@@ -38,7 +38,8 @@ h2 { margin-bottom: 1rem; font-size: clamp(1.3rem, 2.4vw, 1.6rem); line-height: 
   padding: .7rem max(1.25rem, calc((100vw - var(--max-width)) / 2)) 0;
   border-bottom: 1px solid var(--line); background: #fff;
 }
-.brand { color: var(--text); font-size: 1.1rem; font-weight: 700; letter-spacing: -.02em; text-decoration: none; }
+.brand { color: var(--muted); font-size: 1rem; font-weight: 400; text-decoration: none; }
+.brand:hover { color: var(--blue); }
 .primary-nav { flex: 1; display: flex; flex-wrap: wrap; gap: 0 1.5rem; padding-top: .25rem; }
 .primary-nav a { padding: .6rem 0 .65rem; border-bottom: 3px solid transparent; color: var(--muted); font-size: .9rem; font-weight: 600; line-height: 1.4; text-decoration: none; white-space: nowrap; }
 .primary-nav a:hover { color: var(--blue); }
@@ -59,8 +60,7 @@ footer { display: flex; justify-content: space-between; align-items: center; gap
 
 /* ---------- home / profile ---------- */
 .home-hero { padding: 2.8rem 0 1.6rem; }
-.home-name { margin: 0 0 .5rem; font-size: 1.45rem; font-weight: 600; letter-spacing: 0; }
-.home-name .roman-inline { margin-left: .7rem; color: var(--muted); font-size: .95rem; font-weight: 400; }
+.home-name { margin: 0 0 .4rem; font-size: 1.2rem; font-weight: 600; letter-spacing: 0; }
 .home-role { margin: 0 0 .1rem; font-size: .95rem; }
 .profile-links { display: flex; flex-wrap: wrap; gap: .6rem 1.2rem; margin-top: 1.2rem; font-size: .9rem; }
 .home-hero .profile-links { margin-top: 1rem; }
