@@ -24,10 +24,7 @@ document.querySelectorAll('img.toc-img').forEach(img => {
   const miss = () => { const d = document.createElement('div'); d.className = 'toc-missing';
     d.dataset.jaMissing = img.dataset.jaMissing; d.dataset.enMissing = img.dataset.enMissing;
     d.textContent = img.dataset[(document.documentElement.lang === 'en' ? 'en' : 'ja') + 'Missing']; img.replaceWith(d); };
-  // try .png first, then .svg, then show the placeholder
-  const onErr = () => { if (img.src.endsWith('.png')) { img.src = img.src.replace(/\.png$/, '.svg'); } else { miss(); } };
-  img.addEventListener('error', onErr);
-  if (img.complete && img.naturalWidth === 0) onErr();
+  if (img.complete && img.naturalWidth === 0) miss(); else img.addEventListener('error', miss);
 });
 (() => { const links = [...document.querySelectorAll('.side-toc a')]; if (!links.length || !('IntersectionObserver' in window)) return;
   const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id)); }), { rootMargin: '-10% 0px -70% 0px' });
