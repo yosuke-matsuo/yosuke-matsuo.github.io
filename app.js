@@ -25,3 +25,20 @@ buttons.forEach(b => b.addEventListener('click', () => {
 let stored; try { stored = localStorage.getItem('ym-language'); } catch (e) {}
 const req = new URLSearchParams(location.search).get('lang');
 setLanguage(['ja', 'en'].includes(req) ? req : stored || (navigator.language.toLowerCase().startsWith('ja') ? 'ja' : 'en'));
+
+// lightbox: open TOC / cover images over the page; close with background click, × or Esc
+const lb = document.createElement('div');
+lb.className = 'lightbox'; lb.hidden = true;
+lb.innerHTML = '<button type="button" class="lightbox-close" aria-label="Close">×</button><img alt=""/>';
+document.body.appendChild(lb);
+const lbImg = lb.querySelector('img');
+let lastLink = null;
+function closeLb() { lb.hidden = true; lbImg.removeAttribute('src'); document.body.classList.remove('lb-open'); if (lastLink) lastLink.focus(); }
+document.querySelectorAll('.toc-link').forEach(a => a.addEventListener('click', e => {
+  const img = a.querySelector('img'); if (!img) return;
+  e.preventDefault(); lastLink = a;
+  lbImg.src = img.getAttribute('src'); lbImg.alt = img.alt;
+  lb.hidden = false; document.body.classList.add('lb-open'); lb.querySelector('button').focus();
+}));
+lb.addEventListener('click', e => { if (e.target !== lbImg) closeLb(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !lb.hidden) closeLb(); });
