@@ -62,7 +62,7 @@ footer { display: flex; justify-content: space-between; align-items: center; gap
 /* ---------- home / profile ---------- */
 .home-hero { padding: 2.8rem 0 1.6rem; }
 .home-name { max-width: none; margin: 0 0 .4rem; font-size: 1.2rem; font-weight: 600; letter-spacing: 0; }
-.home-name .name-ja { font-size: .85em; font-weight: 500; }
+.home-name .name-ja { font-size: .8em; font-weight: 500; }
 .home-role { margin: 0 0 .1rem; font-size: .95rem; }
 .profile-links { display: flex; flex-wrap: wrap; gap: .6rem 1.2rem; margin-top: 1.2rem; font-size: .9rem; }
 .home-hero .profile-links { margin-top: 1rem; }
