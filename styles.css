@@ -74,6 +74,7 @@ footer { display: flex; justify-content: space-between; align-items: center; gap
 .pub-cite { margin: 0 0 .5rem; font-size: .92rem; line-height: 1.6; }
 .pub-title { display: block; margin: .15rem 0; font-weight: 700; color: var(--text); }
 .pub-desc { margin: 0 0 .4rem; }
+.pub-contrib { margin: 0 0 .4rem; color: var(--muted); font-size: .88rem; }
 .toc-wrap { margin-top: .8rem; }
 .toc-wrap.has-cover { display: grid; grid-template-columns: minmax(0, max-content) auto; justify-content: start; align-items: start; gap: 1rem 1.6rem; }
 .fig { min-width: 0; }
