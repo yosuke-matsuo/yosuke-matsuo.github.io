@@ -56,6 +56,7 @@ h2 { margin-bottom: 1rem; font-size: clamp(1.3rem, 2.4vw, 1.6rem); line-height: 
 .content-section { padding: 2.6rem 0; border-top: 1px solid var(--line); }
 .content-section h2 { padding-left: .7rem; border-left: 5px solid var(--blue); line-height: 1.25; }
 .reading > p, .reading > ul, .reading > ol { max-width: 72ch; }
+.reading > .pres-list { max-width: none; }
 .reading p, .reading li { font-size: 1rem; }
 footer { display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; width: min(var(--max-width), calc(100% - 2.5rem)); margin: 0 auto; padding: 1.6rem 0 2.2rem; border-top: 1px solid var(--line); color: var(--muted); font-size: .82rem; }
 .copyright { margin: 1.5rem 0 0; color: var(--muted); font-size: .8rem; }
@@ -73,6 +74,7 @@ footer { display: flex; justify-content: space-between; align-items: center; gap
 .pub-card { margin: 1.2rem 0; padding: .3rem 0 .4rem 1rem; border-left: 3px solid #e3ebf3; }
 .pub-cite { margin: 0 0 .5rem; font-size: .92rem; line-height: 1.6; }
 .pub-title { display: block; margin: .15rem 0; font-weight: 700; color: var(--text); }
+.pub-title-ja { display: block; margin: -.1rem 0 .2rem; color: var(--muted); font-size: .88rem; }
 .pub-desc { margin: 0 0 .4rem; }
 .pub-contrib { margin: 0 0 .4rem; color: var(--muted); font-size: .88rem; }
 .toc-wrap { margin-top: .8rem; }
