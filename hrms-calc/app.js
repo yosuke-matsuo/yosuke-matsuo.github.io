@@ -76,7 +76,7 @@ const strings={
   errorSearch:'実測 m/z と許容誤差を確認してください（ppm は 0 以上、100万未満）。',
   errorLines:'一度に入力できるのは1000行までです。',
   errorGeneric:'計算できませんでした。入力を確認してください。',
-  title:'HRMS Calc — 精密質量・分子式候補・SI記載チェック'},
+  brandSub:'（HRMS精密質量計算ツール）',title:'HRMS Calc（HRMS精密質量計算ツール）'},
  en:{skip:'Skip to content',
   lead:'Calculates exact HRMS masses (m/z), finds candidate formulas, calculates many compounds at once, and writes and checks HRMS statements for papers and SI. Everything runs in your browser; nothing you enter is sent anywhere.',
   electronHead:'The electron mass is taken into account.',electronShort:'It is subtracted for positive ions and added for negative ions; ignoring it gives an error of a few ppm.',electronSurvey:'A survey of about 3000 SI files from <i>Org. Lett.</i> (2023–2024) found errors in about 30% of the reported accurate-mass data; about two-thirds of these came from ignoring the electron mass (<a href="https://doi.org/10.1021/acs.orglett.4c03458" target="_blank" rel="noopener noreferrer">Christmann, <i>Org. Lett.</i> 2025, <i>27</i>, 4⁠–⁠7</a>).',details:'Details',
@@ -151,7 +151,7 @@ const strings={
   errorSearch:'Check the measured m/z and the tolerance (ppm must be at least 0 and below one million).',
   errorLines:'Up to 1000 lines can be entered at once.',
   errorGeneric:'The calculation failed. Check your input.',
-  title:'HRMS Calc — exact masses, candidate formulas and SI checks'}
+  brandSub:' (HRMS Exact Mass Calculator)',title:'HRMS Calc (HRMS Exact Mass Calculator)'}
 };
 const EXAMPLES={
  batch:'Glucose\tC6H12O6\t[M+Na]+\t203.0524\nCatechin\tC15H14O6\t[M-H]-\t289.0716\nPunicalagin\tC48H28O30\t[M-2H]2-\t541.0263\nCaffeine C8H10N4O2 [M+H]+ 195.0877',
