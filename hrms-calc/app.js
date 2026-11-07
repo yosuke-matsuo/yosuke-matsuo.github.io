@@ -4,7 +4,7 @@ const $=id=>document.getElementById(id);
 const strings={
  ja:{skip:'本文へ移動',
   lead:'HRMSの精密質量（m/z）の計算、分子式候補の検索、一括計算、論文・SIの記載文の作成とチェックができます。計算はすべてブラウザー内で行い、入力した内容はどこにも送信しません。',
-  electronHead:'電子の質量を考慮して計算します。',electronShort:'正イオンでは電子の質量を引き、負イオンでは足します。考慮しないと数ppmずれます。',details:'詳しく',
+  electronHead:'電子の質量を考慮して計算します。',electronShort:'正イオンでは電子の質量を引き、負イオンでは足します。考慮しないと数ppmずれます。',electronSurvey:'2023～2024年の<i>Org. Lett.</i>誌のSI約3000件の調査では、精密質量データの約3割に計算値の誤りがあり、その約3分の2は電子の質量を考慮していないものでした（<a href="https://doi.org/10.1021/acs.orglett.4c03458" target="_blank" rel="noopener noreferrer">Christmann, <i>Org. Lett.</i> 2025, <i>27</i>, 4–7</a>）。',details:'詳しく',
   tabCalc:'精密質量',tabFinder:'分子式検索',tabBatch:'一括計算',tabCheck:'記載チェック',
   method:'計算方法',sources:'出典・参考文献',
   formula:'分子式（中性分子 M）',ion:'イオンの種類',optionalFound:'実測 m/z（任意）',
@@ -71,7 +71,7 @@ const strings={
   title:'HRMS Calc — 精密質量・分子式候補・SI記載チェック'},
  en:{skip:'Skip to content',
   lead:'Calculates exact HRMS masses (m/z), finds candidate formulas, calculates many compounds at once, and writes and checks HRMS statements for papers and SI. Everything runs in your browser; nothing you enter is sent anywhere.',
-  electronHead:'The electron mass is taken into account.',electronShort:'It is subtracted for positive ions and added for negative ions; ignoring it gives an error of a few ppm.',details:'Details',
+  electronHead:'The electron mass is taken into account.',electronShort:'It is subtracted for positive ions and added for negative ions; ignoring it gives an error of a few ppm.',electronSurvey:'A survey of about 3000 SI files from <i>Org. Lett.</i> (2023–2024) found errors in the calculated values of about 30% of the accurate-mass data; about two-thirds of these came from ignoring the electron mass (<a href="https://doi.org/10.1021/acs.orglett.4c03458" target="_blank" rel="noopener noreferrer">Christmann, <i>Org. Lett.</i> 2025, <i>27</i>, 4–7</a>).',details:'Details',
   tabCalc:'Exact mass',tabFinder:'Find formulas',tabBatch:'Batch',tabCheck:'Check SI text',
   method:'Method',sources:'Sources and references',
   formula:'Molecular formula (neutral M)',ion:'Ion type',optionalFound:'Measured m/z (optional)',

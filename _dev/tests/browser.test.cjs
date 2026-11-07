@@ -180,7 +180,7 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
   {
     const p = await page(); await p.goto(`${BASE}/hrms-calc/index.html?lang=ja#checker`);
     ok(await p.isVisible('#checkForm') && await p.evaluate(() => document.querySelector('#tab-checker').getAttribute('aria-selected')) === 'true', 'address #checker opens the checker');
-    await p.click('.electron-note a'); ok(await p.isVisible('#checkForm') && new URL(p.url()).hash === '#method', '“Details” jumps to the method without changing the tool');
+    await p.click('.electron-note a[href="#method"]'); ok(await p.isVisible('#checkForm') && new URL(p.url()).hash === '#method', '“Details” jumps to the method without changing the tool');
     await p.ctx.close();
   }
   // 11. typography: formulas with subscripts, charges as superscripts, italic m/z, external links in a new tab
@@ -199,7 +199,7 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
     ok((await p.innerHTML('#checkResults')).includes('C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>Na') && (await p.innerHTML('#checkResults')).includes('[M + Na]<sup>+</sup>'), 'checker: quoted text with subscripts and superscripts');
     ok((await p.innerHTML('#calcSi [data-t=siAppend]')).includes('C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>Na') && (await p.inputValue('#formula')) === 'C15H14O6', 'help text subscripts; input field unchanged');
     const ext = await p.$$eval('a[href^="http"]', as => as.map(a => a.target === '_blank' && a.rel.includes('noopener')));
-    ok(ext.length === 7 && ext.every(Boolean), `external links open in a new tab (${ext.length})`);
+    ok(ext.length === 8 && ext.every(Boolean), `external links open in a new tab (${ext.length})`);
     await p.ctx.close();
   }
   await browser.close(); console.log(fails ? `${fails} check(s) failed` : 'all browser checks passed'); process.exit(fails ? 1 : 0);
