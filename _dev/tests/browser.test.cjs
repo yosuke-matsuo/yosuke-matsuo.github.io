@@ -250,6 +250,16 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
     ok((await b.textContent('#calcMain')).includes('181.070665'), 'link works when storage is blocked');
     await b.ctx.close();
   }
+  // 14. journal formats only in the calculator tab; the link in the statement area reaches them
+  {
+    const p = await page(); await p.goto(`${BASE}/hrms-calc/index.html?lang=ja`);
+    const inCalc = await p.isVisible('#journals') && await p.evaluate(() => !!document.querySelector('#calculator #journals'));
+    await p.click('#tab-finder'); const hiddenElsewhere = await p.isHidden('#journals');
+    await p.click('#tab-calculator'); await p.fill('#formula', 'C6H12O6'); await p.click('#calcSi a[href="#journals"]');
+    ok(inCalc && hiddenElsewhere && new URL(p.url()).hash === '#journals' && await p.isVisible('#calcForm') && (await p.$$('#journals dt')).length === 5,
+      'journal formats shown only in the calculator tab; the link jumps there without changing the tool');
+    await p.ctx.close();
+  }
   // 13. every text on the page and the window title exist in both languages (no "undefined"); HRMS Calc files carry one version
   for (const lang of ['ja', 'en']) {
     const p = await page(); await p.goto(`${BASE}/hrms-calc/index.html?lang=${lang}`);
