@@ -20,7 +20,12 @@ const strings={
   found:'実測 m/z',tolerance:'許容誤差 ±',
   rangeHelp:'中性分子 M の原子数の範囲（最小〜最大）を元素ごとに指定します。使わない元素は最大を 0 にします。付加イオンの原子は含めません。',
   moreElements:'その他の元素（金属・希土類など）',search:'候補を検索',cancel:'検索を中止',
-  candidateNote:'許容誤差に入る組成を、誤差の小さい順に表示します。DBEでは絞り込んでいません。',
+  candidateNote:'許容誤差に入る組成を、誤差の小さい順に表示します。',
+  filterTitle:'候補の絞り込み（任意）',
+  filterDbe:'DBE が0以上の整数になる組成だけ（窒素ルールと同じ条件。P・金属などを含み DBE を計算できない組成は残します）',
+  filterRatio:'元素比が一般的な範囲の組成だけ（H/C 0.2–3.1、N/C ≤ 1.3、O/C ≤ 1.2、P/C ≤ 0.3、S/C ≤ 0.8、Si/C ≤ 0.5。炭素を含まない組成は残します）',
+  excludedFmt:n=>`絞り込みで除外 ${n} 件`,reset:'初期値に戻す',linkCopy:'この条件のリンクをコピー',
+  savedNote:'イオンの種類・許容誤差・原子数の範囲・絞り込みは、このブラウザーに保存され、次回も使われます。',
   copy:'結果をコピー',
   batchHelp:'1行に1化合物を、名前（任意）・分子式・イオン（任意）・実測 m/z（任意）の順に、タブ・空白・カンマで区切って入力します。Excelの表も貼り付けられます。',
   batchInput:'化合物の一覧',batchIon:'イオンの種類（省略した行）',batchRun:'一括計算する',example:'例を入れる',
@@ -47,6 +52,9 @@ const strings={
   electron:'正電荷1つにつき電子1個分の質量を引き、負電荷1つにつき足します（<i>m</i><sub>e</sub> = 0.0005485799090441 Da）。',
   precision:'結合エネルギーなどに相当する質量は含めません（通常の扱い）。表示は小数点以下6桁で、判定には丸める前の値を使います。',
   ppm:'誤差（ppm）=（実測値 − 計算値）/ 計算値 × 10⁶。誤差（mDa）=（実測値 − 計算値）× 1000。許容誤差は ± の範囲として使います。',
+  filterMethod:'分子式検索の絞り込み：DBE の条件は、中性分子 M の DBE が0以上の整数であることです（C・H・N・O・S・ハロゲンの組成では窒素ルールと同じ条件）。元素比の条件は、Kind と Fiehn が示した「一般的な範囲」（データベースの分子式の99.7%を含む範囲）のうち、H・N・O・P・S・Si の炭素に対する比を使います。',
+  urlMethod:'精密質量と分子式検索の入力は、ページのアドレス（URL）に入ります。そのアドレスをブックマーク・共有すると、同じ入力で開けます。一括計算と記載チェックの入力はアドレスに入りません。',
+  ratioSource:'分子式の元素比の範囲',
   dbe:'DBE = 1 + C + N/2 − (H + F + Cl + Br + I)/2（中性分子 M の値。小数もそのまま表示）。C・H・N・O・S・ハロゲン以外を含む組成では「—」とします。',
   isotopes:'84元素に対応し、各元素で天然存在比が最も高い同位体の質量を使います（例：B は ¹¹B、Fe は ⁵⁶Fe）。Tc・Pm など天然の同位体組成がない元素は使えません。',
   isoMethod:'同位体パターンはNISTの存在比から計算し、同じ整数質量の同位体組成を1本にまとめます（m/z は存在比による加重平均）。高分解能では分かれて観測されることがあります。',
@@ -87,7 +95,12 @@ const strings={
   found:'Measured m/z',tolerance:'Tolerance ±',
   rangeHelp:'Set the range of atom counts (minimum–maximum) for each element of the neutral M. Set the maximum to 0 for unused elements. Do not include adduct atoms.',
   moreElements:'More elements (metals, rare earths and others)',search:'Find formulas',cancel:'Cancel search',
-  candidateNote:'Compositions within the tolerance, from the smallest error. Not filtered by DBE.',
+  candidateNote:'Compositions within the tolerance, from the smallest error.',
+  filterTitle:'Filter candidates (optional)',
+  filterDbe:'Only compositions whose DBE is a non-negative integer (the same condition as the nitrogen rule; compositions with P, metals or other elements for which DBE cannot be calculated are kept)',
+  filterRatio:'Only compositions with common element ratios (H/C 0.2–3.1, N/C ≤ 1.3, O/C ≤ 1.2, P/C ≤ 0.3, S/C ≤ 0.8, Si/C ≤ 0.5; compositions without carbon are kept)',
+  excludedFmt:n=>`${n} excluded by the filters`,reset:'Reset to defaults',linkCopy:'Copy a link to these inputs',
+  savedNote:'The ion type, tolerance, atom-count ranges and filters are saved in this browser and used next time.',
   copy:'Copy results',
   batchHelp:'One compound per line: name (optional), formula, ion (optional) and measured m/z (optional), separated by tabs, spaces or commas. Tables from Excel can be pasted.',
   batchInput:'Compounds',batchIon:'Ion type (for lines without one)',batchRun:'Calculate all',example:'Insert example',
@@ -114,6 +127,9 @@ const strings={
   electron:'One electron mass is subtracted per positive charge and added per negative charge (<i>m</i><sub>e</sub> = 0.0005485799090441 Da).',
   precision:'Mass equivalents of binding energies are not included, as usual. Values are shown to six decimal places; judgments use unrounded values.',
   ppm:'Error (ppm) = (measured − calculated) / calculated × 10⁶. Error (mDa) = (measured − calculated) × 1000. The tolerance is applied as a ± range.',
+  filterMethod:'Candidate filters: the DBE condition requires the DBE of the neutral M to be a non-negative integer (for C, H, N, O, S and halogens this is the same condition as the nitrogen rule). The element-ratio condition uses the ratios of H, N, O, P, S and Si to carbon in the “common range” given by Kind and Fiehn (covering 99.7% of the formulas in their database).',
+  urlMethod:'The inputs of the calculator and the formula finder are kept in the page address (URL), so a bookmarked or shared address opens with the same inputs. Inputs of the batch and the checker are not kept in the address.',
+  ratioSource:'Element-ratio ranges of formulas',
   dbe:'DBE = 1 + C + N/2 − (H + F + Cl + Br + I)/2 (for the neutral M, shown with any fraction). Compositions with elements other than C, H, N, O, S and halogens show —.',
   isotopes:'84 elements are supported, each with the mass of its most abundant isotope (for example ¹¹B for B and ⁵⁶Fe for Fe). Elements without a natural isotope composition, such as Tc and Pm, cannot be used.',
   isoMethod:'Isotope patterns are calculated from the NIST abundances; isotopologues with the same nominal mass are combined into one peak (m/z is the abundance-weighted mean). They may be resolved at high resolution.',
@@ -211,10 +227,11 @@ function sentence(counts,key,mz,found){return siSentence({key,ionFormula:siFormu
 function readFound(raw){const v=raw.trim();if(v==='')return '';if(!/^\d+(\.\d+)?$/.test(v)||!(Number(v)>0))throw Error('found');return v;}
 function calculate(showErrors){
  const fRaw=$('formula').value.trim();
- if(!fRaw){calcState=null;renderCalc();return;}
+ if(!fRaw){calcState=null;renderCalc();clearCalcUrl();return;}
  try{
   const counts=parseFormula(fRaw),key=$('calcIon').value,r=ion(counts,key),found=readFound($('calcFound').value);
   calcState={counts,key,r,found,pattern:isotopePattern(ionCounts(counts,key),r.z)};
+  setUrl({f:fRaw,ion:key,found});
  }catch(e){calcState=showErrors?{error:e.message}:null;}
  renderCalc();
 }
@@ -222,7 +239,8 @@ function renderCalc(){
  const box=$('calcResult'),main=$('calcMain');
  box.classList.toggle('error',!!(calcState&&calcState.error));
  $('calcPlaceholder').hidden=!!calcState;$('calcSi').hidden=$('calcIso').hidden=!(calcState&&!calcState.error);
- main.replaceChildren();$('siCopyStatus').textContent='';
+ main.replaceChildren();$('siCopyStatus').textContent='';$('calcLinkStatus').textContent='';
+ $('calcLinkRow').hidden=!(calcState&&!calcState.error);
  if(!calcState)return;
  if(calcState.error){main.append(html('p',rich(errorText(calcState.error)),'error'));return;}
  const {counts,key,r,found}=calcState;
@@ -268,7 +286,7 @@ $('siCopy').onclick=()=>{if(!calcState||calcState.error)return;const {counts,key
 // ---------- formula finder ----------
 function headers(){return [t('formula'),t('ionFormula'),'z',t('mz'),'Δ ppm','Δ mDa','DBE'];}
 function resultValues(r){return [r.formula,r.ionFormula,r.z,r.mz.toFixed(6),r.ppm.toFixed(3),r.mDa.toFixed(3),r.dbe??'—'];}
-function renderResults(){const table=$('results');tableHead(table,headers());table.querySelector('tbody').replaceChildren();if(last){for(const r of last.results){const v=resultValues(r);v[0]=H(formulaHtml(r.formula));v[1]=H(formulaHtml(r.ionFormula));row(table,v);}$('searchStatus').textContent=`${last.complete?t('complete'):t('incomplete')} · ${t('countFmt')(last.results.length)}`;}}
+function renderResults(){const table=$('results');tableHead(table,headers());table.querySelector('tbody').replaceChildren();if(last){for(const r of last.results){const v=resultValues(r);v[0]=H(formulaHtml(r.formula));v[1]=H(formulaHtml(r.ionFormula));row(table,v);}$('searchStatus').textContent=`${last.complete?t('complete'):t('incomplete')} · ${t('countFmt')(last.results.length)}`+(last.excluded?` · ${t('excludedFmt')(last.excluded)}`:'');}}
 for(const [e,v]of Object.entries(ELEMENTS)){
  const div=el('div',{className:'range'},el('b',{textContent:e}));
  for(const bound of ['min','max']){const input=el('input',{type:'number',min:0,max:1000,step:1,required:true,value:bound==='min'?0:({C:30,H:60,O:20}[e]||0)});input.dataset.element=e;input.dataset.bound=bound;div.append(input);if(bound==='min')div.append(el('span',{textContent:'–'}));}
@@ -277,7 +295,7 @@ for(const [e,v]of Object.entries(ELEMENTS)){
 }
 {const order=['C','H','N','O','S','P','F','Cl','Br','I','B','Si','Na','K'];const box=$('ranges');[...box.children].sort((x,y)=>order.indexOf(x.querySelector('b').textContent)-order.indexOf(y.querySelector('b').textContent)).forEach(n=>box.append(n));}
 function cancel(){if(worker){worker.terminate();worker=null;}$('cancel').disabled=true;$('searchButton').disabled=false;}
-function clearSearch(){cancel();last=null;$('searchStatus').textContent='';$('copyStatus').textContent='';$('copy').disabled=true;renderResults();}
+function clearSearch(){cancel();last=null;$('searchStatus').textContent='';$('copyStatus').textContent='';$('copy').disabled=$('searchLink').disabled=true;renderResults();}
 $('searchForm').oninput=event=>{clearSearch();if(event.target.closest('#extraRanges'))$('extraElements').open=true;};
 function checkRanges(){for(const input of document.querySelectorAll('.range input'))input.removeAttribute('aria-invalid');
  for(const div of document.querySelectorAll('.range')){const [a,b]=div.querySelectorAll('input');for(const input of [a,b]){const v=input.value.trim();let why=null;
@@ -291,12 +309,13 @@ $('searchForm').onsubmit=event=>{event.preventDefault();clearSearch();
  try{
   const ranges=[...document.querySelectorAll('.range')].map(div=>{const inputs=div.querySelectorAll('input');return [inputs[0].dataset.element,Number(inputs[0].value),Number(inputs[1].value)];});
   worker=new Worker(new URL('./worker.js',import.meta.url),{type:'module'});$('cancel').disabled=false;$('searchButton').disabled=true;$('searchStatus').textContent=t('running');
-  worker.onmessage=({data})=>{cancel();if(data.error){say($('searchStatus'),errorText(data.error));return;}last=data;renderResults();$('copy').disabled=!data.results.length;};
+  worker.onmessage=({data})=>{cancel();if(data.error){say($('searchStatus'),errorText(data.error));return;}last=data;renderResults();$('copy').disabled=!data.results.length;$('searchLink').disabled=false;};
   worker.onerror=()=>{cancel();$('searchStatus').textContent=t('errorGeneric');};
-  worker.postMessage({found:Number($('found').value),tolerance:Number($('tolerance').value),unit:$('unit').value,adduct:$('searchIon').value,ranges});
+  worker.postMessage({found:Number($('found').value),tolerance:Number($('tolerance').value),unit:$('unit').value,adduct:$('searchIon').value,ranges,filters:{dbe:$('filterDbe').checked,ratio:$('filterRatio').checked}});
+  setUrl(finderParams());
  }catch(e){cancel();say($('searchStatus'),errorText(e.message));}};
 $('cancel').onclick=()=>{cancel();$('searchStatus').textContent=t('stopped');};
-$('copy').onclick=async()=>{if(!last)return;const context=`${t('found')}: ${$('found').value}\t${$('searchIon').value}\t±${$('tolerance').value} ${$('unit').value}\t${last.complete?t('complete'):t('incomplete')}`;try{await navigator.clipboard.writeText([context,headers().join('\t'),...last.results.map(r=>resultValues(r).join('\t'))].join('\n'));$('copyStatus').textContent=t('copyOk');}catch{$('copyStatus').textContent=t('copyFail');}};
+$('copy').onclick=async()=>{if(!last)return;const fl=[$('filterDbe').checked&&'DBE',$('filterRatio').checked&&(lang==='ja'?'元素比':'element ratios')].filter(Boolean).join(', ');const context=`${t('found')}: ${$('found').value}\t${$('searchIon').value}\t±${$('tolerance').value} ${$('unit').value}\t${last.complete?t('complete'):t('incomplete')}`+(fl?`\t${lang==='ja'?'絞り込み':'Filters'}: ${fl}`:'')+(last.excluded?`\t${t('excludedFmt')(last.excluded)}`:'');try{await navigator.clipboard.writeText([context,headers().join('\t'),...last.results.map(r=>resultValues(r).join('\t'))].join('\n'));$('copyStatus').textContent=t('copyOk');}catch{$('copyStatus').textContent=t('copyFail');}};
 
 // ---------- batch ----------
 function batchHeaders(){return [t('line'),t('label'),t('formula'),t('ion'),t('ionFormula'),t('mz'),t('measured'),'Δ ppm','DBE',t('note')];}
@@ -394,3 +413,64 @@ function syncLangLinks(){for(const a of document.querySelectorAll('a[href]')){co
 function setLanguage(value){cancel();lang=value;try{localStorage.setItem('ym-language',value);}catch(e){}try{const u=new URL(location.href);u.searchParams.set('lang',value);history.replaceState(null,'',u);}catch(e){}syncLangLinks();$('searchStatus').textContent='';translate();}
 $('langJa').onclick=()=>setLanguage('ja');$('langEn').onclick=()=>setLanguage('en');
 translate();syncLangLinks();
+
+// ---------- saved settings (this browser only) and inputs kept in the address ----------
+const STORE='hrms-calc-settings',DEFAULT_MAX={C:30,H:60,O:20};
+const isIon=k=>typeof k==='string'&&Object.hasOwn(IONS,k);
+const validTol=v=>typeof v==='number'&&Number.isFinite(v)&&v>=0&&v<1e6;
+const validRange=v=>Array.isArray(v)&&v.length===2&&v.every(n=>Number.isInteger(n)&&n>=0&&n<=1000)&&v[0]<=v[1];
+function loadSettings(){try{const v=JSON.parse(localStorage.getItem(STORE)||'{}');return v&&typeof v==='object'&&!Array.isArray(v)?v:{};}catch(e){return {};}}
+let settings=loadSettings();
+function saveSettings(){try{localStorage.setItem(STORE,JSON.stringify(settings));}catch(e){}}
+function rangeInputs(){return [...document.querySelectorAll('.range')].map(div=>div.querySelectorAll('input'));}
+function readRanges(){const o={};for(const [a,b] of rangeInputs())o[a.dataset.element]=[Number(a.value),Number(b.value)];return o;}
+function writeRanges(o){for(const [a,b] of rangeInputs()){const v=o[a.dataset.element];[a.value,b.value]=validRange(v)?v:[0,0];}
+ if([...document.querySelectorAll('#extraRanges input[data-bound=max]')].some(i=>Number(i.value)>0))$('extraElements').open=true;}
+function defaultRanges(){const o={};for(const e of Object.keys(ELEMENTS))o[e]=[0,DEFAULT_MAX[e]||0];return o;}
+function finderSettings(){return {ion:$('searchIon').value,tol:Number($('tolerance').value),unit:$('unit').value,ranges:readRanges(),dbe:$('filterDbe').checked,ratio:$('filterRatio').checked};}
+function applyFinder(f){
+ if(isIon(f.ion))$('searchIon').value=f.ion;if(validTol(f.tol))$('tolerance').value=String(f.tol);if(['ppm','mDa'].includes(f.unit))$('unit').value=f.unit;
+ if(f.ranges&&typeof f.ranges==='object')writeRanges(f.ranges);$('filterDbe').checked=f.dbe===true;$('filterRatio').checked=f.ratio===true;
+}
+if(isIon(settings.calcIon))$('calcIon').value=settings.calcIon;
+if(isIon(settings.batchIon))$('batchIon').value=settings.batchIon;
+if(settings.finder&&typeof settings.finder==='object')applyFinder(settings.finder);
+if(validTol(settings.checkTol))$('checkTol').value=String(settings.checkTol);
+if(typeof settings.siAppend==='boolean'){si.append=settings.siAppend;for(const c of document.querySelectorAll('[data-si=append]'))c.checked=si.append;}
+$('calcIon').addEventListener('change',()=>{settings.calcIon=$('calcIon').value;saveSettings();});
+$('batchIon').addEventListener('change',()=>{settings.batchIon=$('batchIon').value;saveSettings();});
+$('checkTol').addEventListener('change',()=>{const v=Number($('checkTol').value);if(validTol(v)){settings.checkTol=v;saveSettings();}});
+for(const c of document.querySelectorAll('[data-si=append]'))c.addEventListener('change',()=>{settings.siAppend=c.checked;saveSettings();});
+$('searchForm').addEventListener('change',()=>{const f=finderSettings();if(validTol(f.tol)&&Object.values(f.ranges).every(validRange)){settings.finder=f;saveSettings();}});
+$('resetSearch').onclick=()=>{
+ applyFinder({ion:'[M+H]+',tol:5,unit:'ppm',ranges:defaultRanges(),dbe:false,ratio:false});$('extraElements').open=false;
+ for(const input of document.querySelectorAll('.range input'))input.removeAttribute('aria-invalid');
+ delete settings.finder;saveSettings();clearSearch();
+};
+
+// address: ?f=&ion=&found= (calculator) or ?mz=&ion=&tol=&unit=&r=C0-30,H0-60&filter=dbe,ratio (finder)
+const URL_KEYS=['f','ion','found','mz','tol','unit','r','filter'];
+function setUrl(params){try{const u=new URL(location.href);for(const k of URL_KEYS)u.searchParams.delete(k);
+ if(params)for(const [k,v] of Object.entries(params))if(v!==''&&v!==undefined&&v!==null)u.searchParams.set(k,v);history.replaceState(null,'',u);}catch(e){}}
+function clearCalcUrl(){if(new URLSearchParams(location.search).has('f'))setUrl(null);}
+function finderParams(){
+ const r=Object.entries(readRanges()).filter(([,v])=>v[1]>0).map(([e,v])=>`${e}${v[0]}-${v[1]}`).join(',');
+ return {mz:$('found').value.trim(),ion:$('searchIon').value,tol:$('tolerance').value.trim(),unit:$('unit').value,r,filter:[$('filterDbe').checked&&'dbe',$('filterRatio').checked&&'ratio'].filter(Boolean).join(',')};
+}
+function shareLink(tab){const u=new URL(location.href);u.searchParams.delete('lang');u.hash=tab;return u.href;}
+$('calcLink').onclick=()=>copyRich(shareLink('calculator'),null,$('calcLinkStatus'));
+$('searchLink').onclick=()=>copyRich(shareLink('finder'),null,$('copyStatus'));
+{
+ const q=new URLSearchParams(location.search);
+ if(q.has('mz')){
+  const f={ion:q.get('ion'),tol:q.has('tol')?Number(q.get('tol')):NaN,unit:q.get('unit')},fl=(q.get('filter')||'').split(',');
+  if(q.has('r')){f.ranges={};for(const part of q.get('r').split(',')){const m=/^([A-Z][a-z]?)(\d{1,4})-(\d{1,4})$/.exec(part.trim());if(m&&Object.hasOwn(ELEMENTS,m[1]))f.ranges[m[1]]=[Number(m[2]),Number(m[3])];}}
+  f.dbe=fl.includes('dbe');f.ratio=fl.includes('ratio');applyFinder(f);
+  $('found').value=q.get('mz').slice(0,40);
+  if(!tabFromHash())selectTab(tabs.find(x=>x.getAttribute('aria-controls')==='finder'),false);
+  $('searchForm').requestSubmit();
+ }else if(q.has('f')){
+  $('formula').value=q.get('f').slice(0,500);if(isIon(q.get('ion')))$('calcIon').value=q.get('ion');$('calcFound').value=(q.get('found')||'').slice(0,40);
+  calculate(true);
+ }
+}

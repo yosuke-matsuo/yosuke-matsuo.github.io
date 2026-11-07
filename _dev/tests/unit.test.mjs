@@ -132,3 +132,34 @@ test('pruned search equals an independent brute-force search on small ranges', (
     assert.deepEqual(res.results.map(r => key(r.formula)).sort(), brute.sort(), `${adduct} ${found}`);
   }
 });
+
+test('candidate filters: integer DBE (nitrogen rule) and element ratios (Kind & Fiehn 2007, common range)', () => {
+  const { dbeRule, ratioRule } = core;
+  // rules on single compositions
+  assert.equal(dbeRule(parseFormula('C6H12O6')), true);
+  assert.equal(dbeRule(parseFormula('C6H11O6')), false);              // DBE 1.5
+  assert.equal(dbeRule(parseFormula('C2H8')), false);                 // DBE −1
+  assert.equal(dbeRule(parseFormula('C5H5N')), true);                 // pyridine
+  assert.equal(dbeRule(parseFormula('C5H6N')), false);                // breaks the nitrogen rule
+  assert.equal(dbeRule(parseFormula('C3H9O4P')), null);               // P: DBE not defined here, so not judged
+  assert.equal(ratioRule(parseFormula('C15H10O7')), true);            // quercetin
+  assert.equal(ratioRule(parseFormula('C82H54O52')), true);           // a large ellagitannin
+  assert.equal(ratioRule(parseFormula('CH4')), false);                // H/C 4 > 3.1
+  assert.equal(ratioRule(parseFormula('C2O5')), false);               // O/C 2.5 > 1.2
+  assert.equal(ratioRule(parseFormula('C10H2')), true);               // H/C 0.2: on the boundary, kept
+  assert.equal(ratioRule(parseFormula('C20H3')), false);              // H/C 0.15 < 0.2
+  assert.equal(ratioRule(parseFormula('H2O')), null);                 // no carbon: not judged
+  // search: filtered results = unfiltered results that pass the rules; excluded counts the rest
+  const q = { found: 301.0354, tolerance: 10, unit: 'ppm', adduct: '[M-H]-', ranges: [['C', 0, 40], ['H', 0, 80], ['N', 0, 6], ['O', 0, 20], ['S', 0, 2], ['P', 0, 2]] };
+  const all = search(q).results;
+  for (const filters of [{ dbe: true }, { ratio: true }, { dbe: true, ratio: true }]) {
+    const res = search({ ...q, filters });
+    const keep = all.filter(r => { const c = parseFormula(r.formula); return !(filters.dbe && dbeRule(c) === false) && !(filters.ratio && ratioRule(c) === false); });
+    assert.deepEqual(res.results.map(r => r.formula), keep.map(r => r.formula), JSON.stringify(filters));
+    assert.equal(res.excluded, all.length - keep.length);
+    assert.ok(res.results.some(r => r.formula === 'C15H10O7'), 'quercetin stays');
+  }
+  assert.ok(search({ ...q, filters: { dbe: true } }).results.every(r => r.dbe === null || (r.dbe >= 0 && Number.isInteger(r.dbe))));
+  assert.equal(search(q).excluded, 0);
+  assert.throws(() => search({ ...q, filters: null }), /search/);
+});

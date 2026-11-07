@@ -199,8 +199,52 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
     ok((await p.innerHTML('#checkResults')).includes('C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>Na') && (await p.innerHTML('#checkResults')).includes('[M + Na]<sup>+</sup>'), 'checker: quoted text with subscripts and superscripts');
     ok((await p.innerHTML('#calcSi [data-t=siAppend]')).includes('C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>Na') && (await p.inputValue('#formula')) === 'C15H14O6', 'help text subscripts; input field unchanged');
     const ext = await p.$$eval('a[href^="http"]', as => as.map(a => a.target === '_blank' && a.rel.includes('noopener')));
-    ok(ext.length === 8 && ext.every(Boolean), `external links open in a new tab (${ext.length})`);
+    ok(ext.length === 10 && ext.every(Boolean), `external links open in a new tab (${ext.length})`);
     await p.ctx.close();
+  }
+  // 11. inputs kept in the address, shareable links, saved settings, candidate filters
+  {
+    const p = await page({ permissions: ['clipboard-read', 'clipboard-write'] });
+    await p.goto(`${BASE}/hrms-calc/index.html?lang=ja`);
+    await p.fill('#formula', 'C6H12O6'); await p.selectOption('#calcIon', '[M+Na]+'); await p.fill('#calcFound', '203.0524');
+    let u = new URL(p.url());
+    ok(u.searchParams.get('f') === 'C6H12O6' && u.searchParams.get('ion') === '[M+Na]+' && u.searchParams.get('found') === '203.0524' && u.searchParams.get('lang') === 'ja', `calculator inputs in the address (${p.url()})`);
+    await p.click('#calcLink'); await p.waitForTimeout(200);
+    const link = await p.evaluate(() => navigator.clipboard.readText());
+    const lu = new URL(link);
+    ok(lu.searchParams.get('f') === 'C6H12O6' && !lu.searchParams.has('lang') && lu.hash === '#calculator' && (await p.textContent('#calcLinkStatus')).includes('コピー'), `link copied without the language (${link})`);
+    const q = await page(); await q.goto(link);
+    ok((await q.inputValue('#formula')) === 'C6H12O6' && (await q.inputValue('#calcIon')) === '[M+Na]+' && (await q.textContent('#calcMain')).includes('203.052609'), 'opening the link restores the calculator and its result');
+    await q.ctx.close();
+    await p.fill('#formula', ''); ok(!new URL(p.url()).searchParams.has('f') && await p.isHidden('#calcLinkRow'), 'emptying the formula removes it from the address');
+    // finder link with ranges and filters runs the search
+    const fl = `${BASE}/hrms-calc/index.html?lang=ja&mz=301.0354&ion=${encodeURIComponent('[M-H]-')}&tol=10&unit=ppm&r=C0-40,H0-80,N0-6,O0-20,S0-2,P0-2&filter=dbe,ratio`;
+    const f = await page(); await f.goto(fl);
+    await f.waitForFunction(() => !document.querySelector('#searchButton').disabled && document.querySelectorAll('#results tbody tr').length > 0);
+    const fst = await f.textContent('#searchStatus');
+    ok(new URL(f.url()).hash === '#finder' && await f.isChecked('#filterDbe') && await f.isChecked('#filterRatio') && (await f.inputValue('#ranges input[data-element="P"][data-bound="max"]')) === '2' && fst.includes('除外 23 件') && fst.includes('候補 24 件'), `finder link restores conditions and searches: ${fst}`);
+    ok((await f.textContent('#results tbody tr:first-child')).includes('C15H10O7'), 'quercetin first after filtering');
+    await f.uncheck('#filterRatio'); await f.click('#searchButton'); await f.waitForFunction(() => !document.querySelector('#searchButton').disabled && document.querySelectorAll('#results tbody tr').length > 0);
+    ok((await f.textContent('#searchStatus')).includes('候補 36 件') && new URL(f.url()).searchParams.get('filter') === 'dbe', `filter change reflected in results and address: ${await f.textContent('#searchStatus')}`);
+    // settings saved in this browser (same context = same storage)
+    await f.selectOption('#unit', 'mDa'); await f.fill('#tolerance', '2'); await f.dispatchEvent('#tolerance', 'change');
+    await f.click('#tab-calculator'); await f.selectOption('#calcIon', '[M-H]-'); await f.click('#tab-batch'); await f.selectOption('#batchIon', '[M+Na]+');
+    ok(await f.isHidden('#batchTableActions'), 'batch copy button hidden before calculating');
+    const g = await f.ctx.newPage(); await g.goto(`${BASE}/hrms-calc/index.html?lang=ja#finder`);
+    ok((await g.inputValue('#unit')) === 'mDa' && (await g.inputValue('#tolerance')) === '2' && (await g.inputValue('#searchIon')) === '[M-H]-' && await g.isChecked('#filterDbe') && !(await g.isChecked('#filterRatio')) &&
+      (await g.inputValue('#ranges input[data-element="P"][data-bound="max"]')) === '2' && (await g.inputValue('#calcIon')) === '[M-H]-' && (await g.inputValue('#batchIon')) === '[M+Na]+' && (await g.inputValue('#found')) === '181.0707',
+      'settings restored on a new visit (measured m/z not stored)');
+    await g.click('#resetSearch');
+    ok((await g.inputValue('#unit')) === 'ppm' && (await g.inputValue('#tolerance')) === '5' && (await g.inputValue('#searchIon')) === '[M+H]+' && !(await g.isChecked('#filterDbe')) &&
+      (await g.inputValue('#ranges input[data-element="C"][data-bound="max"]')) === '30' && (await g.inputValue('#ranges input[data-element="P"][data-bound="max"]')) === '0', 'reset restores the finder defaults');
+    const h = await f.ctx.newPage(); await h.goto(`${BASE}/hrms-calc/index.html?lang=ja#finder`);
+    ok((await h.inputValue('#tolerance')) === '5' && (await h.inputValue('#calcIon')) === '[M-H]-', 'reset is saved; other settings kept');
+    await f.ctx.close(); await p.ctx.close();
+    // storage blocked: the page still works
+    const b = await page(); await b.addInitScript(() => Object.defineProperty(window, 'localStorage', { get() { throw new Error('blocked'); } }));
+    await b.goto(`${BASE}/hrms-calc/index.html?lang=ja&f=C6H12O6&ion=${encodeURIComponent('[M+H]+')}`);
+    ok((await b.textContent('#calcMain')).includes('181.070665'), 'link works when storage is blocked');
+    await b.ctx.close();
   }
   await browser.close(); console.log(fails ? `${fails} check(s) failed` : 'all browser checks passed'); process.exit(fails ? 1 : 0);
 })();

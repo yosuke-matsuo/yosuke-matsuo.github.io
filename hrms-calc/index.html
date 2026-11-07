@@ -39,6 +39,7 @@
 <div id="calcResult" class="result-box">
 <p id="calcPlaceholder" class="placeholder" data-t="calcPlaceholder"></p>
 <div id="calcMain" aria-live="polite"></div>
+<div class="actions link-row" id="calcLinkRow" hidden><button type="button" id="calcLink" data-t="linkCopy"></button><span id="calcLinkStatus" class="hint" role="status"></span></div>
 <div id="calcSi" class="result-block" hidden>
 <h3 data-t="siTitle"></h3>
 <div class="si-options">
@@ -67,12 +68,17 @@
 <p class="hint" data-t="rangeHelp"></p>
 <div class="rangeGrid" id="ranges"></div>
 <details id="extraElements"><summary data-t="moreElements"></summary><div class="rangeGrid" id="extraRanges"></div></details>
-<div class="actions"><button class="primary" id="searchButton" data-t="search"></button><button type="button" id="cancel" data-t="cancel" disabled></button></div>
+<fieldset class="filters"><legend data-t="filterTitle"></legend>
+<label class="check"><input type="checkbox" id="filterDbe"><span data-t="filterDbe"></span></label>
+<label class="check"><input type="checkbox" id="filterRatio"><span data-t="filterRatio"></span></label>
+</fieldset>
+<div class="actions"><button class="primary" id="searchButton" data-t="search"></button><button type="button" id="cancel" data-t="cancel" disabled></button><button type="button" id="resetSearch" class="text-button" data-t="reset"></button></div>
+<p class="hint" data-t="savedNote"></p>
 </form>
 <p id="searchStatus" aria-live="polite"></p>
 <p class="hint" data-t="candidateNote"></p>
 <div class="tableWrap"><table id="results"><thead></thead><tbody></tbody></table></div>
-<div class="actions"><button id="copy" type="button" data-t="copy" disabled></button><span id="copyStatus" class="hint" role="status"></span></div>
+<div class="actions"><button id="copy" type="button" data-t="copy" disabled></button><button id="searchLink" type="button" data-t="linkCopy" disabled></button><span id="copyStatus" class="hint" role="status"></span></div>
 </section>
 
 <section id="batch" class="panel" role="tabpanel" aria-labelledby="tab-batch" hidden>
@@ -115,6 +121,8 @@
 <p data-t="precision"></p>
 <p data-t="ppm"></p>
 <p data-t="dbe"></p>
+<p><span data-t="filterMethod"></span> <a href="https://doi.org/10.1186/1471-2105-8-105" target="_blank" rel="noopener noreferrer">Kind &amp; Fiehn, <i>BMC Bioinformatics</i> 2007</a></p>
+<p data-t="urlMethod"></p>
 <p data-t="isotopes"></p>
 <p data-t="isoMethod"></p>
 <p data-t="checkMethod"></p>
@@ -126,6 +134,7 @@
 <dt data-t="isotopeSource"></dt><dd><a href="https://physics.nist.gov/cgi-bin/Compositions/stand_alone.pl?all=all&amp;ascii=ascii2" target="_blank" rel="noopener noreferrer">NIST — Atomic Weights and Isotopic Compositions</a></dd>
 <dt data-t="electronSource"></dt><dd><a href="https://physics.nist.gov/cuu/Constants/Table/allascii.txt" target="_blank" rel="noopener noreferrer">NIST — 2022 CODATA Recommended Values</a></dd>
 <dt data-t="paperIntro"></dt><dd>Christmann, M. <a href="https://doi.org/10.1021/acs.orglett.4c03458" target="_blank" rel="noopener noreferrer">What I Learned from Analyzing Accurate Mass Data of 3000 Supporting Information Files.</a> <i>Org. Lett.</i> <b>2025</b>, <i>27</i>, 4–7.</dd>
+<dt data-t="ratioSource"></dt><dd>Kind, T.; Fiehn, O. <a href="https://doi.org/10.1186/1471-2105-8-105" target="_blank" rel="noopener noreferrer">Seven Golden Rules for heuristic filtering of molecular formulas obtained by accurate mass spectrometry.</a> <i>BMC Bioinformatics</i> <b>2007</b>, <i>8</i>, 105.</dd>
 </dl>
 <p class="note" data-t="accessDate"></p>
 </section>
