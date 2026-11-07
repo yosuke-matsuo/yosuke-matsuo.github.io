@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HRMS Calc — 精密質量と分子式候補</title>
+<meta name="description" content="分子式からHRMSの精密質量（m/z）を計算し、実測 m/z から分子式の候補を探すブラウザー用ツール。">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip-link" href="#main" data-t="skip"></a>
+<header class="site-header">
+<a class="brand" href="../index.html">Yosuke Matsuo</a>
+<nav class="primary-nav"><a href="#calculator" data-t="calcTitle"></a><a href="#finder" data-t="searchTitle"></a><a href="#method" data-t="method"></a><a href="#sources" data-t="sources"></a></nav>
+<div class="language-switch" role="group" aria-label="Language"><button type="button" id="langJa" aria-pressed="true">日本語</button><button type="button" id="langEn" aria-pressed="false">English</button></div>
+</header>
+<main id="main">
+<div class="intro"><h1>HRMS Calc</h1><p class="lead" data-t="lead"></p></div>
+
+<section id="calculator"><h2 data-t="calcTitle"></h2>
+<form id="calcForm">
+<div class="fields">
+<label><span data-t="formula"></span><input id="formula" value="C6H12O6" required autocomplete="off" spellcheck="false"></label>
+<label><span data-t="ion"></span><select id="calcIon"></select></label>
+<label><span data-t="optionalFound"></span><input id="calcFound" type="number" step="any" min="0" placeholder="181.0707"></label>
+</div>
+<p class="hint" data-t="syntax"></p>
+<button class="primary" data-t="calculate"></button>
+</form>
+<div id="calcResult" aria-live="polite"></div>
+</section>
+
+<section id="finder"><h2 data-t="searchTitle"></h2>
+<form id="searchForm" novalidate>
+<div class="fields">
+<label><span data-t="found"></span><input id="found" type="number" min="0.000001" max="100000" step="any" value="181.0707" required></label>
+<label><span data-t="ion"></span><select id="searchIon"></select></label>
+<label><span data-t="tolerance"></span><div class="inline"><input id="tolerance" type="number" min="0" step="any" value="5" required><select id="unit" aria-label="Tolerance unit"><option>ppm</option><option>mDa</option></select></div></label>
+</div>
+<p class="hint" data-t="rangeHelp"></p>
+<div class="rangeGrid" id="ranges"></div>
+<details id="extraElements"><summary data-t="moreElements"></summary><div class="rangeGrid" id="extraRanges"></div></details>
+<div class="actions"><button class="primary" id="searchButton" data-t="search"></button><button type="button" id="cancel" data-t="cancel" disabled></button></div>
+</form>
+<p id="searchStatus" aria-live="polite"></p>
+<p class="hint" data-t="candidateNote"></p>
+<div class="tableWrap"><table id="results"><thead></thead><tbody></tbody></table></div>
+<div class="actions"><button id="copy" type="button" data-t="copy" disabled></button><span id="copyStatus" class="hint" role="status"></span></div>
+</section>
+
+<section id="method"><h2 data-t="method"></h2>
+<div class="equation">m/z = (Σ nᵢ mᵢ − z mₑ) / |z|</div>
+<p data-t="definition"></p>
+<p data-t="electron"></p>
+<p><span data-t="electronWhy"></span> <a href="https://doi.org/10.1021/acs.orglett.4c03458">Christmann, <i>Org. Lett.</i> 2025</a></p>
+<p data-t="precision"></p>
+<p data-t="ppm"></p>
+<p data-t="dbe"></p>
+<p data-t="isotopes"></p>
+<details><summary data-t="constants"></summary><table id="constants"><thead></thead><tbody></tbody></table></details>
+</section>
+
+<section id="sources"><h2 data-t="sources"></h2>
+<dl class="sources">
+<dt data-t="isotopeSource"></dt><dd><a href="https://physics.nist.gov/cgi-bin/Compositions/stand_alone.pl?all=all&amp;ascii=ascii2">NIST — Atomic Weights and Isotopic Compositions</a></dd>
+<dt data-t="electronSource"></dt><dd><a href="https://physics.nist.gov/cuu/Constants/Table/allascii.txt">NIST — 2022 CODATA Recommended Values</a></dd>
+<dt data-t="paperIntro"></dt><dd>Christmann, M. <a href="https://doi.org/10.1021/acs.orglett.4c03458">What I Learned from Analyzing Accurate Mass Data of 3000 Supporting Information Files.</a> <i>Org. Lett.</i> <b>2025</b>, <i>27</i>, 4–7.</dd>
+</dl>
+<p class="note" data-t="accessDate"></p>
+</section>
+
+<footer><p>© 2026 <a href="../index.html">Yosuke Matsuo</a></p><p><a href="https://github.com/yosuke-matsuo/yosuke-matsuo.github.io/tree/main/hrms-calc" data-t="sourceCode"></a> · <span data-t="codeLicense"></span><a href="LICENSE.txt">MIT License</a></p></footer>
+</main>
+<script type="module" src="app.js"></script>
+</body>
+</html>

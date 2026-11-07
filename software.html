@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="color-scheme" content="light"/>
+<title data-ja="ソフトウェア — Yosuke Matsuo" data-en="Software — Yosuke Matsuo">ソフトウェア — Yosuke Matsuo</title>
+<link rel="stylesheet" href="./styles.css"/>
+<script defer src="./app.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">本文へ移動</a>
+<header class="site-header">
+<a class="brand" href="./index.html">Yosuke Matsuo</a>
+<nav class="primary-nav" aria-label="Main"><a href="./research.html" data-ja="研究内容" data-en="Research">研究内容</a><a href="./publications.html" data-ja="業績" data-en="Publications">業績</a><a aria-current="page" href="./software.html" data-ja="ソフトウェア" data-en="Software">ソフトウェア</a></nav>
+<div class="language-switch" role="group" aria-label="Language"><button type="button" data-language="ja" aria-pressed="true">日本語</button><button type="button" data-language="en" aria-pressed="false">English</button></div>
+</header>
+<main class="page-shell" id="main">
+
+<div class="page-body">
+<section class="intro"><h1 data-ja="ソフトウェア" data-en="Software">ソフトウェア</h1></section>
+<section class="content-section reading" id="hrms-calc">
+<h2 data-ja="HRMS Calc" data-en="HRMS Calc">HRMS Calc</h2>
+<p data-ja="高分解能質量分析（HRMS）の精密質量を計算するウェブツールです（ブラウザーで動作、MIT License）。" data-en="A web tool for exact masses in high-resolution mass spectrometry (runs in the browser; MIT License).">高分解能質量分析（HRMS）の精密質量を計算するウェブツールです（ブラウザーで動作、MIT License）。</p>
+<ul class="compact-list"><li><span data-lang="ja">分子式と付加イオン（[M+H]⁺、[M+Na]⁺、[M−H]⁻ など15種類）から m/z を計算し、実測値との誤差（ppm・mDa）を表示</span><span data-lang="en" hidden>Calculates m/z from a formula and an ion type (15 types such as [M+H]⁺, [M+Na]⁺ and [M−H]⁻) and shows the error from a measured value (ppm, mDa)</span></li><li><span data-lang="ja">実測 m/z と許容誤差から、元素ごとの原子数の範囲を指定して分子式の候補を検索</span><span data-lang="en" hidden>Finds candidate formulas for a measured m/z within a tolerance and per-element atom-count ranges</span></li><li><span data-lang="ja">84元素に対応。同位体質量と電子質量はNISTの値を使用</span><span data-lang="en" hidden>Supports 84 elements, using NIST isotope and electron masses</span></li></ul>
+<p><span data-lang="ja"><a class="ext-link" href="./hrms-calc/index.html">HRMS Calcを開く</a></span><span data-lang="en" hidden><a class="ext-link" href="./hrms-calc/index.html">Open HRMS Calc</a></span></p>
+</section>
+</div>
+</main>
+<footer><p class="copyright">© 2026 Yosuke Matsuo</p></footer>
+</body>
+</html>
