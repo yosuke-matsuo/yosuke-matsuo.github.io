@@ -30,7 +30,7 @@
 <form id="calcForm" novalidate>
 <div class="fields">
 <label><span data-t="formula"></span><input id="formula" autocomplete="off" spellcheck="false" placeholder="C6H12O6"></label>
-<label><span data-t="ion"></span><select id="calcIon"></select></label>
+<div class="field"><span class="field-label" id="calcIon-label" data-t="ion"></span><select id="calcIon" hidden aria-labelledby="calcIon-label"></select></div>
 <label><span data-t="optionalFound"></span><input id="calcFound" inputmode="decimal" autocomplete="off" placeholder="181.0707"></label>
 </div>
 <p class="hint" data-t="syntax"></p>
@@ -62,7 +62,7 @@
 <form id="searchForm" novalidate>
 <div class="fields">
 <label><span data-t="found"></span><input id="found" type="number" min="0.000001" max="100000" step="any" value="181.0707" required></label>
-<label><span data-t="ion"></span><select id="searchIon"></select></label>
+<div class="field"><span class="field-label" id="searchIon-label" data-t="ion"></span><select id="searchIon" hidden aria-labelledby="searchIon-label"></select></div>
 <label><span data-t="tolerance"></span><div class="inline"><input id="tolerance" type="number" min="0" step="any" value="5" required><select id="unit" aria-label="Tolerance unit"><option>ppm</option><option>mDa</option></select></div></label>
 </div>
 <p class="hint" data-t="rangeHelp"></p>
@@ -85,7 +85,7 @@
 <form id="batchForm" novalidate>
 <p class="hint" data-t="batchHelp"></p>
 <label class="block"><span data-t="batchInput"></span><textarea id="batchInput" rows="7" spellcheck="false" autocomplete="off"></textarea></label>
-<div class="fields"><label><span data-t="batchIon"></span><select id="batchIon"></select></label></div>
+<div class="fields"><div class="field"><span class="field-label" id="batchIon-label" data-t="batchIon"></span><select id="batchIon" hidden aria-labelledby="batchIon-label"></select></div></div>
 <div class="actions"><button class="primary" data-t="batchRun"></button><button type="button" id="batchExample" data-t="example"></button></div>
 </form>
 <p id="batchStatus" role="status"></p>

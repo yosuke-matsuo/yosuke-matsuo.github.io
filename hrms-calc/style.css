@@ -73,3 +73,17 @@ button.text-button{border-color:transparent;background:none;color:var(--blue);pa
 /* journal formats */
 #journals>p,.journal-list{max-width:80ch}.journal-list dt{margin:1.3rem 0 .35rem;font-weight:600}.journal-list dd{margin:0}.journal-list dd p{margin:0 0 .4rem;font-size:.92rem}
 .journal-list .journal-example{padding:.5rem .75rem;border-left:3px solid var(--line);background:var(--surface);font-size:.95rem;overflow-wrap:anywhere}
+/* ion picker: the current ion as a button; a table of all ion types opens below it */
+.field{min-width:0}.field-label{display:block;font-size:.9rem;margin-bottom:.35rem;font-weight:600}
+.ion-picker{position:relative}
+.ion-current{display:flex;justify-content:space-between;align-items:center;gap:.5rem;width:100%;background:#fff;color:var(--text);text-align:left}
+.ion-current::after{content:"▾";color:var(--muted)}.ion-current[aria-expanded=true]::after{content:"▴"}
+.ion-panel{position:absolute;z-index:20;top:calc(100% + .3rem);left:0;display:flex;flex-wrap:wrap;align-items:flex-start;gap:.6rem 1.4rem;width:max-content;max-width:calc(100vw - 1.5rem);padding:.75rem .85rem;background:#fff;border:1px solid var(--line);border-radius:.3rem;box-shadow:0 8px 24px rgba(20,30,40,.14)}
+.ion-panel table{width:auto;margin:0;border-collapse:collapse;font-size:.88rem}
+.ion-panel caption{padding:0 0 .35rem;text-align:left;font-weight:600}
+.ion-panel th,.ion-panel td{padding:.15rem;border:0;text-align:left;white-space:nowrap;background:none}
+.ion-panel thead th{color:var(--muted);font-size:.78rem;font-weight:600;text-align:center}
+.ion-panel tbody th{padding-right:.5rem;color:var(--muted);font-size:.82rem;font-weight:600}
+.ion-panel td button{width:100%;padding:.3rem .55rem;background:#fff;font-size:.88rem}
+.ion-panel td button[aria-pressed=true]{background:var(--blue);border-color:var(--blue);color:#fff}
+@media(max-width:560px){.ion-panel tbody th,.ion-panel thead td{display:none}.ion-panel{gap:.6rem}}

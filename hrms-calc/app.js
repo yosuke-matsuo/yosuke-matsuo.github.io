@@ -17,7 +17,7 @@ const strings={
   jNotListed:'Wiley（Angew. Chem. など）、RSC、Elsevier、Springer の投稿規定は、原文を確認できなかったため載せていません。確認した規定には、電子の質量についての記載はありませんでした。',
   method:'計算方法',sources:'出典・参考文献',
   formula:'分子式（中性分子 M）',ion:'イオンの種類',optionalFound:'実測 m/z（任意）',
-  posIons:'正イオン',negIons:'負イオン',
+  posIons:'正イオン',negIons:'負イオン',ionNone:'付加・脱離なし',ionColM:'M',ionCol2M:'2M',ionColZ2:'M（2価）',
   syntax:'H・Na などの付加・脱離は「イオンの種類」で選びます。括弧・同位体・電荷は入力できません。',
   calculate:'計算する',calcPlaceholder:'分子式を入力すると、ここに結果が表示されます。',
   mz:'計算 m/z',neutral:'中性分子 M',ionFormula:'イオンの組成',measured:'実測 m/z',diff:'誤差',
@@ -101,7 +101,7 @@ const strings={
   jNotListed:'Guidelines of Wiley (such as Angew. Chem.), RSC, Elsevier and Springer are not listed because their originals could not be checked. None of the guidelines checked mentions the electron mass.',
   method:'Method',sources:'Sources and references',
   formula:'Molecular formula (neutral M)',ion:'Ion type',optionalFound:'Measured m/z (optional)',
-  posIons:'Positive ions',negIons:'Negative ions',
+  posIons:'Positive ions',negIons:'Negative ions',ionNone:'none',ionColM:'M',ionCol2M:'2M',ionColZ2:'M (z = 2)',
   syntax:'Choose adducts and losses such as H or Na under “Ion type”. Parentheses, isotopes and charges cannot be entered.',
   calculate:'Calculate',calcPlaceholder:'Enter a formula and the result appears here.',
   mz:'Calculated m/z',neutral:'Neutral M',ionFormula:'Ion composition',measured:'Measured m/z',diff:'Error',
@@ -213,6 +213,44 @@ for(const id of ['calcIon','searchIon','batchIon']){
  for(const [lab,keys] of [['posIons',POS],['negIons',NEG]]){const g=el('optgroup');g.dataset.t=lab;for(const k of keys)g.append(new Option(ionOption(k),k));$(id).append(g);}
  $(id).value='[M+H]+';
 }
+// ion picker: a button shows the current ion; it opens a table of all ion types (positive / negative;
+// rows = atoms added or removed, columns = M, 2M, doubly charged). The hidden <select> keeps the value.
+const ION_GRID={
+ posIons:[['+H',['[M+H]+','[2M+H]+','[M+2H]2+']],['+Na',['[M+Na]+','[2M+Na]+',null]],['+K',['[M+K]+',null,null]],['+NH4',['[M+NH4]+',null,null]],
+  ['+Li',['[M+Li]+',null,null]],['+H −H2O',['[M+H-H2O]+',null,null]],[null,['[M]+','[2M]+',null]]],
+ negIons:[['−H',['[M-H]-','[2M-H]-','[M-2H]2-']],['+HCOO',['[M+HCOO]-',null,null]],['+CH3COO',['[M+CH3COO]-',null,null]],['+Cl',['[M+Cl]-',null,null]],
+  [null,['[M]-','[2M]-',null]]]
+};
+const pickers=[];
+function syncPickers(){for(const pk of pickers)pk.sync();}
+function makePicker(id){
+ const sel=$(id),wrap=el('div',{className:'ion-picker',id:id+'-picker'});
+ const btn=el('button',{type:'button',className:'ion-current'}),cur=el('span',{id:id+'-current'}),panel=el('div',{className:'ion-panel',id:id+'-panel',hidden:true});
+ btn.setAttribute('aria-haspopup','true');btn.setAttribute('aria-expanded','false');btn.setAttribute('aria-controls',panel.id);btn.setAttribute('aria-labelledby',`${id}-label ${id}-current`);btn.append(cur);
+ for(const [cap,rows] of Object.entries(ION_GRID)){
+  const table=el('table'),caption=el('caption'),head=el('tr',{},el('td')),body=el('tbody');caption.dataset.t=cap;
+  for(const k of ['ionColM','ionCol2M','ionColZ2']){const th=el('th',{scope:'col'});th.dataset.t=k;head.append(th);}
+  for(const [lab,keys] of rows){
+   const tr=el('tr'),th=el('th',{scope:'row'});if(lab)th.innerHTML=rich(lab);else th.dataset.t='ionNone';tr.append(th);
+   for(const k of keys){const td=el('td');if(k){const b=el('button',{type:'button',textContent:ionOption(k)});b.dataset.ion=k;b.onclick=()=>choose(k);td.append(b);}tr.append(td);}
+   body.append(tr);
+  }
+  table.append(caption,el('thead',{},head),body);panel.append(table);
+ }
+ wrap.append(btn,panel);sel.after(wrap);
+ function open(){panel.hidden=false;btn.setAttribute('aria-expanded','true');panel.style.left='0px';
+  const over=panel.getBoundingClientRect().right-(document.documentElement.clientWidth-12);if(over>0)panel.style.left=`${-over}px`;
+  (panel.querySelector('button[aria-pressed=true]')||panel.querySelector('td button')).focus();}
+ function close(focus){if(panel.hidden)return;panel.hidden=true;btn.setAttribute('aria-expanded','false');if(focus)btn.focus();}
+ function sync(){cur.textContent=ionOption(sel.value);for(const b of panel.querySelectorAll('td button'))b.setAttribute('aria-pressed',String(b.dataset.ion===sel.value));}
+ function choose(k){sel.value=k;sync();close(true);sel.dispatchEvent(new Event('input',{bubbles:true}));sel.dispatchEvent(new Event('change',{bubbles:true}));}
+ btn.onclick=()=>panel.hidden?open():close(false);
+ wrap.addEventListener('keydown',e=>{if(e.key==='Escape'&&!panel.hidden){e.preventDefault();close(true);}});
+ document.addEventListener('click',e=>{if(!wrap.contains(e.target))close(false);});
+ document.addEventListener('focusin',e=>{if(!wrap.contains(e.target))close(false);});
+ sync();pickers.push({sync,close});
+}
+for(const id of ['calcIon','searchIon','batchIon'])makePicker(id);
 
 // ---------- tabs ----------
 const tabs=[...document.querySelectorAll('[role=tab]')];
@@ -448,7 +486,7 @@ function defaultRanges(){const o={};for(const e of Object.keys(ELEMENTS))o[e]=[0
 function finderSettings(){return {ion:$('searchIon').value,tol:Number($('tolerance').value),unit:$('unit').value,ranges:readRanges(),dbe:$('filterDbe').checked,ratio:$('filterRatio').checked};}
 function applyFinder(f){
  if(isIon(f.ion))$('searchIon').value=f.ion;if(validTol(f.tol))$('tolerance').value=String(f.tol);if(['ppm','mDa'].includes(f.unit))$('unit').value=f.unit;
- if(f.ranges&&typeof f.ranges==='object')writeRanges(f.ranges);$('filterDbe').checked=f.dbe===true;$('filterRatio').checked=f.ratio===true;
+ if(f.ranges&&typeof f.ranges==='object')writeRanges(f.ranges);$('filterDbe').checked=f.dbe===true;$('filterRatio').checked=f.ratio===true;syncPickers();
 }
 if(isIon(settings.calcIon))$('calcIon').value=settings.calcIon;
 if(isIon(settings.batchIon))$('batchIon').value=settings.batchIon;
@@ -492,3 +530,4 @@ $('searchLink').onclick=()=>copyRich(shareLink('finder'),null,$('copyStatus'));
   calculate(true);
  }
 }
+syncPickers();
