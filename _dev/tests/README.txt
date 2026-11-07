@@ -1,6 +1,7 @@
 HRMS Calc と個人サイトのテスト（_dev/ は GitHub Pages では公開されません）
 
 リポジトリのルートで実行します。
+プルリクエストと main への push では、GitHub Actions（.github/workflows/tests.yml）が 1 と 2 を自動で実行します。
 
 1. 計算・科学的回帰テスト（Node.js 20.11 以降、ブラウザー不要）
      node --test _dev/tests/unit.test.mjs _dev/tests/features.test.mjs
