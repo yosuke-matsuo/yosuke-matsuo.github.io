@@ -203,7 +203,7 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
     ok((await p.innerHTML('#checkResults')).includes('C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>Na') && (await p.innerHTML('#checkResults')).includes('[M + Na]<sup>+</sup>'), 'checker: quoted text with subscripts and superscripts');
     ok((await p.innerHTML('#calcSi [data-t=siAppend]')).includes('C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>Na') && (await p.inputValue('#formula')) === 'C15H14O6', 'help text subscripts; input field unchanged');
     const ext = await p.$$eval('a[href^="http"]', as => as.map(a => a.target === '_blank' && a.rel.includes('noopener')));
-    ok(ext.length === 22 && ext.every(Boolean), `external links open in a new tab (${ext.length})`);
+    ok(ext.length === 20 && ext.every(Boolean), `external links open in a new tab (${ext.length})`);
     await p.ctx.close();
   }
   // 11. inputs kept in the address, shareable links, saved settings, candidate filters

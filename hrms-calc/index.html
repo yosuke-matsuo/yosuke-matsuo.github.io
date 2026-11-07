@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>HRMS Calc（HRMS精密質量計算ツール）</title>
 <meta name="description" content="電子の質量を考慮してHRMSの精密質量（m/z）を計算するブラウザー用ツール。分子式候補の検索、一括計算、同位体パターン、論文・SIの記載文の作成とチェック。">
-<link rel="stylesheet" href="style.css?v=20261107-2">
+<link rel="stylesheet" href="style.css?v=20261107-4">
 </head>
 <body>
 <a class="skip-link" href="#main" data-t="skip"></a>
@@ -116,24 +116,17 @@
 <section id="journals"><h2 data-t="journals"></h2>
 <p class="journals-intro" data-t="journalsIntro"></p>
 <dl class="journal-list">
-<dt>ACS — <a href="https://researcher-resources.acs.org/publish/author_guidelines?coden=joceah" target="_blank" rel="noopener noreferrer"><i>J. Org. Chem.</i></a></dt>
-<dd><p class="journal-example">HRMS (ESI/Q-TOF) <i>m</i>/<i>z</i>: [M + Na]<sup>+</sup> Calcd for C<sub>13</sub>H<sub>17</sub>NO<sub>3</sub>Na 258.1101; Found 258.1074.</p><p data-t="jAcs"></p></dd>
-<dt>ACS — <a href="https://researcher-resources.acs.org/publish/author_guidelines?coden=jnprdf" target="_blank" rel="noopener noreferrer"><i>J. Nat. Prod.</i></a>, <a href="https://researcher-resources.acs.org/publish/data_guidelines" target="_blank" rel="noopener noreferrer">ACS Research Data Guidelines</a></dt>
-<dd><p class="journal-example">HRMS (ESI-TOF) <i>m</i>/<i>z</i>: [M + Na]<sup>+</sup> Calcd for C<sub>13</sub>H<sub>17</sub>NO<sub>3</sub>Na 258.1101; Found 258.1074.</p><p data-t="jJnp"></p></dd>
+<dt>ACS — <a href="https://researcher-resources.acs.org/publish/author_guidelines?coden=joceah" target="_blank" rel="noopener noreferrer"><i>J. Org. Chem.</i></a>, <a href="https://researcher-resources.acs.org/publish/author_guidelines?coden=jnprdf" target="_blank" rel="noopener noreferrer"><i>J. Nat. Prod.</i></a></dt>
+<dd><p class="journal-example">HRMS (ESI/Q-TOF) <i>m</i>/<i>z</i>: [M + Na]<sup>+</sup> Calcd for C<sub>13</sub>H<sub>17</sub>NO<sub>3</sub>Na 258.1101; Found 258.1074.</p></dd>
 <dt>Wiley — <a href="https://onlinelibrary.wiley.com/page/journal/15213773/homepage/notice-to-authors" target="_blank" rel="noopener noreferrer"><i>Angew. Chem. Int. Ed.</i></a>, <a href="https://chemistry-europe.onlinelibrary.wiley.com/hub/journal/10990690/notice-to-authors" target="_blank" rel="noopener noreferrer"><i>Eur. J. Org. Chem.</i></a>, <a href="https://aces.onlinelibrary.wiley.com/hub/journal/1861471x/notice-to-authors" target="_blank" rel="noopener noreferrer"><i>Chem. Asian J.</i></a></dt>
-<dd><p class="journal-example">HRMS (ESI) <i>m</i>/<i>z</i> calcd for C<sub>32</sub>H<sub>47</sub>NO<sub>5</sub>+Na<sup>+</sup>: 548.3352 [M+Na]<sup>+</sup>; found: 548.3331.</p><p data-t="jWiley"></p></dd>
-<dt>MDPI — <a href="https://mdpi-res.com/data/molbank-checklist-for-authors.pdf" target="_blank" rel="noopener noreferrer">Molbank Checklist for Authors</a></dt>
-<dd><p class="journal-example">HRMS (ESI) <i>m</i>/<i>z</i>: [M + H]<sup>+</sup>, calcd. for C<sub>w</sub>H<sub>x</sub>N<sub>y</sub>O<sub>z</sub> 321.0001; found 321.0004.</p><p data-t="jMdpi"></p></dd>
+<dd><p class="journal-example">HRMS (ESI) <i>m</i>/<i>z</i> calcd for C<sub>32</sub>H<sub>47</sub>NO<sub>5</sub>+Na<sup>+</sup>: 548.3352 [M+Na]<sup>+</sup>; found: 548.3331.</p></dd>
 <dt>Elsevier — <a href="https://www.sciencedirect.com/journal/tetrahedron/publish/guide-for-authors" target="_blank" rel="noopener noreferrer"><i>Tetrahedron</i></a></dt>
-<dd><p class="journal-example">HRMS (ES+): <i>m</i>/<i>z</i> [M + H]<sup>+</sup> calcd 333.1248, found 333.1229</p><p data-t="jTet"></p></dd>
+<dd><p class="journal-example">HRMS (ES+): <i>m</i>/<i>z</i> [M + H]<sup>+</sup> calcd 333.1248, found 333.1229</p></dd>
 <dt>Thieme — <a href="https://www.thieme.de/statics/dokumente/thieme/final/de/dokumente/zw_synthesis/CFZ-Synthesis-Authors-Instructions-2025.pdf" target="_blank" rel="noopener noreferrer"><i>Synthesis</i></a></dt>
-<dd><p class="journal-example">HRMS–FAB: <i>m</i>/<i>z</i> [M + H]<sup>+</sup> calcd for C<sub>21</sub>H<sub>38</sub>N<sub>4</sub>O<sub>6</sub>S: 475.5285; found: 475.5267.</p><p data-t="jThieme"></p></dd>
-<dt><span data-t="psj"></span> — <a href="https://cpb.pharm.or.jp/document/CPB_Instructions.pdf" target="_blank" rel="noopener noreferrer"><i>Chem. Pharm. Bull.</i></a>, <a href="https://bpb.pharm.or.jp/document/BPB_Instructions.pdf" target="_blank" rel="noopener noreferrer"><i>Biol. Pharm. Bull.</i></a></dt>
-<dd><p class="journal-example">FAB-MS <i>m</i>/<i>z</i>: 332.1258 (Calcd for C<sub>18</sub>H<sub>20</sub>O<sub>6</sub>: 332.1259)</p><p data-t="jPsj"></p></dd>
-<dt><span data-t="jsp"></span> — <a href="https://link.springer.com/journal/11418/submission-guidelines" target="_blank" rel="noopener noreferrer"><i>J. Nat. Med.</i></a></dt>
-<dd><p class="journal-example">HRFAB-MS <i>m</i>/<i>z</i>:332.1258 (Calcd for C<sub>18</sub>H<sub>20</sub>O<sub>6</sub>: 332.1259)</p><p data-t="jJnm"></p></dd>
+<dd><p class="journal-example">HRMS–FAB: <i>m</i>/<i>z</i> [M + H]<sup>+</sup> calcd for C<sub>21</sub>H<sub>38</sub>N<sub>4</sub>O<sub>6</sub>S: 475.5285; found: 475.5267.</p></dd>
+<dt><span data-t="psj"></span> — <a href="https://cpb.pharm.or.jp/document/CPB_Instructions.pdf" target="_blank" rel="noopener noreferrer"><i>Chem. Pharm. Bull.</i></a>, <a href="https://bpb.pharm.or.jp/document/BPB_Instructions.pdf" target="_blank" rel="noopener noreferrer"><i>Biol. Pharm. Bull.</i></a>; <span data-t="jsp"></span> — <a href="https://link.springer.com/journal/11418/submission-guidelines" target="_blank" rel="noopener noreferrer"><i>J. Nat. Med.</i></a></dt>
+<dd><p class="journal-example">FAB-MS <i>m</i>/<i>z</i>: 332.1258 (Calcd for C<sub>18</sub>H<sub>20</sub>O<sub>6</sub>: 332.1259)</p></dd>
 </dl>
-<p class="note" data-t="jNotListed"></p>
 </section>
 
 <section id="method"><h2 data-t="method"></h2>
@@ -164,6 +157,6 @@
 
 <footer><p>© 2026 <a href="../index.html">Yosuke Matsuo</a></p><p><a href="https://github.com/yosuke-matsuo/yosuke-matsuo.github.io/tree/main/hrms-calc" data-t="sourceCode" target="_blank" rel="noopener noreferrer"></a> · <span data-t="codeLicense"></span><a href="LICENSE.txt">MIT License</a></p></footer>
 </main>
-<script type="module" src="app.js?v=20261107-2"></script>
+<script type="module" src="app.js?v=20261107-4"></script>
 </body>
 </html>
