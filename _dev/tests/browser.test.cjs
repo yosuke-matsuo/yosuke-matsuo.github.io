@@ -40,6 +40,8 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
   // 4. worker search, cancel, clearing on change, copy notice separate from the status
   {
     const p = await page({ permissions: ['clipboard-read', 'clipboard-write'] });
+    // searches finish in well under a second; deliver results 3 s late so the cancel check is not a race
+    await p.addInitScript(() => { const W = window.Worker; window.Worker = class extends W { set onmessage(f) { super.onmessage = e => setTimeout(() => f(e), 3000); } get onmessage() { return super.onmessage; } }; });
     await p.goto(`${BASE}/hrms-calc/index.html?lang=ja`); await p.click('#tab-finder');
     ok(new URL(p.url()).hash === '#finder' && await p.isVisible('#searchForm') && !(await p.isVisible('#calcForm')), 'finder tab opens and is kept in the address');
     await p.click('#searchButton'); await p.waitForFunction(() => !document.querySelector('#searchButton').disabled);
