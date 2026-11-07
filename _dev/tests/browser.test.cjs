@@ -19,7 +19,7 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
     const p = await page();
     if (blocked) await p.addInitScript(() => Object.defineProperty(window, 'localStorage', { get() { throw new Error('blocked'); } }));
     await p.goto(`${BASE}/index.html`); await p.click('[data-language="en"]');
-    await p.click('a[href^="./software.html"]:visible'); await p.waitForLoadState();
+    await p.click('a[href^="./tools.html"]:visible'); await p.waitForLoadState();
     await p.click('a[href^="./hrms-calc/index.html"]:visible'); await p.waitForLoadState();
     ok(await p.evaluate(() => document.documentElement.lang) === 'en', `HRMS opens in English (localStorage ${blocked ? 'blocked' : 'available'})`);
     ok(!(await p.$('header a')), 'HRMS header has no link to the personal page');
@@ -86,7 +86,7 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
     await p.ctx.close();
   }
   // 6. pages (Japanese and English): internal links resolve; every shown image loads after scrolling through (lazy images included)
-  for (const lang of ['ja', 'en']) for (const path of ['/index.html', '/research.html', '/publications.html', '/software.html', '/hrms-calc/index.html', '/404.html']) {
+  for (const lang of ['ja', 'en']) for (const path of ['/index.html', '/research.html', '/publications.html', '/tools.html', '/hrms-calc/index.html', '/404.html']) {
     const p = await page(); const r = await p.goto(`${BASE}${path}?lang=${lang}`); await p.waitForLoadState('networkidle');
     await p.evaluate(async () => { for (let y = 0; y < document.body.scrollHeight; y += 300) { scrollTo(0, y); await new Promise(r => setTimeout(r, 50)); } });
     await p.waitForFunction(() => [...document.images].filter(i => i.getAttribute('src') && i.checkVisibility()).every(i => i.complete), null, { timeout: 15000 }).catch(() => {});

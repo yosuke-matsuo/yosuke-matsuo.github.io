@@ -14,7 +14,7 @@
 - 開発用のファイルやメモは _dev/ か .claude/ に置く（GitHub Pages で公開されない）。ルートに README や .md を置かない。.nojekyll は追加しない。
 - 依頼に必要のない変更（特に研究内容・業績のページ）はしない。デザイン・配色・簡潔な文章を保ち、装飾や冗長な説明を増やさない。
 
-## 個人ページ（index / research / publications / software / 404）
+## 個人ページ（index / research / publications / tools / 404）
 - 日英両方を用意する（data-ja・data-en 属性、または data-lang の span）。言語は ?lang= と localStorage（ym-language）で引き継ぐ。
 - 外部リンクは target="_blank" rel="noopener noreferrer"。
 - 業績ページの画像は width・height に実寸、先頭以外は loading="lazy"、decoding="async"。画像の文字が読めなくなる圧縮はしない。
