@@ -1,5 +1,5 @@
-import {ELEMENTS,IONS,parseFormula,ion,ionCounts,ppm,dbe,isotopePattern} from './core.js?v=20261107-2';
-import {ionLabel,formulaHtml,siFormula,siSentence,checkText,parseBatch} from './si.js?v=20261107-2';
+import {ELEMENTS,IONS,parseFormula,ion,ionCounts,ppm,dbe,isotopePattern} from './core.js?v=20261107-3';
+import {ionLabel,formulaHtml,siFormula,siSentence,checkText,parseBatch} from './si.js?v=20261107-3';
 const $=id=>document.getElementById(id);
 const strings={
  ja:{skip:'本文へ移動',
@@ -7,16 +7,7 @@ const strings={
   electronHead:'電子の質量を考慮して計算します。',electronShort:'正イオンでは電子の質量を引き、負イオンでは足します。考慮しないと数ppmずれます。',electronSurvey:'2023～2024年の<i>Org. Lett.</i>誌のSI約3000件の調査では、精密質量データの約3割に記載の誤りがあり、その約3分の2は電子の質量を考慮していないものでした（<a href="https://doi.org/10.1021/acs.orglett.4c03458" target="_blank" rel="noopener noreferrer">Christmann, <i>Org. Lett.</i> 2025, <i>27</i>, 4⁠–⁠7</a>）。',details:'詳しく',
   tabCalc:'精密質量',tabFinder:'分子式検索',tabBatch:'一括計算',tabCheck:'記載チェック',
   journals:'主な雑誌のHRMSの書き方',journalsLink:'主な雑誌の書き方',psj:'日本薬学会',jsp:'日本生薬学会',
-  journalsIntro:'投稿規定に載っている記載例を、そのまま示します（2026年11月7日に原文を確認）。HRMS Calc の記載文は ACS の書式で、計算値はイオンの値（電子の質量を考慮）です。',
-  jAcs:'分子式と計算値には、付加した原子（H・Na など）を含めます。イオン化法と質量分析計の種類も書きます。分子量1000未満では、計算値との差が 0.003 m/z 以内なら通常は十分とされています。例の計算値は、電子の質量を引いたイオンの値です。',
-  jJnp:'J. Nat. Prod. の規定では、データの書き方は ACS Research Data Guidelines に従うとされ、例はそちらのものです（J. Org. Chem. の例とは ESI-TOF の部分だけが違います）。誤差の上限は 5 ppm または 0.003 m/z で、装置のメーカー・型式・主な設定も書きます。',
-  jWiley:'Angew. Chem.（version 10/26）と、Chemistry Europe・ACES の雑誌に共通の規定（version 09/26）で同じ例です。分子式は中性分子に Na+ を足す形で書き、イオンの種類は計算値の後ろに置きます。Angew. Chem. では、高分解能を 5 ppm の精度とし、測定条件（m/z の範囲、分解能、質量精度）の記載を求めています。例の計算値 548.3352 は電子の質量を考慮していない値で、[M+Na]+ の値は 548.3346 です。どちらの規定でも、天然物の単離・構造決定の論文では元素分析のデータが必要とされています。',
-  jJnm:'Springer から出版されている日本生薬学会の雑誌です。日本薬学会の雑誌と同じ化合物の例で、計算値は中性分子の値です（電子の質量を引いた M⁺ の値は 332.1254）。規定は2019年4月10日の改訂です。',
-  jMdpi:'Molbank のチェックリストの例で、ACS とほぼ同じ形です。分子量1000未満では、計算値との差が 0.003 m/z 以内なら通常は十分とされています。',
-  jTet:'質量分析では、m/z、イオンの種類、計算値と実測値を書きます。構造が新しい低分子化合物には、通常 ¹H・¹³C NMR と HRMS が必要とされています。例には分子式が書かれていません。',
-  jThieme:'calcd と found は小文字で、後ろにコロンを付けます。例の分子式は中性分子 M のもので、計算値 475.5285 は、この分子式の [M + H]+ の値（475.2585）と一致しません。',
-  jPsj:'実測値を先に書き、計算値を括弧に入れます。イオンの種類は書きません。例の計算値は中性分子の値（332.12599）で、電子の質量を引いた M⁺ の値は 332.1254 です。',
-  jNotListed:'確認した規定には、電子の質量についての記載はありませんでした。',
+  journalsIntro:'投稿規定に載っている記載例です（2026年11月7日に原文を確認）。',
   method:'計算方法',sources:'出典・参考文献',
   formula:'分子式（中性分子 M）',ion:'イオンの種類',optionalFound:'実測 m/z（任意）',
   posIons:'正イオン',negIons:'負イオン',ionNone:'付加・脱離なし',ionColM:'M',ionCol2M:'2M',ionColZ2:'M（2価）',
@@ -93,16 +84,7 @@ const strings={
   electronHead:'The electron mass is taken into account.',electronShort:'It is subtracted for positive ions and added for negative ions; ignoring it gives an error of a few ppm.',electronSurvey:'A survey of about 3000 SI files from <i>Org. Lett.</i> (2023–2024) found errors in about 30% of the reported accurate-mass data; about two-thirds of these came from ignoring the electron mass (<a href="https://doi.org/10.1021/acs.orglett.4c03458" target="_blank" rel="noopener noreferrer">Christmann, <i>Org. Lett.</i> 2025, <i>27</i>, 4⁠–⁠7</a>).',details:'Details',
   tabCalc:'Exact mass',tabFinder:'Find formulas',tabBatch:'Batch',tabCheck:'Check SI text',
   journals:'How major journals ask for HRMS data',journalsLink:'Other journals',psj:'Pharmaceutical Society of Japan',jsp:'Japanese Society of Pharmacognosy',
-  journalsIntro:'Examples as printed in the author guidelines (checked against the originals on 7 November 2026). HRMS Calc writes statements in the ACS format, with calculated values for the ion (electron mass included).',
-  jAcs:'Molecular formulas and Calcd values include any added atoms (usually H or Na); the ionization method and mass analyzer type are reported. Below 1000 amu, a Found value within 0.003 m/z unit of the Calcd value is usually adequate. The Calcd value of the example is that of the ion, with the electron mass subtracted.',
-  jJnp:'J. Nat. Prod. asks for data to follow the ACS Research Data Guidelines, which give this example (it differs from the J. Org. Chem. example only in ESI-TOF). The error limit is 5 ppm or 0.003 m/z units, and the instrument make, model and key settings are described.',
-  jWiley:'The same example appears in Angew. Chem. (version 10/26) and in the guidelines shared by the Chemistry Europe and ACES journals (version 09/26). The formula is written as the neutral molecule plus Na+, and the ion type follows the calculated value. Angew. Chem. defines high resolution as 5 ppm precision and asks for the HRMS parameters (m/z range, resolution, mass accuracy). The calcd value of the example, 548.3352, does not include the electron mass; the [M+Na]+ value is 548.3346. Both guidelines require elemental analysis data for papers on the isolation and structure elucidation of natural products.',
-  jJnm:'Journal of the Japanese Society of Pharmacognosy, published by Springer. The example is the same compound as in the Pharmaceutical Society of Japan journals; its Calcd value is the neutral value (M⁺ with the electron mass subtracted: 332.1254). Guidelines revised on 10 April 2019.',
-  jMdpi:'The example from the Molbank checklist is almost the same as ACS. Below 1000 amu, found values within 0.003 m/z unit of the Calcd value are usually adequate.',
-  jTet:'MS data list m/z values, ion type, and calculated and found values. Structurally novel small molecules typically need ¹H and ¹³C NMR and HRMS. The example gives no molecular formula.',
-  jThieme:'Lowercase calcd and found, each followed by a colon. The formula in the example is that of the neutral M, and the calcd value 475.5285 does not match the [M + H]+ value of that formula (475.2585).',
-  jPsj:'The found value comes first and the Calcd value is in parentheses; the ion type is not given. The Calcd value of the example is the neutral value (332.12599); with the electron mass subtracted, M⁺ is 332.1254.',
-  jNotListed:'None of the guidelines checked mentions the electron mass.',
+  journalsIntro:'Examples as printed in the author guidelines (checked on 7 November 2026).',
   method:'Method',sources:'Sources and references',
   formula:'Molecular formula (neutral M)',ion:'Ion type',optionalFound:'Measured m/z (optional)',
   posIons:'Positive ions',negIons:'Negative ions',ionNone:'none',ionColM:'M',ionCol2M:'2M',ionColZ2:'M (z = 2)',
@@ -368,7 +350,7 @@ $('searchForm').onsubmit=event=>{event.preventDefault();clearSearch();
  const bad=checkRanges();if(bad){if(bad.input.closest('details'))bad.input.closest('details').open=true;bad.input.setAttribute('aria-invalid','true');bad.input.focus();$('searchStatus').textContent=bad.text;return;}
  try{
   const ranges=[...document.querySelectorAll('.range')].map(div=>{const inputs=div.querySelectorAll('input');return [inputs[0].dataset.element,Number(inputs[0].value),Number(inputs[1].value)];});
-  worker=new Worker(new URL('./worker.js?v=20261107-2',import.meta.url),{type:'module'});$('cancel').disabled=false;$('searchButton').disabled=true;$('searchStatus').textContent=t('running');
+  worker=new Worker(new URL('./worker.js?v=20261107-3',import.meta.url),{type:'module'});$('cancel').disabled=false;$('searchButton').disabled=true;$('searchStatus').textContent=t('running');
   worker.onmessage=({data})=>{cancel();if(data.error){say($('searchStatus'),errorText(data.error));return;}last=data;renderResults();$('copy').disabled=!data.results.length;$('searchLink').disabled=false;};
   worker.onerror=()=>{cancel();$('searchStatus').textContent=t('errorGeneric');};
   worker.postMessage({found:Number($('found').value),tolerance:Number($('tolerance').value),unit:$('unit').value,adduct:$('searchIon').value,ranges,filters:{dbe:$('filterDbe').checked,ratio:$('filterRatio').checked}});
