@@ -1,12 +1,14 @@
 import {ELEMENTS,ELECTRON_MASS} from './constants.js';
+import {ISOTOPES} from './isotopes.js';
 export {ELEMENTS,ELECTRON_MASS};
+// [number of M, signed charge, atoms added (+) or removed (−)]
 export const IONS = {
- '[M]+': [1,1,{}], '[M+H]+': [1,1,{H:1}], '[M+Na]+': [1,1,{Na:1}],
- '[M+K]+': [1,1,{K:1}], '[M+NH4]+': [1,1,{N:1,H:4}],
- '[M]-': [1,-1,{}], '[M-H]-': [1,-1,{H:-1}], '[M+Cl]-': [1,-1,{Cl:1}],
- '[M+2H]2+': [1,2,{H:2}], '[M-2H]2-': [1,-2,{H:-2}],
- '[2M]+': [2,1,{}], '[2M+H]+': [2,1,{H:1}], '[2M+Na]+': [2,1,{Na:1}],
- '[2M]-': [2,-1,{}], '[2M-H]-': [2,-1,{H:-1}]
+ '[M+H]+': [1,1,{H:1}], '[M+Na]+': [1,1,{Na:1}], '[M+K]+': [1,1,{K:1}], '[M+NH4]+': [1,1,{N:1,H:4}],
+ '[M+Li]+': [1,1,{Li:1}], '[M+H-H2O]+': [1,1,{H:-1,O:-1}], '[M]+': [1,1,{}], '[M+2H]2+': [1,2,{H:2}],
+ '[2M+H]+': [2,1,{H:1}], '[2M+Na]+': [2,1,{Na:1}], '[2M]+': [2,1,{}],
+ '[M-H]-': [1,-1,{H:-1}], '[M+HCOO]-': [1,-1,{C:1,H:1,O:2}], '[M+CH3COO]-': [1,-1,{C:2,H:3,O:2}],
+ '[M+Cl]-': [1,-1,{Cl:1}], '[M]-': [1,-1,{}], '[M-2H]2-': [1,-2,{H:-2}],
+ '[2M-H]-': [2,-1,{H:-1}], '[2M]-': [2,-1,{}]
 };
 export function parseFormula(input) {
  if(typeof input!=='string'||!input.length||input.length>500) throw Error('formula');
@@ -31,13 +33,18 @@ export function mass(c){
  }
  return result;
 }
-export function ion(c,key){
+// composition of the ion: mult × M + added − removed atoms
+export function ionCounts(c,key){
  if(!Object.hasOwn(IONS,key))throw Error('ion');
- const [mult,z,delta]=IONS[key];const counts={};
+ const [mult,,delta]=IONS[key];const counts={};
  for(const [e,n] of Object.entries(c))counts[e]=n*mult;
  for(const [e,n] of Object.entries(delta))counts[e]=(counts[e]||0)+n;
  if(Object.values(counts).some(n=>n<0))throw Error('composition');
  if(!Object.values(counts).some(n=>n>0))throw Error('composition');
+ return counts;
+}
+export function ion(c,key){
+ const counts=ionCounts(c,key);const z=IONS[key][1];
  const neutral=mass(c); if(!(neutral>0))throw Error('formula');
  const mz=(mass(counts)-z*ELECTRON_MASS)/Math.abs(z);
  if(!(mz>0))throw Error('composition');
@@ -47,6 +54,35 @@ export const ppm=(found,calculated)=>(found-calculated)/calculated*1e6;
 export function dbe(c){
  if(Object.keys(c).some(k=>c[k]&&!['C','H','N','O','S','F','Cl','Br','I'].includes(k)))return null;
  return 1+(c.C||0)+(c.N||0)/2-((c.H||0)+(c.F||0)+(c.Cl||0)+(c.Br||0)+(c.I||0))/2;
+}
+/* Isotope pattern of a composition with signed charge z.
+   Isotopologues with the same total mass number are combined into one peak:
+   abundance = sum, m/z = abundance-weighted mean. shift = mass number − that of the
+   most-abundant-isotope (monoisotopic) composition. Intensities are relative to the largest peak. */
+export function isotopePattern(counts,z,{minRelative=1e-3,maxPeaks=20}={}){
+ if(!Number.isInteger(z)||z===0)throw Error('charge');
+ const prune=d=>{let max=0;for(const p of d.P)if(p>max)max=p;const cut=max*1e-14;let a=0,b=d.P.length-1;
+  while(a<b&&d.P[a]<cut)a++;while(b>a&&d.P[b]<cut)b--;return {a0:d.a0+a,P:d.P.slice(a,b+1),PM:d.PM.slice(a,b+1)};};
+ const conv=(x,y)=>{const n=x.P.length+y.P.length-1,P=new Float64Array(n),PM=new Float64Array(n);
+  for(let i=0;i<x.P.length;i++){const xp=x.P[i],xm=x.PM[i];if(!xp)continue;
+   for(let j=0;j<y.P.length;j++){P[i+j]+=xp*y.P[j];PM[i+j]+=xm*y.P[j]+xp*y.PM[j];}}
+  return prune({a0:x.a0+y.a0,P,PM});};
+ let dist={a0:0,P:Float64Array.of(1),PM:Float64Array.of(0)},mono=0;
+ for(const [e,n0] of Object.entries(counts)){
+  const n=n0|0;if(!n)continue;if(!Object.hasOwn(ISOTOPES,e)||n<0||n>100000)throw Error('formula');
+  const iso=ISOTOPES[e],a0=Math.min(...iso.map(i=>i[0])),len=Math.max(...iso.map(i=>i[0]))-a0+1;
+  let base={a0,P:new Float64Array(len),PM:new Float64Array(len)};
+  for(const [a,m,p] of iso){base.P[a-a0]+=p;base.PM[a-a0]+=p*m;}
+  mono+=n*iso.reduce((x,y)=>y[2]>x[2]?y:x)[0];
+  let k=n,acc=null;while(k){if(k&1)acc=acc?conv(acc,base):base;k>>=1;if(k)base=conv(base,base);}
+  dist=conv(dist,acc);
+ }
+ let max=0;for(const p of dist.P)if(p>max)max=p;
+ let peaks=[];for(let i=0;i<dist.P.length;i++){const p=dist.P[i];if(!(p>0))continue;
+  peaks.push({shift:dist.a0+i-mono,mz:(dist.PM[i]/p-z*ELECTRON_MASS)/Math.abs(z),relative:p/max*100,abundance:p});}
+ peaks=peaks.filter(p=>p.relative>=minRelative*100);
+ if(peaks.length>maxPeaks)peaks=peaks.sort((a,b)=>b.relative-a.relative).slice(0,maxPeaks).sort((a,b)=>a.shift-b.shift);
+ return peaks;
 }
 export function search({found,tolerance,unit,adduct,ranges},limits={}){
  if(!Number.isFinite(found)||found<=0||found>100000||!Number.isFinite(tolerance)||tolerance<0||

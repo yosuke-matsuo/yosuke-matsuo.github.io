@@ -1,103 +1,284 @@
-import {ELEMENTS,IONS,ELECTRON_MASS,parseFormula,ion,ppm} from './core.js';
+import {ELEMENTS,IONS,parseFormula,ion,ionCounts,ppm,dbe,isotopePattern} from './core.js';
+import {ionLabel,formulaHtml,siFormula,siSentence,checkText,parseBatch} from './si.js';
 const $=id=>document.getElementById(id);
 const strings={
  ja:{skip:'本文へ移動',
-  lead:'分子式からHRMSの精密質量（m/z）を計算し、実測 m/z から分子式の候補を探します。計算はブラウザー内で行い、入力した値はどこにも送信しません。',
-  calcTitle:'精密質量を計算',searchTitle:'分子式候補を検索',method:'計算方法',sources:'出典・参考文献',
+  lead:'分子式からHRMSの精密質量（m/z）を計算します。実測値からの分子式候補の検索、複数化合物の一括計算、論文・SIの記載文の作成とチェックもできます。計算はすべてブラウザー内で行い、入力した内容はどこにも送信しません。',
+  electronHead:'電子の質量を考慮して計算します。',electronShort:'正イオンでは電子の分を引き、負イオンでは足します。中性分子の質量のまま比べると、数ppmずれます。',details:'詳しく',
+  tabCalc:'精密質量',tabFinder:'分子式検索',tabBatch:'一括計算',tabCheck:'記載チェック',
+  method:'計算方法',sources:'出典・参考文献',
   formula:'分子式（中性分子 M）',ion:'イオンの種類',optionalFound:'実測 m/z（任意）',
+  posIons:'正イオン',negIons:'負イオン',
   syntax:'例：C6H12O6。H・Na などの付加や脱離は「イオンの種類」で選びます。括弧・同位体の指定・電荷を含む式は入力できません。',
-  calculate:'計算する',found:'実測 m/z',tolerance:'許容誤差 ±',
+  calculate:'計算する',calcPlaceholder:'分子式を入力すると、ここに計算結果が表示されます。',
+  mz:'計算 m/z',neutral:'中性分子 M',ionFormula:'イオンの組成',measured:'実測 m/z',diff:'誤差',
+  siTitle:'論文・SI用の記載',siSource:'J. Org. Chem.（ACS）の投稿規定の例と同じ書式です。規定では、イオン化法と質量分析計の種類（例：ESI/Q-TOF）を書き、分子式と計算値には付加した原子（H・Na など）を含めます。',
+  siMethod:'イオン化法・分析計',siAppend:'Na・K・Li・Cl を分子式の末尾に書く（例：C6H12O6Na、規定の例と同じ）',siCopy:'記載文をコピー',
+  siNeedFound:'実測 m/z を入力すると「Found」まで作成します。',
+  isoTitle:'同位体パターン',peak:'ピーク',relative:'相対強度 (%)',
+  isoNote:'同じ整数質量の同位体組成を1本にまとめた値です（m/z は存在比による加重平均）。相対強度は最も強いピークを100とします。',
+  found:'実測 m/z',tolerance:'許容誤差 ±',
   rangeHelp:'中性分子 M に含める元素ごとに、原子数の範囲（最小〜最大）を指定します。使わない元素は最大を 0 にします。付加イオンの原子は自動で加わります。',
   moreElements:'その他の元素（金属・希土類など）',search:'候補を検索',cancel:'検索を中止',
   candidateNote:'質量が許容誤差に入る組成を、誤差の小さい順に表示します。不飽和度（DBE）では絞り込んでいないので、DBEの列も確認してください。化合物として妥当かどうかは、ほかのデータと合わせて判断します。',
   copy:'結果をコピー',
-  definition:'nᵢ は付加・脱離後のイオンに含まれる原子数、mᵢ は各元素の同位体質量、z は符号付きの電荷数です。2価以上のイオンは |z| で割ります。',
-  electron:'電子の質量は自動で補正します。正電荷1つにつき電子1個分を引き、負電荷1つにつき足します（mₑ = 0.0005485799090441 Da）。',
+  batchHelp:'1行に1化合物を、「名前（任意）　分子式　イオン（任意）　実測 m/z（任意）」の順に、タブ・空白・カンマで区切って入力します。Excelの表もそのまま貼り付けられます。',
+  batchInput:'化合物の一覧',batchIon:'イオンの種類（省略した行）',batchRun:'一括計算する',example:'例を入れる',
+  label:'名前',line:'行',note:'メモ',copyTable:'表をコピー（Excel用）',copySiAll:'記載文をまとめてコピー',
+  batchCount:(n,e)=>`${n} 件を計算しました`+(e?`（${e} 行は計算できませんでした）`:''),batchEmpty:'化合物を入力してください。',
+  errToken:v=>`読み取れない項目：${v}`,errIon:v=>`イオンの種類を認識できません：${v}`,
+  checkHelp:'論文やSIのHRMSの記載を貼り付けると、計算値（calcd）を計算し直して照合します。複数の化合物をまとめて貼り付けられます。',
+  checkInput:'HRMSの記載',checkTol:'実測値の許容差 ± (ppm)',checkRun:'チェックする',
+  checkNone:'「calcd for 分子式 数値」の形の記載が見つかりませんでした。',
+  checkSummary:(n,a,b,c)=>`${n} 件を確認しました：一致 ${a} 件、要確認 ${b} 件、誤りの可能性 ${c} 件`,
+  stOk:'一致',stWarn:'要確認',stError:'誤りの可能性',stUnparsed:'読み取り不可',
+  cOk:'計算値は正しい値と一致します。',cRounding:'一致します（最終桁の丸めが異なります）。',
+  cElectron:'電子の質量が考慮されていない可能性があります（記載値は電子を補正しない値と一致）。',
+  cElectronSign:'電子の質量の加減が逆の可能性があります。',
+  cNeutralFormula:'記載の分子式は中性分子 M のものです（イオンの組成を書くのが一般的です）。計算値はイオンとして正しい値です。',
+  cNeutralFormulaElectron:'記載の分子式は中性分子 M のもので、電子の質量も考慮されていない可能性があります。',
+  cMismatch:'計算値が一致しません。分子式・イオンの種類・数値を確認してください。',
+  cChargeAssumed:'電荷を記載から読み取れなかったため、±1 として照合しました。',
+  cFewDigits:'小数の桁数が少ないため、電子の質量の扱いは判定できません。',
+  cFoundOff:tol=>`実測値との差が ±${tol} ppm を超えています。`,
+  cFormula:'分子式を読み取れませんでした（元素記号と数字だけに対応しています）。',
+  stated:'記載の計算値',recalc:'正しい計算値',
+  definition:'<i>n</i><sub>i</sub> は付加・脱離後のイオンに含まれる原子数、<i>m</i><sub>i</sub> は各元素の同位体質量、<i>z</i> は符号付きの電荷数です。2価以上のイオンは |<i>z</i>| で割ります。',
+  electron:'電子の質量は自動で補正します。正電荷1つにつき電子1個分を引き、負電荷1つにつき足します（<i>m</i><sub>e</sub> = 0.0005485799090441 Da）。',
   precision:'結合エネルギーやイオン化エネルギーに相当する質量は含めません（HRMSの組成計算で通常使われる扱いです）。表示は小数点以下6桁で、候補の判定には丸める前の値を使います。',
   ppm:'誤差（ppm）=（実測値 − 計算値）/ 計算値 × 10⁶。誤差（mDa）=（実測値 − 計算値）× 1000。許容誤差は ± の範囲として使います。',
   dbe:'DBE = 1 + C + N/2 − (H + F + Cl + Br + I)/2。中性分子 M の値を、小数もそのまま表示します。C・H・N・O・S・ハロゲン以外の元素を含む組成では「—」とします。スルホンなど硫黄の酸化数が高い化合物では、値の解釈に注意してください。',
   isotopes:'84元素に対応し、各元素で天然存在比が最も高い同位体の質量を使います（例：B は ¹¹B、Fe は ⁵⁶Fe、Se は ⁸⁰Se）。最も軽い同位体や、スペクトルで最も強いピークとは一致しないことがあります。Tc・Pm など天然の同位体組成がない元素は使えません。',
+  isoMethod:'同位体パターンは、NISTの同位体存在比から計算します。同じ整数質量になる同位体組成は1本にまとめ、m/z は存在比で重み付けした平均とします。分解能の高い装置では、これらが分かれて観測されることがあります。',
+  checkMethod:'記載チェックでは、「calcd for」の後の分子式をイオンの組成として m/z を計算し直し、記載の計算値と比べます。最終桁の丸めの範囲で一致すれば「一致」とします。一致しない場合は、電子の質量を補正しない値、電子の加減が逆の値、中性分子の分子式として計算した値と比べ、当てはまる可能性を示します。',
   constants:'使用する同位体と質量を表示',
-  isotopeSource:'同位体質量',electronSource:'電子質量',paperIntro:'HRMSデータの報告で起こりやすい誤り（電子質量やイオン組成の扱いなど）',
+  isotopeSource:'同位体質量・存在比',electronSource:'電子質量',paperIntro:'HRMSデータの報告で起こりやすい誤り（電子質量やイオン組成の扱いなど）',
   accessDate:'データ参照日：2026年11月7日',
-  privacy:'計算はすべてブラウザー内で行い、入力した分子式や実測値はどこにも送信しません。',
   electronWhy:'HRMSの理論値は、電子の質量を考慮して計算する必要があります。中性分子の質量のまま比べると、数ppmの差が生じます。論文のSupporting Informationの精密質量データでは、この扱いの誤りが最も多く見られたと報告されています。',
   sourceCode:'ソースコード',codeLicense:'HRMS Calcのプログラム：',
   rangeEmpty:'空欄です',rangeInt:'整数で入力してください',rangeBounds:'0〜1000の範囲で入力してください',rangeOrder:'最小が最大より大きくなっています',rangeNone:'少なくとも1つの元素で、最大を1以上にしてください。',
-  minimum:'最小',maximum:'最大',neutral:'中性分子 M の質量',ionFormula:'イオンの組成',mz:'計算 m/z',
+  minimum:'最小',maximum:'最大',
   running:'検索中…',complete:'検索完了',incomplete:'探索の上限に達したため、一部の結果です（見つかった候補の中での誤差順）。範囲を狭めて検索し直してください。',stopped:'検索を中止しました。',
-  countFmt:n=>`候補 ${n} 件`,copyOk:'コピーしました',copyFail:'コピーできませんでした。表を選択してコピーしてください。',
+  countFmt:n=>`候補 ${n} 件`,copyOk:'コピーしました',copyFail:'コピーできませんでした。選択してコピーしてください。',
   element:'元素',isotope:'同位体',mass:'質量 / Da',
   errorFormula:'分子式を確認してください。元素記号と正の整数だけを使えます。',
+  errorFound:'実測 m/z は正の数で入力してください。',
   errorComposition:'この組成では指定したイオンになりません（脱プロトン化するHがない、など）。',
   errorRange:'原子数は0〜1000の整数で、最小 ≦ 最大にしてください。少なくとも1つの元素の最大を1以上にします。',
   errorSearch:'実測 m/z と許容誤差を確認してください（ppm は 0 以上、100万未満）。',
+  errorLines:'一度に入力できるのは1000行までです。',
   errorGeneric:'計算できませんでした。入力を確認してください。',
-  title:'HRMS Calc — 精密質量と分子式候補'},
+  title:'HRMS Calc — 精密質量・分子式候補・SI記載チェック'},
  en:{skip:'Skip to content',
-  lead:'Calculates exact HRMS masses (m/z) from molecular formulas and finds candidate formulas for a measured m/z. Everything runs in your browser; nothing you enter is sent anywhere.',
-  calcTitle:'Calculate exact mass',searchTitle:'Find candidate formulas',method:'Method',sources:'Sources and references',
+  lead:'Calculates exact HRMS masses (m/z) from molecular formulas. You can also find candidate formulas for a measured value, calculate many compounds at once, and write and check HRMS statements for papers and SI. Everything runs in your browser; nothing you enter is sent anywhere.',
+  electronHead:'The electron mass is taken into account.',electronShort:'It is subtracted for positive ions and added for negative ions. Using the mass of the neutral molecule instead gives an error of a few ppm.',details:'Details',
+  tabCalc:'Exact mass',tabFinder:'Find formulas',tabBatch:'Batch',tabCheck:'Check SI text',
+  method:'Method',sources:'Sources and references',
   formula:'Molecular formula (neutral M)',ion:'Ion type',optionalFound:'Measured m/z (optional)',
+  posIons:'Positive ions',negIons:'Negative ions',
   syntax:'Example: C6H12O6. Choose adducts and losses such as H or Na under “Ion type”. Parentheses, isotope labels and charges cannot be entered in the formula.',
-  calculate:'Calculate',found:'Measured m/z',tolerance:'Tolerance ±',
+  calculate:'Calculate',calcPlaceholder:'Enter a formula and the result appears here.',
+  mz:'Calculated m/z',neutral:'Neutral M',ionFormula:'Ion composition',measured:'Measured m/z',diff:'Error',
+  siTitle:'Statement for papers and SI',siSource:'Same format as the example in the J. Org. Chem. (ACS) author guidelines, which ask for the ionization method and the mass analyzer (e.g. ESI/Q-TOF), and for formulas and calculated values that include the added atoms (such as H or Na).',
+  siMethod:'Ionization / analyzer',siAppend:'Write Na, K, Li or Cl at the end of the formula (e.g. C6H12O6Na, as in the guidelines)',siCopy:'Copy statement',
+  siNeedFound:'Enter the measured m/z to add “Found”.',
+  isoTitle:'Isotope pattern',peak:'Peak',relative:'Relative intensity (%)',
+  isoNote:'Isotopologues with the same nominal mass are combined into one peak (m/z is the abundance-weighted mean). Intensities are relative to the strongest peak (100).',
+  found:'Measured m/z',tolerance:'Tolerance ±',
   rangeHelp:'For each element in the neutral M, set the range of atom counts (minimum–maximum). Set the maximum to 0 for elements you do not need. Adduct atoms are added automatically.',
   moreElements:'More elements (metals, rare earths and others)',search:'Find formulas',cancel:'Cancel search',
   candidateNote:'Compositions within the tolerance are listed from the smallest error. They are not filtered by double-bond equivalents (DBE), so check the DBE column as well. Judge whether a candidate is chemically reasonable together with your other data.',
   copy:'Copy results',
-  definition:'nᵢ is the number of atoms in the final ion, mᵢ the isotope mass of each element and z the signed charge. Ions with two or more charges are divided by |z|.',
-  electron:'The electron mass is corrected automatically: one electron is subtracted per positive charge and added per negative charge (mₑ = 0.0005485799090441 Da).',
+  batchHelp:'One compound per line: name (optional), formula, ion (optional) and measured m/z (optional), separated by tabs, spaces or commas. You can paste a table from Excel.',
+  batchInput:'Compounds',batchIon:'Ion type (for lines without one)',batchRun:'Calculate all',example:'Insert example',
+  label:'Name',line:'Line',note:'Note',copyTable:'Copy table (for Excel)',copySiAll:'Copy all statements',
+  batchCount:(n,e)=>`${n} compound${n===1?'':'s'} calculated`+(e?` (${e} line${e===1?'':'s'} could not be calculated)`:''),batchEmpty:'Enter one or more compounds.',
+  errToken:v=>`Cannot read: ${v}`,errIon:v=>`Unknown ion type: ${v}`,
+  checkHelp:'Paste HRMS statements from a paper or SI. Each calculated value (calcd) is recalculated and compared. You can paste many compounds at once.',
+  checkInput:'HRMS statements',checkTol:'Tolerance for measured values ± (ppm)',checkRun:'Check',
+  checkNone:'No statement of the form “calcd for formula value” was found.',
+  checkSummary:(n,a,b,c)=>`${n} checked: ${a} correct, ${b} to review, ${c} possible error${c===1?'':'s'}`,
+  stOk:'Correct',stWarn:'Review',stError:'Possible error',stUnparsed:'Not readable',
+  cOk:'The calculated value is correct.',cRounding:'Correct (the last digit is rounded differently).',
+  cElectron:'The electron mass may not have been taken into account (the value matches the uncorrected mass).',
+  cElectronSign:'The electron mass may have been added and subtracted the wrong way round.',
+  cNeutralFormula:'The formula given is that of the neutral M (the ion composition is usually given). The value is correct for the ion.',
+  cNeutralFormulaElectron:'The formula given is that of the neutral M, and the electron mass may not have been taken into account.',
+  cMismatch:'The calculated value does not match. Check the formula, ion type and numbers.',
+  cChargeAssumed:'No charge was found in the text, so ±1 was assumed.',
+  cFewDigits:'Too few decimal places to judge how the electron mass was handled.',
+  cFoundOff:tol=>`The measured value differs by more than ±${tol} ppm.`,
+  cFormula:'The formula could not be read (only element symbols and numbers are supported).',
+  stated:'Stated value',recalc:'Correct value',
+  definition:'<i>n</i><sub>i</sub> is the number of atoms in the final ion, <i>m</i><sub>i</sub> the isotope mass of each element and <i>z</i> the signed charge. Ions with two or more charges are divided by |<i>z</i>|.',
+  electron:'The electron mass is corrected automatically: one electron is subtracted per positive charge and added per negative charge (<i>m</i><sub>e</sub> = 0.0005485799090441 Da).',
   precision:'Mass equivalents of binding and ionization energies are not included, as is usual for HRMS composition calculations. Values are shown to six decimal places; candidates are judged with unrounded values.',
   ppm:'Error (ppm) = (measured − calculated) / calculated × 10⁶. Error (mDa) = (measured − calculated) × 1000. The tolerance is applied as a ± range.',
   dbe:'DBE = 1 + C + N/2 − (H + F + Cl + Br + I)/2, for the neutral M, shown with any fraction. Compositions containing elements other than C, H, N, O, S and halogens show —. Interpret the value with care for compounds with high-valent sulfur, such as sulfones.',
   isotopes:'84 elements are supported, each with the mass of its most naturally abundant isotope (for example ¹¹B for B, ⁵⁶Fe for Fe and ⁸⁰Se for Se). This may differ from the lightest isotope or the most intense peak in a spectrum. Elements without a natural isotope composition, such as Tc and Pm, cannot be used.',
+  isoMethod:'Isotope patterns are calculated from the NIST isotopic compositions. Isotopologues with the same nominal mass are combined into one peak whose m/z is the abundance-weighted mean; high-resolution instruments may separate them.',
+  checkMethod:'The checker takes the formula after “calcd for” as the composition of the ion, recalculates its m/z and compares it with the stated value. Values that agree within rounding of the last digit are marked correct. Otherwise the stated value is compared with the mass without the electron correction, with the correction applied the wrong way round, and with the value calculated from the neutral formula, to show the likely cause.',
   constants:'Show isotopes and masses used',
-  isotopeSource:'Isotope masses',electronSource:'Electron mass',paperIntro:'Common errors in reporting HRMS data (electron mass, ion composition and more)',
+  isotopeSource:'Isotope masses and abundances',electronSource:'Electron mass',paperIntro:'Common errors in reporting HRMS data (electron mass, ion composition and more)',
   accessDate:'Data accessed: 7 November 2026',
-  privacy:'All calculations run in your browser; formulas and measured values are never sent anywhere.',
   electronWhy:'Theoretical HRMS values must account for the electron mass; comparing with the mass of the neutral molecule gives an error of a few ppm. In accurate-mass data from Supporting Information files, this was reported as the most frequent error.',
   sourceCode:'Source code',codeLicense:'HRMS Calc code: ',
   rangeEmpty:'is empty',rangeInt:'must be a whole number',rangeBounds:'must be between 0 and 1000',rangeOrder:'minimum is larger than maximum',rangeNone:'Set a maximum of 1 or more for at least one element.',
-  minimum:'Minimum',maximum:'Maximum',neutral:'Mass of neutral M',ionFormula:'Ion composition',mz:'Calculated m/z',
+  minimum:'Minimum',maximum:'Maximum',
   running:'Searching…',complete:'Search complete',incomplete:'The search limit was reached, so the results are partial (sorted by error among the candidates found). Narrow the ranges and search again.',stopped:'Search canceled.',
-  countFmt:n=>`${n} candidate${n===1?'':'s'}`,copyOk:'Copied',copyFail:'Could not copy. Select the table and copy it manually.',
+  countFmt:n=>`${n} candidate${n===1?'':'s'}`,copyOk:'Copied',copyFail:'Could not copy. Select the text and copy it manually.',
   element:'Element',isotope:'Isotope',mass:'Mass / Da',
   errorFormula:'Check the formula. Use element symbols and positive integers only.',
+  errorFound:'Enter the measured m/z as a positive number.',
   errorComposition:'This composition cannot form the selected ion (for example, no H to remove for deprotonation).',
   errorRange:'Atom counts must be integers from 0 to 1000 with minimum ≤ maximum, and at least one element needs a maximum of 1 or more.',
   errorSearch:'Check the measured m/z and the tolerance (ppm must be at least 0 and below one million).',
+  errorLines:'Up to 1000 lines can be entered at once.',
   errorGeneric:'The calculation failed. Check your input.',
-  title:'HRMS Calc — exact masses and candidate formulas'}
+  title:'HRMS Calc — exact masses, candidate formulas and SI checks'}
+};
+const EXAMPLES={
+ batch:'Glucose\tC6H12O6\t[M+Na]+\t203.0524\nCatechin\tC15H14O6\t[M-H]-\t289.0716\nPunicalagin\tC48H28O30\t[M-2H]2-\t541.0263\nCaffeine C8H10N4O2 [M+H]+ 195.0877',
+ check:'HRMS (ESI) m/z: [M + Na]+ Calcd for C6H12O6Na 203.0526; Found 203.0524.\nHRMS (ESI) m/z: [M + H]+ Calcd for C8H11N4O2 195.0882; Found 195.0877.\nHRESIMS m/z 289.0716 [M − H]− (calcd for C15H13O6, 289.0718).\nHRMS (ESI) m/z: [M + Na]+ Calcd for C15H14O6 313.0683; Found 313.0679.'
 };
 function initialLang(){const q=new URLSearchParams(location.search).get('lang');if(q==='ja'||q==='en')return q;try{const s=localStorage.getItem('ym-language');if(s==='ja'||s==='en')return s;}catch(e){}return (navigator.language||'').startsWith('ja')?'ja':'en';}
-let lang=initialLang(),worker=null,last=null;
+let lang=initialLang(),worker=null,last=null,calcState=null,batchRows=null,checkRecords=null;
 const t=k=>strings[lang][k];
-function headers(){return [t('formula'),t('ionFormula'),'z',t('mz'),'Δ ppm','Δ mDa','DBE'];}
-function tableHead(table,labels){table.querySelector('thead').replaceChildren();const tr=document.createElement('tr');for(const s of labels){const th=document.createElement('th');th.textContent=s;tr.append(th);}table.querySelector('thead').append(tr);}
-function row(table,values){const tr=document.createElement('tr');for(const s of values){const td=document.createElement('td');td.textContent=s;tr.append(td);}table.querySelector('tbody').append(tr);}
-function resultValues(r){return [r.formula,r.ionFormula,r.z,r.mz.toFixed(6),r.ppm.toFixed(3),r.mDa.toFixed(3),r.dbe??'—'];}
-function renderResults(){const table=$('results');tableHead(table,headers());table.querySelector('tbody').replaceChildren();if(last){for(const r of last.results)row(table,resultValues(r));$('searchStatus').textContent=`${last.complete?t('complete'):t('incomplete')} · ${t('countFmt')(last.results.length)}`;}}
-function translate(){document.documentElement.lang=lang;document.title=t('title');for(const el of document.querySelectorAll('[data-t]'))el.textContent=t(el.dataset.t);$('langJa').setAttribute('aria-pressed',String(lang==='ja'));$('langEn').setAttribute('aria-pressed',String(lang==='en'));for(const input of document.querySelectorAll('.range input'))input.setAttribute('aria-label',`${input.dataset.element} ${t(input.dataset.bound==='min'?'minimum':'maximum')}`);tableHead($('constants'),[t('element'),t('isotope'),t('mass')]);renderResults();}
-for(const id of ['calcIon','searchIon']){for(const key of Object.keys(IONS))$(id).add(new Option(key,key));$(id).value='[M+H]+';}
-for(const [e,v]of Object.entries(ELEMENTS)){
- const div=document.createElement('div');div.className='range';const b=document.createElement('b');b.textContent=e;div.append(b);
- for(const bound of ['min','max']){const input=document.createElement('input');input.type='number';input.min=0;input.max=1000;input.step=1;input.required=true;input.value=bound==='min'?0:({C:30,H:60,O:20}[e]||0);input.dataset.element=e;input.dataset.bound=bound;div.append(input);if(bound==='min'){const span=document.createElement('span');span.textContent='–';div.append(span);}}
- const common=['C','H','N','O','F','P','S','Cl','Br','I','B','Si','Na','K'];
- $(common.includes(e)?'ranges':'extraRanges').append(div);row($('constants'),[e,`${v.isotope}${e}`,v.mass]);
+const el=(tag,props={},...kids)=>{const e=document.createElement(tag);Object.assign(e,props);e.append(...kids);return e;};
+const html=(tag,markup,cls)=>{const e=document.createElement(tag);e.innerHTML=markup;if(cls)e.className=cls;return e;};
+const signed=(x,d)=>(x>0?'+':x<0?'−':'')+Math.abs(x).toFixed(d);
+// Text shown on the page: subscript atom counts in formulas, superscript the charge of ion notation, italic m/z.
+// escape=false only for the fixed strings of this file (some contain <i>/<sub>).
+const escH=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function rich(s,escape=true){
+ let h=escape?escH(s):String(s);
+ h=h.replace(/\[([^\]\n<>]{0,30}M[^\]\n<>]{0,30})\]\s?(\d*[+\-−])(?![\w])/g,(m,inner,ch)=>`[${inner.replace(/([A-Za-z])(\d+)/g,'$1<sub>$2</sub>')}]<sup>${ch.replace('-','−')}</sup>`);
+ h=h.replace(/(^|[^A-Za-z0-9>\/])((?:[A-Z][a-z]?\d*){2,})(?![A-Za-z0-9])/g,(m,pre,f)=>/\d/.test(f)?pre+f.replace(/(\d+)/g,'<sub>$1</sub>'):m);
+ return h.replace(/\bm\/z\b/g,'<i>m</i>/<i>z</i>');
 }
-{const order=['C','H','N','O','S','P','F','Cl','Br','I','B','Si','Na','K'];const box=$('ranges');[...box.children].sort((x,y)=>order.indexOf(x.querySelector('b').textContent)-order.indexOf(y.querySelector('b').textContent)).forEach(el=>box.append(el));}
-function errorText(code){return t({formula:'errorFormula',composition:'errorComposition',range:'errorRange',search:'errorSearch'}[code]||'errorGeneric');}
+const say=(node,text)=>{node.innerHTML=rich(text);};
+const H=h=>({h});
+// plain text for <option>: Unicode sub- and superscripts, e.g. [M + NH₄]⁺
+const SUBS='₀₁₂₃₄₅₆₇₈₉',SUPS='⁰¹²³⁴⁵⁶⁷⁸⁹';
+function ionOption(key){const m=/^(\[.*\])(\d*)([+−])$/.exec(ionLabel(key).text);
+ return m[1].replace(/([A-Za-z])(\d+)/g,(x,a,d)=>a+[...d].map(c=>SUBS[c]).join(''))+[...m[2]].map(c=>SUPS[c]).join('')+(m[3]==='+'?'⁺':'⁻');}
+function tableHead(table,labels){const tr=el('tr');for(const s of labels)tr.append(html('th',s==='z'?'<i>z</i>':rich(s,false)));table.querySelector('thead').replaceChildren(tr);}
+function row(table,values){const tr=el('tr');for(const s of values){const td=el('td');if(s&&s.h!==undefined)td.innerHTML=s.h;else td.textContent=s;tr.append(td);}table.querySelector('tbody').append(tr);return tr;}
+async function copyRich(text,markup,status){
+ try{
+  if(markup&&window.ClipboardItem&&navigator.clipboard.write)await navigator.clipboard.write([new ClipboardItem({'text/plain':new Blob([text],{type:'text/plain'}),'text/html':new Blob([markup],{type:'text/html'})})]);
+  else await navigator.clipboard.writeText(text);
+  status.textContent=t('copyOk');
+ }catch{try{await navigator.clipboard.writeText(text);status.textContent=t('copyOk');}catch{status.textContent=t('copyFail');}}
+}
+function errorText(code){return t({formula:'errorFormula',composition:'errorComposition',range:'errorRange',search:'errorSearch',found:'errorFound',lines:'errorLines'}[code]||'errorGeneric');}
+
+// ---------- ion selects ----------
+const POS=Object.keys(IONS).filter(k=>IONS[k][1]>0),NEG=Object.keys(IONS).filter(k=>IONS[k][1]<0);
+for(const id of ['calcIon','searchIon','batchIon']){
+ for(const [lab,keys] of [['posIons',POS],['negIons',NEG]]){const g=el('optgroup');g.dataset.t=lab;for(const k of keys)g.append(new Option(ionOption(k),k));$(id).append(g);}
+ $(id).value='[M+H]+';
+}
+
+// ---------- tabs ----------
+const tabs=[...document.querySelectorAll('[role=tab]')];
+function selectTab(tab,focus,updateHash=true){
+ for(const x of tabs){const on=x===tab;x.setAttribute('aria-selected',String(on));x.tabIndex=on?0:-1;$(x.getAttribute('aria-controls')).hidden=!on;}
+  if(focus)tab.focus();
+ if(updateHash)try{const u=new URL(location.href);u.hash=tab.getAttribute('aria-controls');history.replaceState(null,'',u);}catch(e){}
+}
+tabs.forEach((tab,i)=>{
+ tab.onclick=()=>selectTab(tab);
+ tab.onkeydown=e=>{const k={ArrowRight:i+1,ArrowLeft:i-1,Home:0,End:tabs.length-1}[e.key];if(k===undefined)return;e.preventDefault();selectTab(tabs[(k+tabs.length)%tabs.length],true);};
+});
+function tabFromHash(){const h=location.hash.slice(1);return tabs.find(x=>x.getAttribute('aria-controls')===h);}
+selectTab(tabFromHash()||tabs[0],false,false);
+// keep the address bar as it was opened when the hash is not a tab (e.g. #method)
+window.addEventListener('hashchange',()=>{const tab=tabFromHash();if(tab)selectTab(tab,false,false);});
+
+// ---------- statement settings (shared by the calculator and the batch) ----------
+const si={method:'ESI',append:true};
+for(const c of document.querySelectorAll('[data-si]')){
+ c.addEventListener(c.type==='checkbox'?'change':'input',()=>{
+  si[c.dataset.si]=c.type==='checkbox'?c.checked:c.value;
+  for(const d of document.querySelectorAll(`[data-si=${c.dataset.si}]`))if(d!==c){if(d.type==='checkbox')d.checked=c.checked;else d.value=c.value;}
+  renderSi();$('siCopyStatus').textContent='';$('batchCopyStatus').textContent='';
+ });
+}
+function sentence(counts,key,mz,found){return siSentence({method:si.method,key,ionFormula:siFormula(counts,key,si.append),calcd:mz,found});}
+
+// ---------- calculator ----------
+function readFound(raw){const v=raw.trim();if(v==='')return '';if(!/^\d+(\.\d+)?$/.test(v)||!(Number(v)>0))throw Error('found');return v;}
+function calculate(showErrors){
+ const fRaw=$('formula').value.trim();
+ if(!fRaw){calcState=null;renderCalc();return;}
+ try{
+  const counts=parseFormula(fRaw),key=$('calcIon').value,r=ion(counts,key),found=readFound($('calcFound').value);
+  calcState={counts,key,r,found,pattern:isotopePattern(ionCounts(counts,key),r.z)};
+ }catch(e){calcState=showErrors?{error:e.message}:null;}
+ renderCalc();
+}
+function renderCalc(){
+ const box=$('calcResult'),main=$('calcMain');
+ box.classList.toggle('error',!!(calcState&&calcState.error));
+ $('calcPlaceholder').hidden=!!calcState;$('calcSi').hidden=$('calcIso').hidden=!(calcState&&!calcState.error);
+ main.replaceChildren();$('siCopyStatus').textContent='';
+ if(!calcState)return;
+ if(calcState.error){main.append(html('p',rich(errorText(calcState.error)),'error'));return;}
+ const {counts,key,r,found}=calcState;
+ main.append(html('p',`${ionLabel(key).html} <span class="sep">·</span> ${t('ionFormula')} ${formulaHtml(r.ionFormula)}${r.z>0?'<sup>'+(r.z>1?r.z:'')+'+</sup>':'<sup>'+(r.z<-1?-r.z:'')+'−</sup>'}`,'result-ion'));
+ main.append(html('p',`<span>${rich(t('mz'),false)}</span> <strong>${r.mz.toFixed(6)}</strong>`,'result-mz'));
+ const facts=el('dl',{className:'result-facts'});
+ const fact=(k,v)=>facts.append(el('div',{},html('dt',rich(k,false)),html('dd',v)));
+ fact(t('neutral'),`${formulaHtml(r.formula)} · ${r.neutral.toFixed(6)} Da`);
+ const d=dbe(counts);fact('DBE',d===null?'—':String(d));
+ if(found){const f=Number(found);fact(t('measured'),`${found}（${t('diff')} ${signed(ppm(f,r.mz),2)} ppm, ${signed((f-r.mz)*1000,3)} mDa）`.replace(/[（）]/g,c=>lang==='ja'?c:c==='（'?' (':')'));}
+ main.append(facts);
+ renderSi();renderIso();
+}
+function renderSi(){
+ if(calcState&&!calcState.error){
+  const {counts,key,r,found}=calcState,s=sentence(counts,key,r.mz,found),p=$('siText');
+  p.replaceChildren();$('siCopy').disabled=!s;
+  if(s)p.innerHTML=s.html;
+  const need=found?'':t('siNeedFound');
+  if(need)p.append(el('span',{className:'hint need',textContent:(s?' ':'')+need}));
+ }
+ if(batchRows)renderBatchSiState();
+}
+function renderIso(){
+ const peaks=calcState.pattern,table=$('isoTable');
+ tableHead(table,[t('peak'),'m/z',t('relative')]);table.querySelector('tbody').replaceChildren();
+ const name=s=>s===0?'M':`M${s>0?'+':'−'}${Math.abs(s)}`;
+ for(const p of peaks)row(table,[name(p.shift),p.mz.toFixed(4),p.relative>=10?p.relative.toFixed(1):p.relative.toFixed(2)]);
+ // bar chart
+ const w=46,h=120,pad=18,W=Math.max(peaks.length*w,200);
+ let svg=`<svg viewBox="0 0 ${W} ${h+34}" width="${W}" height="${h+34}" role="img"><line x1="0" y1="${h+pad}" x2="${W}" y2="${h+pad}" class="axis"/>`;
+ peaks.forEach((p,i)=>{const bh=Math.max(p.relative/100*h,1),x=i*w+w/2;
+  svg+=`<rect x="${x-9}" y="${h+pad-bh}" width="18" height="${bh}" class="bar${p.shift===0?' mono':''}"/>`+
+   `<text x="${x}" y="${h+pad-bh-4}" class="val">${p.relative>=10?p.relative.toFixed(0):p.relative.toFixed(1)}</text>`+
+   `<text x="${x}" y="${h+pad+14}" class="lab">${name(p.shift)}</text>`;});
+ $('isoChart').innerHTML=svg+'</svg>';
+}
+$('calcForm').addEventListener('input',()=>calculate(false));
+$('calcForm').addEventListener('change',()=>calculate(true));
+$('calcForm').onsubmit=e=>{e.preventDefault();calculate(true);if(!$('formula').value.trim())$('formula').focus();};
+$('siCopy').onclick=()=>{if(!calcState||calcState.error)return;const {counts,key,r,found}=calcState,s=sentence(counts,key,r.mz,found);if(s)copyRich(s.text,s.html,$('siCopyStatus'));};
+
+// ---------- formula finder ----------
+function headers(){return [t('formula'),t('ionFormula'),'z',t('mz'),'Δ ppm','Δ mDa','DBE'];}
+function resultValues(r){return [r.formula,r.ionFormula,r.z,r.mz.toFixed(6),r.ppm.toFixed(3),r.mDa.toFixed(3),r.dbe??'—'];}
+function renderResults(){const table=$('results');tableHead(table,headers());table.querySelector('tbody').replaceChildren();if(last){for(const r of last.results){const v=resultValues(r);v[0]=H(formulaHtml(r.formula));v[1]=H(formulaHtml(r.ionFormula));row(table,v);}$('searchStatus').textContent=`${last.complete?t('complete'):t('incomplete')} · ${t('countFmt')(last.results.length)}`;}}
+for(const [e,v]of Object.entries(ELEMENTS)){
+ const div=el('div',{className:'range'},el('b',{textContent:e}));
+ for(const bound of ['min','max']){const input=el('input',{type:'number',min:0,max:1000,step:1,required:true,value:bound==='min'?0:({C:30,H:60,O:20}[e]||0)});input.dataset.element=e;input.dataset.bound=bound;div.append(input);if(bound==='min')div.append(el('span',{textContent:'–'}));}
+ const common=['C','H','N','O','F','P','S','Cl','Br','I','B','Si','Na','K'];
+ $(common.includes(e)?'ranges':'extraRanges').append(div);row($('constants'),[e,H(`<sup>${v.isotope}</sup>${e}`),v.mass]);
+}
+{const order=['C','H','N','O','S','P','F','Cl','Br','I','B','Si','Na','K'];const box=$('ranges');[...box.children].sort((x,y)=>order.indexOf(x.querySelector('b').textContent)-order.indexOf(y.querySelector('b').textContent)).forEach(n=>box.append(n));}
 function cancel(){if(worker){worker.terminate();worker=null;}$('cancel').disabled=true;$('searchButton').disabled=false;}
 function clearSearch(){cancel();last=null;$('searchStatus').textContent='';$('copyStatus').textContent='';$('copy').disabled=true;renderResults();}
-$('calcForm').oninput=()=>{$('calcResult').replaceChildren();};
 $('searchForm').oninput=event=>{clearSearch();if(event.target.closest('#extraRanges'))$('extraElements').open=true;};
-function syncLangLinks(){for(const a of document.querySelectorAll('a[href]')){const h=a.getAttribute('href');if(!h||/^[a-z][a-z0-9+.-]*:/i.test(h)||h.startsWith('#'))continue;const [pq,frag]=h.split('#');const [path,q]=pq.split('?');if(!/\.html$/.test(path))continue;const ps=new URLSearchParams(q||'');ps.set('lang',lang);a.setAttribute('href',`${path}?${ps}${frag?'#'+frag:''}`);}}
-function setLanguage(value){cancel();lang=value;try{localStorage.setItem('ym-language',value);}catch(e){}try{const u=new URL(location.href);u.searchParams.set('lang',value);history.replaceState(null,'',u);}catch(e){}syncLangLinks();$('calcResult').replaceChildren();$('searchStatus').textContent='';translate();}
-$('langJa').onclick=()=>setLanguage('ja');$('langEn').onclick=()=>setLanguage('en');
-$('calcForm').onsubmit=event=>{event.preventDefault();const out=$('calcResult');out.replaceChildren();out.className='';try{
- const r=ion(parseFormula($('formula').value),$('calcIon').value);const p=document.createElement('p');p.textContent=`${r.formula} · ${t('neutral')}: ${r.neutral.toFixed(6)} Da`;out.append(p);
- const p2=document.createElement('p');p2.textContent=`${$('calcIon').value} · ${t('ionFormula')}: ${r.ionFormula} (z = ${r.z}) · ${t('mz')}: `;const strong=document.createElement('strong');strong.textContent=r.mz.toFixed(6);p2.append(strong);out.append(p2);
- if($('calcFound').value!==''){const f=Number($('calcFound').value);if(!Number.isFinite(f)||f<=0)throw Error('search');const p3=document.createElement('p');p3.textContent=`Δ ${ppm(f,r.mz).toFixed(3)} ppm / ${((f-r.mz)*1000).toFixed(3)} mDa`;out.append(p3);}
- }catch(e){out.textContent=errorText(e.message);out.className='error';}};
 function checkRanges(){for(const input of document.querySelectorAll('.range input'))input.removeAttribute('aria-invalid');
  for(const div of document.querySelectorAll('.range')){const [a,b]=div.querySelectorAll('input');for(const input of [a,b]){const v=input.value.trim();let why=null;
   if(v==='')why='rangeEmpty';else if(!/^-?\d+$/.test(v))why='rangeInt';else if(Number(v)<0||Number(v)>1000)why='rangeBounds';
@@ -108,12 +289,108 @@ function checkRanges(){for(const input of document.querySelectorAll('.range inpu
 $('searchForm').onsubmit=event=>{event.preventDefault();clearSearch();
  const bad=checkRanges();if(bad){if(bad.input.closest('details'))bad.input.closest('details').open=true;bad.input.setAttribute('aria-invalid','true');bad.input.focus();$('searchStatus').textContent=bad.text;return;}
  try{
- const ranges=[...document.querySelectorAll('.range')].map(div=>{const inputs=div.querySelectorAll('input');return [inputs[0].dataset.element,Number(inputs[0].value),Number(inputs[1].value)];});
- worker=new Worker(new URL('./worker.js',import.meta.url),{type:'module'});$('cancel').disabled=false;$('searchButton').disabled=true;$('searchStatus').textContent=t('running');
- worker.onmessage=({data})=>{cancel();if(data.error){$('searchStatus').textContent=errorText(data.error);return;}last=data;renderResults();$('copy').disabled=!data.results.length;};
- worker.onerror=()=>{cancel();$('searchStatus').textContent=t('errorGeneric');};
- worker.postMessage({found:Number($('found').value),tolerance:Number($('tolerance').value),unit:$('unit').value,adduct:$('searchIon').value,ranges});
- }catch(e){cancel();$('searchStatus').textContent=errorText(e.message);}};
+  const ranges=[...document.querySelectorAll('.range')].map(div=>{const inputs=div.querySelectorAll('input');return [inputs[0].dataset.element,Number(inputs[0].value),Number(inputs[1].value)];});
+  worker=new Worker(new URL('./worker.js',import.meta.url),{type:'module'});$('cancel').disabled=false;$('searchButton').disabled=true;$('searchStatus').textContent=t('running');
+  worker.onmessage=({data})=>{cancel();if(data.error){say($('searchStatus'),errorText(data.error));return;}last=data;renderResults();$('copy').disabled=!data.results.length;};
+  worker.onerror=()=>{cancel();$('searchStatus').textContent=t('errorGeneric');};
+  worker.postMessage({found:Number($('found').value),tolerance:Number($('tolerance').value),unit:$('unit').value,adduct:$('searchIon').value,ranges});
+ }catch(e){cancel();say($('searchStatus'),errorText(e.message));}};
 $('cancel').onclick=()=>{cancel();$('searchStatus').textContent=t('stopped');};
 $('copy').onclick=async()=>{if(!last)return;const context=`${t('found')}: ${$('found').value}\t${$('searchIon').value}\t±${$('tolerance').value} ${$('unit').value}\t${last.complete?t('complete'):t('incomplete')}`;try{await navigator.clipboard.writeText([context,headers().join('\t'),...last.results.map(r=>resultValues(r).join('\t'))].join('\n'));$('copyStatus').textContent=t('copyOk');}catch{$('copyStatus').textContent=t('copyFail');}};
+
+// ---------- batch ----------
+function batchHeaders(){return [t('line'),t('label'),t('formula'),t('ion'),t('ionFormula'),t('mz'),t('measured'),'Δ ppm','DBE',t('note')];}
+function batchValues(b){
+ if(b.error)return [b.line,b.label,b.formula,b.error==='formula'?'':b.key,'','','','','',b.message];
+ return [b.line,b.label,b.r.formula,b.key,b.r.ionFormula,b.r.mz.toFixed(6),b.found,b.found?ppm(Number(b.found),b.r.mz).toFixed(2):'',b.dbe??'—',''];
+}
+function runBatch(){
+ $('batchCopyStatus').textContent='';
+ let rows;try{rows=parseBatch($('batchInput').value,$('batchIon').value);}catch(e){batchRows=null;renderBatch();say($('batchStatus'),errorText(e.message));return;}
+ batchRows=rows.map(b=>{
+  if(b.error)return {...b,code:b.error};
+  try{const r=ion(b.counts,b.key);return {...b,r,dbe:dbe(b.counts)};}catch(e){return {...b,error:e.message,code:e.message};}
+ });
+ renderBatch();
+}
+function renderBatch(){
+ const table=$('batchResults');tableHead(table,batchHeaders());table.querySelector('tbody').replaceChildren();
+ $('batchSi').hidden=$('batchTableActions').hidden=!(batchRows&&batchRows.some(b=>!b.error));$('batchTableStatus').textContent='';
+ if(!batchRows){$('batchStatus').textContent='';return;}
+ if(!batchRows.length){$('batchStatus').textContent=t('batchEmpty');return;}
+ for(const b of batchRows){
+  if(b.error)b.message=b.code==='token'?t('errToken')(b.bad):b.code==='ion'?t('errIon')(b.bad):errorText(b.code);
+  const v=batchValues(b);if(b.formula&&(!b.error||b.counts))v[2]=H(formulaHtml(b.error?b.formula:b.r.formula));if(v[3])v[3]=H(ionLabel(v[3]).html);if(v[4])v[4]=H(formulaHtml(v[4]));
+  const tr=row(table,v);if(b.error)tr.className='row-error';
+ }
+ const bad=batchRows.filter(b=>b.error).length;
+ $('batchStatus').textContent=t('batchCount')(batchRows.length-bad,bad);
+ renderBatchSiState();
+}
+function renderBatchSiState(){
+ $('batchCopySi').disabled=!(batchRows||[]).some(b=>!b.error);
+}
+$('batchForm').onsubmit=e=>{e.preventDefault();runBatch();};
+$('batchInput').addEventListener('input',()=>{if(batchRows){batchRows=null;renderBatch();}});
+$('batchIon').addEventListener('change',()=>{if(batchRows)runBatch();});
+$('batchExample').onclick=()=>{$('batchInput').value=EXAMPLES.batch;runBatch();};
+$('batchCopyTsv').onclick=()=>{if(!batchRows)return;copyRich([batchHeaders().join('\t'),...batchRows.map(b=>batchValues(b).join('\t'))].join('\n'),null,$('batchTableStatus'));};
+$('batchCopySi').onclick=()=>{
+ if(!batchRows)return;const text=[],marks=[];
+ for(const b of batchRows){if(b.error)continue;const s=sentence(b.counts,b.key,b.r.mz,b.found);if(!s)continue;
+  const lab=b.label?`${b.label}: `:'';text.push(lab+s.text);marks.push(`<p>${lab.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}${s.html}</p>`);}
+ copyRich(text.join('\n'),marks.join(''),$('batchCopyStatus'));
+};
+
+// ---------- checker ----------
+const CODE_TEXT={ok:'cOk',rounding:'cRounding',electron:'cElectron',electronSign:'cElectronSign',neutralFormula:'cNeutralFormula',neutralFormulaElectron:'cNeutralFormulaElectron',mismatch:'cMismatch',chargeAssumed:'cChargeAssumed',fewDigits:'cFewDigits',formula:'cFormula'};
+const STATUS_TEXT={ok:'stOk',warn:'stWarn',error:'stError',unparsed:'stUnparsed'};
+function tolValue(){const v=Number($('checkTol').value);return Number.isFinite(v)&&v>=0?v:5;}
+function codeText(c){return c==='foundOff'?t('cFoundOff')(tolValue()):t(CODE_TEXT[c]);}
+function runCheck(){checkRecords=checkText($('checkInput').value,{tolerancePpm:tolValue()});renderCheck();}
+function renderCheck(){
+ const list=$('checkResults');list.replaceChildren();$('checkCopyStatus').textContent='';
+ $('checkActions').hidden=!(checkRecords&&checkRecords.length);
+ if(!checkRecords){$('checkSummary').textContent='';return;}
+ if(!checkRecords.length){say($('checkSummary'),t('checkNone'));return;}
+ const n=s=>checkRecords.filter(r=>r.status===s).length;
+ $('checkSummary').textContent=t('checkSummary')(checkRecords.length,n('ok'),n('warn'),n('error')+n('unparsed'));
+ for(const r of checkRecords){
+  const li=el('li',{className:`check-item ${r.status}`});
+  li.append(el('p',{className:'check-head'},el('span',{className:`badge ${r.status}`,textContent:t(STATUS_TEXT[r.status])}),' ',html('span',rich(r.codes.map(codeText).join(' ')))));
+  li.append(html('p',rich(r.snippet),'check-snippet'));
+  if(r.recalculated!==null){
+   const parts=[`${t('stated')} ${r.stated}`,`${t('recalc')} ${r.recalculated.toFixed(4)} (${signed(r.diffMDa,2)} mDa)`];
+   if(r.found!==null)parts.push(`${t('measured')} ${r.found} (${signed(r.ppm,2)} ppm)`);
+   li.append(html('p',rich(parts.join(' · ')),'check-values'));
+  }
+  list.append(li);
+ }
+}
+$('checkForm').onsubmit=e=>{e.preventDefault();runCheck();};
+$('checkInput').addEventListener('input',()=>{if(checkRecords){checkRecords=null;renderCheck();}});
+$('checkTol').addEventListener('input',()=>{if(checkRecords)runCheck();});
+$('checkExample').onclick=()=>{$('checkInput').value=EXAMPLES.check;runCheck();};
+$('checkCopy').onclick=()=>{
+ if(!checkRecords)return;
+ const lines=[[ '#','status','message','ion','formula','z',t('stated'),t('recalc'),'Δ mDa',t('measured'),'Δ ppm','text'].join('\t')];
+ checkRecords.forEach((r,i)=>lines.push([i+1,t(STATUS_TEXT[r.status]),r.codes.map(codeText).join(' '),r.ion,r.formula,r.z??'',r.stated,r.recalculated?.toFixed(4)??'',r.diffMDa?.toFixed(2)??'',r.found??'',r.ppm?.toFixed(2)??'',r.snippet].join('\t')));
+ copyRich(lines.join('\n'),null,$('checkCopyStatus'));
+};
+
+// ---------- language ----------
+function translate(){
+ document.documentElement.lang=lang;document.title=t('title');
+ for(const n of document.querySelectorAll('[data-t]')){if(n.tagName==='OPTGROUP')n.label=t(n.dataset.t);else if(n.tagName==='OPTION')n.textContent=t(n.dataset.t);else n.innerHTML=rich(t(n.dataset.t),false);}
+ $('langJa').setAttribute('aria-pressed',String(lang==='ja'));$('langEn').setAttribute('aria-pressed',String(lang==='en'));
+ $('tabs').setAttribute('aria-label',lang==='ja'?'機能':'Tools');
+ for(const input of document.querySelectorAll('.range input'))input.setAttribute('aria-label',`${input.dataset.element} ${t(input.dataset.bound==='min'?'minimum':'maximum')}`);
+ tableHead($('constants'),[t('element'),t('isotope'),t('mass')]);
+ $('batchInput').placeholder=lang==='ja'?'例）Glucose\tC6H12O6\t[M+Na]+\t203.0524':'e.g. Glucose\tC6H12O6\t[M+Na]+\t203.0524';
+ $('checkInput').placeholder='HRMS (ESI) m/z: [M + Na]+ Calcd for C6H12O6Na 203.0526; Found 203.0524.';
+ renderResults();renderCalc();renderBatch();renderCheck();
+}
+function syncLangLinks(){for(const a of document.querySelectorAll('a[href]')){const h=a.getAttribute('href');if(!h||/^[a-z][a-z0-9+.-]*:/i.test(h)||h.startsWith('#'))continue;const [pq,frag]=h.split('#');const [path,q]=pq.split('?');if(!/\.html$/.test(path))continue;const ps=new URLSearchParams(q||'');ps.set('lang',lang);a.setAttribute('href',`${path}?${ps}${frag?'#'+frag:''}`);}}
+function setLanguage(value){cancel();lang=value;try{localStorage.setItem('ym-language',value);}catch(e){}try{const u=new URL(location.href);u.searchParams.set('lang',value);history.replaceState(null,'',u);}catch(e){}syncLangLinks();$('searchStatus').textContent='';translate();}
+$('langJa').onclick=()=>setLanguage('ja');$('langEn').onclick=()=>setLanguage('en');
 translate();syncLangLinks();

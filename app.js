@@ -34,10 +34,12 @@ lb.innerHTML = '<button type="button" class="lightbox-close">×</button><img alt
 document.body.appendChild(lb);
 const lbImg = lb.querySelector('img'), lbClose = lb.querySelector('button');
 let lastLink = null;
-lb.addEventListener('close', () => {
+function afterClose() {
   lbImg.removeAttribute('src'); document.body.classList.remove('lb-open');
   if (lastLink) lastLink.focus(); lastLink = null;
-});
+}
+lb.addEventListener('close', afterClose); // Esc
+function closeLb() { if (lb.open) lb.close(); afterClose(); }
 document.querySelectorAll('.toc-link').forEach(a => {
   a.setAttribute('aria-haspopup', 'dialog');
   a.addEventListener('click', e => {
@@ -50,6 +52,6 @@ document.querySelectorAll('.toc-link').forEach(a => {
     document.body.classList.add('lb-open'); lb.showModal(); lbClose.focus();
   });
 });
-lb.addEventListener('click', e => { if (e.target !== lbImg) lb.close(); });
+lb.addEventListener('click', e => { if (e.target !== lbImg) closeLb(); });
 // the close button is the only control: Tab / Shift+Tab stay on it
 lb.addEventListener('keydown', e => { if (e.key === 'Tab') { e.preventDefault(); lbClose.focus(); } });
