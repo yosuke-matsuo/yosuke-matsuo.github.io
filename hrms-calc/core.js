@@ -84,7 +84,16 @@ export function isotopePattern(counts,z,{minRelative=1e-3,maxPeaks=20}={}){
  if(peaks.length>maxPeaks)peaks=peaks.sort((a,b)=>b.relative-a.relative).slice(0,maxPeaks).sort((a,b)=>a.shift-b.shift);
  return peaks;
 }
-export function search({found,tolerance,unit,adduct,ranges},limits={}){
+// Optional filters for candidate formulas of the neutral M.
+// Element ratios: "common range" (covering 99.7% of formulas) of Kind & Fiehn, BMC Bioinformatics 2007, 8, 105 (Table 2).
+export const RATIO_LIMITS={H:[0.2,3.1],N:[0,1.3],O:[0,1.2],P:[0,0.3],S:[0,0.8],Si:[0,0.5]};
+// true / false, or null when the rule cannot be applied (DBE undefined for the elements; no carbon for ratios)
+export function dbeRule(c){const d=dbe(c);return d===null?null:d>=0&&Number.isInteger(d);}
+export function ratioRule(c){if(!(c.C>0))return null;
+ for(const [e,[lo,hi]] of Object.entries(RATIO_LIMITS)){const r=(c[e]||0)/c.C;if(r<lo-1e-12||r>hi+1e-12)return false;}return true;}
+export function search({found,tolerance,unit,adduct,ranges,filters={}},limits={}){
+ if(typeof filters!=='object'||filters===null)throw Error('search');
+ const useDbe=filters.dbe===true,useRatio=filters.ratio===true;
  if(!Number.isFinite(found)||found<=0||found>100000||!Number.isFinite(tolerance)||tolerance<0||
  !['ppm','mDa'].includes(unit)||(unit==='ppm'&&tolerance>=1e6)||!Object.hasOwn(IONS,adduct))throw Error('search');
  const [mult,z,delta]=IONS[adduct];
@@ -101,7 +110,7 @@ export function search({found,tolerance,unit,adduct,ranges},limits={}){
  const low=(lowMz*Math.abs(z)-offset)/mult,high=(highMz*Math.abs(z)-offset)/mult;
  const mins=Array(rows.length+1).fill(0),maxs=[...mins];
  for(let i=rows.length-1;i>=0;i--){mins[i]=mins[i+1]+rows[i].min*rows[i].w;maxs[i]=maxs[i+1]+rows[i].max*rows[i].w;}
- const results=[],counts={};let nodes=0,complete=true;
+ const results=[],counts={};let nodes=0,complete=true,excluded=0;
  const maxNodes=limits.maxNodes??2000000,maxResults=limits.maxResults??5000;
  function visit(i,sum){
   if(!complete)return;if(++nodes>maxNodes){complete=false;return;}
@@ -110,6 +119,7 @@ export function search({found,tolerance,unit,adduct,ranges},limits={}){
    let r;try{r=ion(counts,adduct);}catch(e){if(['composition','formula'].includes(e.message))return;throw e;}
    const error=ppm(found,r.mz),md=(found-r.mz)*1000;
    if(Math.abs(unit==='ppm'?error:md)<=tolerance+1e-8){
+    if((useDbe&&dbeRule(counts)===false)||(useRatio&&ratioRule(counts)===false)){excluded++;return;}
     if(results.length>=maxResults){complete=false;return;}
     results.push({...r,ppm:error,mDa:md,dbe:dbe(counts)});
    }return;
@@ -121,5 +131,5 @@ export function search({found,tolerance,unit,adduct,ranges},limits={}){
   delete counts[r.e];
  }
  visit(0,0);results.sort((a,b)=>Math.abs(a.ppm)-Math.abs(b.ppm)||a.formula.localeCompare(b.formula));
- return {results,complete,nodes};
+ return {results,complete,nodes,excluded};
 }

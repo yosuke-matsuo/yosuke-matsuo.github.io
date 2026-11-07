@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>HRMS Calc — 精密質量・分子式候補・SI記載チェック</title>
+<title>HRMS Calc（HRMS精密質量計算ツール）</title>
 <meta name="description" content="電子の質量を考慮してHRMSの精密質量（m/z）を計算するブラウザー用ツール。分子式候補の検索、一括計算、同位体パターン、論文・SIの記載文の作成とチェック。">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <a class="skip-link" href="#main" data-t="skip"></a>
 <header class="site-header">
-<h1 class="brand">HRMS Calc</h1>
+<h1 class="brand">HRMS Calc<span class="brand-sub" data-t="brandSub">（HRMS精密質量計算ツール）</span></h1>
 <div class="language-switch" role="group" aria-label="Language"><button type="button" id="langJa" aria-pressed="true">日本語</button><button type="button" id="langEn" aria-pressed="false">English</button></div>
 </header>
 <main id="main">
@@ -30,7 +30,7 @@
 <form id="calcForm" novalidate>
 <div class="fields">
 <label><span data-t="formula"></span><input id="formula" autocomplete="off" spellcheck="false" placeholder="C6H12O6"></label>
-<label><span data-t="ion"></span><select id="calcIon"></select></label>
+<div class="field"><span class="field-label" id="calcIon-label" data-t="ion"></span><select id="calcIon" hidden aria-labelledby="calcIon-label"></select></div>
 <label><span data-t="optionalFound"></span><input id="calcFound" inputmode="decimal" autocomplete="off" placeholder="181.0707"></label>
 </div>
 <p class="hint" data-t="syntax"></p>
@@ -39,12 +39,13 @@
 <div id="calcResult" class="result-box">
 <p id="calcPlaceholder" class="placeholder" data-t="calcPlaceholder"></p>
 <div id="calcMain" aria-live="polite"></div>
+<div class="actions link-row" id="calcLinkRow" hidden><button type="button" id="calcLink" data-t="linkCopy"></button><span id="calcLinkStatus" class="hint" role="status"></span></div>
 <div id="calcSi" class="result-block" hidden>
 <h3 data-t="siTitle"></h3>
 <div class="si-options">
 <label class="check"><input type="checkbox" data-si="append" checked><span data-t="siAppend"></span></label>
 </div>
-<p class="hint si-source"><span data-t="siSource"></span> <a href="https://researcher-resources.acs.org/publish/author_guidelines/pdf?coden=joceah" target="_blank" rel="noopener noreferrer">J. Org. Chem. Author Guidelines</a></p>
+<p class="hint si-source"><span data-t="siSource"></span> <a href="https://researcher-resources.acs.org/publish/author_guidelines/pdf?coden=joceah" target="_blank" rel="noopener noreferrer">J. Org. Chem. Author Guidelines</a> · <a href="#journals" data-t="journalsLink"></a></p>
 <p id="siText" class="si-text"></p>
 <div class="actions"><button type="button" id="siCopy" data-t="siCopy"></button><span id="siCopyStatus" class="hint" role="status"></span></div>
 </div>
@@ -61,25 +62,30 @@
 <form id="searchForm" novalidate>
 <div class="fields">
 <label><span data-t="found"></span><input id="found" type="number" min="0.000001" max="100000" step="any" value="181.0707" required></label>
-<label><span data-t="ion"></span><select id="searchIon"></select></label>
+<div class="field"><span class="field-label" id="searchIon-label" data-t="ion"></span><select id="searchIon" hidden aria-labelledby="searchIon-label"></select></div>
 <label><span data-t="tolerance"></span><div class="inline"><input id="tolerance" type="number" min="0" step="any" value="5" required><select id="unit" aria-label="Tolerance unit"><option>ppm</option><option>mDa</option></select></div></label>
 </div>
 <p class="hint" data-t="rangeHelp"></p>
 <div class="rangeGrid" id="ranges"></div>
 <details id="extraElements"><summary data-t="moreElements"></summary><div class="rangeGrid" id="extraRanges"></div></details>
-<div class="actions"><button class="primary" id="searchButton" data-t="search"></button><button type="button" id="cancel" data-t="cancel" disabled></button></div>
+<fieldset class="filters"><legend data-t="filterTitle"></legend>
+<label class="check"><input type="checkbox" id="filterDbe"><span data-t="filterDbe"></span></label>
+<label class="check"><input type="checkbox" id="filterRatio"><span data-t="filterRatio"></span></label>
+</fieldset>
+<div class="actions"><button class="primary" id="searchButton" data-t="search"></button><button type="button" id="cancel" data-t="cancel" disabled></button><button type="button" id="resetSearch" class="text-button" data-t="reset"></button></div>
+<p class="hint" data-t="savedNote"></p>
 </form>
 <p id="searchStatus" aria-live="polite"></p>
 <p class="hint" data-t="candidateNote"></p>
 <div class="tableWrap"><table id="results"><thead></thead><tbody></tbody></table></div>
-<div class="actions"><button id="copy" type="button" data-t="copy" disabled></button><span id="copyStatus" class="hint" role="status"></span></div>
+<div class="actions"><button id="copy" type="button" data-t="copy" disabled></button><button id="searchLink" type="button" data-t="linkCopy" disabled></button><span id="copyStatus" class="hint" role="status"></span></div>
 </section>
 
 <section id="batch" class="panel" role="tabpanel" aria-labelledby="tab-batch" hidden>
 <form id="batchForm" novalidate>
 <p class="hint" data-t="batchHelp"></p>
 <label class="block"><span data-t="batchInput"></span><textarea id="batchInput" rows="7" spellcheck="false" autocomplete="off"></textarea></label>
-<div class="fields"><label><span data-t="batchIon"></span><select id="batchIon"></select></label></div>
+<div class="fields"><div class="field"><span class="field-label" id="batchIon-label" data-t="batchIon"></span><select id="batchIon" hidden aria-labelledby="batchIon-label"></select></div></div>
 <div class="actions"><button class="primary" data-t="batchRun"></button><button type="button" id="batchExample" data-t="example"></button></div>
 </form>
 <p id="batchStatus" role="status"></p>
@@ -107,6 +113,29 @@
 <div class="actions" id="checkActions" hidden><button type="button" id="checkCopy" data-t="copy"></button><span id="checkCopyStatus" class="hint" role="status"></span></div>
 </section>
 
+<section id="journals"><h2 data-t="journals"></h2>
+<p class="journals-intro" data-t="journalsIntro"></p>
+<dl class="journal-list">
+<dt>ACS — <a href="https://researcher-resources.acs.org/publish/author_guidelines?coden=joceah" target="_blank" rel="noopener noreferrer"><i>J. Org. Chem.</i></a></dt>
+<dd><p class="journal-example">HRMS (ESI/Q-TOF) <i>m</i>/<i>z</i>: [M + Na]<sup>+</sup> Calcd for C<sub>13</sub>H<sub>17</sub>NO<sub>3</sub>Na 258.1101; Found 258.1074.</p><p data-t="jAcs"></p></dd>
+<dt>ACS — <a href="https://researcher-resources.acs.org/publish/author_guidelines?coden=jnprdf" target="_blank" rel="noopener noreferrer"><i>J. Nat. Prod.</i></a>, <a href="https://researcher-resources.acs.org/publish/data_guidelines" target="_blank" rel="noopener noreferrer">ACS Research Data Guidelines</a></dt>
+<dd><p class="journal-example">HRMS (ESI-TOF) <i>m</i>/<i>z</i>: [M + Na]<sup>+</sup> Calcd for C<sub>13</sub>H<sub>17</sub>NO<sub>3</sub>Na 258.1101; Found 258.1074.</p><p data-t="jJnp"></p></dd>
+<dt>Wiley — <a href="https://onlinelibrary.wiley.com/page/journal/15213773/homepage/notice-to-authors" target="_blank" rel="noopener noreferrer"><i>Angew. Chem. Int. Ed.</i></a>, <a href="https://chemistry-europe.onlinelibrary.wiley.com/hub/journal/10990690/notice-to-authors" target="_blank" rel="noopener noreferrer"><i>Eur. J. Org. Chem.</i></a>, <a href="https://aces.onlinelibrary.wiley.com/hub/journal/1861471x/notice-to-authors" target="_blank" rel="noopener noreferrer"><i>Chem. Asian J.</i></a></dt>
+<dd><p class="journal-example">HRMS (ESI) <i>m</i>/<i>z</i> calcd for C<sub>32</sub>H<sub>47</sub>NO<sub>5</sub>+Na<sup>+</sup>: 548.3352 [M+Na]<sup>+</sup>; found: 548.3331.</p><p data-t="jWiley"></p></dd>
+<dt>MDPI — <a href="https://mdpi-res.com/data/molbank-checklist-for-authors.pdf" target="_blank" rel="noopener noreferrer">Molbank Checklist for Authors</a></dt>
+<dd><p class="journal-example">HRMS (ESI) <i>m</i>/<i>z</i>: [M + H]<sup>+</sup>, calcd. for C<sub>w</sub>H<sub>x</sub>N<sub>y</sub>O<sub>z</sub> 321.0001; found 321.0004.</p><p data-t="jMdpi"></p></dd>
+<dt>Elsevier — <a href="https://www.sciencedirect.com/journal/tetrahedron/publish/guide-for-authors" target="_blank" rel="noopener noreferrer"><i>Tetrahedron</i></a></dt>
+<dd><p class="journal-example">HRMS (ES+): <i>m</i>/<i>z</i> [M + H]<sup>+</sup> calcd 333.1248, found 333.1229</p><p data-t="jTet"></p></dd>
+<dt>Thieme — <a href="https://www.thieme.de/statics/dokumente/thieme/final/de/dokumente/zw_synthesis/CFZ-Synthesis-Authors-Instructions-2025.pdf" target="_blank" rel="noopener noreferrer"><i>Synthesis</i></a></dt>
+<dd><p class="journal-example">HRMS–FAB: <i>m</i>/<i>z</i> [M + H]<sup>+</sup> calcd for C<sub>21</sub>H<sub>38</sub>N<sub>4</sub>O<sub>6</sub>S: 475.5285; found: 475.5267.</p><p data-t="jThieme"></p></dd>
+<dt><span data-t="psj"></span> — <a href="https://cpb.pharm.or.jp/document/CPB_Instructions.pdf" target="_blank" rel="noopener noreferrer"><i>Chem. Pharm. Bull.</i></a>, <a href="https://bpb.pharm.or.jp/document/BPB_Instructions.pdf" target="_blank" rel="noopener noreferrer"><i>Biol. Pharm. Bull.</i></a></dt>
+<dd><p class="journal-example">FAB-MS <i>m</i>/<i>z</i>: 332.1258 (Calcd for C<sub>18</sub>H<sub>20</sub>O<sub>6</sub>: 332.1259)</p><p data-t="jPsj"></p></dd>
+<dt><span data-t="jsp"></span> — <a href="https://link.springer.com/journal/11418/submission-guidelines" target="_blank" rel="noopener noreferrer"><i>J. Nat. Med.</i></a></dt>
+<dd><p class="journal-example">HRFAB-MS <i>m</i>/<i>z</i>:332.1258 (Calcd for C<sub>18</sub>H<sub>20</sub>O<sub>6</sub>: 332.1259)</p><p data-t="jJnm"></p></dd>
+</dl>
+<p class="note" data-t="jNotListed"></p>
+</section>
+
 <section id="method"><h2 data-t="method"></h2>
 <div class="equation"><i>m</i>/<i>z</i> = (Σ <i>n</i><sub>i</sub> <i>m</i><sub>i</sub> − <i>z</i> <i>m</i><sub>e</sub>) / |<i>z</i>|</div>
 <p data-t="definition"></p>
@@ -115,6 +144,8 @@
 <p data-t="precision"></p>
 <p data-t="ppm"></p>
 <p data-t="dbe"></p>
+<p><span data-t="filterMethod"></span> <a href="https://doi.org/10.1186/1471-2105-8-105" target="_blank" rel="noopener noreferrer">Kind &amp; Fiehn, <i>BMC Bioinformatics</i> 2007</a></p>
+<p data-t="urlMethod"></p>
 <p data-t="isotopes"></p>
 <p data-t="isoMethod"></p>
 <p data-t="checkMethod"></p>
@@ -126,6 +157,7 @@
 <dt data-t="isotopeSource"></dt><dd><a href="https://physics.nist.gov/cgi-bin/Compositions/stand_alone.pl?all=all&amp;ascii=ascii2" target="_blank" rel="noopener noreferrer">NIST — Atomic Weights and Isotopic Compositions</a></dd>
 <dt data-t="electronSource"></dt><dd><a href="https://physics.nist.gov/cuu/Constants/Table/allascii.txt" target="_blank" rel="noopener noreferrer">NIST — 2022 CODATA Recommended Values</a></dd>
 <dt data-t="paperIntro"></dt><dd>Christmann, M. <a href="https://doi.org/10.1021/acs.orglett.4c03458" target="_blank" rel="noopener noreferrer">What I Learned from Analyzing Accurate Mass Data of 3000 Supporting Information Files.</a> <i>Org. Lett.</i> <b>2025</b>, <i>27</i>, 4–7.</dd>
+<dt data-t="ratioSource"></dt><dd>Kind, T.; Fiehn, O. <a href="https://doi.org/10.1186/1471-2105-8-105" target="_blank" rel="noopener noreferrer">Seven Golden Rules for heuristic filtering of molecular formulas obtained by accurate mass spectrometry.</a> <i>BMC Bioinformatics</i> <b>2007</b>, <i>8</i>, 105.</dd>
 </dl>
 <p class="note" data-t="accessDate"></p>
 </section>

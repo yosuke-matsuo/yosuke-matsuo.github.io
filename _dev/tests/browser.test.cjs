@@ -5,6 +5,8 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
 (async () => {
   const browser = await chromium.launch(process.env.CHROMIUM ? { executablePath: process.env.CHROMIUM } : {});
   const page = async (opts = {}) => { const ctx = await browser.newContext(opts); const p = await ctx.newPage(); p.ctx = ctx; return p; };
+  // choose an ion type with the ion picker (button that opens a table of ion types)
+  const pickIon = async (p, id, key) => { await p.click(`#${id}-picker .ion-current`); await p.click(`#${id}-panel button[data-ion="${key}"]`); };
 
   // 1. language survives reload, other query parameters and the hash are kept
   for (const [from, to, btn] of [['ja', 'en', '#langEn'], ['en', 'ja', '#langJa']]) {
@@ -40,6 +42,8 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
   // 4. worker search, cancel, clearing on change, copy notice separate from the status
   {
     const p = await page({ permissions: ['clipboard-read', 'clipboard-write'] });
+    // searches finish in well under a second; deliver results 3 s late so the cancel check is not a race
+    await p.addInitScript(() => { const W = window.Worker; window.Worker = class extends W { set onmessage(f) { super.onmessage = e => setTimeout(() => f(e), 3000); } get onmessage() { return super.onmessage; } }; });
     await p.goto(`${BASE}/hrms-calc/index.html?lang=ja`); await p.click('#tab-finder');
     ok(new URL(p.url()).hash === '#finder' && await p.isVisible('#searchForm') && !(await p.isVisible('#calcForm')), 'finder tab opens and is kept in the address');
     await p.click('#searchButton'); await p.waitForFunction(() => !document.querySelector('#searchButton').disabled);
@@ -138,7 +142,7 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
       'calculator: empty box with a placeholder before calculating; electron note shown at the top');
     await p.fill('#formula', 'C6H12O6');
     ok((await p.textContent('.result-mz strong')) === '181.070665' && !(await p.isVisible('#calcPlaceholder')), 'calculator: result appears in the box while typing ([M+H]+ 181.070665)');
-    await p.selectOption('#calcIon', '[M+HCOO]-'); await p.fill('#calcFound', '225.0614');
+    await pickIon(p, 'calcIon', '[M+HCOO]-'); await p.fill('#calcFound', '225.0614');
     const facts = await p.textContent('.result-facts');
     ok((await p.textContent('.result-mz strong')) === '225.061591' && facts.includes('−0.85 ppm'), `calculator: formate adduct 225.061591 and error shown (${facts})`);
     const si = await p.textContent('#siText');
@@ -186,7 +190,7 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
   // 11. typography: formulas with subscripts, charges as superscripts, italic m/z, external links in a new tab
   {
     const p = await page(); await p.goto(`${BASE}/hrms-calc/index.html?lang=ja`);
-    await p.fill('#formula', 'C15H14O6'); await p.selectOption('#calcIon', '[M+NH4]+');
+    await p.fill('#formula', 'C15H14O6'); await pickIon(p, 'calcIon', '[M+NH4]+');
     const opt = await p.$eval('#calcIon', s => [...s.options].map(o => o.text).join(' '));
     ok(opt.includes('[M + NH₄]⁺') && opt.includes('[M − 2H]²⁻') && opt.includes('[M + H − H₂O]⁺'), `ion options use super/subscripts: ${opt.slice(0, 80)}…`);
     const main = await p.innerHTML('#calcMain');
@@ -199,8 +203,84 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
     ok((await p.innerHTML('#checkResults')).includes('C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>Na') && (await p.innerHTML('#checkResults')).includes('[M + Na]<sup>+</sup>'), 'checker: quoted text with subscripts and superscripts');
     ok((await p.innerHTML('#calcSi [data-t=siAppend]')).includes('C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>Na') && (await p.inputValue('#formula')) === 'C15H14O6', 'help text subscripts; input field unchanged');
     const ext = await p.$$eval('a[href^="http"]', as => as.map(a => a.target === '_blank' && a.rel.includes('noopener')));
-    ok(ext.length === 8 && ext.every(Boolean), `external links open in a new tab (${ext.length})`);
+    ok(ext.length === 22 && ext.every(Boolean), `external links open in a new tab (${ext.length})`);
     await p.ctx.close();
+  }
+  // 11. inputs kept in the address, shareable links, saved settings, candidate filters
+  {
+    const p = await page({ permissions: ['clipboard-read', 'clipboard-write'] });
+    await p.goto(`${BASE}/hrms-calc/index.html?lang=ja`);
+    await p.fill('#formula', 'C6H12O6'); await pickIon(p, 'calcIon', '[M+Na]+'); await p.fill('#calcFound', '203.0524');
+    let u = new URL(p.url());
+    ok(u.searchParams.get('f') === 'C6H12O6' && u.searchParams.get('ion') === '[M+Na]+' && u.searchParams.get('found') === '203.0524' && u.searchParams.get('lang') === 'ja', `calculator inputs in the address (${p.url()})`);
+    await p.click('#calcLink'); await p.waitForTimeout(200);
+    const link = await p.evaluate(() => navigator.clipboard.readText());
+    const lu = new URL(link);
+    ok(lu.searchParams.get('f') === 'C6H12O6' && !lu.searchParams.has('lang') && lu.hash === '#calculator' && (await p.textContent('#calcLinkStatus')).includes('コピー'), `link copied without the language (${link})`);
+    const q = await page(); await q.goto(link);
+    ok((await q.inputValue('#formula')) === 'C6H12O6' && (await q.inputValue('#calcIon')) === '[M+Na]+' && (await q.textContent('#calcMain')).includes('203.052609'), 'opening the link restores the calculator and its result');
+    await q.ctx.close();
+    await p.fill('#formula', ''); ok(!new URL(p.url()).searchParams.has('f') && await p.isHidden('#calcLinkRow'), 'emptying the formula removes it from the address');
+    // finder link with ranges and filters runs the search
+    const fl = `${BASE}/hrms-calc/index.html?lang=ja&mz=301.0354&ion=${encodeURIComponent('[M-H]-')}&tol=10&unit=ppm&r=C0-40,H0-80,N0-6,O0-20,S0-2,P0-2&filter=dbe,ratio`;
+    const f = await page(); await f.goto(fl);
+    await f.waitForFunction(() => !document.querySelector('#searchButton').disabled && document.querySelectorAll('#results tbody tr').length > 0);
+    const fst = await f.textContent('#searchStatus');
+    ok(new URL(f.url()).hash === '#finder' && await f.isChecked('#filterDbe') && await f.isChecked('#filterRatio') && (await f.inputValue('#ranges input[data-element="P"][data-bound="max"]')) === '2' && fst.includes('除外 23 件') && fst.includes('候補 24 件'), `finder link restores conditions and searches: ${fst}`);
+    ok((await f.textContent('#results tbody tr:first-child')).includes('C15H10O7'), 'quercetin first after filtering');
+    await f.uncheck('#filterRatio'); await f.click('#searchButton'); await f.waitForFunction(() => !document.querySelector('#searchButton').disabled && document.querySelectorAll('#results tbody tr').length > 0);
+    ok((await f.textContent('#searchStatus')).includes('候補 36 件') && new URL(f.url()).searchParams.get('filter') === 'dbe', `filter change reflected in results and address: ${await f.textContent('#searchStatus')}`);
+    // settings saved in this browser (same context = same storage)
+    await f.selectOption('#unit', 'mDa'); await f.fill('#tolerance', '2'); await f.dispatchEvent('#tolerance', 'change');
+    await f.click('#tab-calculator'); await pickIon(f, 'calcIon', '[M-H]-'); await f.click('#tab-batch'); await pickIon(f, 'batchIon', '[M+Na]+');
+    ok(await f.isHidden('#batchTableActions'), 'batch copy button hidden before calculating');
+    const g = await f.ctx.newPage(); await g.goto(`${BASE}/hrms-calc/index.html?lang=ja#finder`);
+    ok((await g.inputValue('#unit')) === 'mDa' && (await g.inputValue('#tolerance')) === '2' && (await g.inputValue('#searchIon')) === '[M-H]-' && await g.isChecked('#filterDbe') && !(await g.isChecked('#filterRatio')) &&
+      (await g.inputValue('#ranges input[data-element="P"][data-bound="max"]')) === '2' && (await g.inputValue('#calcIon')) === '[M-H]-' && (await g.inputValue('#batchIon')) === '[M+Na]+' && (await g.inputValue('#found')) === '181.0707',
+      'settings restored on a new visit (measured m/z not stored)');
+    await g.click('#resetSearch');
+    ok((await g.inputValue('#unit')) === 'ppm' && (await g.inputValue('#tolerance')) === '5' && (await g.inputValue('#searchIon')) === '[M+H]+' && !(await g.isChecked('#filterDbe')) &&
+      (await g.inputValue('#ranges input[data-element="C"][data-bound="max"]')) === '30' && (await g.inputValue('#ranges input[data-element="P"][data-bound="max"]')) === '0', 'reset restores the finder defaults');
+    const h = await f.ctx.newPage(); await h.goto(`${BASE}/hrms-calc/index.html?lang=ja#finder`);
+    ok((await h.inputValue('#tolerance')) === '5' && (await h.inputValue('#calcIon')) === '[M-H]-', 'reset is saved; other settings kept');
+    await f.ctx.close(); await p.ctx.close();
+    // storage blocked: the page still works
+    const b = await page(); await b.addInitScript(() => Object.defineProperty(window, 'localStorage', { get() { throw new Error('blocked'); } }));
+    await b.goto(`${BASE}/hrms-calc/index.html?lang=ja&f=C6H12O6&ion=${encodeURIComponent('[M+H]+')}`);
+    ok((await b.textContent('#calcMain')).includes('181.070665'), 'link works when storage is blocked');
+    await b.ctx.close();
+  }
+  // 12. ion picker: every ion type once, open/close, keyboard, choice, panel inside the screen
+  {
+    const p = await page(); await p.goto(`${BASE}/hrms-calc/index.html?lang=ja`);
+    for (const id of ['calcIon', 'searchIon', 'batchIon']) {
+      const same = await p.evaluate(id => { const opts = [...document.querySelectorAll(`#${id} option`)].map(o => o.value).sort(); const btns = [...document.querySelectorAll(`#${id}-panel button[data-ion]`)].map(b => b.dataset.ion).sort(); return opts.length > 0 && JSON.stringify(opts) === JSON.stringify(btns); }, id);
+      ok(same, `${id}: the table has every ion type exactly once`);
+    }
+    await p.fill('#formula', 'C6H12O6');
+    await p.click('#calcIon-picker .ion-current');
+    ok(await p.isVisible('#calcIon-panel') && (await p.getAttribute('#calcIon-picker .ion-current', 'aria-expanded')) === 'true' && await p.evaluate(() => document.activeElement.dataset.ion) === '[M+H]+', 'picker opens with focus on the current ion');
+    await p.keyboard.press('Escape');
+    ok(await p.isHidden('#calcIon-panel') && await p.evaluate(() => document.activeElement.classList.contains('ion-current')), 'Esc closes the table, focus back on the button');
+    await p.click('#calcIon-picker .ion-current'); await p.click('h1');
+    ok(await p.isHidden('#calcIon-panel'), 'a click outside closes the table');
+    await pickIon(p, 'calcIon', '[2M+Na]+');
+    ok((await p.inputValue('#calcIon')) === '[2M+Na]+' && (await p.textContent('#calcIon-current')) === '[2M + Na]⁺' && (await p.textContent('#calcMain')).includes('383.115997') &&
+      (await p.getAttribute('#calcIon-panel button[data-ion="[2M+Na]+"]', 'aria-pressed')) === 'true' && await p.isHidden('#calcIon-panel'), `choosing an ion updates the button and the result (${await p.textContent('.result-mz')})`);
+    await p.click('#langEn');
+    ok((await p.textContent('#calcIon-panel caption')) === 'Positive ions' && (await p.textContent('#calcIon-current')) === '[2M + Na]⁺', 'table captions follow the language');
+    await p.ctx.close();
+    for (const w of [360, 1280]) {
+      const q = await page({ viewport: { width: w, height: 800 } }); await q.goto(`${BASE}/hrms-calc/index.html?lang=ja`);
+      const boxes = [];
+      for (const [tab, id] of [['calculator', 'calcIon'], ['finder', 'searchIon'], ['batch', 'batchIon']]) {
+        await q.click(`#tab-${tab}`); await q.click(`#${id}-picker .ion-current`);
+        const r = await q.$eval(`#${id}-panel`, e => { const b = e.getBoundingClientRect(); return [Math.round(b.left), Math.round(b.right)]; });
+        boxes.push(`${id} ${r}`); ok(r[0] >= 0 && r[1] <= w, `${w}px: ${id} table inside the screen (${r})`);
+        await q.keyboard.press('Escape');
+      }
+      await q.ctx.close();
+    }
   }
   await browser.close(); console.log(fails ? `${fails} check(s) failed` : 'all browser checks passed'); process.exit(fails ? 1 : 0);
 })();
