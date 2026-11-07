@@ -250,6 +250,21 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
     ok((await b.textContent('#calcMain')).includes('181.070665'), 'link works when storage is blocked');
     await b.ctx.close();
   }
+  // 13. every text on the page and the window title exist in both languages (no "undefined"); HRMS Calc files carry one version
+  for (const lang of ['ja', 'en']) {
+    const p = await page(); await p.goto(`${BASE}/hrms-calc/index.html?lang=${lang}`);
+    const bad = await p.evaluate(() => [document.title, ...[...document.querySelectorAll('[data-t]')].map(n => n.textContent)].filter(x => /undefined/.test(x)));
+    const h1 = await p.textContent('h1');
+    ok(!bad.length && h1 === (lang === 'ja' ? 'HRMS Calc（HRMS精密質量計算ツール）' : 'HRMS Calc (HRMS Exact Mass Calculator)') && (await p.title()) === h1, `${lang}: title and texts complete (${h1})`);
+    await p.ctx.close();
+  }
+  {
+    const fs = require('fs'), path = require('path'), dir = path.join(__dirname, '..', '..', 'hrms-calc');
+    const re = /(?:from '\.\/|href="|src="|URL\('\.\/)([\w.-]+\.(?:js|css))(\?v=[\w-]+)?/g;
+    const refs = ['index.html', 'app.js', 'core.js', 'si.js', 'worker.js'].flatMap(f => [...fs.readFileSync(path.join(dir, f), 'utf8').matchAll(re)].map(m => m[2] || 'none'));
+    const versions = new Set(refs);
+    ok(refs.length >= 9 && versions.size === 1 && !versions.has('none'), `HRMS Calc files carry one version (${[...versions]}, ${refs.length} references)`);
+  }
   // 12. ion picker: every ion type once, open/close, keyboard, choice, panel inside the screen
   {
     const p = await page(); await p.goto(`${BASE}/hrms-calc/index.html?lang=ja`);

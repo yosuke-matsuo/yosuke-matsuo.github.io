@@ -1,5 +1,5 @@
-import {ELEMENTS,IONS,parseFormula,ion,ionCounts,ppm,dbe,isotopePattern} from './core.js';
-import {ionLabel,formulaHtml,siFormula,siSentence,checkText,parseBatch} from './si.js';
+import {ELEMENTS,IONS,parseFormula,ion,ionCounts,ppm,dbe,isotopePattern} from './core.js?v=20261107-2';
+import {ionLabel,formulaHtml,siFormula,siSentence,checkText,parseBatch} from './si.js?v=20261107-2';
 const $=id=>document.getElementById(id);
 const strings={
  ja:{skip:'本文へ移動',
@@ -368,7 +368,7 @@ $('searchForm').onsubmit=event=>{event.preventDefault();clearSearch();
  const bad=checkRanges();if(bad){if(bad.input.closest('details'))bad.input.closest('details').open=true;bad.input.setAttribute('aria-invalid','true');bad.input.focus();$('searchStatus').textContent=bad.text;return;}
  try{
   const ranges=[...document.querySelectorAll('.range')].map(div=>{const inputs=div.querySelectorAll('input');return [inputs[0].dataset.element,Number(inputs[0].value),Number(inputs[1].value)];});
-  worker=new Worker(new URL('./worker.js',import.meta.url),{type:'module'});$('cancel').disabled=false;$('searchButton').disabled=true;$('searchStatus').textContent=t('running');
+  worker=new Worker(new URL('./worker.js?v=20261107-2',import.meta.url),{type:'module'});$('cancel').disabled=false;$('searchButton').disabled=true;$('searchStatus').textContent=t('running');
   worker.onmessage=({data})=>{cancel();if(data.error){say($('searchStatus'),errorText(data.error));return;}last=data;renderResults();$('copy').disabled=!data.results.length;$('searchLink').disabled=false;};
   worker.onerror=()=>{cancel();$('searchStatus').textContent=t('errorGeneric');};
   worker.postMessage({found:Number($('found').value),tolerance:Number($('tolerance').value),unit:$('unit').value,adduct:$('searchIon').value,ranges,filters:{dbe:$('filterDbe').checked,ratio:$('filterRatio').checked}});
@@ -459,8 +459,9 @@ $('checkCopy').onclick=()=>{
 
 // ---------- language ----------
 function translate(){
- document.documentElement.lang=lang;document.title=t('title');
- for(const n of document.querySelectorAll('[data-t]')){if(n.tagName==='OPTGROUP')n.label=t(n.dataset.t);else if(n.tagName==='OPTION')n.textContent=t(n.dataset.t);else n.innerHTML=rich(t(n.dataset.t),false);}
+ document.documentElement.lang=lang;if(t('title'))document.title=t('title');
+ for(const n of document.querySelectorAll('[data-t]')){if(t(n.dataset.t)===undefined)continue; // a missing string keeps the text written in the HTML
+  if(n.tagName==='OPTGROUP')n.label=t(n.dataset.t);else if(n.tagName==='OPTION')n.textContent=t(n.dataset.t);else n.innerHTML=rich(t(n.dataset.t),false);}
  $('langJa').setAttribute('aria-pressed',String(lang==='ja'));$('langEn').setAttribute('aria-pressed',String(lang==='en'));
  $('tabs').setAttribute('aria-label',lang==='ja'?'機能':'Tools');
  for(const input of document.querySelectorAll('.range input'))input.setAttribute('aria-label',`${input.dataset.element} ${t(input.dataset.bound==='min'?'minimum':'maximum')}`);
