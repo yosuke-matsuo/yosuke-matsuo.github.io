@@ -5,6 +5,7 @@
 ## 進め方
 - 説明・報告は日本語。
 - main には直接 push しない。ブランチで作業し、ユーザーがプルリクエストを確認して Merge する。
+- 変更をコミット・push したら、確認を待たずにプルリクエストまで作成する（ブランチのプルリクエストが Merge 済みなら、最新の main からやり直して新しいプルリクエストにする）。説明には変更内容とテスト結果を書く。
 - 変更後は _dev/tests のテストを実行し、結果（実行できなかったテストを含む）を報告する。確認していないことを確認済みと書かない。
 
 ## 必ず守ること
@@ -13,7 +14,7 @@
 - 開発用のファイルやメモは _dev/ か .claude/ に置く（GitHub Pages で公開されない）。ルートに README や .md を置かない。.nojekyll は追加しない。
 - 依頼に必要のない変更（特に研究内容・業績のページ）はしない。デザイン・配色・簡潔な文章を保ち、装飾や冗長な説明を増やさない。
 
-## 個人ページ（index / research / publications / software / 404）
+## 個人ページ（index / research / publications / tools / 404）
 - 日英両方を用意する（data-ja・data-en 属性、または data-lang の span）。言語は ?lang= と localStorage（ym-language）で引き継ぐ。
 - 外部リンクは target="_blank" rel="noopener noreferrer"。
 - 業績ページの画像は width・height に実寸、先頭以外は loading="lazy"、decoding="async"。画像の文字が読めなくなる圧縮はしない。
