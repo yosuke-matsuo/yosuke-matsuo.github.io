@@ -70,3 +70,6 @@ input::placeholder,textarea::placeholder{color:#a8b1bb;opacity:1}
 button.text-button{border-color:transparent;background:none;color:var(--blue);padding-left:.3rem;padding-right:.3rem}button.text-button:hover{border-color:transparent;color:var(--blue-dark);text-decoration:underline}
 .link-row{margin:.6rem 0 0;align-items:center}
 @media(max-width:560px){.brand-sub{display:block;font-size:.85rem;white-space:normal}}
+/* journal formats */
+#journals>p,.journal-list{max-width:80ch}.journal-list dt{margin:1.3rem 0 .35rem;font-weight:600}.journal-list dd{margin:0}.journal-list dd p{margin:0 0 .4rem;font-size:.92rem}
+.journal-list .journal-example{padding:.5rem .75rem;border-left:3px solid var(--line);background:var(--surface);font-size:.95rem;overflow-wrap:anywhere}
