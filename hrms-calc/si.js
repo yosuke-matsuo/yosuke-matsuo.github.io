@@ -23,12 +23,13 @@ export function siFormula(counts,key,appendMetal=false){
 }
 
 // Format of the example in the J. Org. Chem. (ACS) author guidelines:
-//   HRMS (ESI) m/z: [M + Na]+ Calcd for C6H12O6Na 203.0526; Found 203.0524.
-export function siSentence({method='ESI',key,ionFormula,calcd,found=''}){
- const lab=ionLabel(key),calc=calcd.toFixed(4),f=String(found).trim(),meth=String(method).trim().slice(0,30)||'ESI';
+//   HRMS m/z: [M + Na]+ Calcd for C6H12O6Na 203.0526; Found 203.0524.
+// (the ionization method, which the guidelines also ask for, is left out)
+export function siSentence({key,ionFormula,calcd,found=''}){
+ const lab=ionLabel(key),calc=calcd.toFixed(4),f=String(found).trim();
  if(f&&!/^\d+(\.\d+)?$/.test(f))throw Error('found');
- return {text:`HRMS (${meth}) m/z: ${lab.text} Calcd for ${ionFormula} ${calc}${f?`; Found ${f}`:''}.`,
-  html:`HRMS (${esc(meth)}) <i>m</i>/<i>z</i>: ${lab.html} Calcd for ${formulaHtml(ionFormula)} ${calc}${f?`; Found ${f}`:''}.`};
+ return {text:`HRMS m/z: ${lab.text} Calcd for ${ionFormula} ${calc}${f?`; Found ${f}`:''}.`,
+  html:`HRMS <i>m</i>/<i>z</i>: ${lab.html} Calcd for ${formulaHtml(ionFormula)} ${calc}${f?`; Found ${f}`:''}.`};
 }
 
 // ---------- reading pasted text ----------

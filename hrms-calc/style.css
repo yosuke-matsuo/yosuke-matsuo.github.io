@@ -36,7 +36,7 @@ section.panel{border-top:0;padding-top:1.6rem}
 .result-block h3{margin:0 0 .7rem;font-size:.98rem;font-weight:600}
 .si-options{display:flex;flex-wrap:wrap;align-items:flex-end;gap:.7rem 1.2rem;margin-bottom:.8rem}
 .si-options label span{font-size:.82rem;font-weight:600}
-.si-options label{flex:0 0 auto}.si-options select{width:auto;max-width:none}.si-options input[data-si=method]{width:8rem}
+.si-options label{flex:0 0 auto}.si-options select{width:auto;max-width:none}
 label.check{display:flex;align-items:center;gap:.45rem;padding-bottom:.45rem;font-size:.88rem}.si-options label.check{flex:1 1 16rem;min-width:0}
 label.check input{width:auto;margin:0}label.check span{display:inline;margin:0;font-weight:400;font-size:.88rem}
 .si-text{margin:0;padding:.65rem .85rem;border:1px solid var(--line);border-radius:.2rem;background:#fff;overflow-wrap:anywhere}
@@ -61,3 +61,4 @@ tr.row-error td{color:#a12d2d}
 #checkSummary,#batchStatus{margin:1rem 0 0;font-weight:600}
 @media(max-width:560px){.brand{font-size:1.05rem}.tabs{display:grid;grid-template-columns:1fr 1fr;gap:.4rem;border-bottom:0}.tabs button{margin:0;padding:.55rem .5rem;border:1px solid var(--line);border-radius:.3rem;font-size:.9rem}.tabs button[aria-selected=true]{background:#eaf1f7;box-shadow:inset 0 -3px 0 var(--blue)}.result-box{padding:.9rem 1rem}.result-mz strong{font-size:1.6rem}.si-options label:not(.check){flex:1 1 100%}.si-options select{width:100%}.result-facts{flex-direction:column}}
 sub,sup{line-height:0}
+input::placeholder,textarea::placeholder{color:#a8b1bb;opacity:1}
