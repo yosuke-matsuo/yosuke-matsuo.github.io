@@ -1,13 +1,13 @@
-import {ELEMENTS,IONS,parseFormula,ion,ionCounts,ppm,dbe,isotopePattern} from './core.js?v=20261107-5';
-import {ionLabel,formulaHtml,siFormula,siSentence,checkText,parseBatch} from './si.js?v=20261107-5';
+import {ELEMENTS,IONS,parseFormula,ion,ionCounts,ppm,dbe,isotopePattern} from './core.js?v=20261108-1';
+import {ionLabel,formulaHtml,siFormula,siSentence,checkText,parseBatch,readFound} from './si.js?v=20261108-1';
 const $=id=>document.getElementById(id);
 const strings={
  ja:{skip:'本文へ移動',
   lead:'HRMSの精密質量（m/z）の計算、分子式候補の検索、一括計算、論文・SIの記載文の作成とチェックができます。計算はすべてブラウザー内で行い、入力した内容はどこにも送信しません。',
-  electronHead:'電子の質量を考慮して計算します。',electronShort:'正イオンでは電子の質量を引き、負イオンでは足します。考慮しないと数ppmずれます。',electronSurvey:'2023～2024年の<i>Org. Lett.</i>誌のSI約3000件の調査では、精密質量データの約3割に記載の誤りがあり、その約3分の2は電子の質量を考慮していないものでした（<a href="https://doi.org/10.1021/acs.orglett.4c03458" target="_blank" rel="noopener noreferrer">Christmann, <i>Org. Lett.</i> 2025, <i>27</i>, 4⁠–⁠7</a>）。',details:'詳しく',
+  electronHead:'電子の質量を考慮して計算します。',electronShort:'正イオンでは電子の質量を引き、負イオンでは足します。考慮しないと、m/z 200 では約2.7 ppm ずれます（m/z が小さいほど大きくずれます）。',electronSurvey:'2023～2024年の<i>Org. Lett.</i>誌のSI約3000件の調査では、精密質量データの約3割に記載の誤りがあり、その約3分の2は電子の質量を考慮していないものでした（<a href="https://doi.org/10.1021/acs.orglett.4c03458" target="_blank" rel="noopener noreferrer">Christmann, <i>Org. Lett.</i> 2025, <i>27</i>, 4⁠–⁠7</a>）。',details:'詳しく',
   tabCalc:'精密質量',tabFinder:'分子式検索',tabBatch:'一括計算',tabCheck:'記載チェック',
   journals:'主な雑誌のHRMSの書き方',journalsLink:'主な雑誌の書き方',psj:'日本薬学会',jsp:'日本生薬学会',
-  journalsIntro:'投稿規定に載っている記載例です（2026年11月7日に原文を確認）。',
+  journalsIntro:'投稿規定に載っている記載例です（2026年11月7日に原文を確認）。',journalsNote:'※ 計算値（calcd）は原文のままです。電子の質量を考慮したイオンの値は、Wiley の例で 548.3346、Thieme の例（C21H38N4O6S の [M + H]+）で 475.2585、日本薬学会の例（M⁺）で 332.1254 です。',
   method:'計算方法',sources:'出典・参考文献',
   formula:'分子式（中性分子 M）',ion:'イオンの種類',optionalFound:'実測 m/z（任意）',
   posIons:'正イオン',negIons:'負イオン',ionNone:'付加・脱離なし',ionColM:'M',ionCol2M:'2M',ionColZ2:'M（2価）',
@@ -24,7 +24,7 @@ const strings={
   moreElements:'その他の元素（金属・希土類など）',search:'候補を検索',cancel:'検索を中止',
   candidateNote:'許容誤差に入る組成を、誤差の小さい順に表示します。',
   filterTitle:'候補の絞り込み（任意）',
-  filterDbe:'DBE が0以上の整数になる組成だけ（窒素ルールと同じ条件。P・金属などを含み DBE を計算できない組成は残します）',
+  filterDbe:'DBE が0以上の整数になる組成だけ',
   filterRatio:'元素比が一般的な範囲の組成だけ（H/C 0.2–3.1、N/C ≤ 1.3、O/C ≤ 1.2、P/C ≤ 0.3、S/C ≤ 0.8、Si/C ≤ 0.5。炭素を含まない組成は残します）',
   excludedFmt:n=>`絞り込みで除外 ${n} 件`,reset:'初期値に戻す',linkCopy:'この条件のリンクをコピー',
   savedNote:'イオンの種類・許容誤差・原子数の範囲・絞り込みは、このブラウザーに保存され、次回も使われます。',
@@ -33,11 +33,11 @@ const strings={
   batchInput:'化合物の一覧',batchIon:'イオンの種類（省略した行）',batchRun:'一括計算する',example:'例を入れる',
   label:'名前',line:'行',note:'メモ',copyTable:'表をコピー（Excel用）',copySiAll:'記載文をまとめてコピー',
   batchCount:(n,e)=>`${n} 件を計算しました`+(e?`（${e} 行は計算できませんでした）`:''),batchEmpty:'化合物を入力してください。',
-  errToken:v=>`読み取れない項目：${v}`,errIon:v=>`イオンの種類を認識できません：${v}`,
+  errToken:v=>`読み取れない項目：${v}`,errIon:v=>`イオンの種類を認識できません：${v}`,errIonConflict:v=>`イオンの種類が複数あります：${v}`,
   checkHelp:'論文・SIのHRMSの記載を貼り付けると、計算値（calcd）を検算します。複数の化合物をまとめて確認できます。',
   checkInput:'HRMSの記載',checkTol:'実測値の許容差 ± (ppm)',checkRun:'チェックする',
   checkNone:'「calcd for 分子式 数値」の形の記載が見つかりませんでした。',
-  checkSummary:(n,a,b,c)=>`${n} 件を確認しました：一致 ${a} 件、要確認 ${b} 件、誤りの可能性 ${c} 件`,
+  checkSummary:(n,a,b,c,u)=>`${n} 件を確認しました：一致 ${a} 件、要確認 ${b} 件、誤りの可能性 ${c} 件`+(u?`、読み取れなかった記載 ${u} 件`:''),
   stOk:'一致',stWarn:'要確認',stError:'誤りの可能性',stUnparsed:'読み取り不可',
   cOk:'',cRounding:'最終桁の丸めが異なります。',
   cElectron:'記載の計算値は、電子の質量を補正していない値です。',
@@ -45,7 +45,7 @@ const strings={
   cNeutralFormula:'分子式が中性分子 M のものです（計算値はイオンとして正しい値）。',
   cNeutralFormulaElectron:'分子式が中性分子 M のもので、記載の計算値は電子の質量も補正していません。',
   cMismatch:'計算値が一致しません。分子式・イオン・数値を確認してください。',
-  cChargeAssumed:'電荷の記載がないため、±1 として照合しました。',
+  cChargeAssumed:'電荷の記載がないため、正負の両方（±1）で照合し、よく一致する方を採用しました。',cChargeConflict:'記載の中で電荷が食い違っています。最もよく一致する電荷で照合しました。記載を確認してください。',cNoFormula:'「calcd」の後に分子式を読み取れないため、検算していません。',cNoValue:'計算値の数値を読み取れないため、検算していません。',
   cFewDigits:'桁数が少ないため、電子の質量の扱いは判定できません。',
   cFoundOff:tol=>`実測値との差が ±${tol} ppm を超えています。`,
   cFormula:'分子式を読み取れません（元素記号と数字のみ対応）。',
@@ -54,8 +54,8 @@ const strings={
   electron:'正電荷1つにつき電子1個分の質量を引き、負電荷1つにつき足します（<i>m</i><sub>e</sub> = 0.0005485799090441 Da）。',
   precision:'結合エネルギーなどに相当する質量は含めません（通常の扱い）。表示は小数点以下6桁で、判定には丸める前の値を使います。',
   ppm:'誤差（ppm）=（実測値 − 計算値）/ 計算値 × 10⁶。誤差（mDa）=（実測値 − 計算値）× 1000。許容誤差は ± の範囲として使います。',
-  filterMethod:'分子式検索の絞り込み：DBE の条件は、中性分子 M の DBE が0以上の整数であることです（C・H・N・O・S・ハロゲンの組成では窒素ルールと同じ条件）。元素比の条件は、Kind と Fiehn が示した「一般的な範囲」（データベースの分子式の99.7%を含む範囲）のうち、H・N・O・P・S・Si の炭素に対する比を使います。',
-  urlMethod:'精密質量と分子式検索の入力は、ページのアドレス（URL）に入ります。そのアドレスをブックマーク・共有すると、同じ入力で開けます。一括計算と記載チェックの入力はアドレスに入りません。',
+  filterMethod:'分子式検索の絞り込み：DBE の条件は、中性分子 M の DBE が整数で、かつ0以上であることです。DBE は C・H・N・O・S・ハロゲンを通常の原子価（C 4、N 3、H とハロゲン 1、O・S 2）として計算するので、ほかの元素を含む組成は判定せずに残します。整数であることは窒素ルール（窒素の数と整数質量の偶奇）と同じ条件ですが、0以上であることは窒素ルールには含まれません（例：CH4 より H の多い CH6 は窒素ルールを満たしますが、DBE は −1 です）。元素比の条件は、Kind と Fiehn が示した「一般的な範囲」（データベースの分子式の99.7%を含む範囲）のうち、H・N・O・P・S・Si の炭素に対する比を使います。',
+  urlMethod:'精密質量と分子式検索の入力は、ページのアドレスの「#」より後ろに入ります。この部分はサーバーに送られませんが、そのアドレスをブックマーク・共有すると、入力も一緒に伝わります。一括計算と記載チェックの入力はアドレスに入りません。',
   ratioSource:'分子式の元素比の範囲',
   dbe:'DBE = 1 + C + N/2 − (H + F + Cl + Br + I)/2（中性分子 M の値。小数もそのまま表示）。C・H・N・O・S・ハロゲン以外を含む組成では「—」とします。',
   isotopes:'84元素に対応し、各元素で天然存在比が最も高い同位体の質量を使います（例：B は ¹¹B、Fe は ⁵⁶Fe）。Tc・Pm など天然の同位体組成がない元素は使えません。',
@@ -81,10 +81,10 @@ const strings={
   brandSub:'（HRMS精密質量計算ツール）',title:'HRMS Calc（HRMS精密質量計算ツール）'},
  en:{skip:'Skip to content',
   lead:'Calculates exact HRMS masses (m/z), finds candidate formulas, calculates many compounds at once, and writes and checks HRMS statements for papers and SI. Everything runs in your browser; nothing you enter is sent anywhere.',
-  electronHead:'The electron mass is taken into account.',electronShort:'It is subtracted for positive ions and added for negative ions; ignoring it gives an error of a few ppm.',electronSurvey:'A survey of about 3000 SI files from <i>Org. Lett.</i> (2023–2024) found errors in about 30% of the reported accurate-mass data; about two-thirds of these came from ignoring the electron mass (<a href="https://doi.org/10.1021/acs.orglett.4c03458" target="_blank" rel="noopener noreferrer">Christmann, <i>Org. Lett.</i> 2025, <i>27</i>, 4⁠–⁠7</a>).',details:'Details',
+  electronHead:'The electron mass is taken into account.',electronShort:'It is subtracted for positive ions and added for negative ions; ignoring it shifts m/z 200 by about 2.7 ppm (more at lower m/z).',electronSurvey:'A survey of about 3000 SI files from <i>Org. Lett.</i> (2023–2024) found errors in about 30% of the reported accurate-mass data; about two-thirds of these came from ignoring the electron mass (<a href="https://doi.org/10.1021/acs.orglett.4c03458" target="_blank" rel="noopener noreferrer">Christmann, <i>Org. Lett.</i> 2025, <i>27</i>, 4⁠–⁠7</a>).',details:'Details',
   tabCalc:'Exact mass',tabFinder:'Find formulas',tabBatch:'Batch',tabCheck:'Check SI text',
   journals:'How major journals ask for HRMS data',journalsLink:'Other journals',psj:'Pharmaceutical Society of Japan',jsp:'Japanese Society of Pharmacognosy',
-  journalsIntro:'Examples as printed in the author guidelines (checked on 7 November 2026).',
+  journalsIntro:'Examples as printed in the author guidelines (checked on 7 November 2026).',journalsNote:'* Calcd values are as printed. With the electron mass taken into account, the ion values are 548.3346 for the Wiley example, 475.2585 for the Thieme example ([M + H]+ of C21H38N4O6S) and 332.1254 for the Pharmaceutical Society of Japan example (M⁺).',
   method:'Method',sources:'Sources and references',
   formula:'Molecular formula (neutral M)',ion:'Ion type',optionalFound:'Measured m/z (optional)',
   posIons:'Positive ions',negIons:'Negative ions',ionNone:'none',ionColM:'M',ionCol2M:'2M',ionColZ2:'M (z = 2)',
@@ -101,7 +101,7 @@ const strings={
   moreElements:'More elements (metals, rare earths and others)',search:'Find formulas',cancel:'Cancel search',
   candidateNote:'Compositions within the tolerance, from the smallest error.',
   filterTitle:'Filter candidates (optional)',
-  filterDbe:'Only compositions whose DBE is a non-negative integer (the same condition as the nitrogen rule; compositions with P, metals or other elements for which DBE cannot be calculated are kept)',
+  filterDbe:'Only compositions whose DBE is a non-negative integer',
   filterRatio:'Only compositions with common element ratios (H/C 0.2–3.1, N/C ≤ 1.3, O/C ≤ 1.2, P/C ≤ 0.3, S/C ≤ 0.8, Si/C ≤ 0.5; compositions without carbon are kept)',
   excludedFmt:n=>`${n} excluded by the filters`,reset:'Reset to defaults',linkCopy:'Copy a link to these inputs',
   savedNote:'The ion type, tolerance, atom-count ranges and filters are saved in this browser and used next time.',
@@ -110,11 +110,11 @@ const strings={
   batchInput:'Compounds',batchIon:'Ion type (for lines without one)',batchRun:'Calculate all',example:'Insert example',
   label:'Name',line:'Line',note:'Note',copyTable:'Copy table (for Excel)',copySiAll:'Copy all statements',
   batchCount:(n,e)=>`${n} compound${n===1?'':'s'} calculated`+(e?` (${e} line${e===1?'':'s'} could not be calculated)`:''),batchEmpty:'Enter one or more compounds.',
-  errToken:v=>`Cannot read: ${v}`,errIon:v=>`Unknown ion type: ${v}`,
+  errToken:v=>`Cannot read: ${v}`,errIon:v=>`Unknown ion type: ${v}`,errIonConflict:v=>`More than one ion type: ${v}`,
   checkHelp:'Paste HRMS statements from a paper or SI to recheck the calculated values (calcd). Many compounds can be checked at once.',
   checkInput:'HRMS statements',checkTol:'Tolerance for measured values ± (ppm)',checkRun:'Check',
   checkNone:'No statement of the form “calcd for formula value” was found.',
-  checkSummary:(n,a,b,c)=>`${n} checked: ${a} correct, ${b} to review, ${c} possible error${c===1?'':'s'}`,
+  checkSummary:(n,a,b,c,u)=>`${n} checked: ${a} correct, ${b} to review, ${c} possible error${c===1?'':'s'}`+(u?`, ${u} not readable`:''),
   stOk:'Correct',stWarn:'Review',stError:'Possible error',stUnparsed:'Not readable',
   cOk:'',cRounding:'The last digit is rounded differently.',
   cElectron:'The stated value was calculated without the electron mass.',
@@ -122,7 +122,7 @@ const strings={
   cNeutralFormula:'The formula is that of the neutral M (the value is correct for the ion).',
   cNeutralFormulaElectron:'The formula is that of the neutral M, and the stated value was calculated without the electron mass.',
   cMismatch:'The calculated value does not match. Check the formula, ion and numbers.',
-  cChargeAssumed:'No charge given, so ±1 was assumed.',
+  cChargeAssumed:'No charge given; both signs (±1) were tried and the better match was used.',cChargeConflict:'The charges written for this compound disagree; the best-matching charge was used. Check the statement.',cNoFormula:'No formula could be read after “calcd”, so this was not checked.',cNoValue:'No calculated value could be read, so this was not checked.',
   cFewDigits:'Too few decimal places to judge the electron mass.',
   cFoundOff:tol=>`The measured value differs by more than ±${tol} ppm.`,
   cFormula:'The formula cannot be read (element symbols and numbers only).',
@@ -131,8 +131,8 @@ const strings={
   electron:'One electron mass is subtracted per positive charge and added per negative charge (<i>m</i><sub>e</sub> = 0.0005485799090441 Da).',
   precision:'Mass equivalents of binding energies are not included, as usual. Values are shown to six decimal places; judgments use unrounded values.',
   ppm:'Error (ppm) = (measured − calculated) / calculated × 10⁶. Error (mDa) = (measured − calculated) × 1000. The tolerance is applied as a ± range.',
-  filterMethod:'Candidate filters: the DBE condition requires the DBE of the neutral M to be a non-negative integer (for C, H, N, O, S and halogens this is the same condition as the nitrogen rule). The element-ratio condition uses the ratios of H, N, O, P, S and Si to carbon in the “common range” given by Kind and Fiehn (covering 99.7% of the formulas in their database).',
-  urlMethod:'The inputs of the calculator and the formula finder are kept in the page address (URL), so a bookmarked or shared address opens with the same inputs. Inputs of the batch and the checker are not kept in the address.',
+  filterMethod:'Candidate filters: the DBE condition requires the DBE of the neutral M to be an integer and not negative. DBE is calculated for C, H, N, O, S and halogens with the usual valences (C 4, N 3, H and halogens 1, O and S 2); compositions with other elements are not judged and are kept. Being an integer is the same condition as the nitrogen rule (parity of the number of nitrogens and of the nominal mass); being non-negative is not part of the nitrogen rule (CH6 satisfies the nitrogen rule but has DBE −1). The element-ratio condition uses the ratios of H, N, O, P, S and Si to carbon in the “common range” given by Kind and Fiehn (covering 99.7% of the formulas in their database).',
+  urlMethod:'The inputs of the calculator and the formula finder are kept in the page address after “#”. That part is not sent to the server, but a bookmarked or shared address carries the inputs. Inputs of the batch and the checker are not kept in the address.',
   ratioSource:'Element-ratio ranges of formulas',
   dbe:'DBE = 1 + C + N/2 − (H + F + Cl + Br + I)/2 (for the neutral M, shown with any fraction). Compositions with elements other than C, H, N, O, S and halogens show —.',
   isotopes:'84 elements are supported, each with the mass of its most abundant isotope (for example ¹¹B for B and ⁵⁶Fe for Fe). Elements without a natural isotope composition, such as Tc and Pm, cannot be used.',
@@ -249,7 +249,7 @@ tabs.forEach((tab,i)=>{
  tab.onclick=()=>selectTab(tab);
  tab.onkeydown=e=>{const k={ArrowRight:i+1,ArrowLeft:i-1,Home:0,End:tabs.length-1}[e.key];if(k===undefined)return;e.preventDefault();selectTab(tabs[(k+tabs.length)%tabs.length],true);};
 });
-function tabFromHash(){const h=location.hash.slice(1);return tabs.find(x=>x.getAttribute('aria-controls')===h);}
+function tabFromHash(){const h=location.hash.slice(1).split('?')[0];return tabs.find(x=>x.getAttribute('aria-controls')===h);}
 selectTab(tabFromHash()||tabs[0],false,false);
 // keep the address bar as it was opened when the hash is not a tab (e.g. #method)
 window.addEventListener('hashchange',()=>{const tab=tabFromHash();if(tab)selectTab(tab,false,false);});
@@ -266,14 +266,13 @@ for(const c of document.querySelectorAll('[data-si]')){
 function sentence(counts,key,mz,found){return siSentence({key,ionFormula:siFormula(counts,key,si.append),calcd:mz,found});}
 
 // ---------- calculator ----------
-function readFound(raw){const v=raw.trim();if(v==='')return '';if(!/^\d+(\.\d+)?$/.test(v)||!(Number(v)>0))throw Error('found');return v;}
 function calculate(showErrors){
  const fRaw=$('formula').value.trim();
  if(!fRaw){calcState=null;renderCalc();clearCalcUrl();return;}
  try{
   const counts=parseFormula(fRaw),key=$('calcIon').value,r=ion(counts,key),found=readFound($('calcFound').value);
   calcState={counts,key,r,found,pattern:isotopePattern(ionCounts(counts,key),r.z)};
-  setUrl({f:fRaw,ion:key,found});
+  setUrl({f:fRaw,ion:key,found},'calculator');
  }catch(e){calcState=showErrors?{error:e.message}:null;}
  renderCalc();
 }
@@ -350,11 +349,11 @@ $('searchForm').onsubmit=event=>{event.preventDefault();clearSearch();
  const bad=checkRanges();if(bad){if(bad.input.closest('details'))bad.input.closest('details').open=true;bad.input.setAttribute('aria-invalid','true');bad.input.focus();$('searchStatus').textContent=bad.text;return;}
  try{
   const ranges=[...document.querySelectorAll('.range')].map(div=>{const inputs=div.querySelectorAll('input');return [inputs[0].dataset.element,Number(inputs[0].value),Number(inputs[1].value)];});
-  worker=new Worker(new URL('./worker.js?v=20261107-5',import.meta.url),{type:'module'});$('cancel').disabled=false;$('searchButton').disabled=true;$('searchStatus').textContent=t('running');
+  worker=new Worker(new URL('./worker.js?v=20261108-1',import.meta.url),{type:'module'});$('cancel').disabled=false;$('searchButton').disabled=true;$('searchStatus').textContent=t('running');
   worker.onmessage=({data})=>{cancel();if(data.error){say($('searchStatus'),errorText(data.error));return;}last=data;renderResults();$('copy').disabled=!data.results.length;$('searchLink').disabled=false;};
   worker.onerror=()=>{cancel();$('searchStatus').textContent=t('errorGeneric');};
   worker.postMessage({found:Number($('found').value),tolerance:Number($('tolerance').value),unit:$('unit').value,adduct:$('searchIon').value,ranges,filters:{dbe:$('filterDbe').checked,ratio:$('filterRatio').checked}});
-  setUrl(finderParams());
+  setUrl(finderParams(),'finder');
  }catch(e){cancel();say($('searchStatus'),errorText(e.message));}};
 $('cancel').onclick=()=>{cancel();$('searchStatus').textContent=t('stopped');};
 $('copy').onclick=async()=>{if(!last)return;const fl=[$('filterDbe').checked&&'DBE',$('filterRatio').checked&&(lang==='ja'?'元素比':'element ratios')].filter(Boolean).join(', ');const context=`${t('found')}: ${$('found').value}\t${$('searchIon').value}\t±${$('tolerance').value} ${$('unit').value}\t${last.complete?t('complete'):t('incomplete')}`+(fl?`\t${lang==='ja'?'絞り込み':'Filters'}: ${fl}`:'')+(last.excluded?`\t${t('excludedFmt')(last.excluded)}`:'');try{await navigator.clipboard.writeText([context,headers().join('\t'),...last.results.map(r=>resultValues(r).join('\t'))].join('\n'));$('copyStatus').textContent=t('copyOk');}catch{$('copyStatus').textContent=t('copyFail');}};
@@ -380,7 +379,7 @@ function renderBatch(){
  if(!batchRows){$('batchStatus').textContent='';return;}
  if(!batchRows.length){$('batchStatus').textContent=t('batchEmpty');return;}
  for(const b of batchRows){
-  if(b.error)b.message=b.code==='token'?t('errToken')(b.bad):b.code==='ion'?t('errIon')(b.bad):errorText(b.code);
+  if(b.error)b.message=b.code==='token'?t('errToken')(b.bad):b.code==='ion'?t('errIon')(b.bad):b.code==='ionConflict'?t('errIonConflict')(b.bad):errorText(b.code);
   const v=batchValues(b);if(b.formula&&(!b.error||b.counts))v[2]=H(formulaHtml(b.error?b.formula:b.r.formula));if(v[3])v[3]=H(ionLabel(v[3]).html);if(v[4])v[4]=H(formulaHtml(v[4]));
   const tr=row(table,v);if(b.error)tr.className='row-error';
  }
@@ -404,7 +403,7 @@ $('batchCopySi').onclick=()=>{
 };
 
 // ---------- checker ----------
-const CODE_TEXT={ok:'cOk',rounding:'cRounding',electron:'cElectron',electronSign:'cElectronSign',neutralFormula:'cNeutralFormula',neutralFormulaElectron:'cNeutralFormulaElectron',mismatch:'cMismatch',chargeAssumed:'cChargeAssumed',fewDigits:'cFewDigits',formula:'cFormula'};
+const CODE_TEXT={ok:'cOk',rounding:'cRounding',electron:'cElectron',electronSign:'cElectronSign',neutralFormula:'cNeutralFormula',neutralFormulaElectron:'cNeutralFormulaElectron',mismatch:'cMismatch',chargeAssumed:'cChargeAssumed',chargeConflict:'cChargeConflict',noFormula:'cNoFormula',noValue:'cNoValue',fewDigits:'cFewDigits',formula:'cFormula'};
 const STATUS_TEXT={ok:'stOk',warn:'stWarn',error:'stError',unparsed:'stUnparsed'};
 function tolValue(){const v=Number($('checkTol').value);return Number.isFinite(v)&&v>=0?v:5;}
 function codeText(c){return c==='foundOff'?t('cFoundOff')(tolValue()):t(CODE_TEXT[c]);}
@@ -415,7 +414,7 @@ function renderCheck(){
  if(!checkRecords){$('checkSummary').textContent='';return;}
  if(!checkRecords.length){say($('checkSummary'),t('checkNone'));return;}
  const n=s=>checkRecords.filter(r=>r.status===s).length;
- $('checkSummary').textContent=t('checkSummary')(checkRecords.length,n('ok'),n('warn'),n('error')+n('unparsed'));
+ $('checkSummary').textContent=t('checkSummary')(checkRecords.length,n('ok'),n('warn'),n('error'),n('unparsed'));
  for(const r of checkRecords){
   const li=el('li',{className:`check-item ${r.status}`});
   li.append(el('p',{className:'check-head'},el('span',{className:`badge ${r.status}`,textContent:t(STATUS_TEXT[r.status])}),' ',html('span',rich(r.codes.map(codeText).filter(Boolean).join(' ')))));
@@ -491,20 +490,25 @@ $('resetSearch').onclick=()=>{
  delete settings.finder;saveSettings();clearSearch();
 };
 
-// address: ?f=&ion=&found= (calculator) or ?mz=&ion=&tol=&unit=&r=C0-30,H0-60&filter=dbe,ratio (finder)
+// address: #calculator?f=&ion=&found= or #finder?mz=&ion=&tol=&unit=&r=C0-30,H0-60&filter=dbe,ratio
+// The inputs go after "#", which browsers do not send to the server. ?f= / ?mz= (earlier links) are still read.
 const URL_KEYS=['f','ion','found','mz','tol','unit','r','filter'];
-function setUrl(params){try{const u=new URL(location.href);for(const k of URL_KEYS)u.searchParams.delete(k);
- if(params)for(const [k,v] of Object.entries(params))if(v!==''&&v!==undefined&&v!==null)u.searchParams.set(k,v);history.replaceState(null,'',u);}catch(e){}}
-function clearCalcUrl(){if(new URLSearchParams(location.search).has('f'))setUrl(null);}
+const query=params=>new URLSearchParams(Object.entries(params||{}).filter(([,v])=>v!==''&&v!==undefined&&v!==null)).toString();
+function hashParams(){const h=location.hash.slice(1),i=h.indexOf('?');return new URLSearchParams(i<0?'':h.slice(i+1));}
+function addressWith(params,tab,keepLang=true){const u=new URL(location.href);for(const k of URL_KEYS)u.searchParams.delete(k);if(!keepLang)u.searchParams.delete('lang');
+ const q=query(params);u.hash=tab+(q?'?'+q:'');return u;}
+function setUrl(params,tab){try{history.replaceState(null,'',addressWith(params,tab));}catch(e){}}
+function clearCalcUrl(){if(hashParams().has('f'))setUrl(null,'calculator');}
 function finderParams(){
  const r=Object.entries(readRanges()).filter(([,v])=>v[1]>0).map(([e,v])=>`${e}${v[0]}-${v[1]}`).join(',');
  return {mz:$('found').value.trim(),ion:$('searchIon').value,tol:$('tolerance').value.trim(),unit:$('unit').value,r,filter:[$('filterDbe').checked&&'dbe',$('filterRatio').checked&&'ratio'].filter(Boolean).join(',')};
 }
-function shareLink(tab){const u=new URL(location.href);u.searchParams.delete('lang');u.hash=tab;return u.href;}
-$('calcLink').onclick=()=>copyRich(shareLink('calculator'),null,$('calcLinkStatus'));
-$('searchLink').onclick=()=>copyRich(shareLink('finder'),null,$('copyStatus'));
+const calcParams=()=>({f:$('formula').value.trim(),ion:$('calcIon').value,found:$('calcFound').value.trim()});
+$('calcLink').onclick=()=>copyRich(addressWith(calcParams(),'calculator',false).href,null,$('calcLinkStatus'));
+$('searchLink').onclick=()=>copyRich(addressWith(finderParams(),'finder',false).href,null,$('copyStatus'));
 {
- const q=new URLSearchParams(location.search);
+ const h=hashParams(),old=new URLSearchParams(location.search);
+ const q=h.has('mz')||h.has('f')?h:old;
  if(q.has('mz')){
   const f={ion:q.get('ion'),tol:q.has('tol')?Number(q.get('tol')):NaN,unit:q.get('unit')},fl=(q.get('filter')||'').split(',');
   if(q.has('r')){f.ranges={};for(const part of q.get('r').split(',')){const m=/^([A-Z][a-z]?)(\d{1,4})-(\d{1,4})$/.exec(part.trim());if(m&&Object.hasOwn(ELEMENTS,m[1]))f.ranges[m[1]]=[Number(m[2]),Number(m[3])];}}

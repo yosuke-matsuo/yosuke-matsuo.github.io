@@ -35,7 +35,7 @@ document.body.appendChild(lb);
 const lbImg = lb.querySelector('img'), lbClose = lb.querySelector('button');
 let lastLink = null;
 function afterClose() {
-  lbImg.removeAttribute('src'); document.body.classList.remove('lb-open');
+  lbImg.removeAttribute('src'); lbImg.removeAttribute('style'); document.body.classList.remove('lb-open');
   if (lastLink) lastLink.focus(); lastLink = null;
 }
 lb.addEventListener('close', afterClose); // Esc
@@ -49,6 +49,11 @@ document.querySelectorAll('.toc-link').forEach(a => {
     const t = lbText[document.documentElement.lang === 'en' ? 'en' : 'ja'];
     lb.setAttribute('aria-label', t.name); lbClose.setAttribute('aria-label', t.close);
     lbImg.src = img.getAttribute('src'); lbImg.alt = img.alt;
+    // an SVG scales without loss: show it as large as the screen allows, keeping the aspect ratio
+    if (/\.svg(?:[?#]|$)/i.test(img.getAttribute('src')) && img.width && img.height) {
+      const w = Math.min(window.innerWidth - 32, (window.innerHeight - 64) * img.width / img.height);
+      lbImg.style.width = `${Math.max(w, img.width)}px`;
+    }
     document.body.classList.add('lb-open'); lb.showModal(); lbClose.focus();
   });
 });
