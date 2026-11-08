@@ -174,6 +174,11 @@ test('SI checker: charge after the value, unknown or conflicting charge, Wiley f
   // conflicting charges: to review
   r = one('HRMS (ESI) m/z calcd for C15H13O6+ 289.0718 [M-H]-; found 289.0716.');
   assert.equal(r.status, 'warn'); assert.ok(r.codes.includes('chargeConflict'));
+  // a notation before "calcd" that contradicts the one after the value (Codex review)
+  r = one('HRMS [M-H]- calcd for C6H13O6 181.0707 [M+H]+; found 181.0707.');
+  assert.equal(r.status, 'warn'); assert.ok(r.codes.includes('chargeConflict'));
+  r = one('HRMS (ESI) m/z [M+H]+ calcd for C6H13O6 181.0707 [M+H]+; found 181.0707.');
+  assert.equal(r.status, 'ok');
   // the errors are still told apart
   assert.deepEqual(one('HRMS m/z calcd for C15H13O6 289.0712 [M-H]-; found 289.0716.').codes, ['electron']);
   assert.deepEqual(one('HRMS m/z calcd for C15H13O6 289.0707 [M-H]-; found 289.0716.').codes, ['electronSign']);

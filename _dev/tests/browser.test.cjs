@@ -215,6 +215,10 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
     await p.fill('#formula', 'C6H12O6'); await pickIon(p, 'calcIon', '[M+Na]+'); await p.fill('#calcFound', '203.0524');
     let u = new URL(p.url()), hu = hashOf(p.url());
     ok(hu.tab === 'calculator' && hu.q.get('f') === 'C6H12O6' && hu.q.get('ion') === '[M+Na]+' && hu.q.get('found') === '203.0524' && u.searchParams.get('lang') === 'ja' && !u.searchParams.has('f'), `calculator inputs after # in the address, not in the query (${p.url()})`);
+    // moving to another tab and back (or clicking the open tab) keeps the inputs in the address
+    await p.click('#tab-finder'); await p.click('#tab-calculator'); await p.click('#tab-calculator');
+    hu = hashOf(p.url());
+    ok(hu.tab === 'calculator' && hu.q.get('f') === 'C6H12O6' && hu.q.get('found') === '203.0524', `inputs kept in the address after tab clicks (${p.url()})`);
     await p.click('#calcLink'); await p.waitForTimeout(200);
     const link = await p.evaluate(() => navigator.clipboard.readText());
     const lu = new URL(link), lh = hashOf(link);

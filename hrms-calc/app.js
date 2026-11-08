@@ -1,5 +1,5 @@
-import {ELEMENTS,IONS,parseFormula,ion,ionCounts,ppm,dbe,isotopePattern} from './core.js?v=20261108-1';
-import {ionLabel,formulaHtml,siFormula,siSentence,checkText,parseBatch,readFound} from './si.js?v=20261108-1';
+import {ELEMENTS,IONS,parseFormula,ion,ionCounts,ppm,dbe,isotopePattern} from './core.js?v=20261108-2';
+import {ionLabel,formulaHtml,siFormula,siSentence,checkText,parseBatch,readFound} from './si.js?v=20261108-2';
 const $=id=>document.getElementById(id);
 const strings={
  ja:{skip:'本文へ移動',
@@ -240,10 +240,12 @@ for(const id of ['calcIon','searchIon','batchIon'])makePicker(id);
 
 // ---------- tabs ----------
 const tabs=[...document.querySelectorAll('[role=tab]')];
+// inputs of each tab, kept in the address when moving between tabs
+const tabInputs={};
 function selectTab(tab,focus,updateHash=true){
  for(const x of tabs){const on=x===tab;x.setAttribute('aria-selected',String(on));x.tabIndex=on?0:-1;$(x.getAttribute('aria-controls')).hidden=!on;}
   if(focus)tab.focus();
- if(updateHash)try{const u=new URL(location.href);u.hash=tab.getAttribute('aria-controls');history.replaceState(null,'',u);}catch(e){}
+ if(updateHash)setUrl(tabInputs[tab.getAttribute('aria-controls')],tab.getAttribute('aria-controls'));
 }
 tabs.forEach((tab,i)=>{
  tab.onclick=()=>selectTab(tab);
@@ -349,7 +351,7 @@ $('searchForm').onsubmit=event=>{event.preventDefault();clearSearch();
  const bad=checkRanges();if(bad){if(bad.input.closest('details'))bad.input.closest('details').open=true;bad.input.setAttribute('aria-invalid','true');bad.input.focus();$('searchStatus').textContent=bad.text;return;}
  try{
   const ranges=[...document.querySelectorAll('.range')].map(div=>{const inputs=div.querySelectorAll('input');return [inputs[0].dataset.element,Number(inputs[0].value),Number(inputs[1].value)];});
-  worker=new Worker(new URL('./worker.js?v=20261108-1',import.meta.url),{type:'module'});$('cancel').disabled=false;$('searchButton').disabled=true;$('searchStatus').textContent=t('running');
+  worker=new Worker(new URL('./worker.js?v=20261108-2',import.meta.url),{type:'module'});$('cancel').disabled=false;$('searchButton').disabled=true;$('searchStatus').textContent=t('running');
   worker.onmessage=({data})=>{cancel();if(data.error){say($('searchStatus'),errorText(data.error));return;}last=data;renderResults();$('copy').disabled=!data.results.length;$('searchLink').disabled=false;};
   worker.onerror=()=>{cancel();$('searchStatus').textContent=t('errorGeneric');};
   worker.postMessage({found:Number($('found').value),tolerance:Number($('tolerance').value),unit:$('unit').value,adduct:$('searchIon').value,ranges,filters:{dbe:$('filterDbe').checked,ratio:$('filterRatio').checked}});
@@ -497,7 +499,7 @@ const query=params=>new URLSearchParams(Object.entries(params||{}).filter(([,v])
 function hashParams(){const h=location.hash.slice(1),i=h.indexOf('?');return new URLSearchParams(i<0?'':h.slice(i+1));}
 function addressWith(params,tab,keepLang=true){const u=new URL(location.href);for(const k of URL_KEYS)u.searchParams.delete(k);if(!keepLang)u.searchParams.delete('lang');
  const q=query(params);u.hash=tab+(q?'?'+q:'');return u;}
-function setUrl(params,tab){try{history.replaceState(null,'',addressWith(params,tab));}catch(e){}}
+function setUrl(params,tab){tabInputs[tab]=params;try{history.replaceState(null,'',addressWith(params,tab));}catch(e){}}
 function clearCalcUrl(){if(hashParams().has('f'))setUrl(null,'calculator');}
 function finderParams(){
  const r=Object.entries(readRanges()).filter(([,v])=>v[1]>0).map(([e,v])=>`${e}${v[0]}-${v[1]}`).join(',');

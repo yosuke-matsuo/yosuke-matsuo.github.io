@@ -1,5 +1,5 @@
-import {ELEMENTS,ELECTRON_MASS} from './constants.js?v=20261108-1';
-import {ISOTOPES} from './isotopes.js?v=20261108-1';
+import {ELEMENTS,ELECTRON_MASS} from './constants.js?v=20261108-2';
+import {ISOTOPES} from './isotopes.js?v=20261108-2';
 export {ELEMENTS,ELECTRON_MASS};
 // [number of M, signed charge, atoms added (+) or removed (−)]
 export const IONS = {

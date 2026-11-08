@@ -1,5 +1,5 @@
 // Sentences for papers / Supporting Information, a checker for reported HRMS values, and batch input.
-import {IONS,ELECTRON_MASS,parseFormula,formula,mass,ionCounts} from './core.js?v=20261108-1';
+import {IONS,ELECTRON_MASS,parseFormula,formula,mass,ionCounts} from './core.js?v=20261108-2';
 const MINUS='−';
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
@@ -43,7 +43,7 @@ export function normalize(s){
 const BRACKET=/[\[(]\s*(\d*)\s*M\s*((?:[+-]\s*\d*\s*(?:[A-Z][a-z]?\d*)+\s*)*)[\])]\s*(\d*)\s*([+-])/g;
 // '[M+HCOO]-' style notation -> {mult, z, delta, text}
 export function parseIonNotation(s){
- BRACKET.lastIndex=0;const m=BRACKET.exec(normalize(s));if(!m)return null;return bracketInfo(m);
+ const m=new RegExp(BRACKET).exec(normalize(s));if(!m)return null;return bracketInfo(m);
 }
 function bracketInfo(m){
  const mult=m[1]?Number(m[1]):1,z=(m[3]?Number(m[3]):1)*(m[4]==='+'?1:-1),delta={};
@@ -105,7 +105,8 @@ export function checkText(text,{tolerancePpm=5}={}){
   // ion notations of this record: next to the formula, right after the value, otherwise the last one before "calcd"
   const notes=[];
   for(const cand of [ionAfter&&ionAfter[1],ionBefore&&ionBefore[1],ionAfterValue&&ionAfterValue[1]]){if(cand){const info=parseIonNotation(cand);if(info)notes.push(info);}}
-  if(!notes.length){const all=[...before.matchAll(BRACKET)];for(let i=all.length-1;i>=0;i--){const info=bracketInfo(all[i]);if(info){notes.push(info);start=Math.min(start,from+all[i].index);break;}}}
+  // the last one before "calcd" is also read, so a notation that contradicts it is not missed
+  {const all=[...before.matchAll(BRACKET)];for(let i=all.length-1;i>=0;i--){const info=bracketInfo(all[i]);if(info){notes.push(info);start=Math.min(start,from+all[i].index);break;}}}
   const br=notes[0]||null;
   prevEnd=end;
   const written=fm[1]+(fm[2]||'');
