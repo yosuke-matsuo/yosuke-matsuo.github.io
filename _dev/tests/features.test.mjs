@@ -160,3 +160,58 @@ C6H12O6 [M+H]+ 181.0707 extra`, '[M+H]+');
   assert.equal(ionKeyFrom('M'), null, '[M]+ and [M]- are ambiguous without a charge');
   assert.throws(() => parseBatch('C6H12O6\n'.repeat(1001)), /lines/);
 });
+
+test('SI checker: charge after the value, unknown or conflicting charge, Wiley format, unreadable statements (review 2026-11)', () => {
+  const one = t => { const r = checkText(t); assert.equal(r.length, 1, t); return r[0]; };
+  // [M-H]- written after the calculated value: the record is correct (C15H13O6- 289.0717617)
+  let r = one('HRMS (ESI) m/z calcd for C15H13O6 289.0718 [M-H]-; found 289.0716.');
+  assert.deepEqual([r.status, r.codes, r.z], ['ok', ['ok'], -1]);
+  assert.ok(Math.abs(r.recalculated - 289.0717617163) < 1e-6);
+  assert.ok(Math.abs(r.ppm - -0.56) < 0.01);
+  // no charge: both signs tried, the matching one is used, marked to review (not "electron sign reversed")
+  r = one('HRMS (ESI) m/z calcd for C15H13O6 289.0718; found 289.0716.');
+  assert.deepEqual([r.status, r.codes, r.z], ['warn', ['ok', 'chargeAssumed'], -1]);
+  // conflicting charges: to review
+  r = one('HRMS (ESI) m/z calcd for C15H13O6+ 289.0718 [M-H]-; found 289.0716.');
+  assert.equal(r.status, 'warn'); assert.ok(r.codes.includes('chargeConflict'));
+  // a notation before "calcd" that contradicts the one after the value (Codex review)
+  r = one('HRMS [M-H]- calcd for C6H13O6 181.0707 [M+H]+; found 181.0707.');
+  assert.equal(r.status, 'warn'); assert.ok(r.codes.includes('chargeConflict'));
+  r = one('HRMS (ESI) m/z [M+H]+ calcd for C6H13O6 181.0707 [M+H]+; found 181.0707.');
+  assert.equal(r.status, 'ok');
+  // the errors are still told apart
+  assert.deepEqual(one('HRMS m/z calcd for C15H13O6 289.0712 [M-H]-; found 289.0716.').codes, ['electron']);
+  assert.deepEqual(one('HRMS m/z calcd for C15H13O6 289.0707 [M-H]-; found 289.0716.').codes, ['electronSign']);
+  assert.deepEqual(one('HRMS (ESI) m/z: [M + Na]+ Calcd for C6H12O6 203.0526; Found 203.0524.').codes, ['neutralFormula']);
+  // two compounds, each with its ion notation after the value
+  const two = checkText('1: HRMS m/z calcd for C15H13O6 289.0718 [M-H]-; found 289.0716. 2: HRMS m/z calcd for C6H13O6 181.0707 [M+H]+; found 181.0705.');
+  assert.deepEqual(two.map(x => [x.z, x.status, x.found]), [[-1, 'ok', '289.0716'], [1, 'ok', '181.0705']]);
+  // neutral formula + added ion (Wiley style): C32H47NO5+Na+ is the ion C32H47NO5Na+
+  r = one('HRMS (ESI) m/z calcd for C32H47NO5+Na+: 548.3346 [M+Na]+; found: 548.3331.');
+  assert.deepEqual([r.status, r.formula, r.z], ['ok', 'C32H47NO5Na', 1]);
+  assert.deepEqual(one('HRMS (ESI): m/z calcd for C32H47NO5+Na+: 548.3352 [M+Na]+; found: 548.3331').codes, ['electron']);
+  // unreadable statements are counted, not taken as correct; prose and elemental analysis are ignored
+  const mixed = checkText('HRMS (ESI) m/z: [M + Na]+ Calcd for C6H12O6Na 203.0526; Found 203.0524.\nHRMS (ESI) m/z 289.0716 [M - H]- (calcd for, 289.0718).');
+  assert.deepEqual(mixed.map(x => x.status), ['ok', 'unparsed']);
+  assert.deepEqual(mixed[1].codes, ['noFormula']);
+  assert.equal(checkText('The calculated ECD spectrum matched. Anal. Calcd for C6H12O6: C, 40.00; H, 6.71.').length, 0);
+});
+
+test('batch input: labels that look like formulas, measured values, ion conflicts (review 2026-11)', () => {
+  const rows = parseBatch(['A\tC6H12O6\t[M+H]+\t181.0707', 'B\tC6H12O6\t[M+H]+\t181.0707', 'B1\tC6H12O6\t[M+H]+\t181.0707',
+    'C C6H12O6 [M+H]+ 181.0707', 'N,C6H12O6,[M+Na]+,203.0524', 'B [M+H]+', 'A\tC6H12O6\t[M+H]+\t0', 'A\tC6H12O6\t[M+H]+\t-1',
+    'A C6H12O6 [M+H]+ [M+Na]+ 181.0707', 'A C6H12O6 [M+H]+ [M+H]+ 181.0707', 'C6H12O6 181.0707'].join('\n'), '[M+H]+');
+  assert.deepEqual(rows.map(r => [r.label, r.formula, r.key, r.found, r.error]), [
+    ['A', 'C6H12O6', '[M+H]+', '181.0707', null],
+    ['B', 'C6H12O6', '[M+H]+', '181.0707', null],
+    ['B1', 'C6H12O6', '[M+H]+', '181.0707', null],
+    ['C', 'C6H12O6', '[M+H]+', '181.0707', null],
+    ['N', 'C6H12O6', '[M+Na]+', '203.0524', null],
+    ['', 'B', '[M+H]+', '', null],
+    ['A', 'C6H12O6', '[M+H]+', '', 'found'],
+    ['A', 'C6H12O6', '[M+H]+', '', 'found'],
+    ['A', 'C6H12O6', '[M+H]+', '', 'ionConflict'],
+    ['A', 'C6H12O6', '[M+H]+', '181.0707', null],
+    ['', 'C6H12O6', '[M+H]+', '181.0707', null],
+  ]);
+});

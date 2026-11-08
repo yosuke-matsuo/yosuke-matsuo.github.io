@@ -6,6 +6,8 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
   const browser = await chromium.launch(process.env.CHROMIUM ? { executablePath: process.env.CHROMIUM } : {});
   const page = async (opts = {}) => { const ctx = await browser.newContext(opts); const p = await ctx.newPage(); p.ctx = ctx; return p; };
   // choose an ion type with the ion picker (button that opens a table of ion types)
+  // HRMS Calc keeps inputs after "#": #calculator?f=...&ion=...
+  const hashOf = url => { const h = new URL(url).hash.slice(1), i = h.indexOf('?'); return { tab: i < 0 ? h : h.slice(0, i), q: new URLSearchParams(i < 0 ? '' : h.slice(i + 1)) }; };
   const pickIon = async (p, id, key) => { await p.click(`#${id}-picker .ion-current`); await p.click(`#${id}-panel button[data-ion="${key}"]`); };
 
   // 1. language survives reload, other query parameters and the hash are kept
@@ -211,25 +213,29 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
     const p = await page({ permissions: ['clipboard-read', 'clipboard-write'] });
     await p.goto(`${BASE}/hrms-calc/index.html?lang=ja`);
     await p.fill('#formula', 'C6H12O6'); await pickIon(p, 'calcIon', '[M+Na]+'); await p.fill('#calcFound', '203.0524');
-    let u = new URL(p.url());
-    ok(u.searchParams.get('f') === 'C6H12O6' && u.searchParams.get('ion') === '[M+Na]+' && u.searchParams.get('found') === '203.0524' && u.searchParams.get('lang') === 'ja', `calculator inputs in the address (${p.url()})`);
+    let u = new URL(p.url()), hu = hashOf(p.url());
+    ok(hu.tab === 'calculator' && hu.q.get('f') === 'C6H12O6' && hu.q.get('ion') === '[M+Na]+' && hu.q.get('found') === '203.0524' && u.searchParams.get('lang') === 'ja' && !u.searchParams.has('f'), `calculator inputs after # in the address, not in the query (${p.url()})`);
+    // moving to another tab and back (or clicking the open tab) keeps the inputs in the address
+    await p.click('#tab-finder'); await p.click('#tab-calculator'); await p.click('#tab-calculator');
+    hu = hashOf(p.url());
+    ok(hu.tab === 'calculator' && hu.q.get('f') === 'C6H12O6' && hu.q.get('found') === '203.0524', `inputs kept in the address after tab clicks (${p.url()})`);
     await p.click('#calcLink'); await p.waitForTimeout(200);
     const link = await p.evaluate(() => navigator.clipboard.readText());
-    const lu = new URL(link);
-    ok(lu.searchParams.get('f') === 'C6H12O6' && !lu.searchParams.has('lang') && lu.hash === '#calculator' && (await p.textContent('#calcLinkStatus')).includes('コピー'), `link copied without the language (${link})`);
+    const lu = new URL(link), lh = hashOf(link);
+    ok(lh.q.get('f') === 'C6H12O6' && !lu.searchParams.has('lang') && lh.tab === 'calculator' && (await p.textContent('#calcLinkStatus')).includes('コピー'), `link copied without the language (${link})`);
     const q = await page(); await q.goto(link);
     ok((await q.inputValue('#formula')) === 'C6H12O6' && (await q.inputValue('#calcIon')) === '[M+Na]+' && (await q.textContent('#calcMain')).includes('203.052609'), 'opening the link restores the calculator and its result');
     await q.ctx.close();
-    await p.fill('#formula', ''); ok(!new URL(p.url()).searchParams.has('f') && await p.isHidden('#calcLinkRow'), 'emptying the formula removes it from the address');
+    await p.fill('#formula', ''); ok(!hashOf(p.url()).q.has('f') && await p.isHidden('#calcLinkRow'), 'emptying the formula removes it from the address');
     // finder link with ranges and filters runs the search
     const fl = `${BASE}/hrms-calc/index.html?lang=ja&mz=301.0354&ion=${encodeURIComponent('[M-H]-')}&tol=10&unit=ppm&r=C0-40,H0-80,N0-6,O0-20,S0-2,P0-2&filter=dbe,ratio`;
     const f = await page(); await f.goto(fl);
     await f.waitForFunction(() => !document.querySelector('#searchButton').disabled && document.querySelectorAll('#results tbody tr').length > 0);
     const fst = await f.textContent('#searchStatus');
-    ok(new URL(f.url()).hash === '#finder' && await f.isChecked('#filterDbe') && await f.isChecked('#filterRatio') && (await f.inputValue('#ranges input[data-element="P"][data-bound="max"]')) === '2' && fst.includes('除外 23 件') && fst.includes('候補 24 件'), `finder link restores conditions and searches: ${fst}`);
+    ok(hashOf(f.url()).tab === 'finder' && hashOf(f.url()).q.get('mz') === '301.0354' && !new URL(f.url()).searchParams.has('mz') && await f.isChecked('#filterDbe') && await f.isChecked('#filterRatio') && (await f.inputValue('#ranges input[data-element="P"][data-bound="max"]')) === '2' && fst.includes('除外 23 件') && fst.includes('候補 24 件'), `earlier ?mz= link restores conditions, searches and moves the inputs after #: ${fst}`);
     ok((await f.textContent('#results tbody tr:first-child')).includes('C15H10O7'), 'quercetin first after filtering');
     await f.uncheck('#filterRatio'); await f.click('#searchButton'); await f.waitForFunction(() => !document.querySelector('#searchButton').disabled && document.querySelectorAll('#results tbody tr').length > 0);
-    ok((await f.textContent('#searchStatus')).includes('候補 36 件') && new URL(f.url()).searchParams.get('filter') === 'dbe', `filter change reflected in results and address: ${await f.textContent('#searchStatus')}`);
+    ok((await f.textContent('#searchStatus')).includes('候補 36 件') && hashOf(f.url()).q.get('filter') === 'dbe', `filter change reflected in results and address: ${await f.textContent('#searchStatus')}`);
     // settings saved in this browser (same context = same storage)
     await f.selectOption('#unit', 'mDa'); await f.fill('#tolerance', '2'); await f.dispatchEvent('#tolerance', 'change');
     await f.click('#tab-calculator'); await pickIon(f, 'calcIon', '[M-H]-'); await f.click('#tab-batch'); await pickIon(f, 'batchIon', '[M+Na]+');
@@ -259,6 +265,30 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
     ok(inCalc && hiddenElsewhere && new URL(p.url()).hash === '#journals' && await p.isVisible('#calcForm') && (await p.$$('#journals dt')).length === 5,
       'journal formats shown only in the calculator tab; the link jumps there without changing the tool');
     await p.ctx.close();
+  }
+  // 15. review fixes: negative ion after the value, Wiley format and an unreadable line, batch labels and values, SVG enlargement
+  {
+    const p = await page(); await p.goto(`${BASE}/hrms-calc/index.html?lang=ja#checker`);
+    await p.fill('#checkInput', 'HRMS (ESI) m/z calcd for C15H13O6 289.0718 [M-H]-; found 289.0716.\nHRMS (ESI) m/z calcd for C32H47NO5+Na+: 548.3352 [M+Na]+; found: 548.3331.\nHRMS (ESI) m/z 289.0716 [M - H]- (calcd for, 289.0718).');
+    await p.click('#checkForm button.primary');
+    const st = await p.$$eval('#checkResults .badge', b => b.map(x => x.className.replace('badge ', '')));
+    const sum = await p.textContent('#checkSummary');
+    ok(st.join() === 'ok,error,unparsed' && sum.includes('読み取れなかった記載 1 件'), `checker: negative ion ok, Wiley value flagged, unreadable line counted (${st}; ${sum})`);
+    await p.click('#tab-batch');
+    await p.fill('#batchInput', 'A\tC6H12O6\t[M+H]+\t181.0707\nB\tC6H12O6\t[M+H]+\t181.0707\nC\tC6H12O6\t[M+H]+\t0\nB');
+    await p.click('#batchForm button.primary');
+    const rows = await p.$$eval('#batchResults tbody tr', trs => trs.map(tr => [...tr.cells].map(c => c.textContent)));
+    ok(rows.length === 4 && rows[1][1] === 'B' && rows[1][2] === 'C6H12O6' && rows[1][5] === '181.070665' && rows[2][9].includes('正の数') && rows[3][2] === 'B' && rows[3][1] === '',
+      `batch: label B kept as a name, measured 0 rejected on its row, B alone is boron (${rows.map(r => r[1] + '/' + r[2] + '/' + r[9]).join(' | ')})`);
+    await p.ctx.close();
+    const q = await page({ viewport: { width: 1280, height: 900 } }); await q.goto(`${BASE}/publications.html?lang=ja`);
+    await q.click('a.toc-link[href$="10.1021_acs.jnatprod.5c01064.svg"]');
+    const w = await q.$eval('.lightbox img', i => Math.round(i.getBoundingClientRect().width));
+    const inside = await q.$eval('.lightbox img', i => { const b = i.getBoundingClientRect(); return b.right <= innerWidth && b.bottom <= innerHeight; });
+    await q.keyboard.press('Escape');
+    const back = await q.evaluate(() => document.activeElement.classList.contains('toc-link'));
+    ok(w > 900 && inside && back, `SVG figure enlarged to ${w}px within the screen; Esc returns focus to the link`);
+    await q.ctx.close();
   }
   // 13. every text on the page and the window title exist in both languages (no "undefined"); HRMS Calc files carry one version
   for (const lang of ['ja', 'en']) {
