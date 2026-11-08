@@ -186,7 +186,26 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
   {
     const p = await page(); await p.goto(`${BASE}/hrms-calc/index.html?lang=ja#checker`);
     ok(await p.isVisible('#checkForm') && await p.evaluate(() => document.querySelector('#tab-checker').getAttribute('aria-selected')) === 'true', 'address #checker opens the checker');
-    await p.click('.electron-note a[href="#method"]'); ok(await p.isVisible('#checkForm') && new URL(p.url()).hash === '#method', '“Details” jumps to the method without changing the tool');
+    const vis = async () => p.$$eval('#method [data-tabs]', ps => ps.filter(x => !x.hidden).map(x => x.dataset.t || x.querySelector('[data-t]').dataset.t).join());
+    const onChecker = await vis(); await p.click('#tab-finder'); const onFinder = await vis();
+    ok(onChecker === 'checkMethod' && onFinder === 'dbe,filterMethod,urlMethod' && await p.isVisible('#method [data-t=definition]') && await p.$('a[href="#method"]') === null,
+      `method notes only for the open tool (checker: ${onChecker}; finder: ${onFinder}); no “Details” link`);
+    const text = await p.textContent('main');
+    ok(!text.includes('結合エネルギー') && !text.includes('最も多いと報告') && (await p.textContent('.journals-note')).trim() === '※ 計算値（calcd）は原文のままです。', 'removed notes are gone; journal note is one sentence');
+    await p.ctx.close();
+  }
+  // 10b. decimal places of calculated values: shared by the calculator, finder and batch, saved in this browser
+  {
+    const p = await page(); await p.goto(`${BASE}/hrms-calc/index.html?lang=ja`);
+    await p.fill('#formula', 'C6H12O6'); await p.press('#formula', 'Enter');
+    await p.selectOption('#calculator [data-digits]', '4');
+    const mz4 = await p.textContent('.result-mz strong'), fd = await p.$eval('#finder [data-digits]', s => s.value);
+    await p.reload(); await p.fill('#formula', 'C6H12O6'); await p.press('#formula', 'Enter');
+    const after = await p.textContent('.result-mz strong');
+    await p.click('#tab-batch'); await p.fill('#batchInput', 'C6H12O6'); await p.click('#batchForm button.primary');
+    await p.selectOption('#batch [data-digits]', '8');
+    const b8 = await p.$eval('#batchResults tbody tr', tr => tr.cells[5].textContent);
+    ok(mz4 === '181.0707' && fd === '4' && after === '181.0707' && b8 === '181.07066456', `decimal places: ${mz4}, finder ${fd}, after reload ${after}, batch ${b8}`);
     await p.ctx.close();
   }
   // 11. typography: formulas with subscripts, charges as superscripts, italic m/z, external links in a new tab
@@ -205,7 +224,7 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
     ok((await p.innerHTML('#checkResults')).includes('C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>Na') && (await p.innerHTML('#checkResults')).includes('[M + Na]<sup>+</sup>'), 'checker: quoted text with subscripts and superscripts');
     ok((await p.innerHTML('#calcSi [data-t=siAppend]')).includes('C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>Na') && (await p.inputValue('#formula')) === 'C15H14O6', 'help text subscripts; input field unchanged');
     const ext = await p.$$eval('a[href^="http"]', as => as.map(a => a.target === '_blank' && a.rel.includes('noopener')));
-    ok(ext.length === 20 && ext.every(Boolean), `external links open in a new tab (${ext.length})`);
+    ok(ext.length === 19 && ext.every(Boolean), `external links open in a new tab (${ext.length})`);
     await p.ctx.close();
   }
   // 11. inputs kept in the address, shareable links, saved settings, candidate filters

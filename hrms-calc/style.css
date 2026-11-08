@@ -15,7 +15,7 @@ footer a{color:var(--muted)}
 
 /* v77: electron note, tabs, result box, statements, isotope pattern, batch and checker */
 .electron-note{max-width:80ch;margin:0;padding:.7rem .95rem;border:1px solid #c6d9ea;border-radius:.3rem;background:#f2f7fb;font-size:.93rem}
-.electron-note strong{font-weight:700;color:var(--blue-dark)}.electron-note a[href="#method"]{white-space:nowrap}
+.electron-note strong{font-weight:700;color:var(--blue-dark)}
 .tabs{display:flex;flex-wrap:wrap;gap:.25rem;margin:.6rem 0 0;border-bottom:1px solid var(--line)}
 .tabs button{margin-bottom:-1px;padding:.6rem 1.1rem;border:1px solid transparent;border-bottom:0;border-radius:.3rem .3rem 0 0;background:none;color:var(--muted);font-weight:600;white-space:nowrap}
 .tabs button:hover{color:var(--blue-dark);border-color:transparent}

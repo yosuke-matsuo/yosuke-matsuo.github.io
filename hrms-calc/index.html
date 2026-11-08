@@ -7,12 +7,12 @@
 <meta name="description" content="電子の質量を考慮してHRMSの精密質量（m/z）を計算するブラウザー用ツール。分子式候補の検索、一括計算、同位体パターン、論文・SIの記載文の作成とチェック。">
 <link rel="canonical" href="https://yosuke-matsuo.github.io/hrms-calc/">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="松尾洋介（Yosuke Matsuo）">
+<meta property="og:site_name" content="Yosuke Matsuo（松尾洋介）">
 <meta property="og:title" content="HRMS Calc（HRMS精密質量計算ツール）">
 <meta property="og:description" content="電子の質量を考慮してHRMSの精密質量（m/z）を計算するブラウザー用ツール。分子式候補の検索、一括計算、同位体パターン、論文・SIの記載文の作成とチェック。">
 <meta property="og:url" content="https://yosuke-matsuo.github.io/hrms-calc/">
 <meta property="og:locale" content="ja_JP">
-<link rel="stylesheet" href="style.css?v=20261108-2">
+<link rel="stylesheet" href="style.css?v=20261108-3">
 </head>
 <body>
 <a class="skip-link" href="#main" data-t="skip"></a>
@@ -23,7 +23,7 @@
 <main id="main">
 <div class="intro">
 <p class="lead" data-t="lead"></p>
-<p class="electron-note"><strong data-t="electronHead"></strong> <span data-t="electronShort"></span> <span data-t="electronSurvey"></span> <a href="#method" data-t="details"></a></p>
+<p class="electron-note"><strong data-t="electronHead"></strong> <span data-t="electronShort"></span> <span data-t="electronSurvey"></span></p>
 </div>
 
 <div class="tabs" role="tablist" id="tabs">
@@ -39,6 +39,7 @@
 <label><span data-t="formula"></span><input id="formula" autocomplete="off" spellcheck="false" placeholder="C6H12O6"></label>
 <div class="field"><span class="field-label" id="calcIon-label" data-t="ion"></span><select id="calcIon" hidden aria-labelledby="calcIon-label"></select></div>
 <label><span data-t="optionalFound"></span><input id="calcFound" inputmode="decimal" autocomplete="off" placeholder="181.0707"></label>
+<label><span data-t="digits"></span><select data-digits></select></label>
 </div>
 <p class="hint" data-t="syntax"></p>
 <button class="primary" data-t="calculate"></button>
@@ -87,6 +88,7 @@
 <label><span data-t="found"></span><input id="found" type="number" min="0.000001" max="100000" step="any" value="181.0707" required></label>
 <div class="field"><span class="field-label" id="searchIon-label" data-t="ion"></span><select id="searchIon" hidden aria-labelledby="searchIon-label"></select></div>
 <label><span data-t="tolerance"></span><div class="inline"><input id="tolerance" type="number" min="0" step="any" value="5" required><select id="unit" aria-label="Tolerance unit"><option>ppm</option><option>mDa</option></select></div></label>
+<label><span data-t="digits"></span><select data-digits></select></label>
 </div>
 <p class="hint" data-t="rangeHelp"></p>
 <div class="rangeGrid" id="ranges"></div>
@@ -108,7 +110,7 @@
 <form id="batchForm" novalidate>
 <p class="hint" data-t="batchHelp"></p>
 <label class="block"><span data-t="batchInput"></span><textarea id="batchInput" rows="7" spellcheck="false" autocomplete="off"></textarea></label>
-<div class="fields"><div class="field"><span class="field-label" id="batchIon-label" data-t="batchIon"></span><select id="batchIon" hidden aria-labelledby="batchIon-label"></select></div></div>
+<div class="fields"><div class="field"><span class="field-label" id="batchIon-label" data-t="batchIon"></span><select id="batchIon" hidden aria-labelledby="batchIon-label"></select></div><label><span data-t="digits"></span><select data-digits></select></label></div>
 <div class="actions"><button class="primary" data-t="batchRun"></button><button type="button" id="batchExample" data-t="example"></button></div>
 </form>
 <p id="batchStatus" role="status"></p>
@@ -141,15 +143,13 @@
 <div class="equation"><i>m</i>/<i>z</i> = (Σ <i>n</i><sub>i</sub> <i>m</i><sub>i</sub> − <i>z</i> <i>m</i><sub>e</sub>) / |<i>z</i>|</div>
 <p data-t="definition"></p>
 <p data-t="electron"></p>
-<p><span data-t="electronWhy"></span> <a href="https://doi.org/10.1021/acs.orglett.4c03458" target="_blank" rel="noopener noreferrer">Christmann, <i>Org. Lett.</i> 2025</a></p>
-<p data-t="precision"></p>
 <p data-t="ppm"></p>
-<p data-t="dbe"></p>
-<p><span data-t="filterMethod"></span> <a href="https://doi.org/10.1186/1471-2105-8-105" target="_blank" rel="noopener noreferrer">Kind &amp; Fiehn, <i>BMC Bioinformatics</i> 2007</a></p>
-<p data-t="urlMethod"></p>
+<p data-t="dbe" data-tabs="calculator finder batch"></p>
+<p data-tabs="finder"><span data-t="filterMethod"></span> <a href="https://doi.org/10.1186/1471-2105-8-105" target="_blank" rel="noopener noreferrer">Kind &amp; Fiehn, <i>BMC Bioinformatics</i> 2007</a></p>
+<p data-t="urlMethod" data-tabs="calculator finder"></p>
 <p data-t="isotopes"></p>
-<p data-t="isoMethod"></p>
-<p data-t="checkMethod"></p>
+<p data-t="isoMethod" data-tabs="calculator"></p>
+<p data-t="checkMethod" data-tabs="checker"></p>
 <details><summary data-t="constants"></summary><table id="constants"><thead></thead><tbody></tbody></table></details>
 </section>
 
@@ -165,6 +165,6 @@
 
 <footer><p>© 2026 <a href="../index.html">Yosuke Matsuo</a></p><p><a href="https://github.com/yosuke-matsuo/yosuke-matsuo.github.io/tree/main/hrms-calc" data-t="sourceCode" target="_blank" rel="noopener noreferrer"></a> · <span data-t="codeLicense"></span><a href="LICENSE.txt">MIT License</a></p></footer>
 </main>
-<script type="module" src="app.js?v=20261108-2"></script>
+<script type="module" src="app.js?v=20261108-3"></script>
 </body>
 </html>
