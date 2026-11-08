@@ -26,7 +26,8 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
     await p.click('a[href^="./tools.html"]:visible'); await p.waitForLoadState();
     await p.click('a[href^="./hrms-calc/index.html"]:visible'); await p.waitForLoadState();
     ok(await p.evaluate(() => document.documentElement.lang) === 'en', `HRMS opens in English (localStorage ${blocked ? 'blocked' : 'available'})`);
-    ok(!(await p.$('header a')), 'HRMS header has no link to the personal page');
+    ok((await p.getAttribute('header a.home-link', 'href')) === '../tools.html?lang=en' && (await p.textContent('header a.home-link')) === '← Tools' && (await p.getAttribute('footer a[href^="../tools.html"]', 'href')) === '../tools.html?lang=en',
+      'HRMS header and footer links to the tools page keep the language');
     await p.click('#langJa'); await p.click('footer a[href^="../index.html"]'); await p.waitForLoadState();
     ok(await p.evaluate(() => document.documentElement.lang) === 'ja', `back on personal page in Japanese (localStorage ${blocked ? 'blocked' : 'available'})`);
     await p.ctx.close();
@@ -143,10 +144,10 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
     ok(await p.isVisible('#calcPlaceholder') && (await p.textContent('#calcMain')) === '' && !(await p.isVisible('#calcSi')) && await p.isVisible('.electron-note'),
       'calculator: empty box with a placeholder before calculating; electron note shown at the top');
     await p.fill('#formula', 'C6H12O6');
-    ok((await p.textContent('.result-mz strong')) === '181.070665' && !(await p.isVisible('#calcPlaceholder')), 'calculator: result appears in the box while typing ([M+H]+ 181.070665)');
+    ok((await p.textContent('.result-mz strong')) === '181.0707' && !(await p.isVisible('#calcPlaceholder')), 'calculator: result appears in the box while typing ([M+H]+ 181.0707, 4 decimal places by default)');
     await pickIon(p, 'calcIon', '[M+HCOO]-'); await p.fill('#calcFound', '225.0614');
     const facts = await p.textContent('.result-facts');
-    ok((await p.textContent('.result-mz strong')) === '225.061591' && facts.includes('−0.85 ppm'), `calculator: formate adduct 225.061591 and error shown (${facts})`);
+    ok((await p.textContent('.result-mz strong')) === '225.0616' && facts.includes('−0.85 ppm'), `calculator: formate adduct 225.0616 and error shown (${facts})`);
     const si = await p.textContent('#siText');
     ok(si === 'HRMS m/z: [M + HCOO]− Calcd for C7H13O8 225.0616; Found 225.0614.' && !(await p.$('[data-si=method]')), `statement without ionization method: ${si}`);
     const guide = await p.$eval('#calcSi .si-source a', a => [a.href, a.target]);
@@ -165,10 +166,10 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
     // batch
     await p.click('#batchExample');
     const rows = await p.$$eval('#batchResults tbody tr', rs => rs.map(r => [...r.cells].map(c => c.textContent)));
-    ok(rows.length === 4 && rows[2][3] === '[M − 2H]2−' && rows[2][5] === '541.025993' && rows[0][7] === '-1.03', `batch: ${rows.map(r => r.slice(1, 8).join(' ')).join(' | ')}`);
+    ok(rows.length === 4 && rows[2][3] === '[M − 2H]2−' && rows[2][5] === '541.0260' && rows[0][7] === '-1.03', `batch: ${rows.map(r => r.slice(1, 8).join(' ')).join(' | ')}`);
     await p.click('#batchCopyTsv'); await p.waitForTimeout(150);
     const tsv = await p.evaluate(() => navigator.clipboard.readText());
-    ok(tsv.split('\n').length === 5 && tsv.split('\n')[1].split('\t')[5] === '203.052609', 'batch: table copied as tab-separated text');
+    ok(tsv.split('\n').length === 5 && tsv.split('\n')[1].split('\t')[5] === '203.0526', 'batch: table copied as tab-separated text');
     await p.click('#batchCopySi'); await p.waitForTimeout(150);
     const sis = (await p.evaluate(() => navigator.clipboard.readText())).split('\n');
     ok(sis.length === 4 && sis[0] === 'Glucose: HRMS m/z: [M + Na]+ Calcd for C6H12O6Na 203.0526; Found 203.0524.', `batch: statements copied (${sis[0]})`);
@@ -198,14 +199,15 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
   {
     const p = await page(); await p.goto(`${BASE}/hrms-calc/index.html?lang=ja`);
     await p.fill('#formula', 'C6H12O6'); await p.press('#formula', 'Enter');
-    await p.selectOption('#calculator [data-digits]', '4');
+    const def = await p.textContent('.result-mz strong');
+    await p.selectOption('#calculator [data-digits]', '6');
     const mz4 = await p.textContent('.result-mz strong'), fd = await p.$eval('#finder [data-digits]', s => s.value);
     await p.reload(); await p.fill('#formula', 'C6H12O6'); await p.press('#formula', 'Enter');
     const after = await p.textContent('.result-mz strong');
     await p.click('#tab-batch'); await p.fill('#batchInput', 'C6H12O6'); await p.click('#batchForm button.primary');
     await p.selectOption('#batch [data-digits]', '8');
     const b8 = await p.$eval('#batchResults tbody tr', tr => tr.cells[5].textContent);
-    ok(mz4 === '181.0707' && fd === '4' && after === '181.0707' && b8 === '181.07066456', `decimal places: ${mz4}, finder ${fd}, after reload ${after}, batch ${b8}`);
+    ok(def === '181.0707' && mz4 === '181.070665' && fd === '6' && after === '181.070665' && b8 === '181.07066456', `decimal places: default ${def}, 6 → ${mz4}, finder ${fd}, after reload ${after}, batch ${b8}`);
     await p.ctx.close();
   }
   // 11. typography: formulas with subscripts, charges as superscripts, italic m/z, external links in a new tab
@@ -243,7 +245,7 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
     const lu = new URL(link), lh = hashOf(link);
     ok(lh.q.get('f') === 'C6H12O6' && !lu.searchParams.has('lang') && lh.tab === 'calculator' && (await p.textContent('#calcLinkStatus')).includes('コピー'), `link copied without the language (${link})`);
     const q = await page(); await q.goto(link);
-    ok((await q.inputValue('#formula')) === 'C6H12O6' && (await q.inputValue('#calcIon')) === '[M+Na]+' && (await q.textContent('#calcMain')).includes('203.052609'), 'opening the link restores the calculator and its result');
+    ok((await q.inputValue('#formula')) === 'C6H12O6' && (await q.inputValue('#calcIon')) === '[M+Na]+' && (await q.textContent('#calcMain')).includes('203.0526'), 'opening the link restores the calculator and its result');
     await q.ctx.close();
     await p.fill('#formula', ''); ok(!hashOf(p.url()).q.has('f') && await p.isHidden('#calcLinkRow'), 'emptying the formula removes it from the address');
     // finder link with ranges and filters runs the search
@@ -272,7 +274,7 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
     // storage blocked: the page still works
     const b = await page(); await b.addInitScript(() => Object.defineProperty(window, 'localStorage', { get() { throw new Error('blocked'); } }));
     await b.goto(`${BASE}/hrms-calc/index.html?lang=ja&f=C6H12O6&ion=${encodeURIComponent('[M+H]+')}`);
-    ok((await b.textContent('#calcMain')).includes('181.070665'), 'link works when storage is blocked');
+    ok((await b.textContent('#calcMain')).includes('181.0707'), 'link works when storage is blocked');
     await b.ctx.close();
   }
   // 14. journal formats only in the calculator tab; the link in the statement area reaches them
@@ -297,7 +299,7 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
     await p.fill('#batchInput', 'A\tC6H12O6\t[M+H]+\t181.0707\nB\tC6H12O6\t[M+H]+\t181.0707\nC\tC6H12O6\t[M+H]+\t0\nB');
     await p.click('#batchForm button.primary');
     const rows = await p.$$eval('#batchResults tbody tr', trs => trs.map(tr => [...tr.cells].map(c => c.textContent)));
-    ok(rows.length === 4 && rows[1][1] === 'B' && rows[1][2] === 'C6H12O6' && rows[1][5] === '181.070665' && rows[2][9].includes('正の数') && rows[3][2] === 'B' && rows[3][1] === '',
+    ok(rows.length === 4 && rows[1][1] === 'B' && rows[1][2] === 'C6H12O6' && rows[1][5] === '181.0707' && rows[2][9].includes('正の数') && rows[3][2] === 'B' && rows[3][1] === '',
       `batch: label B kept as a name, measured 0 rejected on its row, B alone is boron (${rows.map(r => r[1] + '/' + r[2] + '/' + r[9]).join(' | ')})`);
     await p.ctx.close();
     const q = await page({ viewport: { width: 1280, height: 900 } }); await q.goto(`${BASE}/publications.html?lang=ja`);
@@ -324,6 +326,30 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
     const versions = new Set(refs);
     ok(refs.length >= 9 && versions.size === 1 && !versions.has('none'), `HRMS Calc files carry one version (${[...versions]}, ${refs.length} references)`);
   }
+  // 16. personal pages: one version of styles.css / app.js, the same footer, structured data, description and sharing tags follow the language
+  {
+    const fs = require('fs'), path = require('path'), root = path.join(__dirname, '..', '..');
+    const pages = ['index.html', 'research.html', 'publications.html', 'tools.html', '404.html'];
+    const refs = pages.flatMap(f => [...fs.readFileSync(path.join(root, f), 'utf8').matchAll(/(?:href|src)="\.?\/(?:styles\.css|app\.js)(\?v=[\w-]+)?"/g)].map(m => m[1] || 'none'));
+    const vs = new Set(refs);
+    ok(refs.length === 10 && vs.size === 1 && !vs.has('none'), `personal pages load styles.css and app.js with one version (${[...vs]}, ${refs.length})`);
+    const feet = new Set(pages.map(f => /<footer>[\s\S]*?<\/footer>/.exec(fs.readFileSync(path.join(root, f), 'utf8'))[0]));
+    ok(feet.size === 1 && [...feet][0].includes('最終更新'), 'every personal page has the same footer with the last update');
+    for (const [f, type] of [['index.html', 'Person'], ['hrms-calc/index.html', 'WebApplication']]) {
+      const m = /<script type="application\/ld\+json">([\s\S]*?)<\/script>/.exec(fs.readFileSync(path.join(root, f), 'utf8'));
+      let d = null; try { d = JSON.parse(m[1]); } catch (e) {}
+      ok(d && d['@type'] === type && (type !== 'Person' || d.sameAs.length === 4), `${f}: structured data ${type} parses`);
+    }
+    for (const url of ['index.html', 'tools.html', 'hrms-calc/index.html']) {
+      const p = await page(); await p.goto(`${BASE}/${url}?lang=en`);
+      const m = await p.evaluate(() => ['meta[name=description]', 'meta[property="og:description"]', 'meta[property="og:title"]', 'meta[property="og:locale"]'].map(s => document.querySelector(s).content));
+      ok(!/[\u3040-\u30ff\u4e00-\u9fff]/.test(m[0] + m[1]) && m[2] === await p.title() && m[3] === 'en_US', `${url}: description and sharing tags in English (${m[0].slice(0, 30)}…)`);
+      await p.click(url.startsWith('hrms') ? '#langJa' : '[data-language="ja"]');
+      const j = await p.evaluate(() => [document.querySelector('meta[name=description]').content, document.querySelector('meta[property="og:locale"]').content]);
+      ok(/[\u3040-\u30ff]/.test(j[0]) && j[1] === 'ja_JP', `${url}: back to Japanese`);
+      await p.ctx.close();
+    }
+  }
   // 12. ion picker: every ion type once, open/close, keyboard, choice, panel inside the screen
   {
     const p = await page(); await p.goto(`${BASE}/hrms-calc/index.html?lang=ja`);
@@ -339,7 +365,7 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
     await p.click('#calcIon-picker .ion-current'); await p.click('h1');
     ok(await p.isHidden('#calcIon-panel'), 'a click outside closes the table');
     await pickIon(p, 'calcIon', '[2M+Na]+');
-    ok((await p.inputValue('#calcIon')) === '[2M+Na]+' && (await p.textContent('#calcIon-current')) === '[2M + Na]⁺' && (await p.textContent('#calcMain')).includes('383.115997') &&
+    ok((await p.inputValue('#calcIon')) === '[2M+Na]+' && (await p.textContent('#calcIon-current')) === '[2M + Na]⁺' && (await p.textContent('#calcMain')).includes('383.1160') &&
       (await p.getAttribute('#calcIon-panel button[data-ion="[2M+Na]+"]', 'aria-pressed')) === 'true' && await p.isHidden('#calcIon-panel'), `choosing an ion updates the button and the result (${await p.textContent('.result-mz')})`);
     await p.click('#langEn');
     ok((await p.textContent('#calcIon-panel caption')) === 'Positive ions' && (await p.textContent('#calcIon-current')) === '[2M + Na]⁺', 'table captions follow the language');

@@ -18,6 +18,7 @@
 ## 個人ページ（index / research / publications / tools / 404）
 - 日英両方を用意する（data-ja・data-en 属性、または data-lang の span）。言語は ?lang= と localStorage（ym-language）で引き継ぐ。
 - 外部リンクは target="_blank" rel="noopener noreferrer"。
+- 個人ページ（404 を含む）を変更したら、styles.css・app.js の版番号（?v=日付-番号）を全ページで同じ新しい値にし、フッターの最終更新日も全ページ同じ日付に更新する（テストで確認）。
 - 業績ページの画像は width・height に実寸、先頭以外は loading="lazy"、decoding="async"。画像の文字が読めなくなる圧縮はしない。
 
 ## HRMS Calc（hrms-calc/）

@@ -3,9 +3,13 @@ const buttons = [...document.querySelectorAll('[data-language]')];
 function setLanguage(lang) {
   const sel = lang === 'en' ? 'en' : 'ja';
   document.documentElement.lang = sel;
-  document.querySelectorAll('[data-ja][data-en]').forEach(n => { if (n.tagName !== 'IMG') n.textContent = n.dataset[sel]; });
+  document.querySelectorAll('[data-ja][data-en]').forEach(n => { if (n.tagName === 'META') n.content = n.dataset[sel]; else if (n.tagName !== 'IMG') n.textContent = n.dataset[sel]; });
   document.querySelectorAll('[data-lang]').forEach(n => { n.hidden = n.dataset.lang !== sel; });
   const title = document.querySelector('title'); if (title) document.title = title.dataset[sel];
+  // page title and locale for sharing follow the language as well (the description has data-ja / data-en)
+  const og = p => document.querySelector(`meta[property="og:${p}"]`);
+  if (og('title') && title) og('title').content = title.dataset[sel];
+  if (og('locale')) og('locale').content = sel === 'en' ? 'en_US' : 'ja_JP';
   buttons.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.language === sel)));
   try { localStorage.setItem('ym-language', sel); } catch (e) {}
   document.querySelectorAll('a[href]').forEach(a => {

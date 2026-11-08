@@ -1,5 +1,5 @@
-import {ELEMENTS,IONS,parseFormula,ion,ionCounts,ppm,dbe,isotopePattern} from './core.js?v=20261108-3';
-import {ionLabel,formulaHtml,siFormula,siSentence,checkText,parseBatch,readFound} from './si.js?v=20261108-3';
+import {ELEMENTS,IONS,parseFormula,ion,ionCounts,ppm,dbe,isotopePattern} from './core.js?v=20261108-5';
+import {ionLabel,formulaHtml,siFormula,siSentence,checkText,parseBatch,readFound} from './si.js?v=20261108-5';
 const $=id=>document.getElementById(id);
 const strings={
  ja:{skip:'本文へ移動',
@@ -77,7 +77,8 @@ const strings={
   errorSearch:'実測 m/z と許容誤差を確認してください（ppm は 0 以上、100万未満）。',
   errorLines:'一度に入力できるのは1000行までです。',
   errorGeneric:'計算できませんでした。入力を確認してください。',
-  brandSub:'（HRMS精密質量計算ツール）',title:'HRMS Calc（HRMS精密質量計算ツール）'},
+  brandSub:'（HRMS精密質量計算ツール）',title:'HRMS Calc（HRMS精密質量計算ツール）',toolsPage:'ツール',
+  metaDescription:'電子の質量を考慮してHRMSの精密質量（m/z）を計算するブラウザー用ツール。分子式候補の検索、一括計算、同位体パターン、論文・SIの記載文の作成とチェック。'},
  en:{skip:'Skip to content',
   lead:'Calculates exact HRMS masses (m/z), finds candidate formulas, calculates many compounds at once, and writes and checks HRMS statements for papers and SI. Everything runs in your browser; nothing you enter is sent anywhere.',
   electronHead:'The electron mass is taken into account.',electronShort:'It is subtracted for positive ions and added for negative ions; ignoring it shifts m/z 200 by about 2.7 ppm (more at lower m/z).',electronSurvey:'A survey of about 3000 SI files from <i>Org. Lett.</i> (2023–2024) found errors in about 30% of the reported accurate-mass data; about two-thirds of these came from ignoring the electron mass (<a href="https://doi.org/10.1021/acs.orglett.4c03458" target="_blank" rel="noopener noreferrer">Christmann, <i>Org. Lett.</i> 2025, <i>27</i>, 4⁠–⁠7</a>).',
@@ -153,7 +154,8 @@ const strings={
   errorSearch:'Check the measured m/z and the tolerance (ppm must be at least 0 and below one million).',
   errorLines:'Up to 1000 lines can be entered at once.',
   errorGeneric:'The calculation failed. Check your input.',
-  brandSub:' (HRMS Exact Mass Calculator)',title:'HRMS Calc (HRMS Exact Mass Calculator)'}
+  brandSub:' (HRMS Exact Mass Calculator)',title:'HRMS Calc (HRMS Exact Mass Calculator)',toolsPage:'Tools',
+  metaDescription:'A browser tool that calculates exact HRMS masses (m/z), taking the electron mass into account. Candidate formulas, batch calculation, isotope patterns, and writing and checking HRMS statements for papers and SI.'}
 };
 const EXAMPLES={
  batch:'Glucose\tC6H12O6\t[M+Na]+\t203.0524\nCatechin\tC15H14O6\t[M-H]-\t289.0716\nPunicalagin\tC48H28O30\t[M-2H]2-\t541.0263\nCaffeine C8H10N4O2 [M+H]+ 195.0877',
@@ -256,8 +258,8 @@ selectTab(tabFromHash()||tabs[0],false,false);
 window.addEventListener('hashchange',()=>{const tab=tabFromHash();if(tab)selectTab(tab,false,false);});
 
 // ---------- decimal places of calculated m/z (calculator, finder, batch) ----------
-let digits=6;
-for(const s of document.querySelectorAll('[data-digits]'))for(const d of [4,5,6,7,8])s.append(el('option',{value:String(d),textContent:String(d),selected:d===6}));
+let digits=4;
+for(const s of document.querySelectorAll('[data-digits]'))for(const d of [4,5,6,7,8])s.append(el('option',{value:String(d),textContent:String(d),selected:d===4}));
 function setDigits(d){digits=d;for(const s of document.querySelectorAll('[data-digits]'))s.value=String(d);if(calcState&&!calcState.error)renderCalc();renderResults();if(batchRows)renderBatch();}
 
 // ---------- statement settings (shared by the calculator and the batch) ----------
@@ -355,7 +357,7 @@ $('searchForm').onsubmit=event=>{event.preventDefault();clearSearch();
  const bad=checkRanges();if(bad){if(bad.input.closest('details'))bad.input.closest('details').open=true;bad.input.setAttribute('aria-invalid','true');bad.input.focus();$('searchStatus').textContent=bad.text;return;}
  try{
   const ranges=[...document.querySelectorAll('.range')].map(div=>{const inputs=div.querySelectorAll('input');return [inputs[0].dataset.element,Number(inputs[0].value),Number(inputs[1].value)];});
-  worker=new Worker(new URL('./worker.js?v=20261108-3',import.meta.url),{type:'module'});$('cancel').disabled=false;$('searchButton').disabled=true;$('searchStatus').textContent=t('running');
+  worker=new Worker(new URL('./worker.js?v=20261108-5',import.meta.url),{type:'module'});$('cancel').disabled=false;$('searchButton').disabled=true;$('searchStatus').textContent=t('running');
   worker.onmessage=({data})=>{cancel();if(data.error){say($('searchStatus'),errorText(data.error));return;}last=data;renderResults();$('copy').disabled=!data.results.length;$('searchLink').disabled=false;};
   worker.onerror=()=>{cancel();$('searchStatus').textContent=t('errorGeneric');};
   worker.postMessage({found:Number($('found').value),tolerance:Number($('tolerance').value),unit:$('unit').value,adduct:$('searchIon').value,ranges,filters:{dbe:$('filterDbe').checked,ratio:$('filterRatio').checked}});
@@ -447,6 +449,9 @@ $('checkCopy').onclick=()=>{
 // ---------- language ----------
 function translate(){
  document.documentElement.lang=lang;if(t('title'))document.title=t('title');
+ // description, page title and locale for sharing follow the language
+ const meta=(sel,v)=>{const m=document.querySelector(sel);if(m)m.content=v;};
+ meta('meta[name=description]',t('metaDescription'));meta('meta[property="og:description"]',t('metaDescription'));meta('meta[property="og:title"]',t('title'));meta('meta[property="og:locale"]',lang==='en'?'en_US':'ja_JP');
  for(const n of document.querySelectorAll('[data-t]')){if(t(n.dataset.t)===undefined)continue; // a missing string keeps the text written in the HTML
   if(n.tagName==='OPTGROUP')n.label=t(n.dataset.t);else if(n.tagName==='OPTION')n.textContent=t(n.dataset.t);else n.innerHTML=rich(t(n.dataset.t),false);}
  $('langJa').setAttribute('aria-pressed',String(lang==='ja'));$('langEn').setAttribute('aria-pressed',String(lang==='en'));
