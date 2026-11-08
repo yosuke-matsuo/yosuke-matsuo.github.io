@@ -26,7 +26,8 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
     await p.click('a[href^="./tools.html"]:visible'); await p.waitForLoadState();
     await p.click('a[href^="./hrms-calc/index.html"]:visible'); await p.waitForLoadState();
     ok(await p.evaluate(() => document.documentElement.lang) === 'en', `HRMS opens in English (localStorage ${blocked ? 'blocked' : 'available'})`);
-    ok(!(await p.$('header a')), 'HRMS header has no link to the personal page');
+    ok((await p.getAttribute('header a.home-link', 'href')) === '../index.html?lang=en' && (await p.getAttribute('footer a[href^="../tools.html"]', 'href')) === '../tools.html?lang=en',
+      'HRMS header link to the home page and footer link to the tools page keep the language');
     await p.click('#langJa'); await p.click('footer a[href^="../index.html"]'); await p.waitForLoadState();
     ok(await p.evaluate(() => document.documentElement.lang) === 'ja', `back on personal page in Japanese (localStorage ${blocked ? 'blocked' : 'available'})`);
     await p.ctx.close();
@@ -323,6 +324,30 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
     const refs = ['index.html', 'app.js', 'core.js', 'si.js', 'worker.js'].flatMap(f => [...fs.readFileSync(path.join(dir, f), 'utf8').matchAll(re)].map(m => m[2] || 'none'));
     const versions = new Set(refs);
     ok(refs.length >= 9 && versions.size === 1 && !versions.has('none'), `HRMS Calc files carry one version (${[...versions]}, ${refs.length} references)`);
+  }
+  // 16. personal pages: one version of styles.css / app.js, the same footer, structured data, description and sharing tags follow the language
+  {
+    const fs = require('fs'), path = require('path'), root = path.join(__dirname, '..', '..');
+    const pages = ['index.html', 'research.html', 'publications.html', 'tools.html', '404.html'];
+    const refs = pages.flatMap(f => [...fs.readFileSync(path.join(root, f), 'utf8').matchAll(/(?:href|src)="\.?\/(?:styles\.css|app\.js)(\?v=[\w-]+)?"/g)].map(m => m[1] || 'none'));
+    const vs = new Set(refs);
+    ok(refs.length === 10 && vs.size === 1 && !vs.has('none'), `personal pages load styles.css and app.js with one version (${[...vs]}, ${refs.length})`);
+    const feet = new Set(pages.map(f => /<footer>[\s\S]*?<\/footer>/.exec(fs.readFileSync(path.join(root, f), 'utf8'))[0]));
+    ok(feet.size === 1 && [...feet][0].includes('最終更新'), 'every personal page has the same footer with the last update');
+    for (const [f, type] of [['index.html', 'Person'], ['hrms-calc/index.html', 'WebApplication']]) {
+      const m = /<script type="application\/ld\+json">([\s\S]*?)<\/script>/.exec(fs.readFileSync(path.join(root, f), 'utf8'));
+      let d = null; try { d = JSON.parse(m[1]); } catch (e) {}
+      ok(d && d['@type'] === type && (type !== 'Person' || d.sameAs.length === 4), `${f}: structured data ${type} parses`);
+    }
+    for (const url of ['index.html', 'tools.html', 'hrms-calc/index.html']) {
+      const p = await page(); await p.goto(`${BASE}/${url}?lang=en`);
+      const m = await p.evaluate(() => ['meta[name=description]', 'meta[property="og:description"]', 'meta[property="og:title"]', 'meta[property="og:locale"]'].map(s => document.querySelector(s).content));
+      ok(!/[\u3040-\u30ff\u4e00-\u9fff]/.test(m[0] + m[1]) && m[2] === await p.title() && m[3] === 'en_US', `${url}: description and sharing tags in English (${m[0].slice(0, 30)}…)`);
+      await p.click(url.startsWith('hrms') ? '#langJa' : '[data-language="ja"]');
+      const j = await p.evaluate(() => [document.querySelector('meta[name=description]').content, document.querySelector('meta[property="og:locale"]').content]);
+      ok(/[\u3040-\u30ff]/.test(j[0]) && j[1] === 'ja_JP', `${url}: back to Japanese`);
+      await p.ctx.close();
+    }
   }
   // 12. ion picker: every ion type once, open/close, keyboard, choice, panel inside the screen
   {
