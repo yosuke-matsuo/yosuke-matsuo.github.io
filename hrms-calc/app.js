@@ -1,5 +1,5 @@
-import {ELEMENTS,IONS,parseFormula,ion,ionCounts,ppm,dbe,isotopePattern} from './core.js?v=20261108-4';
-import {ionLabel,formulaHtml,siFormula,siSentence,checkText,parseBatch,readFound} from './si.js?v=20261108-4';
+import {ELEMENTS,IONS,parseFormula,ion,ionCounts,ppm,dbe,isotopePattern} from './core.js?v=20261108-5';
+import {ionLabel,formulaHtml,siFormula,siSentence,checkText,parseBatch,readFound} from './si.js?v=20261108-5';
 const $=id=>document.getElementById(id);
 const strings={
  ja:{skip:'本文へ移動',
@@ -258,8 +258,8 @@ selectTab(tabFromHash()||tabs[0],false,false);
 window.addEventListener('hashchange',()=>{const tab=tabFromHash();if(tab)selectTab(tab,false,false);});
 
 // ---------- decimal places of calculated m/z (calculator, finder, batch) ----------
-let digits=6;
-for(const s of document.querySelectorAll('[data-digits]'))for(const d of [4,5,6,7,8])s.append(el('option',{value:String(d),textContent:String(d),selected:d===6}));
+let digits=4;
+for(const s of document.querySelectorAll('[data-digits]'))for(const d of [4,5,6,7,8])s.append(el('option',{value:String(d),textContent:String(d),selected:d===4}));
 function setDigits(d){digits=d;for(const s of document.querySelectorAll('[data-digits]'))s.value=String(d);if(calcState&&!calcState.error)renderCalc();renderResults();if(batchRows)renderBatch();}
 
 // ---------- statement settings (shared by the calculator and the batch) ----------
@@ -357,7 +357,7 @@ $('searchForm').onsubmit=event=>{event.preventDefault();clearSearch();
  const bad=checkRanges();if(bad){if(bad.input.closest('details'))bad.input.closest('details').open=true;bad.input.setAttribute('aria-invalid','true');bad.input.focus();$('searchStatus').textContent=bad.text;return;}
  try{
   const ranges=[...document.querySelectorAll('.range')].map(div=>{const inputs=div.querySelectorAll('input');return [inputs[0].dataset.element,Number(inputs[0].value),Number(inputs[1].value)];});
-  worker=new Worker(new URL('./worker.js?v=20261108-4',import.meta.url),{type:'module'});$('cancel').disabled=false;$('searchButton').disabled=true;$('searchStatus').textContent=t('running');
+  worker=new Worker(new URL('./worker.js?v=20261108-5',import.meta.url),{type:'module'});$('cancel').disabled=false;$('searchButton').disabled=true;$('searchStatus').textContent=t('running');
   worker.onmessage=({data})=>{cancel();if(data.error){say($('searchStatus'),errorText(data.error));return;}last=data;renderResults();$('copy').disabled=!data.results.length;$('searchLink').disabled=false;};
   worker.onerror=()=>{cancel();$('searchStatus').textContent=t('errorGeneric');};
   worker.postMessage({found:Number($('found').value),tolerance:Number($('tolerance').value),unit:$('unit').value,adduct:$('searchIon').value,ranges,filters:{dbe:$('filterDbe').checked,ratio:$('filterRatio').checked}});
