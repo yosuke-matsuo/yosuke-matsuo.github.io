@@ -350,6 +350,34 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
       await p.ctx.close();
     }
   }
+  // 17. sharing image, titles, email alt, page jump, back to top, language button lang, sitemap lastmod, image sizes, noscript
+  {
+    const fs = require('fs'), path = require('path'), root = path.join(__dirname, '..', '..');
+    const read = f => fs.readFileSync(path.join(root, f), 'utf8');
+    const png = f => { const b = fs.readFileSync(path.join(root, f)); return [b.readUInt32BE(16), b.readUInt32BE(20)]; };
+    const og = png('images/og-image.png');
+    const withOg = ['index.html', 'research.html', 'publications.html', 'tools.html', 'hrms-calc/index.html'];
+    ok(og[0] === 1200 && og[1] === 630 && withOg.every(f => { const s = read(f); return s.includes('content="https://yosuke-matsuo.github.io/images/og-image.png"') && s.includes('og:image:width" content="1200"') && s.includes('og:image:height" content="630"') && s.includes('name="twitter:card" content="summary_large_image"'); }),
+      `og-image.png is 1200×630 and declared on ${withOg.length} pages`);
+    const bad = [...read('publications.html').matchAll(/<img src="\.\/(images\/[^"]+\.png)"[^>]*width="(\d+)" height="(\d+)"/g)].filter(m => { const [w, h] = png(m[1]); return w !== +m[2] || h !== +m[3]; }).map(m => m[1]);
+    const big = fs.readdirSync(path.join(root, 'images/toc')).filter(f => f.endsWith('.png') && png('images/toc/' + f)[0] > 1600);
+    ok(!bad.length && !big.length, `publication PNGs: width/height match the files, none wider than 1600px (${bad.concat(big)})`);
+    ok((read('sitemap.xml').match(/<lastmod>\d{4}-\d\d-\d\d<\/lastmod>/g) || []).length === 5, 'sitemap: every URL has lastmod');
+    ok(read('hrms-calc/index.html').includes('<noscript>') && read('hrms-calc/index.html').includes('This tool requires JavaScript.'), 'HRMS Calc: message without JavaScript');
+    for (const lang of ['ja', 'en']) {
+      const p = await page(); await p.goto(`${BASE}/index.html?lang=${lang}`);
+      const t = await p.title(), ogt = await p.getAttribute('meta[property="og:title"]', 'content'), alt = await p.getAttribute('.about-mail img', 'alt');
+      const btn = await p.$$eval('.language-switch button', bs => bs.map(b => b.lang).join());
+      ok(t === (lang === 'ja' ? '松尾洋介（Yosuke Matsuo）｜九州医療科学大学 薬学部' : 'Yosuke Matsuo | Kyushu University of Medical Science') && ogt === t && alt === (lang === 'ja' ? 'メールアドレス（画像）' : 'Email address (image)') && btn === 'ja,en',
+        `${lang}: top title, og:title, email alt, language buttons (${t} / ${alt})`);
+      await p.goto(`${BASE}/publications.html?lang=${lang}`);
+      const jump = await p.$$eval('.page-jump a', as => as.map(a => a.getAttribute('href')).join());
+      const top = await p.textContent('.back-to-top a');
+      ok((await p.title()) === (lang === 'ja' ? '業績 — 松尾洋介（Yosuke Matsuo）' : 'Publications — Yosuke Matsuo') && jump === '#papers,#reviews,#presentations' && top === (lang === 'ja' ? 'ページ上部へ戻る' : 'Back to top'),
+        `${lang}: publications title, page jump with reviews, back to top`);
+      await p.ctx.close();
+    }
+  }
   // 12. ion picker: every ion type once, open/close, keyboard, choice, panel inside the screen
   {
     const p = await page(); await p.goto(`${BASE}/hrms-calc/index.html?lang=ja`);
