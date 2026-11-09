@@ -245,6 +245,10 @@ test('SI checker: wider range of statement formats (2026-11)', () => {
   assert.equal(checkText('HRMS (ES+): m/z [M + H]+ calcd 333.1248, found 333.1229')[0].status, 'unparsed');
   assert.equal(checkText('The calculated ECD spectrum agreed with the experimental one. This requires care.').length, 0);
   assert.equal(checkText('Anal. Calcd for C6H12O6: C, 40.00; H, 6.71. Found: C, 39.95; H, 6.75.').length, 0);
+  // formulas without atom counts are still formulas (Codex review); a lone word is not
+  assert.deepEqual((r => [r.status, r.formula])(checkText('HRMS (EI) calcd for CO+ 27.9944; found 27.9943.')[0]), ['ok', 'CO']);
+  assert.equal(checkText('HRMS (EI) m/z 27.0104 [M]+ (HCN requires 27.0104)')[0].formula, 'HCN');
+  assert.equal(checkText('HRMS (ESI) calcd for HRMS 1.0')[0].status, 'unparsed');
   // thousands separators and comma-separated lists are left alone
   assert.equal(checkText('HRMS calcd for C48H28O30Na,1107.0558, found 1107.0560')[0].stated, '1107.0558');
 });
