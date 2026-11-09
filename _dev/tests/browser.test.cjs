@@ -378,6 +378,14 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
       await p.ctx.close();
     }
   }
+  // 18. HRMS Calc: privacy note below the tools (before the method), formula input on the first screen of a small phone
+  for (const lang of ['ja', 'en']) {
+    const p = await page({ viewport: { width: 375, height: 667 } }); await p.goto(`${BASE}/hrms-calc/index.html?lang=${lang}`);
+    const r = await p.evaluate(() => ({ note: document.querySelector('.privacy-note').textContent, before: !!(document.querySelector('.privacy-note').compareDocumentPosition(document.querySelector('#method')) & Node.DOCUMENT_POSITION_FOLLOWING), formulaBottom: document.querySelector('#formula').getBoundingClientRect().bottom, lead: !!document.querySelector('.lead') }));
+    ok(r.note === (lang === 'ja' ? '計算はすべてブラウザー内で行い、入力した内容はどこにも送信しません。' : 'Everything runs in your browser; nothing you enter is sent anywhere.') && r.before && !r.lead && r.formulaBottom <= 667,
+      `${lang}: privacy note before the method; formula input within the first screen at 375×667 (bottom ${Math.round(r.formulaBottom)}px)`);
+    await p.ctx.close();
+  }
   // 12. ion picker: every ion type once, open/close, keyboard, choice, panel inside the screen
   {
     const p = await page(); await p.goto(`${BASE}/hrms-calc/index.html?lang=ja`);

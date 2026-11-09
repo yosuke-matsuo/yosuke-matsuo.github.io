@@ -215,3 +215,36 @@ test('batch input: labels that look like formulas, measured values, ion conflict
     ['', 'C6H12O6', '[M+H]+', '181.0707', null],
   ]);
 });
+
+test('SI checker: wider range of statement formats (2026-11)', () => {
+  // each statement: [text, formula read, calcd, found, charge]
+  const cases = [
+    ['HRMS (ESI) m/z 203.0524 [M+Na]+ (C6H12O6Na requires 203.0526)', 'C6H12O6Na', '203.0526', '203.0524', 1],
+    ['HRMS (ESI) C6H12O6Na [M+Na]+ requires 203.0526; found 203.0524', 'C6H12O6Na', '203.0526', '203.0524', 1],
+    ['HRMS (EI) (Found: M+, 180.0629. C6H12O6 requires M, 180.0628)', 'C6H12O6', '180.0628', '180.0629', 1],
+    ['HRMS (ESI) calcd for C6H13O6 (M+H)+: 181.0707; found: 181.0710.', 'C6H13O6', '181.0707', '181.0710', 1],
+    ['HRMS calcd for [C6H12O6+Na]+ 203.0526, found 203.0524', 'C6H12O6Na', '203.0526', '203.0524', 1],
+    ['HRMS (ESI) m/z: [M + Na]+ Calcd for C6H12O6Na 203,0526; Found 203,0524.', 'C6H12O6Na', '203.0526', '203.0524', 1],
+    ['HRMS (ESI) m/z: [M + Na]+ Calcd for C6H12O6Na 203.0526. Found 203.0524.', 'C6H12O6Na', '203.0526', '203.0524', 1],
+    ['HRMS (ESI) m/z [M+Na]+ calcd 203.0526 for C6H12O6Na, found 203.0524', 'C6H12O6Na', '203.0526', '203.0524', 1],
+    ['HRESIMS m/z 203.0524 [M+Na]+ (calcd. 203.0526 for C6H12O6Na)', 'C6H12O6Na', '203.0526', '203.0524', 1],
+    ['HRESIMS m/z [M+Na]+ 計算値：203.0526（C6H12O6Na）、実測値：203.0524', 'C6H12O6Na', '203.0526', '203.0524', 1],
+    ['HRMS-ESI (m/z): [M+H]+ calcd for C6H13O6, 181.0707; found, 181.0710', 'C6H13O6', '181.0707', '181.0710', 1],
+    ['HRMS (ESI) [M+Na]+ theor. 203.0526 for C6H12O6Na; exp. 203.0524', 'C6H12O6Na', '203.0526', '203.0524', 1],
+    ['HRMS (ESI) [M+Na]+ calcd for C6H12O6Na 203.0526, measured 203.0524', 'C6H12O6Na', '203.0526', '203.0524', 1],
+    ['HRMS (ESI) m/z: [M + HCOO]− Calcd for C7H13O8 225.0616; Found 225.0614.', 'C7H13O8', '225.0616', '225.0614', -1],
+  ];
+  for (const [t, f, calcd, found, z] of cases) {
+    const r = checkText(t);
+    assert.equal(r.length, 1, t);
+    assert.deepEqual([r[0].formula, r[0].stated, r[0].found, r[0].z], [f, calcd, found, z], t);
+    assert.notEqual(r[0].status, 'error', t);
+  }
+  // still told apart: an error in a "requires" statement, a formula-less statement, prose, elemental analysis
+  assert.equal(checkText('HRMS (ESI) m/z 181.0710 [M+H]+ (C6H13O6 requires 181.0712)')[0].codes[0], 'electron');
+  assert.equal(checkText('HRMS (ES+): m/z [M + H]+ calcd 333.1248, found 333.1229')[0].status, 'unparsed');
+  assert.equal(checkText('The calculated ECD spectrum agreed with the experimental one. This requires care.').length, 0);
+  assert.equal(checkText('Anal. Calcd for C6H12O6: C, 40.00; H, 6.71. Found: C, 39.95; H, 6.75.').length, 0);
+  // thousands separators and comma-separated lists are left alone
+  assert.equal(checkText('HRMS calcd for C48H28O30Na,1107.0558, found 1107.0560')[0].stated, '1107.0558');
+});

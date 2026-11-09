@@ -1,9 +1,9 @@
-import {ELEMENTS,IONS,parseFormula,ion,ionCounts,ppm,dbe,isotopePattern} from './core.js?v=20261108-5';
-import {ionLabel,formulaHtml,siFormula,siSentence,checkText,parseBatch,readFound} from './si.js?v=20261108-5';
+import {ELEMENTS,IONS,parseFormula,ion,ionCounts,ppm,dbe,isotopePattern} from './core.js?v=20261109-1';
+import {ionLabel,formulaHtml,siFormula,siSentence,checkText,parseBatch,readFound} from './si.js?v=20261109-1';
 const $=id=>document.getElementById(id);
 const strings={
  ja:{skip:'本文へ移動',
-  lead:'HRMSの精密質量（m/z）の計算、分子式候補の検索、一括計算、論文・SIの記載文の作成とチェックができます。計算はすべてブラウザー内で行い、入力した内容はどこにも送信しません。',
+  privacy:'計算はすべてブラウザー内で行い、入力した内容はどこにも送信しません。',
   electronHead:'電子の質量を考慮して計算します。',electronShort:'正イオンでは電子の質量を引き、負イオンでは足します。考慮しないと、m/z 200 では約2.7 ppm ずれます（m/z が小さいほど大きくずれます）。',electronSurvey:'2023～2024年の<i>Org. Lett.</i>誌のSI約3000件の調査では、精密質量データの約3割に記載の誤りがあり、その約3分の2は電子の質量を考慮していないものでした（<a href="https://doi.org/10.1021/acs.orglett.4c03458" target="_blank" rel="noopener noreferrer">Christmann, <i>Org. Lett.</i> 2025, <i>27</i>, 4⁠–⁠7</a>）。',
   tabCalc:'精密質量',tabFinder:'分子式検索',tabBatch:'一括計算',tabCheck:'記載チェック',
   journals:'主な雑誌のHRMSの書き方',journalsLink:'主な雑誌の書き方',psj:'日本薬学会',jsp:'日本生薬学会',
@@ -80,7 +80,7 @@ const strings={
   brandSub:'（HRMS精密質量計算ツール）',title:'HRMS Calc（HRMS精密質量計算ツール）',toolsPage:'ツール',
   metaDescription:'電子の質量を考慮してHRMSの精密質量（m/z）を計算するブラウザー用ツール。分子式候補の検索、一括計算、同位体パターン、論文・SIの記載文の作成とチェック。'},
  en:{skip:'Skip to content',
-  lead:'Calculates exact HRMS masses (m/z), finds candidate formulas, calculates many compounds at once, and writes and checks HRMS statements for papers and SI. Everything runs in your browser; nothing you enter is sent anywhere.',
+  privacy:'Everything runs in your browser; nothing you enter is sent anywhere.',
   electronHead:'The electron mass is taken into account.',electronShort:'It is subtracted for positive ions and added for negative ions; ignoring it shifts m/z 200 by about 2.7 ppm (more at lower m/z).',electronSurvey:'A survey of about 3000 SI files from <i>Org. Lett.</i> (2023–2024) found errors in about 30% of the reported accurate-mass data; about two-thirds of these came from ignoring the electron mass (<a href="https://doi.org/10.1021/acs.orglett.4c03458" target="_blank" rel="noopener noreferrer">Christmann, <i>Org. Lett.</i> 2025, <i>27</i>, 4⁠–⁠7</a>).',
   tabCalc:'Exact mass',tabFinder:'Find formulas',tabBatch:'Batch',tabCheck:'Check SI text',
   journals:'How major journals ask for HRMS data',journalsLink:'Other journals',psj:'Pharmaceutical Society of Japan',jsp:'Japanese Society of Pharmacognosy',
@@ -357,7 +357,7 @@ $('searchForm').onsubmit=event=>{event.preventDefault();clearSearch();
  const bad=checkRanges();if(bad){if(bad.input.closest('details'))bad.input.closest('details').open=true;bad.input.setAttribute('aria-invalid','true');bad.input.focus();$('searchStatus').textContent=bad.text;return;}
  try{
   const ranges=[...document.querySelectorAll('.range')].map(div=>{const inputs=div.querySelectorAll('input');return [inputs[0].dataset.element,Number(inputs[0].value),Number(inputs[1].value)];});
-  worker=new Worker(new URL('./worker.js?v=20261108-5',import.meta.url),{type:'module'});$('cancel').disabled=false;$('searchButton').disabled=true;$('searchStatus').textContent=t('running');
+  worker=new Worker(new URL('./worker.js?v=20261109-1',import.meta.url),{type:'module'});$('cancel').disabled=false;$('searchButton').disabled=true;$('searchStatus').textContent=t('running');
   worker.onmessage=({data})=>{cancel();if(data.error){say($('searchStatus'),errorText(data.error));return;}last=data;renderResults();$('copy').disabled=!data.results.length;$('searchLink').disabled=false;};
   worker.onerror=()=>{cancel();$('searchStatus').textContent=t('errorGeneric');};
   worker.postMessage({found:Number($('found').value),tolerance:Number($('tolerance').value),unit:$('unit').value,adduct:$('searchIon').value,ranges,filters:{dbe:$('filterDbe').checked,ratio:$('filterRatio').checked}});

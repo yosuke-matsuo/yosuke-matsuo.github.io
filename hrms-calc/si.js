@@ -1,5 +1,5 @@
 // Sentences for papers / Supporting Information, a checker for reported HRMS values, and batch input.
-import {IONS,ELECTRON_MASS,parseFormula,formula,mass,ionCounts} from './core.js?v=20261108-5';
+import {IONS,ELECTRON_MASS,parseFormula,formula,mass,ionCounts} from './core.js?v=20261109-1';
 const MINUS='−';
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
@@ -54,9 +54,19 @@ function bracketInfo(m){
  if(!mult||!z)return null;
  return {mult,z,delta,text:m[0].replace(/\s+/g,'')};
 }
-const CALC=/(?:\bcalc(?:ulated|d\.?|'d|\.)?|\btheor(?:etical|\.)?|計算値)(?![a-z])/gi;
-const FOUND_AFTER=/(?:\bfound|\bobs(?:d|erved)?\.?|実測値)\s*[:=]?\s*(?:m\/z\s*[:=]?\s*)?(\d+\.\d+)/i;
-const MZ_BEFORE=/(?:(?:\bfound|\bobs(?:d|erved)?\.?|実測値)\s*[:=]?\s*|m\/z\s*[:=]?\s*)(\d+\.\d+)/gi;
+const CALC=/(?:\bcalc(?:ulated|d\.?|'d|\.)?|\btheor(?:etical|\.)?|\brequire[sd]?|計算値)(?![a-z])/gi;
+// ion notation such as [M+Na]+, [2M-H]-, (M+H)+ (starts with M, so "[C6H12O6+Na]+" is read as a formula)
+const ION='[\\[(]\\s*\\d*\\s*M(?![a-z])[^\\]\\)\\n]{0,28}[\\])]\\s*\\d*\\s*[+-]';
+const FORMULA='((?:[A-Z][a-z]?\\d*)+)(?:\\s*\\+\\s*((?:[A-Z][a-z]?\\d*)+)(?=\\s*[+\\])\\s:,;]))?\\s*[\\])]?\\s*(\\d*[+-](?![\\d.]))?';
+// formula written just before the keyword ("C6H12O6Na requires 203.0526", "C6H12O6Na [M+Na]+ calcd 203.0526")
+const FORMULA_BEFORE=new RegExp('(?:^|[\\s(\\[,;:])\\[?\\s*'+FORMULA+'\\s*(?:\\(?\\s*('+ION+')\\s*\\)?\\s*)?[,:]?\\s*$');
+// formula written after the value ("calcd 203.0526 for C6H12O6Na", "calcd 203.0526 (C6H12O6Na)")
+const FORMULA_AFTER=new RegExp('\\s*,?\\s*(?:for\\s+)?\\(?\\s*\\[?\\s*'+FORMULA+'\\s*\\)?(?=[\\s,;:.)\\]]|$)','y');
+const ION_AT=new RegExp('\\s*\\(?\\s*('+ION+')\\s*\\)?','y');
+// measured value: "found 203.0524", "found, 203.0524", "found: M+, 180.0629", "measured", "exp.", "実測値"
+const FOUND_WORD='(?:\\bfound|\\bobs(?:d|erved)?\\.?|\\bmeasured|\\bexp(?:t|tl|erimental)?\\.?|実測値)\\s*[:=,]?\\s*(?:M\\s*[+-]?\\s*,?\\s*)?';
+const FOUND_AFTER=new RegExp(FOUND_WORD+'(?:m\\/z\\s*[:=]?\\s*)?(\\d+\\.\\d+)','i');
+const MZ_BEFORE=new RegExp('(?:'+FOUND_WORD+'|m\\/z\\s*[:=]?\\s*)(\\d+\\.\\d+)','gi');
 
 /* Check every "calcd for <formula> <value>" in the text.
    The written formula is taken as the formula of the ion (the usual convention);
@@ -67,7 +77,8 @@ const MZ_BEFORE=/(?:(?:\bfound|\bobs(?:d|erved)?\.?|実測値)\s*[:=]?\s*|m\/z\s
    A "calcd" whose formula or value cannot be read is returned as status "unparsed" (not as correct). */
 const RANK=['ok','rounding','neutralFormula','electron','electronSign','neutralFormulaElectron','mismatch'];
 export function checkText(text,{tolerancePpm=5}={}){
- const s=normalize(text);const records=[];const hits=[...s.matchAll(CALC)];let prevEnd=0;
+ // a comma used as the decimal mark (203,0526): four or more digits and no other decimal point
+ const s=normalize(text).replace(/(\d),(\d{4,6})(?!\d|\.\d)/g,'$1.$2');const records=[];const hits=[...s.matchAll(CALC)];let prevEnd=0;
  hits.forEach((h,hi)=>{
   if(h.index<prevEnd)return;
   // elemental analysis ("Anal. Calcd for C19H21NO3: C, 73.29; ...") is not an accurate mass
@@ -85,19 +96,24 @@ export function checkText(text,{tolerancePpm=5}={}){
    prevEnd=e;
   };
   const fw=take(/\s*(?:\.\s*)?(for|as)?\s*:?\s*/y);const forWord=!!(fw&&fw[1]);
-  const ionBefore=take(/\(?\s*(\[[^\]\n]{1,30}\]\s*\d*\s*[+-])\s*\)?\s*/y);
-  // formula, optionally "+ added ion" (C32H47NO5+Na+), optionally a charge sign (C15H13O6-)
-  const fm=take(/[\[(]?\s*((?:[A-Z][a-z]?\d*)+)(?:\s*\+\s*((?:[A-Z][a-z]?\d*)+)(?=\s*[+\])\s:]))?\s*[\])]?\s*(\d*[+-](?![\d.]))?/y);
-  if(!fm){unparsed('noFormula');return;}
-  const ionAfter=take(/\s*\(?\s*(\[[^\]\n]{1,30}\]\s*\d*\s*[+-])\s*\)?/y);
-  const vm=take(/[\s,:;=]*(?:m\/z\s*[:=]?\s*)?(\d+\.\d+)/y);
-  if(!vm){unparsed('noValue');return;}
-  const ionAfterValue=take(/\s*\(?\s*(\[[^\]\n]{1,30}\]\s*\d*\s*[+-])\s*\)?/y);
+  const ionBefore=take(new RegExp('\\(?\\s*('+ION+')\\s*\\)?\\s*','y'));
+  const VALUE=/[\s,:;=]*(?:\[?M\]?\s*[+-]?\s*[,:]\s*)?(?:m\/z\s*[:=]?\s*)?(\d+\.\d+)/y;
+  // formula, optionally "+ added ion" (C32H47NO5+Na+), optionally a charge sign (C15H13O6-);
+  // the formula may also stand just before the keyword or right after the value
+  const p0=p;let fm=take(new RegExp('[\\[(]?\\s*'+FORMULA,'y')),ionAfter=null,vm,formulaStart=null;
+  if(fm&&!/\d/.test(fm[1])){fm=null;p=p0;}
+  if(fm){ionAfter=take(ION_AT);vm=take(VALUE);if(!vm){unparsed('noValue');return;}}
+  else{
+   const from=Math.max(prevEnd,h.index-80),b=FORMULA_BEFORE.exec(s.slice(from,h.index));
+   if(b&&/\d/.test(b[1])){fm=b;formulaStart=from+b.index;if(b[4])ionAfter=[b[4],b[4]];vm=take(VALUE);if(!vm){unparsed('noValue');return;}}
+   else{vm=take(VALUE);const fa=vm&&take(FORMULA_AFTER);if(!fa||!/\d/.test(fa[1])){unparsed('noFormula');return;}fm=fa;}
+  }
+  const ionAfterValue=take(ION_AT);
   const valueEnd=p;
   // measured value: after ("found 203.0524") or before ("m/z 203.0524 ... (calcd for")
   // (same sentence only, and close to the calculated value, so the next compound's value is not taken)
-  let found=null,start=h.index,end=valueEnd;const near=v=>Math.abs(Number(v)-Number(vm[1]))<=0.5;
-  let after=s.slice(valueEnd,Math.min(nextKw,valueEnd+250));const stop=/[.。](?=\s|$)|\n\s*\n/.exec(after);if(stop)after=after.slice(0,stop.index);
+  let found=null,start=formulaStart??h.index,end=valueEnd;const near=v=>Math.abs(Number(v)-Number(vm[1]))<=0.5;
+  let after=s.slice(valueEnd,Math.min(nextKw,valueEnd+250));const stop=/(?<!\b(?:exp|exptl|obs|obsd|calc|calcd|theor))[.。](?=\s|$)(?!\s*(?:found|obs|measured|exp|実測))|\n\s*\n/i.exec(after);if(stop)after=after.slice(0,stop.index);
   const fa=FOUND_AFTER.exec(after);
   if(fa&&near(fa[1])){found=fa[1];end=valueEnd+fa.index+fa[0].length;}
   const from=Math.max(prevEnd,h.index-250),before=s.slice(from,h.index);
