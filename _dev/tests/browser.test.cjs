@@ -400,6 +400,13 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
       `checker: +0.34 mDa is within ±1 mDa but outside ±1 ppm; unit kept after reload (${head.trim()})`);
     await p.ctx.close();
   }
+  // 20. formula finder: the measured m/z field has no spin buttons
+  {
+    const p = await page(); await p.goto(`${BASE}/hrms-calc/index.html?lang=ja#finder`);
+    const ap = await p.$eval('#found', i => getComputedStyle(i).appearance);
+    ok(ap === 'textfield', `measured m/z without spin buttons (appearance ${ap})`);
+    await p.ctx.close();
+  }
   // 12. ion picker: every ion type once, open/close, keyboard, choice, panel inside the screen
   {
     const p = await page(); await p.goto(`${BASE}/hrms-calc/index.html?lang=ja`);

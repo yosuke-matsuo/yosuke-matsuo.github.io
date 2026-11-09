@@ -89,3 +89,4 @@ button.text-button{border-color:transparent;background:none;color:var(--blue);pa
 .ion-panel td button[aria-pressed=true]{background:var(--blue);border-color:var(--blue);color:#fff}
 @media(max-width:560px){.ion-panel tbody th,.ion-panel thead td{display:none}.ion-panel{gap:.6rem}}
 @media(max-width:560px){.intro{padding:1rem 0 .9rem}.site-header{flex-wrap:wrap;row-gap:.25rem}.brand{flex-basis:100%}.home-link{margin-left:0}.language-switch{margin-left:auto}}
+#found{-moz-appearance:textfield;appearance:textfield}#found::-webkit-inner-spin-button,#found::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
