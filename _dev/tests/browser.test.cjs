@@ -378,6 +378,28 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
       await p.ctx.close();
     }
   }
+  // 18. HRMS Calc: privacy note below the tools (before the method), formula input on the first screen of a small phone
+  for (const lang of ['ja', 'en']) {
+    const p = await page({ viewport: { width: 375, height: 667 } }); await p.goto(`${BASE}/hrms-calc/index.html?lang=${lang}`);
+    const r = await p.evaluate(() => ({ note: document.querySelector('.privacy-note').textContent, before: !!(document.querySelector('.privacy-note').compareDocumentPosition(document.querySelector('#method')) & Node.DOCUMENT_POSITION_FOLLOWING), formulaBottom: document.querySelector('#formula').getBoundingClientRect().bottom, lead: !!document.querySelector('.lead') }));
+    ok(r.note === (lang === 'ja' ? '計算はすべてブラウザー内で行い、入力した内容はどこにも送信しません。' : 'Everything runs in your browser; nothing you enter is sent anywhere.') && r.before && !r.lead && r.formulaBottom <= 667,
+      `${lang}: privacy note before the method; formula input within the first screen at 375×667 (bottom ${Math.round(r.formulaBottom)}px)`);
+    await p.ctx.close();
+  }
+  // 19. checker: tolerance in ppm or mDa, kept in this browser
+  {
+    const p = await page(); await p.goto(`${BASE}/hrms-calc/index.html?lang=ja#checker`);
+    await p.fill('#checkInput', 'HRMS (ESI) m/z: [M + H]+ Calcd for C6H13O6 181.0707; Found 181.0710.');
+    // +0.34 mDa = +1.85 ppm: within ±1 mDa, outside ±1 ppm
+    await p.fill('#checkTol', '1'); await p.selectOption('#checkUnit', 'mDa'); await p.click('#checkForm button.primary');
+    const headMDa = await p.textContent('#checkResults .check-head'), vals = await p.textContent('#checkResults .check-values');
+    await p.selectOption('#checkUnit', 'ppm'); const head = await p.textContent('#checkResults .check-head');
+    await p.selectOption('#checkUnit', 'mDa'); await p.reload();
+    const kept = await p.$eval('#checkUnit', s => s.value);
+    ok(!headMDa.includes('超えて') && head.includes('±1 ppm') && vals.includes('mDa') && vals.includes('ppm') && kept === 'mDa',
+      `checker: +0.34 mDa is within ±1 mDa but outside ±1 ppm; unit kept after reload (${head.trim()})`);
+    await p.ctx.close();
+  }
   // 12. ion picker: every ion type once, open/close, keyboard, choice, panel inside the screen
   {
     const p = await page(); await p.goto(`${BASE}/hrms-calc/index.html?lang=ja`);

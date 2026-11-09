@@ -1,9 +1,9 @@
-import {ELEMENTS,IONS,parseFormula,ion,ionCounts,ppm,dbe,isotopePattern} from './core.js?v=20261108-5';
-import {ionLabel,formulaHtml,siFormula,siSentence,checkText,parseBatch,readFound} from './si.js?v=20261108-5';
+import {ELEMENTS,IONS,parseFormula,ion,ionCounts,ppm,dbe,isotopePattern} from './core.js?v=20261109-3';
+import {ionLabel,formulaHtml,siFormula,siSentence,checkText,parseBatch,readFound} from './si.js?v=20261109-3';
 const $=id=>document.getElementById(id);
 const strings={
  ja:{skip:'本文へ移動',
-  lead:'HRMSの精密質量（m/z）の計算、分子式候補の検索、一括計算、論文・SIの記載文の作成とチェックができます。計算はすべてブラウザー内で行い、入力した内容はどこにも送信しません。',
+  privacy:'計算はすべてブラウザー内で行い、入力した内容はどこにも送信しません。',
   electronHead:'電子の質量を考慮して計算します。',electronShort:'正イオンでは電子の質量を引き、負イオンでは足します。考慮しないと、m/z 200 では約2.7 ppm ずれます（m/z が小さいほど大きくずれます）。',electronSurvey:'2023～2024年の<i>Org. Lett.</i>誌のSI約3000件の調査では、精密質量データの約3割に記載の誤りがあり、その約3分の2は電子の質量を考慮していないものでした（<a href="https://doi.org/10.1021/acs.orglett.4c03458" target="_blank" rel="noopener noreferrer">Christmann, <i>Org. Lett.</i> 2025, <i>27</i>, 4⁠–⁠7</a>）。',
   tabCalc:'精密質量',tabFinder:'分子式検索',tabBatch:'一括計算',tabCheck:'記載チェック',
   journals:'主な雑誌のHRMSの書き方',journalsLink:'主な雑誌の書き方',psj:'日本薬学会',jsp:'日本生薬学会',
@@ -36,7 +36,7 @@ const strings={
   batchCount:(n,e)=>`${n} 件を計算しました`+(e?`（${e} 行は計算できませんでした）`:''),batchEmpty:'化合物を入力してください。',
   errToken:v=>`読み取れない項目：${v}`,errIon:v=>`イオンの種類を認識できません：${v}`,errIonConflict:v=>`イオンの種類が複数あります：${v}`,
   checkHelp:'論文・SIのHRMSの記載を貼り付けると、計算値（calcd）を検算します。複数の化合物をまとめて確認できます。',
-  checkInput:'HRMSの記載',checkTol:'実測値の許容差 ± (ppm)',checkRun:'チェックする',
+  checkInput:'HRMSの記載',checkTol:'実測値の許容差 ±',checkRun:'チェックする',
   checkNone:'「calcd for 分子式 数値」の形の記載が見つかりませんでした。',
   checkSummary:(n,a,b,c,u)=>`${n} 件を確認しました：一致 ${a} 件、要確認 ${b} 件、誤りの可能性 ${c} 件`+(u?`、読み取れなかった記載 ${u} 件`:''),
   stOk:'一致',stWarn:'要確認',stError:'誤りの可能性',stUnparsed:'読み取り不可',
@@ -48,7 +48,7 @@ const strings={
   cMismatch:'計算値が一致しません。分子式・イオン・数値を確認してください。',
   cChargeAssumed:'電荷の記載がないため、正負の両方（±1）で照合し、よく一致する方を採用しました。',cChargeConflict:'記載の中で電荷が食い違っています。最もよく一致する電荷で照合しました。記載を確認してください。',cNoFormula:'「calcd」の後に分子式を読み取れないため、検算していません。',cNoValue:'計算値の数値を読み取れないため、検算していません。',
   cFewDigits:'桁数が少ないため、電子の質量の扱いは判定できません。',
-  cFoundOff:tol=>`実測値との差が ±${tol} ppm を超えています。`,
+  cFoundOff:(tol,u)=>`実測値との差が ±${tol} ${u} を超えています。`,
   cFormula:'分子式を読み取れません（元素記号と数字のみ対応）。',
   stated:'記載の計算値',recalc:'正しい計算値',
   definition:'<i>n</i><sub>i</sub> は付加・脱離後のイオンに含まれる原子数、<i>m</i><sub>i</sub> は各元素の同位体質量、<i>z</i> は符号付きの電荷数です。2価以上のイオンは |<i>z</i>| で割ります。',
@@ -80,7 +80,7 @@ const strings={
   brandSub:'（HRMS精密質量計算ツール）',title:'HRMS Calc（HRMS精密質量計算ツール）',toolsPage:'ツール',
   metaDescription:'電子の質量を考慮してHRMSの精密質量（m/z）を計算するブラウザー用ツール。分子式候補の検索、一括計算、同位体パターン、論文・SIの記載文の作成とチェック。'},
  en:{skip:'Skip to content',
-  lead:'Calculates exact HRMS masses (m/z), finds candidate formulas, calculates many compounds at once, and writes and checks HRMS statements for papers and SI. Everything runs in your browser; nothing you enter is sent anywhere.',
+  privacy:'Everything runs in your browser; nothing you enter is sent anywhere.',
   electronHead:'The electron mass is taken into account.',electronShort:'It is subtracted for positive ions and added for negative ions; ignoring it shifts m/z 200 by about 2.7 ppm (more at lower m/z).',electronSurvey:'A survey of about 3000 SI files from <i>Org. Lett.</i> (2023–2024) found errors in about 30% of the reported accurate-mass data; about two-thirds of these came from ignoring the electron mass (<a href="https://doi.org/10.1021/acs.orglett.4c03458" target="_blank" rel="noopener noreferrer">Christmann, <i>Org. Lett.</i> 2025, <i>27</i>, 4⁠–⁠7</a>).',
   tabCalc:'Exact mass',tabFinder:'Find formulas',tabBatch:'Batch',tabCheck:'Check SI text',
   journals:'How major journals ask for HRMS data',journalsLink:'Other journals',psj:'Pharmaceutical Society of Japan',jsp:'Japanese Society of Pharmacognosy',
@@ -113,7 +113,7 @@ const strings={
   batchCount:(n,e)=>`${n} compound${n===1?'':'s'} calculated`+(e?` (${e} line${e===1?'':'s'} could not be calculated)`:''),batchEmpty:'Enter one or more compounds.',
   errToken:v=>`Cannot read: ${v}`,errIon:v=>`Unknown ion type: ${v}`,errIonConflict:v=>`More than one ion type: ${v}`,
   checkHelp:'Paste HRMS statements from a paper or SI to recheck the calculated values (calcd). Many compounds can be checked at once.',
-  checkInput:'HRMS statements',checkTol:'Tolerance for measured values ± (ppm)',checkRun:'Check',
+  checkInput:'HRMS statements',checkTol:'Tolerance for measured values ±',checkRun:'Check',
   checkNone:'No statement of the form “calcd for formula value” was found.',
   checkSummary:(n,a,b,c,u)=>`${n} checked: ${a} correct, ${b} to review, ${c} possible error${c===1?'':'s'}`+(u?`, ${u} not readable`:''),
   stOk:'Correct',stWarn:'Review',stError:'Possible error',stUnparsed:'Not readable',
@@ -125,7 +125,7 @@ const strings={
   cMismatch:'The calculated value does not match. Check the formula, ion and numbers.',
   cChargeAssumed:'No charge given; both signs (±1) were tried and the better match was used.',cChargeConflict:'The charges written for this compound disagree; the best-matching charge was used. Check the statement.',cNoFormula:'No formula could be read after “calcd”, so this was not checked.',cNoValue:'No calculated value could be read, so this was not checked.',
   cFewDigits:'Too few decimal places to judge the electron mass.',
-  cFoundOff:tol=>`The measured value differs by more than ±${tol} ppm.`,
+  cFoundOff:(tol,u)=>`The measured value differs by more than ±${tol} ${u}.`,
   cFormula:'The formula cannot be read (element symbols and numbers only).',
   stated:'Stated value',recalc:'Correct value',
   definition:'<i>n</i><sub>i</sub> is the number of atoms in the final ion, <i>m</i><sub>i</sub> the isotope mass of each element and <i>z</i> the signed charge. Ions with two or more charges are divided by |<i>z</i>|.',
@@ -357,7 +357,7 @@ $('searchForm').onsubmit=event=>{event.preventDefault();clearSearch();
  const bad=checkRanges();if(bad){if(bad.input.closest('details'))bad.input.closest('details').open=true;bad.input.setAttribute('aria-invalid','true');bad.input.focus();$('searchStatus').textContent=bad.text;return;}
  try{
   const ranges=[...document.querySelectorAll('.range')].map(div=>{const inputs=div.querySelectorAll('input');return [inputs[0].dataset.element,Number(inputs[0].value),Number(inputs[1].value)];});
-  worker=new Worker(new URL('./worker.js?v=20261108-5',import.meta.url),{type:'module'});$('cancel').disabled=false;$('searchButton').disabled=true;$('searchStatus').textContent=t('running');
+  worker=new Worker(new URL('./worker.js?v=20261109-3',import.meta.url),{type:'module'});$('cancel').disabled=false;$('searchButton').disabled=true;$('searchStatus').textContent=t('running');
   worker.onmessage=({data})=>{cancel();if(data.error){say($('searchStatus'),errorText(data.error));return;}last=data;renderResults();$('copy').disabled=!data.results.length;$('searchLink').disabled=false;};
   worker.onerror=()=>{cancel();$('searchStatus').textContent=t('errorGeneric');};
   worker.postMessage({found:Number($('found').value),tolerance:Number($('tolerance').value),unit:$('unit').value,adduct:$('searchIon').value,ranges,filters:{dbe:$('filterDbe').checked,ratio:$('filterRatio').checked}});
@@ -414,8 +414,9 @@ $('batchCopySi').onclick=()=>{
 const CODE_TEXT={ok:'cOk',rounding:'cRounding',electron:'cElectron',electronSign:'cElectronSign',neutralFormula:'cNeutralFormula',neutralFormulaElectron:'cNeutralFormulaElectron',mismatch:'cMismatch',chargeAssumed:'cChargeAssumed',chargeConflict:'cChargeConflict',noFormula:'cNoFormula',noValue:'cNoValue',fewDigits:'cFewDigits',formula:'cFormula'};
 const STATUS_TEXT={ok:'stOk',warn:'stWarn',error:'stError',unparsed:'stUnparsed'};
 function tolValue(){const v=Number($('checkTol').value);return Number.isFinite(v)&&v>=0?v:5;}
-function codeText(c){return c==='foundOff'?t('cFoundOff')(tolValue()):t(CODE_TEXT[c]);}
-function runCheck(){checkRecords=checkText($('checkInput').value,{tolerancePpm:tolValue()});renderCheck();}
+const unitValue=()=>$('checkUnit').value==='mDa'?'mDa':'ppm';
+function codeText(c){return c==='foundOff'?t('cFoundOff')(tolValue(),unitValue()):t(CODE_TEXT[c]);}
+function runCheck(){checkRecords=checkText($('checkInput').value,{tolerance:tolValue(),toleranceUnit:unitValue()});renderCheck();}
 function renderCheck(){
  const list=$('checkResults');list.replaceChildren();$('checkCopyStatus').textContent='';
  $('checkActions').hidden=!(checkRecords&&checkRecords.length);
@@ -429,7 +430,7 @@ function renderCheck(){
   li.append(html('p',rich(r.snippet),'check-snippet'));
   if(r.recalculated!==null){
    const parts=[`${t('stated')} ${r.stated}`,`${t('recalc')} ${r.recalculated.toFixed(4)} (${signed(r.diffMDa,2)} mDa)`];
-   if(r.found!==null)parts.push(`${t('measured')} ${r.found} (${signed(r.ppm,2)} ppm)`);
+   if(r.found!==null)parts.push(`${t('measured')} ${r.found} (${signed(r.ppm,2)} ppm, ${signed(r.foundMDa,2)} mDa)`);
    li.append(html('p',rich(parts.join(' · ')),'check-values'));
   }
   list.append(li);
@@ -438,6 +439,7 @@ function renderCheck(){
 $('checkForm').onsubmit=e=>{e.preventDefault();runCheck();};
 $('checkInput').addEventListener('input',()=>{if(checkRecords){checkRecords=null;renderCheck();}});
 $('checkTol').addEventListener('input',()=>{if(checkRecords)runCheck();});
+$('checkUnit').addEventListener('change',()=>{if(checkRecords)runCheck();});
 $('checkExample').onclick=()=>{$('checkInput').value=EXAMPLES.check;runCheck();};
 $('checkCopy').onclick=()=>{
  if(!checkRecords)return;
@@ -491,10 +493,12 @@ if(settings.finder&&typeof settings.finder==='object')applyFinder(settings.finde
 if([4,5,6,7,8].includes(settings.digits))setDigits(settings.digits);
 for(const s of document.querySelectorAll('[data-digits]'))s.addEventListener('change',()=>{setDigits(Number(s.value));settings.digits=digits;saveSettings();});
 if(validTol(settings.checkTol))$('checkTol').value=String(settings.checkTol);
+if(['ppm','mDa'].includes(settings.checkUnit))$('checkUnit').value=settings.checkUnit;
 if(typeof settings.siAppend==='boolean'){si.append=settings.siAppend;for(const c of document.querySelectorAll('[data-si=append]'))c.checked=si.append;}
 $('calcIon').addEventListener('change',()=>{settings.calcIon=$('calcIon').value;saveSettings();});
 $('batchIon').addEventListener('change',()=>{settings.batchIon=$('batchIon').value;saveSettings();});
 $('checkTol').addEventListener('change',()=>{const v=Number($('checkTol').value);if(validTol(v)){settings.checkTol=v;saveSettings();}});
+$('checkUnit').addEventListener('change',()=>{settings.checkUnit=unitValue();saveSettings();});
 for(const c of document.querySelectorAll('[data-si=append]'))c.addEventListener('change',()=>{settings.siAppend=c.checked;saveSettings();});
 $('searchForm').addEventListener('change',()=>{const f=finderSettings();if(validTol(f.tol)&&Object.values(f.ranges).every(validRange)){settings.finder=f;saveSettings();}});
 $('resetSearch').onclick=()=>{
