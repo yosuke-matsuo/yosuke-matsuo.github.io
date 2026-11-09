@@ -1,5 +1,5 @@
 // Sentences for papers / Supporting Information, a checker for reported HRMS values, and batch input.
-import {IONS,ELECTRON_MASS,parseFormula,formula,mass,ionCounts} from './core.js?v=20261109-2';
+import {IONS,ELECTRON_MASS,parseFormula,formula,mass,ionCounts} from './core.js?v=20261109-3';
 const MINUS='−';
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
@@ -80,7 +80,7 @@ const MZ_BEFORE=new RegExp('(?:'+FOUND_WORD+'|m\\/z\\s*[:=]?\\s*)(\\d+\\.\\d+)',
 const formulaShape=f=>!!f&&(/\d/.test(f)||(f.match(/[A-Z]/g)||[]).length>=2);
 function writtenFormula(f){if(!formulaShape(f))return false;try{parseFormula(f);return true;}catch{return false;}}
 const RANK=['ok','rounding','neutralFormula','electron','electronSign','neutralFormulaElectron','mismatch'];
-export function checkText(text,{tolerancePpm=5}={}){
+export function checkText(text,{tolerancePpm=5,tolerance=tolerancePpm,toleranceUnit='ppm'}={}){
  // a comma used as the decimal mark (203,0526): four or more digits and no other decimal point
  const s=normalize(text).replace(/(\d),(\d{4,6})(?!\d|\.\d)/g,'$1.$2');const records=[];const hits=[...s.matchAll(CALC)];let prevEnd=0;
  hits.forEach((h,hi)=>{
@@ -165,7 +165,8 @@ export function checkText(text,{tolerancePpm=5}={}){
   if(conflict)rec.codes.push('chargeConflict');
   rec.z=r.z;rec.recalculated=r.shown;rec.diffMDa=(S-r.shown)*1000;rec.codes.unshift(r.code);
   if(d<4&&['ok','rounding'].includes(r.code))rec.codes.push('fewDigits');
-  if(found!==null){rec.ppm=(Number(found)-r.ref)/r.ref*1e6;if(Math.abs(rec.ppm)>tolerancePpm+1e-9)rec.codes.push('foundOff');}
+  // the tolerance for the measured value is in ppm or mDa
+  if(found!==null){rec.ppm=(Number(found)-r.ref)/r.ref*1e6;rec.foundMDa=(Number(found)-r.ref)*1000;if(Math.abs(toleranceUnit==='mDa'?rec.foundMDa:rec.ppm)>tolerance+1e-9)rec.codes.push('foundOff');}
   const errors=['electron','electronSign','neutralFormulaElectron','mismatch'];
   rec.status=rec.codes.some(c=>errors.includes(c))?'error':rec.codes.some(c=>['neutralFormula','foundOff','chargeAssumed','chargeConflict'].includes(c))?'warn':'ok';
  });

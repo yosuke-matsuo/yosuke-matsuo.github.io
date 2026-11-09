@@ -252,3 +252,16 @@ test('SI checker: wider range of statement formats (2026-11)', () => {
   // thousands separators and comma-separated lists are left alone
   assert.equal(checkText('HRMS calcd for C48H28O30Na,1107.0558, found 1107.0560')[0].stated, '1107.0558');
 });
+
+test('SI checker: tolerance for the measured value in ppm or mDa', () => {
+  // C6H13O6+ 181.070665; found 181.0710 differs by +1.85 ppm = +0.335 mDa
+  const t = 'HRMS (ESI) m/z: [M + H]+ Calcd for C6H13O6 181.0707; Found 181.0710.';
+  const codes = o => checkText(t, o)[0].codes;
+  assert.deepEqual(codes(), ['ok']);
+  assert.deepEqual(codes({ tolerance: 1, toleranceUnit: 'ppm' }), ['ok', 'foundOff']);
+  assert.deepEqual(codes({ tolerance: 0.5, toleranceUnit: 'mDa' }), ['ok']);
+  assert.deepEqual(codes({ tolerance: 0.3, toleranceUnit: 'mDa' }), ['ok', 'foundOff']);
+  assert.deepEqual(codes({ tolerancePpm: 1 }), ['ok', 'foundOff']);
+  const r = checkText(t)[0];
+  assert.ok(Math.abs(r.foundMDa - 0.335) < 0.001 && Math.abs(r.ppm - 1.85) < 0.01, `${r.foundMDa} mDa, ${r.ppm} ppm`);
+});

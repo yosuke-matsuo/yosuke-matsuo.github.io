@@ -40,7 +40,7 @@
  }
 }
 </script>
-<link rel="stylesheet" href="style.css?v=20261109-2">
+<link rel="stylesheet" href="style.css?v=20261109-3">
 </head>
 <body>
 <a class="skip-link" href="#main" data-t="skip"></a>
@@ -159,7 +159,7 @@
 <form id="checkForm" novalidate>
 <p class="hint" data-t="checkHelp"></p>
 <label class="block"><span data-t="checkInput"></span><textarea id="checkInput" rows="7" spellcheck="false" autocomplete="off"></textarea></label>
-<div class="fields"><label><span data-t="checkTol"></span><input id="checkTol" type="number" min="0" step="any" value="5"></label></div>
+<div class="fields"><label><span data-t="checkTol"></span><div class="inline"><input id="checkTol" type="number" min="0" step="any" value="5"><select id="checkUnit" aria-label="Tolerance unit"><option>ppm</option><option>mDa</option></select></div></label></div>
 <div class="actions"><button class="primary" data-t="checkRun"></button><button type="button" id="checkExample" data-t="example"></button></div>
 </form>
 <p id="checkSummary" role="status"></p>
@@ -196,6 +196,6 @@
 
 <footer><p>© 2026 <a href="../index.html">Yosuke Matsuo</a> · <a href="../tools.html" data-t="toolsPage"></a></p><p><a href="https://github.com/yosuke-matsuo/yosuke-matsuo.github.io/tree/main/hrms-calc" data-t="sourceCode" target="_blank" rel="noopener noreferrer"></a> · <span data-t="codeLicense"></span><a href="LICENSE.txt">MIT License</a></p></footer>
 </main>
-<script type="module" src="app.js?v=20261109-2"></script>
+<script type="module" src="app.js?v=20261109-3"></script>
 </body>
 </html>
