@@ -3,7 +3,7 @@ const buttons = [...document.querySelectorAll('[data-language]')];
 function setLanguage(lang) {
   const sel = lang === 'en' ? 'en' : 'ja';
   document.documentElement.lang = sel;
-  document.querySelectorAll('[data-ja][data-en]').forEach(n => { if (n.tagName === 'META') n.content = n.dataset[sel]; else if (n.tagName !== 'IMG') n.textContent = n.dataset[sel]; });
+  document.querySelectorAll('[data-ja][data-en]').forEach(n => { if (n.tagName === 'META') n.content = n.dataset[sel]; else if (n.tagName === 'IMG') n.alt = n.dataset[sel]; else n.textContent = n.dataset[sel]; });
   document.querySelectorAll('[data-lang]').forEach(n => { n.hidden = n.dataset.lang !== sel; });
   const title = document.querySelector('title'); if (title) document.title = title.dataset[sel];
   // page title and locale for sharing follow the language as well (the description has data-ja / data-en)
