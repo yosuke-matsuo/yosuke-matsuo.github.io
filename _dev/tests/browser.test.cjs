@@ -407,6 +407,22 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
     ok(ap === 'textfield', `measured m/z without spin buttons (appearance ${ap})`);
     await p.ctx.close();
   }
+  // 21. initial HTML (what search engines read) has English-only text only inside <template>; with JavaScript it is shown as before
+  {
+    const fs = require('fs'), path = require('path'), root = path.join(__dirname, '..', '..');
+    const bad = [];
+    for (const f of ['index.html', 'research.html', 'publications.html', 'tools.html', '404.html']) {
+      const outside = fs.readFileSync(path.join(root, f), 'utf8').replace(/<template data-lang="en">[\s\S]*?<\/template>/g, '');
+      if (/data-lang="en"/.test(outside)) bad.push(f);
+    }
+    const top = fs.readFileSync(path.join(root, 'index.html'), 'utf8').replace(/<template[\s\S]*?<\/template>/g, '').replace(/<[^>]+>/g, ' ');
+    ok(!bad.length && !top.includes('See Research for details') && !/松尾 洋介）\s*Yosuke Matsuo/.test(top), `no English-only text outside <template> in the initial HTML (${bad})`);
+    const p = await page(); await p.goto(`${BASE}/index.html?lang=en`);
+    const en = await p.evaluate(() => ({ t: document.querySelectorAll('template').length, h1: document.querySelector('h1').innerText, more: document.querySelector('#about').innerText }));
+    await p.click('[data-language="ja"]'); const ja = await p.evaluate(() => document.querySelector('#about').innerText);
+    ok(en.t === 0 && en.h1 === 'Yosuke Matsuo' && en.more.includes('See Research for details') && ja.includes('詳しくは') && !ja.includes('See Research'), `English text restored from <template> and switched with the language (${en.h1})`);
+    await p.ctx.close();
+  }
   // 12. ion picker: every ion type once, open/close, keyboard, choice, panel inside the screen
   {
     const p = await page(); await p.goto(`${BASE}/hrms-calc/index.html?lang=ja`);

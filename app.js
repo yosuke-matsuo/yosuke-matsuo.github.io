@@ -1,4 +1,6 @@
 'use strict';
+// English text that contains markup is kept in <template data-lang="en"> so the initial HTML (what search engines read) is Japanese only; put it in place first
+document.querySelectorAll('template[data-lang]').forEach(t => t.replaceWith(t.content));
 const buttons = [...document.querySelectorAll('[data-language]')];
 function setLanguage(lang) {
   const sel = lang === 'en' ? 'en' : 'ja';
