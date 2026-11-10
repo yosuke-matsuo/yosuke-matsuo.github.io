@@ -1,5 +1,5 @@
-import {ELEMENTS,IONS,parseFormula,ion,ionCounts,ppm,dbe,isotopePattern} from './core.js?v=20261109-4';
-import {ionLabel,formulaHtml,siFormula,siSentence,checkText,parseBatch,readFound} from './si.js?v=20261109-4';
+import {ELEMENTS,IONS,parseFormula,ion,ionCounts,ppm,dbe,isotopePattern} from './core.js?v=20261111-1';
+import {ionLabel,formulaHtml,siFormula,siSentence,checkText,parseBatch,readFound} from './si.js?v=20261111-1';
 const $=id=>document.getElementById(id);
 const strings={
  ja:{skip:'本文へ移動',
@@ -357,7 +357,7 @@ $('searchForm').onsubmit=event=>{event.preventDefault();clearSearch();
  const bad=checkRanges();if(bad){if(bad.input.closest('details'))bad.input.closest('details').open=true;bad.input.setAttribute('aria-invalid','true');bad.input.focus();$('searchStatus').textContent=bad.text;return;}
  try{
   const ranges=[...document.querySelectorAll('.range')].map(div=>{const inputs=div.querySelectorAll('input');return [inputs[0].dataset.element,Number(inputs[0].value),Number(inputs[1].value)];});
-  worker=new Worker(new URL('./worker.js?v=20261109-4',import.meta.url),{type:'module'});$('cancel').disabled=false;$('searchButton').disabled=true;$('searchStatus').textContent=t('running');
+  worker=new Worker(new URL('./worker.js?v=20261111-1',import.meta.url),{type:'module'});$('cancel').disabled=false;$('searchButton').disabled=true;$('searchStatus').textContent=t('running');
   worker.onmessage=({data})=>{cancel();if(data.error){say($('searchStatus'),errorText(data.error));return;}last=data;renderResults();$('copy').disabled=!data.results.length;$('searchLink').disabled=false;};
   worker.onerror=()=>{cancel();$('searchStatus').textContent=t('errorGeneric');};
   worker.postMessage({found:Number($('found').value),tolerance:Number($('tolerance').value),unit:$('unit').value,adduct:$('searchIon').value,ranges,filters:{dbe:$('filterDbe').checked,ratio:$('filterRatio').checked}});
@@ -464,7 +464,10 @@ function translate(){
  $('checkInput').placeholder='HRMS (ESI) m/z: [M + Na]+ Calcd for C6H12O6Na 203.0526; Found 203.0524.';
  renderResults();renderCalc();renderBatch();renderCheck();
 }
-function syncLangLinks(){for(const a of document.querySelectorAll('a[href]')){const h=a.getAttribute('href');if(!h||/^[a-z][a-z0-9+.-]*:/i.test(h)||h.startsWith('#'))continue;const [pq,frag]=h.split('#');const [path,q]=pq.split('?');if(!/\.html$/.test(path))continue;const ps=new URLSearchParams(q||'');ps.set('lang',lang);a.setAttribute('href',`${path}?${ps}${frag?'#'+frag:''}`);}}
+// links back to the personal pages go to the page in this language (English pages are in ../en/)
+function syncLangLinks(){for(const a of document.querySelectorAll('a[href]')){const h=a.getAttribute('href');if(!h||/^[a-z][a-z0-9+.-]*:/i.test(h)||h.startsWith('#'))continue;const [pq,frag]=h.split('#');const [path,q]=pq.split('?');if(!/\.html$/.test(path))continue;
+ const home=/^\.\.\/(?:en\/)?(index|research|publications|tools)\.html$/.exec(path);if(home){a.dataset.home=home[1];a.setAttribute('href',`../${lang==='en'?'en/':''}${home[1]}.html${frag?'#'+frag:''}`);continue;}
+ const ps=new URLSearchParams(q||'');ps.set('lang',lang);a.setAttribute('href',`${path}?${ps}${frag?'#'+frag:''}`);}}
 function setLanguage(value){cancel();lang=value;try{localStorage.setItem('ym-language',value);}catch(e){}try{const u=new URL(location.href);u.searchParams.set('lang',value);history.replaceState(null,'',u);}catch(e){}syncLangLinks();$('searchStatus').textContent='';translate();}
 $('langJa').onclick=()=>setLanguage('ja');$('langEn').onclick=()=>setLanguage('en');
 translate();syncLangLinks();
