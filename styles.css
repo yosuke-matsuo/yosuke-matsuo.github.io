@@ -70,6 +70,8 @@ footer { display: flex; justify-content: space-between; align-items: center; gap
 .home-name .name-ja { font-size: .8em; font-weight: 500; }
 .home-role { margin: 0 0 .1rem; font-size: .95rem; }
 .home-hero .muted { margin: 0 0 .1rem; }
+.quiet-link { color: inherit; text-decoration-color: var(--line); text-underline-offset: .15em; }
+.quiet-link:hover { color: var(--blue); }
 .home-hero .about-mail { margin-top: .9rem; }
 .profile-links { display: flex; flex-wrap: wrap; gap: .6rem 1.2rem; margin-top: 1.2rem; font-size: .9rem; }
 .home-hero .profile-links { margin-top: 1rem; }
