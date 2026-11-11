@@ -30,6 +30,6 @@
 - hrms-calc のファイルを変更したら、読み込み先に付けている版番号（?v=日付-番号）を全ファイルで同じ新しい値に更新する（古いファイルがブラウザーに残って新旧が混ざるのを防ぐ。テストで確認）。
 - constants.js（NIST の最も存在比の高い同位体の質量、電子質量 0.0005485799090441 Da = CODATA 2022）と isotopes.js（NIST の存在比）は、根拠なく変更しない。
 - m/z = (Σ nᵢmᵢ − z·mₑ)/|z|。電子の質量の説明と Christmann, Org. Lett. 2025, 27, 4–7（https://doi.org/10.1021/acs.orglett.4c03458）へのリンクを残す。
-- 表記：入力欄以外の分子式は原子数を下付き、イオンの電荷は上付き、m/z の m と z はイタリック（app.js の rich() を使う）。<option> は Unicode の上付き・下付き文字。
+- 表記：入力欄以外の分子式は原子数を下付き、イオンの電荷は上付き、m/z の m と z はイタリック（text.js の rich() を使う）。<option> は Unicode の上付き・下付き文字。
 - 論文・SI用の記載文は J. Org. Chem.（ACS）の投稿規定の例の書式で、イオン化法は省略：HRMS m/z: [M + Na]+ Calcd for C6H12O6Na 203.0526; Found 203.0524.
 - MIT License は hrms-calc のコードだけに適用する。
