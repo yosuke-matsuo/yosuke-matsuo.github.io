@@ -137,6 +137,9 @@ def english(page):
         return f'{attr}="../{rest}"'
     s = re.sub(r'\b(href|src)="([^"]*)"', path, s)
 
+    # researchmap in English (the Japanese page links to ?lang=ja)
+    s = re.sub(r'(https://researchmap\.jp/read0135024[^"?]*)\?lang=ja', r'\1?lang=en', s)
+
     note = f'<!-- English page generated from ../{page} by _dev/build_en.py. Edit the Japanese page and run the script. -->\n'
     return s.replace('<!DOCTYPE html>\n', '<!DOCTYPE html>\n' + note, 1)
 
