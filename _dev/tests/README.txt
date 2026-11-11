@@ -23,3 +23,7 @@ HRMS Calc と個人サイトのテスト（_dev/ は GitHub Pages では公開�
 英語版ページ（en/*.html）の再作成
      python3 _dev/build_en.py           日本語のページから en/ を作り直す（個人ページを変更したら実行）
      python3 _dev/build_en.py --check   en/ が日本語のページと一致しているか確認（ブラウザーテストでも確認）
+
+HRMS Calc の文字の書き込みと英語版（hrms-calc/en/index.html）の再作成
+     node _dev/build_hrms_en.mjs           text.js の文字列を hrms-calc/index.html に書き込み、英語版を作り直す
+     node _dev/build_hrms_en.mjs --check   書き込みと英語版が最新か確認（ブラウザーテストでも確認）

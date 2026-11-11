@@ -26,7 +26,7 @@
 
 ## HRMS Calc（hrms-calc/）
 - ブラウザー内で完結する静的ツール。入力内容を外部に送信する処理を加えない。「計算はすべてブラウザー内で行い、入力した内容はどこにも送信しません。」をページ内（ツールの下、計算方法の前）に残す。
-- 文字列は app.js の strings（ja と en の両方）。
+- 文字列は text.js の strings（ja と en の両方）。日本語版 hrms-calc/index.html と英語版 hrms-calc/en/index.html は、`node _dev/build_hrms_en.mjs` で文字列を HTML に書き込んで作る（英語版は手で編集しない）。index.html か text.js を変更したら実行する（テストで一致を確認）。言語ボタンはもう一方のページへ移り、「#」以降の入力値も引き継ぐ。?lang= の古いリンクも対応するページへ移す。
 - hrms-calc のファイルを変更したら、読み込み先に付けている版番号（?v=日付-番号）を全ファイルで同じ新しい値に更新する（古いファイルがブラウザーに残って新旧が混ざるのを防ぐ。テストで確認）。
 - constants.js（NIST の最も存在比の高い同位体の質量、電子質量 0.0005485799090441 Da = CODATA 2022）と isotopes.js（NIST の存在比）は、根拠なく変更しない。
 - m/z = (Σ nᵢmᵢ − z·mₑ)/|z|。電子の質量の説明と Christmann, Org. Lett. 2025, 27, 4–7（https://doi.org/10.1021/acs.orglett.4c03458）へのリンクを残す。
