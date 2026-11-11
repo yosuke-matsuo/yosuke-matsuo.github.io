@@ -19,3 +19,7 @@ HRMS Calc と個人サイトのテスト（_dev/ は GitHub Pages では公開�
 
 3. 同位体データの再作成（任意）
      python3 _dev/tests/make_isotopes.py <NISTのASCII表> hrms-calc/constants.js hrms-calc/isotopes.js
+
+英語版ページ（en/*.html）の再作成
+     python3 _dev/build_en.py           日本語のページから en/ を作り直す（個人ページを変更したら実行）
+     python3 _dev/build_en.py --check   en/ が日本語のページと一致しているか確認（ブラウザーテストでも確認）
