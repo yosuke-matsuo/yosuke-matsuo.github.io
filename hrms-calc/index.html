@@ -6,6 +6,9 @@
 <title>HRMS Calc（HRMS精密質量計算ツール）</title>
 <meta name="description" content="電子の質量を考慮してHRMSの精密質量（m/z）を計算するブラウザー用ツール。分子式候補の検索、一括計算、同位体パターン、論文・SIの記載文の作成とチェック。">
 <link rel="canonical" href="https://yosuke-matsuo.github.io/hrms-calc/">
+<link rel="alternate" hreflang="ja" href="https://yosuke-matsuo.github.io/hrms-calc/">
+<link rel="alternate" hreflang="en" href="https://yosuke-matsuo.github.io/hrms-calc/en/">
+<link rel="alternate" hreflang="x-default" href="https://yosuke-matsuo.github.io/hrms-calc/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Yosuke Matsuo（松尾洋介）">
 <meta property="og:title" content="HRMS Calc（HRMS精密質量計算ツール）">
@@ -40,61 +43,61 @@
  }
 }
 </script>
-<link rel="stylesheet" href="style.css?v=20261111-1">
+<link rel="stylesheet" href="style.css?v=20261111-2">
 </head>
 <body>
-<a class="skip-link" href="#main" data-t="skip"></a>
+<a class="skip-link" href="#main" data-t="skip">本文へ移動</a>
 <header class="site-header">
 <h1 class="brand">HRMS Calc<span class="brand-sub" data-t="brandSub">（HRMS精密質量計算ツール）</span></h1>
-<a class="home-link" href="../tools.html">← <span data-t="toolsPage">ツール</span></a>
+<a class="home-link" href="../tools.html" data-home="tools">← <span data-t="toolsPage">ツール</span></a>
 <div class="language-switch" role="group" aria-label="Language"><button type="button" id="langJa" lang="ja" aria-pressed="true">日本語</button><button type="button" id="langEn" lang="en" aria-pressed="false">English</button></div>
 </header>
 <main id="main">
 <div class="intro">
 <noscript><p class="electron-note">このツールはJavaScriptが必要です。 / This tool requires JavaScript.</p></noscript>
-<p class="electron-note"><strong data-t="electronHead"></strong> <span data-t="electronShort"></span> <span data-t="electronSurvey"></span></p>
+<p class="electron-note"><strong data-t="electronHead">電子の質量を考慮して計算します。</strong> <span data-t="electronShort">正イオンでは電子の質量を引き、負イオンでは足します。考慮しないと、<i>m</i>/<i>z</i> 200 では約2.7 ppm ずれます（<i>m</i>/<i>z</i> が小さいほど大きくずれます）。</span> <span data-t="electronSurvey">2023～2024年の<i>Org. Lett.</i>誌のSI約3000件の調査では、精密質量データの約3割に記載の誤りがあり、その約3分の2は電子の質量を考慮していないものでした（<a href="https://doi.org/10.1021/acs.orglett.4c03458" target="_blank" rel="noopener noreferrer">Christmann, <i>Org. Lett.</i> 2025, <i>27</i>, 4⁠–⁠7</a>）。</span></p>
 </div>
 
 <div class="tabs" role="tablist" id="tabs">
-<button type="button" role="tab" id="tab-calculator" aria-controls="calculator" data-t="tabCalc"></button>
-<button type="button" role="tab" id="tab-finder" aria-controls="finder" data-t="tabFinder"></button>
-<button type="button" role="tab" id="tab-batch" aria-controls="batch" data-t="tabBatch"></button>
-<button type="button" role="tab" id="tab-checker" aria-controls="checker" data-t="tabCheck"></button>
+<button type="button" role="tab" id="tab-calculator" aria-controls="calculator" data-t="tabCalc">精密質量</button>
+<button type="button" role="tab" id="tab-finder" aria-controls="finder" data-t="tabFinder">分子式検索</button>
+<button type="button" role="tab" id="tab-batch" aria-controls="batch" data-t="tabBatch">一括計算</button>
+<button type="button" role="tab" id="tab-checker" aria-controls="checker" data-t="tabCheck">記載チェック</button>
 </div>
 
 <section id="calculator" class="panel" role="tabpanel" aria-labelledby="tab-calculator">
 <form id="calcForm" novalidate>
 <div class="fields">
-<label><span data-t="formula"></span><input id="formula" autocomplete="off" spellcheck="false" placeholder="C6H12O6"></label>
-<div class="field"><span class="field-label" id="calcIon-label" data-t="ion"></span><select id="calcIon" hidden aria-labelledby="calcIon-label"></select></div>
-<label><span data-t="optionalFound"></span><input id="calcFound" inputmode="decimal" autocomplete="off" placeholder="181.0707"></label>
-<label><span data-t="digits"></span><select data-digits></select></label>
+<label><span data-t="formula">分子式（中性分子 M）</span><input id="formula" autocomplete="off" spellcheck="false" placeholder="C6H12O6"></label>
+<div class="field"><span class="field-label" id="calcIon-label" data-t="ion">イオンの種類</span><select id="calcIon" hidden aria-labelledby="calcIon-label"></select></div>
+<label><span data-t="optionalFound">実測 <i>m</i>/<i>z</i>（任意）</span><input id="calcFound" inputmode="decimal" autocomplete="off" placeholder="181.0707"></label>
+<label><span data-t="digits">計算値の小数点以下の桁数</span><select data-digits></select></label>
 </div>
-<p class="hint" data-t="syntax"></p>
-<button class="primary" data-t="calculate"></button>
+<p class="hint" data-t="syntax">H・Na などの付加・脱離は「イオンの種類」で選びます。括弧・同位体・電荷は入力できません。</p>
+<button class="primary" data-t="calculate">計算する</button>
 </form>
 <div id="calcResult" class="result-box">
-<p id="calcPlaceholder" class="placeholder" data-t="calcPlaceholder"></p>
+<p id="calcPlaceholder" class="placeholder" data-t="calcPlaceholder">分子式を入力すると、ここに結果が表示されます。</p>
 <div id="calcMain" aria-live="polite"></div>
-<div class="actions link-row" id="calcLinkRow" hidden><button type="button" id="calcLink" data-t="linkCopy"></button><span id="calcLinkStatus" class="hint" role="status"></span></div>
+<div class="actions link-row" id="calcLinkRow" hidden><button type="button" id="calcLink" data-t="linkCopy">この条件のリンクをコピー</button><span id="calcLinkStatus" class="hint" role="status"></span></div>
 <div id="calcSi" class="result-block" hidden>
-<h3 data-t="siTitle"></h3>
+<h3 data-t="siTitle">論文・SI用の記載</h3>
 <div class="si-options">
-<label class="check"><input type="checkbox" data-si="append" checked><span data-t="siAppend"></span></label>
+<label class="check"><input type="checkbox" data-si="append" checked><span data-t="siAppend">Na・K・Li・Cl を分子式の末尾に書く（例：C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>Na）</span></label>
 </div>
-<p class="hint si-source"><span data-t="siSource"></span> <a href="https://researcher-resources.acs.org/publish/author_guidelines/pdf?coden=joceah" target="_blank" rel="noopener noreferrer">J. Org. Chem. Author Guidelines</a> · <a href="#journals" data-t="journalsLink"></a></p>
+<p class="hint si-source"><span data-t="siSource">J. Org. Chem.（ACS）の投稿規定の例と同じ書式です（イオン化法は省略）。</span> <a href="https://researcher-resources.acs.org/publish/author_guidelines/pdf?coden=joceah" target="_blank" rel="noopener noreferrer">J. Org. Chem. Author Guidelines</a> · <a href="#journals" data-t="journalsLink">主な雑誌の書き方</a></p>
 <p id="siText" class="si-text"></p>
-<div class="actions"><button type="button" id="siCopy" data-t="siCopy"></button><span id="siCopyStatus" class="hint" role="status"></span></div>
+<div class="actions"><button type="button" id="siCopy" data-t="siCopy">記載文をコピー</button><span id="siCopyStatus" class="hint" role="status"></span></div>
 </div>
 <div id="calcIso" class="result-block" hidden>
-<h3 data-t="isoTitle"></h3>
+<h3 data-t="isoTitle">同位体パターン</h3>
 <div id="isoChart" aria-hidden="true"></div>
 <div class="tableWrap"><table id="isoTable" class="compact"><thead></thead><tbody></tbody></table></div>
-<p class="hint" data-t="isoNote"></p>
+<p class="hint" data-t="isoNote">相対強度は最も強いピークを100とします。</p>
 </div>
 </div>
-<div id="journals" class="journals"><h3 data-t="journals"></h3>
-<p class="journals-intro" data-t="journalsIntro"></p>
+<div id="journals" class="journals"><h3 data-t="journals">主な雑誌のHRMSの書き方</h3>
+<p class="journals-intro" data-t="journalsIntro">投稿規定に載っている記載例です（2026年11月7日に原文を確認）。</p>
 <dl class="journal-list">
 <dt>ACS — <a href="https://researcher-resources.acs.org/publish/author_guidelines?coden=joceah" target="_blank" rel="noopener noreferrer"><i>J. Org. Chem.</i></a>, <a href="https://researcher-resources.acs.org/publish/author_guidelines?coden=jnprdf" target="_blank" rel="noopener noreferrer"><i>J. Nat. Prod.</i></a></dt>
 <dd><p class="journal-example">HRMS (ESI/Q-TOF) <i>m</i>/<i>z</i>: [M + Na]<sup>+</sup> Calcd for C<sub>13</sub>H<sub>17</sub>NO<sub>3</sub>Na 258.1101; Found 258.1074.</p></dd>
@@ -104,98 +107,98 @@
 <dd><p class="journal-example">HRMS (ES+): <i>m</i>/<i>z</i> [M + H]<sup>+</sup> calcd 333.1248, found 333.1229</p></dd>
 <dt>Thieme — <a href="https://www.thieme.de/statics/dokumente/thieme/final/de/dokumente/zw_synthesis/CFZ-Synthesis-Authors-Instructions-2025.pdf" target="_blank" rel="noopener noreferrer"><i>Synthesis</i></a></dt>
 <dd><p class="journal-example">HRMS–FAB: <i>m</i>/<i>z</i> [M + H]<sup>+</sup> calcd for C<sub>21</sub>H<sub>38</sub>N<sub>4</sub>O<sub>6</sub>S: 475.5285; found: 475.5267.</p></dd>
-<dt><span data-t="psj"></span> — <a href="https://cpb.pharm.or.jp/document/CPB_Instructions.pdf" target="_blank" rel="noopener noreferrer"><i>Chem. Pharm. Bull.</i></a>, <a href="https://bpb.pharm.or.jp/document/BPB_Instructions.pdf" target="_blank" rel="noopener noreferrer"><i>Biol. Pharm. Bull.</i></a>; <span data-t="jsp"></span> — <a href="https://link.springer.com/journal/11418/submission-guidelines" target="_blank" rel="noopener noreferrer"><i>J. Nat. Med.</i></a></dt>
+<dt><span data-t="psj">日本薬学会</span> — <a href="https://cpb.pharm.or.jp/document/CPB_Instructions.pdf" target="_blank" rel="noopener noreferrer"><i>Chem. Pharm. Bull.</i></a>, <a href="https://bpb.pharm.or.jp/document/BPB_Instructions.pdf" target="_blank" rel="noopener noreferrer"><i>Biol. Pharm. Bull.</i></a>; <span data-t="jsp">日本生薬学会</span> — <a href="https://link.springer.com/journal/11418/submission-guidelines" target="_blank" rel="noopener noreferrer"><i>J. Nat. Med.</i></a></dt>
 <dd><p class="journal-example">FAB-MS <i>m</i>/<i>z</i>: 332.1258 (Calcd for C<sub>18</sub>H<sub>20</sub>O<sub>6</sub>: 332.1259)</p></dd>
 </dl>
-<p class="note journals-note" data-t="journalsNote"></p>
+<p class="note journals-note" data-t="journalsNote">※ 計算値（calcd）は原文のままです。</p>
 </div>
 </section>
 
 <section id="finder" class="panel" role="tabpanel" aria-labelledby="tab-finder" hidden>
 <form id="searchForm" novalidate>
 <div class="fields">
-<label><span data-t="found"></span><input id="found" type="number" min="0.000001" max="100000" step="any" value="181.0707" required></label>
-<div class="field"><span class="field-label" id="searchIon-label" data-t="ion"></span><select id="searchIon" hidden aria-labelledby="searchIon-label"></select></div>
-<label><span data-t="tolerance"></span><div class="inline"><input id="tolerance" type="number" min="0" step="any" value="5" required><select id="unit" aria-label="Tolerance unit"><option>ppm</option><option>mDa</option></select></div></label>
-<label><span data-t="digits"></span><select data-digits></select></label>
+<label><span data-t="found">実測 <i>m</i>/<i>z</i></span><input id="found" type="number" min="0.000001" max="100000" step="any" value="181.0707" required></label>
+<div class="field"><span class="field-label" id="searchIon-label" data-t="ion">イオンの種類</span><select id="searchIon" hidden aria-labelledby="searchIon-label"></select></div>
+<label><span data-t="tolerance">許容誤差 ±</span><div class="inline"><input id="tolerance" type="number" min="0" step="any" value="5" required><select id="unit" aria-label="Tolerance unit"><option>ppm</option><option>mDa</option></select></div></label>
+<label><span data-t="digits">計算値の小数点以下の桁数</span><select data-digits></select></label>
 </div>
-<p class="hint" data-t="rangeHelp"></p>
+<p class="hint" data-t="rangeHelp">中性分子 M の原子数の範囲（最小〜最大）を元素ごとに指定します。使わない元素は最大を 0 にします。付加イオンの原子は含めません。</p>
 <div class="rangeGrid" id="ranges"></div>
-<details id="extraElements"><summary data-t="moreElements"></summary><div class="rangeGrid" id="extraRanges"></div></details>
-<fieldset class="filters"><legend data-t="filterTitle"></legend>
-<label class="check"><input type="checkbox" id="filterDbe"><span data-t="filterDbe"></span></label>
-<label class="check"><input type="checkbox" id="filterRatio"><span data-t="filterRatio"></span></label>
+<details id="extraElements"><summary data-t="moreElements">その他の元素（金属・希土類など）</summary><div class="rangeGrid" id="extraRanges"></div></details>
+<fieldset class="filters"><legend data-t="filterTitle">候補の絞り込み（任意）</legend>
+<label class="check"><input type="checkbox" id="filterDbe"><span data-t="filterDbe">DBE が0以上の整数になる組成だけ</span></label>
+<label class="check"><input type="checkbox" id="filterRatio"><span data-t="filterRatio">元素比が一般的な範囲の組成だけ（H/C 0.2–3.1、N/C ≤ 1.3、O/C ≤ 1.2、P/C ≤ 0.3、S/C ≤ 0.8、Si/C ≤ 0.5。炭素を含まない組成は残します）</span></label>
 </fieldset>
-<div class="actions"><button class="primary" id="searchButton" data-t="search"></button><button type="button" id="cancel" data-t="cancel" disabled></button><button type="button" id="resetSearch" class="text-button" data-t="reset"></button></div>
-<p class="hint" data-t="savedNote"></p>
+<div class="actions"><button class="primary" id="searchButton" data-t="search">候補を検索</button><button type="button" id="cancel" data-t="cancel" disabled>検索を中止</button><button type="button" id="resetSearch" class="text-button" data-t="reset">初期値に戻す</button></div>
+<p class="hint" data-t="savedNote">イオンの種類・許容誤差・計算値の桁数・原子数の範囲・絞り込みは、このブラウザーに保存され、次回も使われます。</p>
 </form>
 <p id="searchStatus" aria-live="polite"></p>
-<p class="hint" data-t="candidateNote"></p>
+<p class="hint" data-t="candidateNote">許容誤差に入る組成を、誤差の小さい順に表示します。</p>
 <div class="tableWrap"><table id="results"><thead></thead><tbody></tbody></table></div>
-<div class="actions"><button id="copy" type="button" data-t="copy" disabled></button><button id="searchLink" type="button" data-t="linkCopy" disabled></button><span id="copyStatus" class="hint" role="status"></span></div>
+<div class="actions"><button id="copy" type="button" data-t="copy" disabled>結果をコピー</button><button id="searchLink" type="button" data-t="linkCopy" disabled>この条件のリンクをコピー</button><span id="copyStatus" class="hint" role="status"></span></div>
 </section>
 
 <section id="batch" class="panel" role="tabpanel" aria-labelledby="tab-batch" hidden>
 <form id="batchForm" novalidate>
-<p class="hint" data-t="batchHelp"></p>
-<label class="block"><span data-t="batchInput"></span><textarea id="batchInput" rows="7" spellcheck="false" autocomplete="off"></textarea></label>
-<div class="fields"><div class="field"><span class="field-label" id="batchIon-label" data-t="batchIon"></span><select id="batchIon" hidden aria-labelledby="batchIon-label"></select></div><label><span data-t="digits"></span><select data-digits></select></label></div>
-<div class="actions"><button class="primary" data-t="batchRun"></button><button type="button" id="batchExample" data-t="example"></button></div>
+<p class="hint" data-t="batchHelp">1行に1化合物を、名前（任意）・分子式・イオン（任意）・実測 <i>m</i>/<i>z</i>（任意）の順に、タブ・空白・カンマで区切って入力します。Excelの表も貼り付けられます。</p>
+<label class="block"><span data-t="batchInput">化合物の一覧</span><textarea id="batchInput" rows="7" spellcheck="false" autocomplete="off"></textarea></label>
+<div class="fields"><div class="field"><span class="field-label" id="batchIon-label" data-t="batchIon">イオンの種類（省略した行）</span><select id="batchIon" hidden aria-labelledby="batchIon-label"></select></div><label><span data-t="digits">計算値の小数点以下の桁数</span><select data-digits></select></label></div>
+<div class="actions"><button class="primary" data-t="batchRun">一括計算する</button><button type="button" id="batchExample" data-t="example">例を入れる</button></div>
 </form>
 <p id="batchStatus" role="status"></p>
 <div class="tableWrap"><table id="batchResults"><thead></thead><tbody></tbody></table></div>
-<div class="actions" id="batchTableActions" hidden><button type="button" id="batchCopyTsv" data-t="copyTable"></button><span id="batchTableStatus" class="hint" role="status"></span></div>
+<div class="actions" id="batchTableActions" hidden><button type="button" id="batchCopyTsv" data-t="copyTable">表をコピー（Excel用）</button><span id="batchTableStatus" class="hint" role="status"></span></div>
 <div id="batchSi" class="result-block" hidden>
-<h3 data-t="siTitle"></h3>
+<h3 data-t="siTitle">論文・SI用の記載</h3>
 <div class="si-options">
-<label class="check"><input type="checkbox" data-si="append" checked><span data-t="siAppend"></span></label>
+<label class="check"><input type="checkbox" data-si="append" checked><span data-t="siAppend">Na・K・Li・Cl を分子式の末尾に書く（例：C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>Na）</span></label>
 </div>
-<p class="hint si-source"><span data-t="siSource"></span> <a href="https://researcher-resources.acs.org/publish/author_guidelines/pdf?coden=joceah" target="_blank" rel="noopener noreferrer">J. Org. Chem. Author Guidelines</a></p>
-<div class="actions"><button type="button" id="batchCopySi" data-t="copySiAll"></button><span id="batchCopyStatus" class="hint" role="status"></span></div>
+<p class="hint si-source"><span data-t="siSource">J. Org. Chem.（ACS）の投稿規定の例と同じ書式です（イオン化法は省略）。</span> <a href="https://researcher-resources.acs.org/publish/author_guidelines/pdf?coden=joceah" target="_blank" rel="noopener noreferrer">J. Org. Chem. Author Guidelines</a></p>
+<div class="actions"><button type="button" id="batchCopySi" data-t="copySiAll">記載文をまとめてコピー</button><span id="batchCopyStatus" class="hint" role="status"></span></div>
 </div>
 </section>
 
 <section id="checker" class="panel" role="tabpanel" aria-labelledby="tab-checker" hidden>
 <form id="checkForm" novalidate>
-<p class="hint" data-t="checkHelp"></p>
-<label class="block"><span data-t="checkInput"></span><textarea id="checkInput" rows="7" spellcheck="false" autocomplete="off"></textarea></label>
-<div class="fields"><label><span data-t="checkTol"></span><div class="inline"><input id="checkTol" type="number" min="0" step="any" value="5"><select id="checkUnit" aria-label="Tolerance unit"><option>ppm</option><option>mDa</option></select></div></label></div>
-<div class="actions"><button class="primary" data-t="checkRun"></button><button type="button" id="checkExample" data-t="example"></button></div>
+<p class="hint" data-t="checkHelp">論文・SIのHRMSの記載を貼り付けると、計算値（calcd）を検算します。複数の化合物をまとめて確認できます。</p>
+<label class="block"><span data-t="checkInput">HRMSの記載</span><textarea id="checkInput" rows="7" spellcheck="false" autocomplete="off"></textarea></label>
+<div class="fields"><label><span data-t="checkTol">実測値の許容差 ±</span><div class="inline"><input id="checkTol" type="number" min="0" step="any" value="5"><select id="checkUnit" aria-label="Tolerance unit"><option>ppm</option><option>mDa</option></select></div></label></div>
+<div class="actions"><button class="primary" data-t="checkRun">チェックする</button><button type="button" id="checkExample" data-t="example">例を入れる</button></div>
 </form>
 <p id="checkSummary" role="status"></p>
 <ol id="checkResults" class="check-list"></ol>
-<div class="actions" id="checkActions" hidden><button type="button" id="checkCopy" data-t="copy"></button><span id="checkCopyStatus" class="hint" role="status"></span></div>
+<div class="actions" id="checkActions" hidden><button type="button" id="checkCopy" data-t="copy">結果をコピー</button><span id="checkCopyStatus" class="hint" role="status"></span></div>
 </section>
 
 
 <p class="note privacy-note" data-t="privacy">計算はすべてブラウザー内で行い、入力した内容はどこにも送信しません。</p>
 
-<section id="method"><h2 data-t="method"></h2>
+<section id="method"><h2 data-t="method">計算方法</h2>
 <div class="equation"><i>m</i>/<i>z</i> = (Σ <i>n</i><sub>i</sub> <i>m</i><sub>i</sub> − <i>z</i> <i>m</i><sub>e</sub>) / |<i>z</i>|</div>
-<p data-t="definition"></p>
-<p data-t="electron"></p>
-<p data-t="ppm"></p>
-<p data-t="dbe" data-tabs="calculator finder batch"></p>
-<p data-tabs="finder"><span data-t="filterMethod"></span> <a href="https://doi.org/10.1186/1471-2105-8-105" target="_blank" rel="noopener noreferrer">Kind &amp; Fiehn, <i>BMC Bioinformatics</i> 2007</a></p>
-<p data-t="urlMethod" data-tabs="calculator finder"></p>
-<p data-t="isotopes"></p>
-<p data-t="isoMethod" data-tabs="calculator"></p>
-<p data-t="checkMethod" data-tabs="checker"></p>
-<details><summary data-t="constants"></summary><table id="constants"><thead></thead><tbody></tbody></table></details>
+<p data-t="definition"><i>n</i><sub>i</sub> は付加・脱離後のイオンに含まれる原子数、<i>m</i><sub>i</sub> は各元素の同位体質量、<i>z</i> は符号付きの電荷数です。2価以上のイオンは |<i>z</i>| で割ります。</p>
+<p data-t="electron">正電荷1つにつき電子1個分の質量を引き、負電荷1つにつき足します（<i>m</i><sub>e</sub> = 0.0005485799090441 Da）。</p>
+<p data-t="ppm">誤差（ppm）=（実測値 − 計算値）/ 計算値 × 10⁶。誤差（mDa）=（実測値 − 計算値）× 1000。許容誤差は ± の範囲として使います。</p>
+<p data-t="dbe" data-tabs="calculator finder batch">DBE = 1 + C + N/2 − (H + F + Cl + Br + I)/2（中性分子 M の値。小数もそのまま表示）。C・H・N・O・S・ハロゲン以外を含む組成では「—」とします。</p>
+<p data-tabs="finder"><span data-t="filterMethod">分子式検索の絞り込み：DBE の条件は、中性分子 M の DBE が整数で、かつ0以上であることです。DBE は C・H・N・O・S・ハロゲンを通常の原子価（C 4、N 3、H とハロゲン 1、O・S 2）として計算するので、ほかの元素を含む組成は判定せずに残します。整数であることは窒素ルール（窒素の数と整数質量の偶奇）と同じ条件ですが、0以上であることは窒素ルールには含まれません（例：CH<sub>4</sub> より H の多い CH<sub>6</sub> は窒素ルールを満たしますが、DBE は −1 です）。元素比の条件は、Kind と Fiehn が示した「一般的な範囲」（データベースの分子式の99.7%を含む範囲）のうち、H・N・O・P・S・Si の炭素に対する比を使います。</span> <a href="https://doi.org/10.1186/1471-2105-8-105" target="_blank" rel="noopener noreferrer">Kind &amp; Fiehn, <i>BMC Bioinformatics</i> 2007</a></p>
+<p data-t="urlMethod" data-tabs="calculator finder">精密質量と分子式検索の入力は、ページのアドレスの「#」より後ろに入ります。この部分はサーバーに送られませんが、そのアドレスをブックマーク・共有すると、入力も一緒に伝わります。一括計算と記載チェックの入力はアドレスに入りません。</p>
+<p data-t="isotopes">84元素に対応し、各元素で天然存在比が最も高い同位体の質量を使います（例：B は ¹¹B、Fe は ⁵⁶Fe）。Tc・Pm など天然の同位体組成がない元素は使えません。</p>
+<p data-t="isoMethod" data-tabs="calculator">同位体パターンはNISTの存在比から計算し、同じ整数質量の同位体組成を1本にまとめます（<i>m</i>/<i>z</i> は存在比による加重平均）。高分解能では分かれて観測されることがあります。</p>
+<p data-t="checkMethod" data-tabs="checker">記載チェックでは、「calcd for」の後の分子式をイオンの組成として <i>m</i>/<i>z</i> を計算し直し、最終桁の丸めの範囲で一致するかを見ます。一致しない場合は、電子の質量の扱いの誤りや、中性分子の分子式のまま計算した可能性を調べます。</p>
+<details><summary data-t="constants">使用する同位体と質量を表示</summary><table id="constants"><thead></thead><tbody></tbody></table></details>
 </section>
 
-<section id="sources"><h2 data-t="sources"></h2>
+<section id="sources"><h2 data-t="sources">出典・参考文献</h2>
 <dl class="sources">
-<dt data-t="isotopeSource"></dt><dd><a href="https://physics.nist.gov/cgi-bin/Compositions/stand_alone.pl?all=all&amp;ascii=ascii2" target="_blank" rel="noopener noreferrer">NIST — Atomic Weights and Isotopic Compositions</a></dd>
-<dt data-t="electronSource"></dt><dd><a href="https://physics.nist.gov/cuu/Constants/Table/allascii.txt" target="_blank" rel="noopener noreferrer">NIST — 2022 CODATA Recommended Values</a></dd>
-<dt data-t="paperIntro"></dt><dd>Christmann, M. <a href="https://doi.org/10.1021/acs.orglett.4c03458" target="_blank" rel="noopener noreferrer">What I Learned from Analyzing Accurate Mass Data of 3000 Supporting Information Files.</a> <i>Org. Lett.</i> <b>2025</b>, <i>27</i>, 4–7.</dd>
-<dt data-t="ratioSource"></dt><dd>Kind, T.; Fiehn, O. <a href="https://doi.org/10.1186/1471-2105-8-105" target="_blank" rel="noopener noreferrer">Seven Golden Rules for heuristic filtering of molecular formulas obtained by accurate mass spectrometry.</a> <i>BMC Bioinformatics</i> <b>2007</b>, <i>8</i>, 105.</dd>
+<dt data-t="isotopeSource">同位体質量・存在比</dt><dd><a href="https://physics.nist.gov/cgi-bin/Compositions/stand_alone.pl?all=all&amp;ascii=ascii2" target="_blank" rel="noopener noreferrer">NIST — Atomic Weights and Isotopic Compositions</a></dd>
+<dt data-t="electronSource">電子質量</dt><dd><a href="https://physics.nist.gov/cuu/Constants/Table/allascii.txt" target="_blank" rel="noopener noreferrer">NIST — 2022 CODATA Recommended Values</a></dd>
+<dt data-t="paperIntro">HRMSデータの報告で多い誤り</dt><dd>Christmann, M. <a href="https://doi.org/10.1021/acs.orglett.4c03458" target="_blank" rel="noopener noreferrer">What I Learned from Analyzing Accurate Mass Data of 3000 Supporting Information Files.</a> <i>Org. Lett.</i> <b>2025</b>, <i>27</i>, 4–7.</dd>
+<dt data-t="ratioSource">分子式の元素比の範囲</dt><dd>Kind, T.; Fiehn, O. <a href="https://doi.org/10.1186/1471-2105-8-105" target="_blank" rel="noopener noreferrer">Seven Golden Rules for heuristic filtering of molecular formulas obtained by accurate mass spectrometry.</a> <i>BMC Bioinformatics</i> <b>2007</b>, <i>8</i>, 105.</dd>
 </dl>
-<p class="note" data-t="accessDate"></p>
+<p class="note" data-t="accessDate">データ参照日：2026年11月7日</p>
 </section>
 
-<footer><p>© 2026 <a href="../index.html">Yosuke Matsuo</a> · <a href="../tools.html" data-t="toolsPage"></a></p><p><a href="https://github.com/yosuke-matsuo/yosuke-matsuo.github.io/tree/main/hrms-calc" data-t="sourceCode" target="_blank" rel="noopener noreferrer"></a> · <span data-t="codeLicense"></span><a href="LICENSE.txt">MIT License</a></p></footer>
+<footer><p>© 2026 <a href="../index.html" data-home="index">Yosuke Matsuo</a> · <a href="../tools.html" data-home="tools" data-t="toolsPage">ツール</a></p><p><a href="https://github.com/yosuke-matsuo/yosuke-matsuo.github.io/tree/main/hrms-calc" data-t="sourceCode" target="_blank" rel="noopener noreferrer">ソースコード</a> · <span data-t="codeLicense">HRMS Calcのプログラム：</span><a href="LICENSE.txt">MIT License</a></p></footer>
 </main>
-<script type="module" src="app.js?v=20261111-1"></script>
+<script type="module" src="app.js?v=20261111-2"></script>
 </body>
 </html>

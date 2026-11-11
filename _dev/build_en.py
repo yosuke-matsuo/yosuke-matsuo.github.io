@@ -132,8 +132,8 @@ def english(page):
         name = re.split(r'[?#]', rest)[0]
         if name in PAGES:
             return f'{attr}="./{rest}"'
-        if name.startswith('hrms-calc/'):
-            rest = re.sub(r'^(hrms-calc/[^?#]*)', r'\1?lang=en', rest) if '?' not in rest else rest
+        if name == 'hrms-calc/index.html':
+            rest = 'hrms-calc/en/index.html' + rest[len(name):]  # the English page of HRMS Calc
         return f'{attr}="../{rest}"'
     s = re.sub(r'\b(href|src)="([^"]*)"', path, s)
 

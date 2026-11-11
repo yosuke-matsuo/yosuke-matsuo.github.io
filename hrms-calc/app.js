@@ -1,181 +1,21 @@
-import {ELEMENTS,IONS,parseFormula,ion,ionCounts,ppm,dbe,isotopePattern} from './core.js?v=20261111-1';
-import {ionLabel,formulaHtml,siFormula,siSentence,checkText,parseBatch,readFound} from './si.js?v=20261111-1';
+import {ELEMENTS,IONS,parseFormula,ion,ionCounts,ppm,dbe,isotopePattern} from './core.js?v=20261111-2';
+import {ionLabel,formulaHtml,siFormula,siSentence,checkText,parseBatch,readFound} from './si.js?v=20261111-2';
+import {strings,rich} from './text.js?v=20261111-2';
 const $=id=>document.getElementById(id);
-const strings={
- ja:{skip:'本文へ移動',
-  privacy:'計算はすべてブラウザー内で行い、入力した内容はどこにも送信しません。',
-  electronHead:'電子の質量を考慮して計算します。',electronShort:'正イオンでは電子の質量を引き、負イオンでは足します。考慮しないと、m/z 200 では約2.7 ppm ずれます（m/z が小さいほど大きくずれます）。',electronSurvey:'2023～2024年の<i>Org. Lett.</i>誌のSI約3000件の調査では、精密質量データの約3割に記載の誤りがあり、その約3分の2は電子の質量を考慮していないものでした（<a href="https://doi.org/10.1021/acs.orglett.4c03458" target="_blank" rel="noopener noreferrer">Christmann, <i>Org. Lett.</i> 2025, <i>27</i>, 4⁠–⁠7</a>）。',
-  tabCalc:'精密質量',tabFinder:'分子式検索',tabBatch:'一括計算',tabCheck:'記載チェック',
-  journals:'主な雑誌のHRMSの書き方',journalsLink:'主な雑誌の書き方',psj:'日本薬学会',jsp:'日本生薬学会',
-  journalsIntro:'投稿規定に載っている記載例です（2026年11月7日に原文を確認）。',journalsNote:'※ 計算値（calcd）は原文のままです。',
-  method:'計算方法',sources:'出典・参考文献',
-  formula:'分子式（中性分子 M）',ion:'イオンの種類',optionalFound:'実測 m/z（任意）',
-  posIons:'正イオン',negIons:'負イオン',ionNone:'付加・脱離なし',ionColM:'M',ionCol2M:'2M',ionColZ2:'M（2価）',
-  syntax:'H・Na などの付加・脱離は「イオンの種類」で選びます。括弧・同位体・電荷は入力できません。',
-  calculate:'計算する',calcPlaceholder:'分子式を入力すると、ここに結果が表示されます。',
-  mz:'計算 m/z',neutral:'中性分子 M',ionFormula:'イオンの組成',measured:'実測 m/z',diff:'誤差',
-  siTitle:'論文・SI用の記載',siSource:'J. Org. Chem.（ACS）の投稿規定の例と同じ書式です（イオン化法は省略）。',
-  siAppend:'Na・K・Li・Cl を分子式の末尾に書く（例：C6H12O6Na）',siCopy:'記載文をコピー',
-  siNeedFound:'実測 m/z を入力すると「Found」まで作成します。',
-  isoTitle:'同位体パターン',peak:'ピーク',relative:'相対強度 (%)',
-  isoNote:'相対強度は最も強いピークを100とします。',
-  found:'実測 m/z',tolerance:'許容誤差 ±',
-  rangeHelp:'中性分子 M の原子数の範囲（最小〜最大）を元素ごとに指定します。使わない元素は最大を 0 にします。付加イオンの原子は含めません。',
-  moreElements:'その他の元素（金属・希土類など）',search:'候補を検索',cancel:'検索を中止',
-  candidateNote:'許容誤差に入る組成を、誤差の小さい順に表示します。',
-  filterTitle:'候補の絞り込み（任意）',
-  filterDbe:'DBE が0以上の整数になる組成だけ',
-  filterRatio:'元素比が一般的な範囲の組成だけ（H/C 0.2–3.1、N/C ≤ 1.3、O/C ≤ 1.2、P/C ≤ 0.3、S/C ≤ 0.8、Si/C ≤ 0.5。炭素を含まない組成は残します）',
-  excludedFmt:n=>`絞り込みで除外 ${n} 件`,reset:'初期値に戻す',linkCopy:'この条件のリンクをコピー',
-  digits:'計算値の小数点以下の桁数',
-  savedNote:'イオンの種類・許容誤差・計算値の桁数・原子数の範囲・絞り込みは、このブラウザーに保存され、次回も使われます。',
-  copy:'結果をコピー',
-  batchHelp:'1行に1化合物を、名前（任意）・分子式・イオン（任意）・実測 m/z（任意）の順に、タブ・空白・カンマで区切って入力します。Excelの表も貼り付けられます。',
-  batchInput:'化合物の一覧',batchIon:'イオンの種類（省略した行）',batchRun:'一括計算する',example:'例を入れる',
-  label:'名前',line:'行',note:'メモ',copyTable:'表をコピー（Excel用）',copySiAll:'記載文をまとめてコピー',
-  batchCount:(n,e)=>`${n} 件を計算しました`+(e?`（${e} 行は計算できませんでした）`:''),batchEmpty:'化合物を入力してください。',
-  errToken:v=>`読み取れない項目：${v}`,errIon:v=>`イオンの種類を認識できません：${v}`,errIonConflict:v=>`イオンの種類が複数あります：${v}`,
-  checkHelp:'論文・SIのHRMSの記載を貼り付けると、計算値（calcd）を検算します。複数の化合物をまとめて確認できます。',
-  checkInput:'HRMSの記載',checkTol:'実測値の許容差 ±',checkRun:'チェックする',
-  checkNone:'「calcd for 分子式 数値」の形の記載が見つかりませんでした。',
-  checkSummary:(n,a,b,c,u)=>`${n} 件を確認しました：一致 ${a} 件、要確認 ${b} 件、誤りの可能性 ${c} 件`+(u?`、読み取れなかった記載 ${u} 件`:''),
-  stOk:'一致',stWarn:'要確認',stError:'誤りの可能性',stUnparsed:'読み取り不可',
-  cOk:'',cRounding:'最終桁の丸めが異なります。',
-  cElectron:'記載の計算値は、電子の質量を補正していない値です。',
-  cElectronSign:'記載の計算値は、電子の質量の加減が逆です。',
-  cNeutralFormula:'分子式が中性分子 M のものです（計算値はイオンとして正しい値）。',
-  cNeutralFormulaElectron:'分子式が中性分子 M のもので、記載の計算値は電子の質量も補正していません。',
-  cMismatch:'計算値が一致しません。分子式・イオン・数値を確認してください。',
-  cChargeAssumed:'電荷の記載がないため、正負の両方（±1）で照合し、よく一致する方を採用しました。',cChargeConflict:'記載の中で電荷が食い違っています。最もよく一致する電荷で照合しました。記載を確認してください。',cNoFormula:'「calcd」の後に分子式を読み取れないため、検算していません。',cNoValue:'計算値の数値を読み取れないため、検算していません。',
-  cFewDigits:'桁数が少ないため、電子の質量の扱いは判定できません。',
-  cFoundOff:(tol,u)=>`実測値との差が ±${tol} ${u} を超えています。`,
-  cFormula:'分子式を読み取れません（元素記号と数字のみ対応）。',
-  stated:'記載の計算値',recalc:'正しい計算値',
-  definition:'<i>n</i><sub>i</sub> は付加・脱離後のイオンに含まれる原子数、<i>m</i><sub>i</sub> は各元素の同位体質量、<i>z</i> は符号付きの電荷数です。2価以上のイオンは |<i>z</i>| で割ります。',
-  electron:'正電荷1つにつき電子1個分の質量を引き、負電荷1つにつき足します（<i>m</i><sub>e</sub> = 0.0005485799090441 Da）。',
-  ppm:'誤差（ppm）=（実測値 − 計算値）/ 計算値 × 10⁶。誤差（mDa）=（実測値 − 計算値）× 1000。許容誤差は ± の範囲として使います。',
-  filterMethod:'分子式検索の絞り込み：DBE の条件は、中性分子 M の DBE が整数で、かつ0以上であることです。DBE は C・H・N・O・S・ハロゲンを通常の原子価（C 4、N 3、H とハロゲン 1、O・S 2）として計算するので、ほかの元素を含む組成は判定せずに残します。整数であることは窒素ルール（窒素の数と整数質量の偶奇）と同じ条件ですが、0以上であることは窒素ルールには含まれません（例：CH4 より H の多い CH6 は窒素ルールを満たしますが、DBE は −1 です）。元素比の条件は、Kind と Fiehn が示した「一般的な範囲」（データベースの分子式の99.7%を含む範囲）のうち、H・N・O・P・S・Si の炭素に対する比を使います。',
-  urlMethod:'精密質量と分子式検索の入力は、ページのアドレスの「#」より後ろに入ります。この部分はサーバーに送られませんが、そのアドレスをブックマーク・共有すると、入力も一緒に伝わります。一括計算と記載チェックの入力はアドレスに入りません。',
-  ratioSource:'分子式の元素比の範囲',
-  dbe:'DBE = 1 + C + N/2 − (H + F + Cl + Br + I)/2（中性分子 M の値。小数もそのまま表示）。C・H・N・O・S・ハロゲン以外を含む組成では「—」とします。',
-  isotopes:'84元素に対応し、各元素で天然存在比が最も高い同位体の質量を使います（例：B は ¹¹B、Fe は ⁵⁶Fe）。Tc・Pm など天然の同位体組成がない元素は使えません。',
-  isoMethod:'同位体パターンはNISTの存在比から計算し、同じ整数質量の同位体組成を1本にまとめます（m/z は存在比による加重平均）。高分解能では分かれて観測されることがあります。',
-  checkMethod:'記載チェックでは、「calcd for」の後の分子式をイオンの組成として m/z を計算し直し、最終桁の丸めの範囲で一致するかを見ます。一致しない場合は、電子の質量の扱いの誤りや、中性分子の分子式のまま計算した可能性を調べます。',
-  constants:'使用する同位体と質量を表示',
-  isotopeSource:'同位体質量・存在比',electronSource:'電子質量',paperIntro:'HRMSデータの報告で多い誤り',
-  accessDate:'データ参照日：2026年11月7日',
-  sourceCode:'ソースコード',codeLicense:'HRMS Calcのプログラム：',
-  rangeEmpty:'空欄です',rangeInt:'整数で入力してください',rangeBounds:'0〜1000の範囲で入力してください',rangeOrder:'最小が最大より大きくなっています',rangeNone:'少なくとも1つの元素で、最大を1以上にしてください。',
-  minimum:'最小',maximum:'最大',
-  running:'検索中…',complete:'検索完了',incomplete:'探索の上限に達したため、一部の結果です（見つかった候補の中での誤差順）。範囲を狭めて検索し直してください。',stopped:'検索を中止しました。',
-  countFmt:n=>`候補 ${n} 件`,copyOk:'コピーしました',copyFail:'コピーできませんでした。選択してコピーしてください。',
-  element:'元素',isotope:'同位体',mass:'質量 / Da',
-  errorFormula:'分子式を確認してください。元素記号と正の整数だけを使えます。',
-  errorFound:'実測 m/z は正の数で入力してください。',
-  errorComposition:'この組成では指定したイオンになりません（脱プロトン化するHがない、など）。',
-  errorRange:'原子数は0〜1000の整数で、最小 ≦ 最大にしてください。少なくとも1つの元素の最大を1以上にします。',
-  errorSearch:'実測 m/z と許容誤差を確認してください（ppm は 0 以上、100万未満）。',
-  errorLines:'一度に入力できるのは1000行までです。',
-  errorGeneric:'計算できませんでした。入力を確認してください。',
-  brandSub:'（HRMS精密質量計算ツール）',title:'HRMS Calc（HRMS精密質量計算ツール）',toolsPage:'ツール',
-  metaDescription:'電子の質量を考慮してHRMSの精密質量（m/z）を計算するブラウザー用ツール。分子式候補の検索、一括計算、同位体パターン、論文・SIの記載文の作成とチェック。'},
- en:{skip:'Skip to content',
-  privacy:'Everything runs in your browser; nothing you enter is sent anywhere.',
-  electronHead:'The electron mass is taken into account.',electronShort:'It is subtracted for positive ions and added for negative ions; ignoring it shifts m/z 200 by about 2.7 ppm (more at lower m/z).',electronSurvey:'A survey of about 3000 SI files from <i>Org. Lett.</i> (2023–2024) found errors in about 30% of the reported accurate-mass data; about two-thirds of these came from ignoring the electron mass (<a href="https://doi.org/10.1021/acs.orglett.4c03458" target="_blank" rel="noopener noreferrer">Christmann, <i>Org. Lett.</i> 2025, <i>27</i>, 4⁠–⁠7</a>).',
-  tabCalc:'Exact mass',tabFinder:'Find formulas',tabBatch:'Batch',tabCheck:'Check SI text',
-  journals:'How major journals ask for HRMS data',journalsLink:'Other journals',psj:'Pharmaceutical Society of Japan',jsp:'Japanese Society of Pharmacognosy',
-  journalsIntro:'Examples as printed in the author guidelines (checked on 7 November 2026).',journalsNote:'* Calcd values are as printed.',
-  method:'Method',sources:'Sources and references',
-  formula:'Molecular formula (neutral M)',ion:'Ion type',optionalFound:'Measured m/z (optional)',
-  posIons:'Positive ions',negIons:'Negative ions',ionNone:'none',ionColM:'M',ionCol2M:'2M',ionColZ2:'M (z = 2)',
-  syntax:'Choose adducts and losses such as H or Na under “Ion type”. Parentheses, isotopes and charges cannot be entered.',
-  calculate:'Calculate',calcPlaceholder:'Enter a formula and the result appears here.',
-  mz:'Calculated m/z',neutral:'Neutral M',ionFormula:'Ion composition',measured:'Measured m/z',diff:'Error',
-  siTitle:'Statement for papers and SI',siSource:'Same format as the example in the J. Org. Chem. (ACS) author guidelines (without the ionization method).',
-  siAppend:'Write Na, K, Li or Cl at the end of the formula (e.g. C6H12O6Na)',siCopy:'Copy statement',
-  siNeedFound:'Enter the measured m/z to add “Found”.',
-  isoTitle:'Isotope pattern',peak:'Peak',relative:'Relative intensity (%)',
-  isoNote:'Intensities are relative to the strongest peak (100).',
-  found:'Measured m/z',tolerance:'Tolerance ±',
-  rangeHelp:'Set the range of atom counts (minimum–maximum) for each element of the neutral M. Set the maximum to 0 for unused elements. Do not include adduct atoms.',
-  moreElements:'More elements (metals, rare earths and others)',search:'Find formulas',cancel:'Cancel search',
-  candidateNote:'Compositions within the tolerance, from the smallest error.',
-  filterTitle:'Filter candidates (optional)',
-  filterDbe:'Only compositions whose DBE is a non-negative integer',
-  filterRatio:'Only compositions with common element ratios (H/C 0.2–3.1, N/C ≤ 1.3, O/C ≤ 1.2, P/C ≤ 0.3, S/C ≤ 0.8, Si/C ≤ 0.5; compositions without carbon are kept)',
-  excludedFmt:n=>`${n} excluded by the filters`,reset:'Reset to defaults',linkCopy:'Copy a link to these inputs',
-  digits:'Decimal places of calculated values',
-  savedNote:'The ion type, tolerance, decimal places, atom-count ranges and filters are saved in this browser and used next time.',
-  copy:'Copy results',
-  batchHelp:'One compound per line: name (optional), formula, ion (optional) and measured m/z (optional), separated by tabs, spaces or commas. Tables from Excel can be pasted.',
-  batchInput:'Compounds',batchIon:'Ion type (for lines without one)',batchRun:'Calculate all',example:'Insert example',
-  label:'Name',line:'Line',note:'Note',copyTable:'Copy table (for Excel)',copySiAll:'Copy all statements',
-  batchCount:(n,e)=>`${n} compound${n===1?'':'s'} calculated`+(e?` (${e} line${e===1?'':'s'} could not be calculated)`:''),batchEmpty:'Enter one or more compounds.',
-  errToken:v=>`Cannot read: ${v}`,errIon:v=>`Unknown ion type: ${v}`,errIonConflict:v=>`More than one ion type: ${v}`,
-  checkHelp:'Paste HRMS statements from a paper or SI to recheck the calculated values (calcd). Many compounds can be checked at once.',
-  checkInput:'HRMS statements',checkTol:'Tolerance for measured values ±',checkRun:'Check',
-  checkNone:'No statement of the form “calcd for formula value” was found.',
-  checkSummary:(n,a,b,c,u)=>`${n} checked: ${a} correct, ${b} to review, ${c} possible error${c===1?'':'s'}`+(u?`, ${u} not readable`:''),
-  stOk:'Correct',stWarn:'Review',stError:'Possible error',stUnparsed:'Not readable',
-  cOk:'',cRounding:'The last digit is rounded differently.',
-  cElectron:'The stated value was calculated without the electron mass.',
-  cElectronSign:'The stated value adds and subtracts the electron mass the wrong way round.',
-  cNeutralFormula:'The formula is that of the neutral M (the value is correct for the ion).',
-  cNeutralFormulaElectron:'The formula is that of the neutral M, and the stated value was calculated without the electron mass.',
-  cMismatch:'The calculated value does not match. Check the formula, ion and numbers.',
-  cChargeAssumed:'No charge given; both signs (±1) were tried and the better match was used.',cChargeConflict:'The charges written for this compound disagree; the best-matching charge was used. Check the statement.',cNoFormula:'No formula could be read after “calcd”, so this was not checked.',cNoValue:'No calculated value could be read, so this was not checked.',
-  cFewDigits:'Too few decimal places to judge the electron mass.',
-  cFoundOff:(tol,u)=>`The measured value differs by more than ±${tol} ${u}.`,
-  cFormula:'The formula cannot be read (element symbols and numbers only).',
-  stated:'Stated value',recalc:'Correct value',
-  definition:'<i>n</i><sub>i</sub> is the number of atoms in the final ion, <i>m</i><sub>i</sub> the isotope mass of each element and <i>z</i> the signed charge. Ions with two or more charges are divided by |<i>z</i>|.',
-  electron:'One electron mass is subtracted per positive charge and added per negative charge (<i>m</i><sub>e</sub> = 0.0005485799090441 Da).',
-  ppm:'Error (ppm) = (measured − calculated) / calculated × 10⁶. Error (mDa) = (measured − calculated) × 1000. The tolerance is applied as a ± range.',
-  filterMethod:'Candidate filters: the DBE condition requires the DBE of the neutral M to be an integer and not negative. DBE is calculated for C, H, N, O, S and halogens with the usual valences (C 4, N 3, H and halogens 1, O and S 2); compositions with other elements are not judged and are kept. Being an integer is the same condition as the nitrogen rule (parity of the number of nitrogens and of the nominal mass); being non-negative is not part of the nitrogen rule (CH6 satisfies the nitrogen rule but has DBE −1). The element-ratio condition uses the ratios of H, N, O, P, S and Si to carbon in the “common range” given by Kind and Fiehn (covering 99.7% of the formulas in their database).',
-  urlMethod:'The inputs of the calculator and the formula finder are kept in the page address after “#”. That part is not sent to the server, but a bookmarked or shared address carries the inputs. Inputs of the batch and the checker are not kept in the address.',
-  ratioSource:'Element-ratio ranges of formulas',
-  dbe:'DBE = 1 + C + N/2 − (H + F + Cl + Br + I)/2 (for the neutral M, shown with any fraction). Compositions with elements other than C, H, N, O, S and halogens show —.',
-  isotopes:'84 elements are supported, each with the mass of its most abundant isotope (for example ¹¹B for B and ⁵⁶Fe for Fe). Elements without a natural isotope composition, such as Tc and Pm, cannot be used.',
-  isoMethod:'Isotope patterns are calculated from the NIST abundances; isotopologues with the same nominal mass are combined into one peak (m/z is the abundance-weighted mean). They may be resolved at high resolution.',
-  checkMethod:'The checker takes the formula after “calcd for” as the composition of the ion, recalculates its m/z and checks agreement within rounding of the last digit. Otherwise it looks for errors in the electron mass or a value calculated from the neutral formula.',
-  constants:'Show isotopes and masses used',
-  isotopeSource:'Isotope masses and abundances',electronSource:'Electron mass',paperIntro:'Common errors in reporting HRMS data',
-  accessDate:'Data accessed: 7 November 2026',
-  sourceCode:'Source code',codeLicense:'HRMS Calc code: ',
-  rangeEmpty:'is empty',rangeInt:'must be a whole number',rangeBounds:'must be between 0 and 1000',rangeOrder:'minimum is larger than maximum',rangeNone:'Set a maximum of 1 or more for at least one element.',
-  minimum:'Minimum',maximum:'Maximum',
-  running:'Searching…',complete:'Search complete',incomplete:'The search limit was reached, so the results are partial (sorted by error among the candidates found). Narrow the ranges and search again.',stopped:'Search canceled.',
-  countFmt:n=>`${n} candidate${n===1?'':'s'}`,copyOk:'Copied',copyFail:'Could not copy. Select the text and copy it manually.',
-  element:'Element',isotope:'Isotope',mass:'Mass / Da',
-  errorFormula:'Check the formula. Use element symbols and positive integers only.',
-  errorFound:'Enter the measured m/z as a positive number.',
-  errorComposition:'This composition cannot form the selected ion (for example, no H to remove for deprotonation).',
-  errorRange:'Atom counts must be integers from 0 to 1000 with minimum ≤ maximum, and at least one element needs a maximum of 1 or more.',
-  errorSearch:'Check the measured m/z and the tolerance (ppm must be at least 0 and below one million).',
-  errorLines:'Up to 1000 lines can be entered at once.',
-  errorGeneric:'The calculation failed. Check your input.',
-  brandSub:' (HRMS Exact Mass Calculator)',title:'HRMS Calc (HRMS Exact Mass Calculator)',toolsPage:'Tools',
-  metaDescription:'A browser tool that calculates exact HRMS masses (m/z), taking the electron mass into account. Candidate formulas, batch calculation, isotope patterns, and writing and checking HRMS statements for papers and SI.'}
-};
 const EXAMPLES={
  batch:'Glucose\tC6H12O6\t[M+Na]+\t203.0524\nCatechin\tC15H14O6\t[M-H]-\t289.0716\nPunicalagin\tC48H28O30\t[M-2H]2-\t541.0263\nCaffeine C8H10N4O2 [M+H]+ 195.0877',
  check:'HRMS (ESI) m/z: [M + Na]+ Calcd for C6H12O6Na 203.0526; Found 203.0524.\nHRMS (ESI) m/z: [M + H]+ Calcd for C8H11N4O2 195.0882; Found 195.0877.\nHRESIMS m/z 289.0716 [M − H]− (calcd for C15H13O6, 289.0718).\nHRMS (ESI) m/z: [M + Na]+ Calcd for C15H14O6 313.0683; Found 313.0679.'
 };
-function initialLang(){const q=new URLSearchParams(location.search).get('lang');if(q==='ja'||q==='en')return q;try{const s=localStorage.getItem('ym-language');if(s==='ja'||s==='en')return s;}catch(e){}return (navigator.language||'').startsWith('ja')?'ja':'en';}
+// The language is that of the page: hrms-calc/ (Japanese) or hrms-calc/en/ (English, made by _dev/build_hrms_en.mjs).
+// ?lang= of earlier links opens the other page; the inputs after "#" go along.
+const pageLang=document.documentElement.lang==='en'?'en':'ja';
+function otherPage(l){const u=new URL(l==='en'?'en/':'../',location.href);const q=new URLSearchParams(location.search);q.delete('lang');u.search=q.toString();u.hash=location.hash;return u.href;}
+function initialLang(){const q=new URLSearchParams(location.search).get('lang');if((q==='ja'||q==='en')&&q!==pageLang)location.replace(otherPage(q));try{localStorage.setItem('ym-language',pageLang);}catch(e){}return pageLang;}
 let lang=initialLang(),worker=null,last=null,calcState=null,batchRows=null,checkRecords=null;
 const t=k=>strings[lang][k];
 const el=(tag,props={},...kids)=>{const e=document.createElement(tag);Object.assign(e,props);e.append(...kids);return e;};
 const html=(tag,markup,cls)=>{const e=document.createElement(tag);e.innerHTML=markup;if(cls)e.className=cls;return e;};
 const signed=(x,d)=>(x>0?'+':x<0?'−':'')+Math.abs(x).toFixed(d);
-// Text shown on the page: subscript atom counts in formulas, superscript the charge of ion notation, italic m/z.
-// escape=false only for the fixed strings of this file (some contain <i>/<sub>).
-const escH=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-function rich(s,escape=true){
- let h=escape?escH(s):String(s);
- h=h.replace(/\[([^\]\n<>]{0,30}M[^\]\n<>]{0,30})\]\s?(\d*[+\-−])(?![\w])/g,(m,inner,ch)=>`[${inner.replace(/([A-Za-z])(\d+)/g,'$1<sub>$2</sub>')}]<sup>${ch.replace('-','−')}</sup>`);
- h=h.replace(/(^|[^A-Za-z0-9>\/])((?:[A-Z][a-z]?\d*){2,})(?![A-Za-z0-9])/g,(m,pre,f)=>/\d/.test(f)?pre+f.replace(/(\d+)/g,'<sub>$1</sub>'):m);
- return h.replace(/\bm\/z\b/g,'<i>m</i>/<i>z</i>');
-}
 const say=(node,text)=>{node.innerHTML=rich(text);};
 const H=h=>({h});
 // plain text for <option>: Unicode sub- and superscripts, e.g. [M + NH₄]⁺
@@ -357,7 +197,7 @@ $('searchForm').onsubmit=event=>{event.preventDefault();clearSearch();
  const bad=checkRanges();if(bad){if(bad.input.closest('details'))bad.input.closest('details').open=true;bad.input.setAttribute('aria-invalid','true');bad.input.focus();$('searchStatus').textContent=bad.text;return;}
  try{
   const ranges=[...document.querySelectorAll('.range')].map(div=>{const inputs=div.querySelectorAll('input');return [inputs[0].dataset.element,Number(inputs[0].value),Number(inputs[1].value)];});
-  worker=new Worker(new URL('./worker.js?v=20261111-1',import.meta.url),{type:'module'});$('cancel').disabled=false;$('searchButton').disabled=true;$('searchStatus').textContent=t('running');
+  worker=new Worker(new URL('./worker.js?v=20261111-2',import.meta.url),{type:'module'});$('cancel').disabled=false;$('searchButton').disabled=true;$('searchStatus').textContent=t('running');
   worker.onmessage=({data})=>{cancel();if(data.error){say($('searchStatus'),errorText(data.error));return;}last=data;renderResults();$('copy').disabled=!data.results.length;$('searchLink').disabled=false;};
   worker.onerror=()=>{cancel();$('searchStatus').textContent=t('errorGeneric');};
   worker.postMessage({found:Number($('found').value),tolerance:Number($('tolerance').value),unit:$('unit').value,adduct:$('searchIon').value,ranges,filters:{dbe:$('filterDbe').checked,ratio:$('filterRatio').checked}});
@@ -464,13 +304,9 @@ function translate(){
  $('checkInput').placeholder='HRMS (ESI) m/z: [M + Na]+ Calcd for C6H12O6Na 203.0526; Found 203.0524.';
  renderResults();renderCalc();renderBatch();renderCheck();
 }
-// links back to the personal pages go to the page in this language (English pages are in ../en/)
-function syncLangLinks(){for(const a of document.querySelectorAll('a[href]')){const h=a.getAttribute('href');if(!h||/^[a-z][a-z0-9+.-]*:/i.test(h)||h.startsWith('#'))continue;const [pq,frag]=h.split('#');const [path,q]=pq.split('?');if(!/\.html$/.test(path))continue;
- const home=/^\.\.\/(?:en\/)?(index|research|publications|tools)\.html$/.exec(path);if(home){a.dataset.home=home[1];a.setAttribute('href',`../${lang==='en'?'en/':''}${home[1]}.html${frag?'#'+frag:''}`);continue;}
- const ps=new URLSearchParams(q||'');ps.set('lang',lang);a.setAttribute('href',`${path}?${ps}${frag?'#'+frag:''}`);}}
-function setLanguage(value){cancel();lang=value;try{localStorage.setItem('ym-language',value);}catch(e){}try{const u=new URL(location.href);u.searchParams.set('lang',value);history.replaceState(null,'',u);}catch(e){}syncLangLinks();$('searchStatus').textContent='';translate();}
+function setLanguage(value){if(value===lang)return;try{localStorage.setItem('ym-language',value);}catch(e){}location.href=otherPage(value);}
 $('langJa').onclick=()=>setLanguage('ja');$('langEn').onclick=()=>setLanguage('en');
-translate();syncLangLinks();
+translate();
 
 // ---------- saved settings (this browser only) and inputs kept in the address ----------
 const STORE='hrms-calc-settings',DEFAULT_MAX={C:30,H:60,O:20};

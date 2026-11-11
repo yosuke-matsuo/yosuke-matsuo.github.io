@@ -45,12 +45,6 @@ if (document.querySelector('link[rel="alternate"][hreflang="en"]')) {
       location.href = other(lang);
     });
   });
-  // HRMS Calc opens in the language of this page
-  document.querySelectorAll('a[href*="hrms-calc/"]').forEach(a => {
-    const h = a.getAttribute('href'), [pathq, frag] = h.split('#'), [path, q] = pathq.split('?');
-    const ps = new URLSearchParams(q || ''); ps.set('lang', pageLang);
-    a.setAttribute('href', `${path}?${ps}${frag ? '#' + frag : ''}`);
-  });
 } else {
   // a page without an English version (404) switches in place
   buttons.forEach(b => b.addEventListener('click', () => {
