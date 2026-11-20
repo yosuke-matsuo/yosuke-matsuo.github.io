@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<!-- English page generated from ../../gaussian/errors-ts.html by _dev/build_en.py. Edit the Japanese page and run the script. -->
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="description" content="Decisions and rerun inputs when a transition-state search stops." data-ja="遷移状態探索が止まったときの判断と再計算入力。" data-en="Decisions and rerun inputs when a transition-state search stops."/>
+<link rel="canonical" href="https://yosuke-matsuo.github.io/en/gaussian/errors-ts.html"/>
+<link rel="alternate" hreflang="ja" href="https://yosuke-matsuo.github.io/gaussian/errors-ts.html"/>
+<link rel="alternate" hreflang="en" href="https://yosuke-matsuo.github.io/en/gaussian/errors-ts.html"/>
+<link rel="alternate" hreflang="x-default" href="https://yosuke-matsuo.github.io/gaussian/errors-ts.html"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Yosuke Matsuo（松尾洋介）"/>
+<meta property="og:title" content="TS errors | Gaussian guide"/>
+<meta property="og:description" content="Decisions and rerun inputs when a transition-state search stops." data-ja="遷移状態探索が止まったときの判断と再計算入力。" data-en="Decisions and rerun inputs when a transition-state search stops."/>
+<meta property="og:url" content="https://yosuke-matsuo.github.io/en/gaussian/errors-ts.html"/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:image" content="https://yosuke-matsuo.github.io/images/og-image.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="color-scheme" content="light"/>
+<title data-ja="TSエラー｜Gaussian入門" data-en="TS errors | Gaussian guide">TS errors | Gaussian guide</title>
+<link rel="stylesheet" href="../../styles.css?v=20261121-1"/>
+<script defer src="../../app.js?v=20261121-1"></script>
+</head>
+<body>
+<a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">Skip to content</a>
+<header class="site-header">
+<a class="brand" href="../index.html">Yosuke Matsuo</a>
+<nav class="primary-nav" aria-label="Main"><a href="../research.html" data-ja="研究内容" data-en="Research">Research</a><a href="../publications.html" data-ja="業績" data-en="Publications">Publications</a><a href="../tools.html" data-ja="ツール" data-en="Tools">Tools</a><a aria-current="location" href="./index.html" data-ja="Gaussian入門" data-en="Gaussian guide">Gaussian guide</a></nav>
+<div class="language-switch" role="group" aria-label="Language"><button type="button" data-language="ja" lang="ja" aria-pressed="false">日本語</button><button type="button" data-language="en" lang="en" aria-pressed="true">English</button></div>
+</header>
+<main class="page-shell guide" id="main">
+<div class="page-body">
+<section class="intro"><nav aria-label="Breadcrumb" class="breadcrumb"><a data-ja="Gaussian入門" data-en="Gaussian guide" href="./index.html">Gaussian guide</a> / <a data-ja="Gaussianのエラー対応" data-en="Troubleshooting Gaussian errors" href="./troubleshooting.html">Troubleshooting Gaussian errors</a></nav><h1 data-en="TS errors" data-ja="TSエラー">TS errors</h1><p data-en="Decisions and rerun inputs when a transition-state search stops." data-ja="遷移状態探索が止まったときの判断と再計算入力。" class="lead">Decisions and rerun inputs when a transition-state search stops.</p></section>
+<nav aria-label="On this page" class="section-nav"><a href="#ts-errors" data-ja="TS探索のエラー" data-en="TS search errors">TS search errors</a><a href="#recipes" data-ja="再計算入力の例" data-en="Example rerun inputs">Example rerun inputs</a><a href="#series" data-ja="再探索の結果の比べ方" data-en="Comparing the retries">Comparing the retries</a></nav>
+<section class="content-section reading" id="ts-errors">
+<h2 data-en="TS search errors" data-ja="TS探索のエラー">TS search errors</h2>
+<article class="error-entry"><h3 data-en="Wrong number of negative eigenvalues" data-ja="負の固有値の数が合わない" id="eigen">Wrong number of negative eigenvalues</h3><pre class="error-marker" translate="no" lang="en">Wrong number of Negative eigenvalues: Desired= 1 Actual= 2</pre><p><strong data-en="Cause: " data-ja="原因：">Cause: </strong><span data-en="The Hessian during the TS search has a second negative curvature besides the reaction direction. This describes the search in progress; it is separate from the number of imaginary frequencies in the Freq after convergence." data-ja="TS探索中のヘシアンに、反応方向以外にもう1つ負の曲率があります。探索途中の状態なので、収束後のFreqで見る虚振動の数とは別のものです。">The Hessian during the TS search has a second negative curvature besides the reaction direction. This describes the search in progress; it is separate from the number of imaginary frequencies in the Freq after convergence.</span></p><strong data-en="What to do" data-ja="対処" class="action-label">What to do</strong><ol class="compact-list">
+<li data-en="Check the bond distances of the TS guess, the orientation of the reacting atoms and atom clashes. A poor guess is the most common cause." data-ja="TS候補の結合距離、反応する原子の向き、原子の衝突を確認します。候補構造が悪いことが最も多い原因です。">Check the bond distances of the TS guess, the orientation of the reacting atoms and atom clashes. A poor guess is the most common cause.</li>
+<li data-en="If the guess is reasonable and the second eigenvalue is very small (|value| ≤ 1×10⁻⁴), run the short NoEigenTest probe below once." data-ja="候補が妥当で、2番目の固有値がごく小さい（|値| ≤ 1×10⁻⁴）なら、下の「短いNoEigenTest試行」を1回だけ行います。">If the guess is reasonable and the second eigenvalue is very small (|value| ≤ 1×10⁻⁴), run the short NoEigenTest probe below once.</li>
+<li data-en="If the direction is unclear or the extra curvature is large, run a mode-check Freq at the same geometry, identify the extra mode and displace ± along it." data-ja="方向が分からない、または追加の曲率が大きい場合は、同じ構造で「モード確認用Freq」を行い、余分なモードを見つけて±変位します。">If the direction is unclear or the extra curvature is large, run a mode-check Freq at the same geometry, identify the extra mode and displace ± along it.</li>
+</ol></article>
+<article class="error-entry"><h3 data-en="TS step limit" data-ja="TSの回数上限" id="ts-steps">TS step limit</h3><pre class="error-marker" translate="no" lang="en">Number of steps exceeded,  NStep= 100</pre><p><strong data-en="Cause: " data-ja="原因：">Cause: </strong><span data-en="The TS search did not converge within the cycle limit." data-ja="TS探索が指定回数で収束していません。">The TS search did not converge within the cycle limit.</span></p><strong data-en="What to do" data-ja="対処" class="action-label">What to do</strong><ol class="compact-list">
+<li data-en="Look at the trend of forces, displacements and the reacting bond distances in a viewer such as GaussView. In a TS search the energy can rise, so judge by these trends rather than by energy alone." data-ja="GaussViewなどのビューアーで力・変位・反応する結合の距離の推移を見ます。TS探索ではエネルギーが上がることもあるので、エネルギーだけでなく、これらの推移で判断します。">Look at the trend of forces, displacements and the reacting bond distances in a viewer such as GaussView. In a TS search the energy can rise, so judge by these trends rather than by energy alone.</li>
+<li data-en="If the reaction geometry is intact and converging, continue from the last computed geometry with Opt=(TS,CalcFC,MaxCycles=100)." data-ja="反応構造が保たれ、収束に向かっているなら、最後に計算した構造から Opt=(TS,CalcFC,MaxCycles=100) で続行します。">If the reaction geometry is intact and converging, continue from the last computed geometry with Opt=(TS,CalcFC,MaxCycles=100).</li>
+<li data-en="If it oscillates strongly, add MaxStep=2–5. If the reaction geometry has fallen apart, rebuild the guess." data-ja="往復が大きいなら MaxStep=2〜5 を加えます。反応構造が崩れていれば候補構造から作り直します。">If it oscillates strongly, add MaxStep=2–5. If the reaction geometry has fallen apart, rebuild the guess.</li>
+</ol></article>
+</section>
+<section class="content-section reading" id="recipes">
+<h2 data-en="Example rerun inputs" data-ja="再計算入力の例">Example rerun inputs</h2>
+<h3 data-en="Short NoEigenTest probe" data-ja="短いNoEigenTest試行" id="gjf-ts-probe">Short NoEigenTest probe</h3>
+<p data-en="Conditions: direct TS search, Desired=1 Actual=2, second eigenvalue with |value| ≤ 1×10⁻⁴, reasonable reaction geometry. Run only 5 cycles with the eigenvalue test temporarily off." data-ja="条件：直接TS探索、Desired=1 Actual=2、2番目の固有値の絶対値が 1×10⁻⁴ 以下、反応構造が妥当。5サイクルだけ実行し、固有値検査を一時的に外して様子を見ます。">Conditions: direct TS search, Desired=1 Actual=2, second eigenvalue with |value| ≤ 1×10⁻⁴, reasonable reaction geometry. Run only 5 cycles with the eigenvalue test temporarily off.</p>
+<pre class="input-block" translate="no" lang="en">%chk=ts_probe.chk
+#p B3LYP/6-31G(d) SCRF=(SMD,Solvent=Methanol)
+ Opt=(TS,CalcFC,NoEigenTest,MaxStep=2,MaxCycles=5)</pre>
+<p data-en="If you have already tried it once for this TS search, go to the mode-check Freq." data-ja="同じTS探索ですでに1回試した場合は、モード確認用Freqへ進みます。">If you have already tried it once for this TS search, go to the mode-check Freq.</p>
+<h3 data-en="Return to the eigenvalue test" data-ja="固有値検査への復帰" id="gjf-ts-return">Return to the eigenvalue test</h3>
+<p data-en="From the last computed geometry of the probe, remove NoEigenTest and restart with a fresh CalcFC." data-ja="短い試行の最後に計算した構造から、NoEigenTest を外し、新しい CalcFC で再開します。">From the last computed geometry of the probe, remove NoEigenTest and restart with a fresh CalcFC.</p>
+<pre class="input-block" translate="no" lang="en">%chk=ts_checked.chk
+#p B3LYP/6-31G(d) SCRF=(SMD,Solvent=Methanol)
+ Opt=(TS,CalcFC,MaxStep=2,MaxCycles=100)</pre>
+<h3 data-en="Mode-check Freq (identifying the extra mode)" data-ja="モード確認用Freq（振動方向の確認）" id="gjf-ts-modes">Mode-check Freq (identifying the extra mode)</h3>
+<p data-en="The structure need not be converged. Run Freq alone at the stopped geometry to obtain complete vibrational modes, then distinguish the reaction mode from the extra mode in a viewer such as GaussView." data-ja="未収束でも構いません。止まった構造で Freq だけを実行し、完全な振動モードを得て、GaussViewなどのビューアーで反応モードと余分なモードを見分けます。">The structure need not be converged. Run Freq alone at the stopped geometry to obtain complete vibrational modes, then distinguish the reaction mode from the extra mode in a viewer such as GaussView.</p>
+<pre class="input-block" translate="no" lang="en">%chk=ts_modes.chk
+#p B3LYP/6-31G(d) SCRF=(SMD,Solvent=Methanol)
+ Freq</pre>
+<p><span data-lang="en">Create two structures displaced ±0.05 Å along the extra mode and start a new TS search from each with Opt=(TS,CalcFC). See <a href="./reaction.html#recovery">TS re-search</a> for the procedure.</span></p>
+<p class="note"><span data-lang="en">Below the route line, continue with a blank line, title, blank line, charge/multiplicity, coordinates and a final blank line (<a href="./start.html#input">input anatomy</a>). Keyword meanings are in the <a href="./keywords.html">keyword reference</a>. Match the functional, basis set and solvent of the original job.</span></p>
+</section>
+<section class="content-section reading" id="series">
+<h2 data-en="Comparing the retries" data-ja="再探索の結果の比べ方">Comparing the retries</h2>
+<p data-en="For the original TS search and the + and − retries, tabulate the mode used, the displacement, the reacting bond distances and whether each converged, and decide which structure to take to the final Freq and IRC." data-ja="元のTS探索と、＋変位・−変位の再探索について、使ったモード・変位量・反応する結合の距離・収束したかどうかを表にまとめ、最終Freq・IRCへ進める構造を決めます。">For the original TS search and the + and − retries, tabulate the mode used, the displacement, the reacting bond distances and whether each converged, and decide which structure to take to the final Freq and IRC.</p>
+</section>
+<aside class="callout callout-caution">
+<strong data-en="Notes" data-ja="注意" class="callout-title">Notes</strong>
+<ul class="callout-list">
+<li data-en="A Freq at an unconverged geometry is for finding directions only; do not use it as TS proof, for thermochemistry or as an IRC start. Run a final Freq after convergence." data-ja="未収束構造でのFreqは方向を調べるためのもので、TSの証明・熱化学値・IRCの出発点には使いません。収束後にあらためて最終Freqを行います。">A Freq at an unconverged geometry is for finding directions only; do not use it as TS proof, for thermochemistry or as an IRC start. Run a final Freq after convergence.</li>
+</ul>
+</aside>
+<section class="content-section reading" id="related">
+<h2 data-en="Related pages" data-ja="関連ページ">Related pages</h2>
+<ul class="compact-list">
+<li><a href="./troubleshooting.html" data-ja="エラー対応トップ" data-en="Troubleshooting index">Troubleshooting index</a></li>
+<li><a href="./reaction.html#recovery" data-ja="TS再探索・振動モード変位" data-en="TS re-search and mode displacement">TS re-search and mode displacement</a></li>
+<li><a href="./errors-opt-scf.html#scf" data-ja="SCFの収束失敗" data-en="SCF convergence failure">SCF convergence failure</a></li>
+</ul>
+</section>
+</div>
+</main>
+<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月21日" data-en="Last updated: 21 November 2026" class="copyright">Last updated: 21 November 2026</p></footer>
+</body>
+</html>

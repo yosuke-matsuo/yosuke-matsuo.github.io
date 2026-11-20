@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="description" content="カテキンで、入力の書き方から出力の確認までを一度に体験します。" data-ja="カテキンで、入力の書き方から出力の確認までを一度に体験します。" data-en="Learn input, execution and output checking in one pass, with catechin."/>
+<link rel="canonical" href="https://yosuke-matsuo.github.io/gaussian/start.html"/>
+<link rel="alternate" hreflang="ja" href="https://yosuke-matsuo.github.io/gaussian/start.html"/>
+<link rel="alternate" hreflang="en" href="https://yosuke-matsuo.github.io/en/gaussian/start.html"/>
+<link rel="alternate" hreflang="x-default" href="https://yosuke-matsuo.github.io/gaussian/start.html"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Yosuke Matsuo（松尾洋介）"/>
+<meta property="og:title" content="はじめてのGaussian計算｜Gaussian入門"/>
+<meta property="og:description" content="カテキンで、入力の書き方から出力の確認までを一度に体験します。" data-ja="カテキンで、入力の書き方から出力の確認までを一度に体験します。" data-en="Learn input, execution and output checking in one pass, with catechin."/>
+<meta property="og:url" content="https://yosuke-matsuo.github.io/gaussian/start.html"/>
+<meta property="og:locale" content="ja_JP"/>
+<meta property="og:image" content="https://yosuke-matsuo.github.io/images/og-image.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="color-scheme" content="light"/>
+<title data-ja="はじめてのGaussian計算｜Gaussian入門" data-en="Your first Gaussian calculation | Gaussian guide">はじめてのGaussian計算｜Gaussian入門</title>
+<link rel="stylesheet" href="../styles.css?v=20261121-1"/>
+<script defer src="../app.js?v=20261121-1"></script>
+</head>
+<body>
+<a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">本文へ移動</a>
+<header class="site-header">
+<a class="brand" href="../index.html">Yosuke Matsuo</a>
+<nav class="primary-nav" aria-label="Main"><a href="../research.html" data-ja="研究内容" data-en="Research">研究内容</a><a href="../publications.html" data-ja="業績" data-en="Publications">業績</a><a href="../tools.html" data-ja="ツール" data-en="Tools">ツール</a><a aria-current="location" href="./index.html" data-ja="Gaussian入門" data-en="Gaussian guide">Gaussian入門</a></nav>
+<div class="language-switch" role="group" aria-label="Language"><button type="button" data-language="ja" lang="ja" aria-pressed="true">日本語</button><button type="button" data-language="en" lang="en" aria-pressed="false">English</button></div>
+</header>
+<main class="page-shell guide" id="main">
+<div class="page-body">
+<section class="intro"><nav aria-label="Breadcrumb" class="breadcrumb"><a data-ja="Gaussian入門" data-en="Gaussian guide" href="./index.html">Gaussian入門</a></nav><h1 data-en="Your first Gaussian calculation" data-ja="はじめてのGaussian計算">はじめてのGaussian計算</h1><p data-en="Learn input, execution and output checking in one pass, with catechin." data-ja="カテキンで、入力の書き方から出力の確認までを一度に体験します。" class="lead">カテキンで、入力の書き方から出力の確認までを一度に体験します。</p></section>
+<nav aria-label="On this page" class="section-nav"><a href="#environment" data-ja="0. 環境を準備する" data-en="0. Set up an environment">0. 環境を準備する</a><a href="#input" data-ja="1. 入力ファイルの中身" data-en="1. Anatomy of an input file">1. 入力ファイルの中身</a><a href="#example" data-ja="2. 完成した入力：(+)-カテキン" data-en="2. Complete input: (+)-catechin">2. 完成した入力：(+)-カテキン</a><a href="#run" data-ja="3. 実行する" data-en="3. Run it">3. 実行する</a><a href="#output" data-ja="4. 出力の見方：3か所だけ確認する" data-en="4. Reading the output: check three places">4. 出力の見方：3か所だけ確認する</a><a href="#errors" data-ja="5. 止まったとき：最初によく出る3つのエラー" data-en="5. When it stops: three common first errors">5. 止まったとき：最初によく出る3つのエラー</a><a href="#next" data-ja="次のステップ" data-en="Next steps">次のステップ</a></nav>
+<section class="content-section reading" id="about">
+
+<p><span data-lang="ja">題材は、茶などに含まれるカテキン類の一つ、(+)-カテキン（C<sub>15</sub>H<sub>14</sub>O<sub>6</sub>）です。</span><template data-lang="en"><span data-lang="en" hidden>The subject is (+)-catechin (C<sub>15</sub>H<sub>14</sub>O<sub>6</sub>), one of the catechins found in tea and other plants.</span></template></p>
+<p><span data-lang="ja">必要なもの：Gaussianを実行できる環境（0で説明）と、テキストエディター。</span><template data-lang="en"><span data-lang="en" hidden>You need an environment that can run Gaussian (see step 0) and a text editor.</span></template></p>
+</section>
+<section class="content-section reading" id="environment">
+<h2 data-en="0. Set up an environment" data-ja="0. 環境を準備する">0. 環境を準備する</h2>
+<p data-en="Gaussian is commercial software. First find out where you can run it." data-ja="Gaussianは有償ソフトです。まず、計算を実行できる場所を確認します。">Gaussianは有償ソフトです。まず、計算を実行できる場所を確認します。</p>
+<div class="table-wrap"><table><thead><tr>
+<th data-en="Option" data-ja="選択肢" scope="col">選択肢</th>
+<th data-en="Details" data-ja="内容" scope="col">内容</th>
+<th data-en="Cost" data-ja="費用" scope="col">費用</th></tr></thead><tbody>
+<tr>
+<td data-en="Your institution&#x27;s license or machines" data-ja="所属機関のライセンス・計算機">所属機関のライセンス・計算機</td>
+<td data-en="Many universities and institutes hold a site license or run Gaussian on shared machines." data-ja="大学・研究所がサイトライセンスや共用計算機を持っている場合。">大学・研究所がサイトライセンスや共用計算機を持っている場合。</td>
+<td data-en="Check with your institution" data-ja="要確認">要確認</td>
+</tr>
+<tr>
+<td><p><span data-lang="ja">自然科学研究機構 岡崎共通研究施設 計算科学研究センター（RCCS）<br><a href="https://ccportal.ims.ac.jp/" target="_blank" rel="noopener noreferrer">ccportal.ims.ac.jp</a></span><template data-lang="en"><span data-lang="en" hidden>Research Center for Computational Science (RCCS), Okazaki, NINS<br><a href="https://ccportal.ims.ac.jp/" target="_blank" rel="noopener noreferrer">ccportal.ims.ac.jp</a></span></template></p></td>
+<td data-en="The shared supercomputer for molecular science." data-ja="分子科学分野の共用スーパーコンピュータ。">分子科学分野の共用スーパーコンピュータ。</td>
+<td data-en="Free (application and annual report required)" data-ja="無料（申請・年度ごとの報告が必要）">無料（申請・年度ごとの報告が必要）</td>
+</tr>
+<tr>
+<td><p><span data-lang="ja">大学の共同利用スーパーコンピュータ<br>例：<a href="https://www.cc.kyushu-u.ac.jp/scp/" target="_blank" rel="noopener noreferrer">九州大学 情報基盤研究開発センター（玄界）</a>、<a href="https://www.hpc.cmc.osaka-u.ac.jp/" target="_blank" rel="noopener noreferrer">大阪大学 D3センター</a>、<a href="https://www.ss.cc.tohoku.ac.jp/" target="_blank" rel="noopener noreferrer">東北大学 サイバーサイエンスセンター</a>、<a href="https://www.t4.cii.isct.ac.jp/" target="_blank" rel="noopener noreferrer">東京科学大学 情報基盤センター（TSUBAME4.0）</a></span><template data-lang="en"><span data-lang="en" hidden>University supercomputer centers open to external users<br>e.g. <a href="https://www.cc.kyushu-u.ac.jp/scp/" target="_blank" rel="noopener noreferrer">Kyushu University RIIT (Genkai)</a>, <a href="https://www.hpc.cmc.osaka-u.ac.jp/" target="_blank" rel="noopener noreferrer">The University of Osaka D3 Center</a>, <a href="https://www.ss.cc.tohoku.ac.jp/" target="_blank" rel="noopener noreferrer">Tohoku University Cyberscience Center</a>, <a href="https://www.t4.cii.isct.ac.jp/" target="_blank" rel="noopener noreferrer">Institute of Science Tokyo CII (TSUBAME4.0)</a></span></template></p></td>
+<td data-en="Open to researchers from other institutions as national joint-use facilities." data-ja="全国共同利用施設として学外の研究者も利用できます。">全国共同利用施設として学外の研究者も利用できます。</td>
+<td data-en="Paid (usage fees)" data-ja="有償（利用負担金）">有償（利用負担金）</td>
+</tr>
+</tbody></table></div>
+<p data-en="This guide is written for Gaussian 16. Defaults, options and output formats may differ in Gaussian 09 and other versions; check the manual for the version you use." data-ja="Gaussian入門は Gaussian 16 を対象としています。Gaussian 09 やその他の版では、既定値・オプション・出力の書式が異なる場合があります。使用する版のマニュアルで確認してください。" class="note">Gaussian入門は Gaussian 16 を対象としています。Gaussian 09 やその他の版では、既定値・オプション・出力の書式が異なる場合があります。使用する版のマニュアルで確認してください。</p>
+<p data-en="The workflow is the same everywhere: write the input file (.gjf/.com) locally, send it to the machine and run it, then bring the output (.log/.out) back to inspect." data-ja="どの環境でも、計算の流れは同じです。手元で入力ファイル（.gjf/.com）を作り、計算機に送って実行し、出力ファイル（.log/.out）を手元に戻して確認します。">どの環境でも、計算の流れは同じです。手元で入力ファイル（.gjf/.com）を作り、計算機に送って実行し、出力ファイル（.log/.out）を手元に戻して確認します。</p>
+</section>
+<section class="content-section reading" id="input">
+<h2 data-en="1. Anatomy of an input file" data-ja="1. 入力ファイルの中身">1. 入力ファイルの中身</h2>
+<p data-en="A Gaussian input is a plain text file (.gjf or .com). It consists of five parts, top to bottom, with one blank line after the route line, after the title and after the coordinates." data-ja="Gaussianの入力は普通のテキストファイルです（拡張子 .gjf または .com）。上から順に5つの部品を書きます。空行は、ルート行の後・タイトルの後・座標の後に1行ずつ入れます。">Gaussianの入力は普通のテキストファイルです（拡張子 .gjf または .com）。上から順に5つの部品を書きます。空行は、ルート行の後・タイトルの後・座標の後に1行ずつ入れます。</p>
+<pre class="input-block keep-lines" translate="no" data-lang="ja">%nprocshared=8                                    ← (1) Link 0: コア数・メモリ・chkファイル名
+%mem=16GB
+%chk=catechin_opt_freq.chk
+#p B3LYP/6-31G(d) Opt Freq                         ← (2) ルート行: 計算方法と計算の種類
+                                                   ← 空行
+(+)-catechin  Opt+Freq                             ← (3) タイトル: 自由記述
+                                                   ← 空行
+0 1                                                ← (4) 電荷 多重度
+C   -1.692270  -0.992002   1.262321                ← (5) 座標: 元素記号 x y z（Å）
+C   -0.275413  -1.265444   0.763977
+ ...
+                                                   ← 最後に空行</pre><template data-lang="en"><pre class="input-block keep-lines" translate="no" data-lang="en" hidden>%nprocshared=8                                    ← (1) Link 0: cores, memory, checkpoint name
+%mem=16GB
+%chk=catechin_opt_freq.chk
+#p B3LYP/6-31G(d) Opt Freq                         ← (2) route line: method and job type
+                                                   ← blank line
+(+)-catechin  Opt+Freq                             ← (3) title: free text
+                                                   ← blank line
+0 1                                                ← (4) charge multiplicity
+C   -1.692270  -0.992002   1.262321                ← (5) coordinates: symbol x y z (Å)
+C   -0.275413  -1.265444   0.763977
+ ...
+                                                   ← blank line at the end</pre></template>
+<div class="table-wrap"><table><thead><tr>
+<th data-en="Part" data-ja="部品" scope="col">部品</th>
+<th data-en="Contents" data-ja="記載内容" scope="col">記載内容</th>
+
+</tr></thead><tbody>
+<tr>
+<td data-en="(1) Link 0" data-ja="(1) Link 0">(1) Link 0</td>
+<td data-en="Lines starting with %: number of cores (%nprocshared), memory (%mem) and checkpoint name (%chk). Set cores and memory for the machine you run on." data-ja="%で始まる行。使うコア数（%nprocshared）、メモリ（%mem）、チェックポイントファイル名（%chk）。コア数とメモリは実行する計算機に合わせます。">%で始まる行。使うコア数（%nprocshared）、メモリ（%mem）、チェックポイントファイル名（%chk）。コア数とメモリは実行する計算機に合わせます。</td>
+
+</tr>
+<tr>
+<td data-en="(2) Route line" data-ja="(2) ルート行">(2) ルート行</td>
+<td data-en="Line starting with #. Method/basis set and job type (Opt, Freq, ...)." data-ja="#で始まる行。汎関数/基底関数と、計算の種類（Opt, Freq など）を書きます。">#で始まる行。汎関数/基底関数と、計算の種類（Opt, Freq など）を書きます。</td>
+
+</tr>
+<tr>
+<td data-en="(3) Title" data-ja="(3) タイトル">(3) タイトル</td>
+<td data-en="A free-text note; it does not affect the calculation." data-ja="メモ。計算には影響しません。">メモ。計算には影響しません。</td>
+
+</tr>
+<tr>
+<td data-en="(4) Charge and multiplicity" data-ja="(4) 電荷 多重度">(4) 電荷 多重度</td>
+<td data-en="A neutral closed-shell molecule is “0 1”; a singly charged cation such as a protonated molecule is “1 1”; a singly charged anion such as a deprotonated molecule is “-1 1”; a neutral radical (doublet) is “0 2”." data-ja="中性の閉殻分子なら「0 1」。プロトン付加体などの一価の陽イオンは「1 1」、脱プロトン体などの一価の陰イオンは「-1 1」、中性のラジカル（二重項）は「0 2」。">中性の閉殻分子なら「0 1」。プロトン付加体などの一価の陽イオンは「1 1」、脱プロトン体などの一価の陰イオンは「-1 1」、中性のラジカル（二重項）は「0 2」。</td>
+
+</tr>
+<tr>
+<td data-en="(5) Coordinates" data-ja="(5) 座標">(5) 座標</td>
+<td data-en="One atom per line: element symbol and x, y, z in Å." data-ja="1行に1原子。元素記号とx, y, z（Å）。">1行に1原子。元素記号とx, y, z（Å）。</td>
+
+</tr>
+</tbody></table></div>
+<h3 data-en="Reading the route line" data-ja="ルート行の読み方">ルート行の読み方</h3>
+<ul class="compact-list">
+<li data-en="#p — output verbosity. #n (or just #) is normal, #p adds per-step information, #t is terse. #p is easiest to check while learning." data-ja="#p — 出力の詳しさ。#n（または # だけ）が標準、#p は各ステップの情報を追加、#t は最小限。">#p — 出力の詳しさ。#n（または # だけ）が標準、#p は各ステップの情報を追加、#t は最小限。</li>
+<li data-en="B3LYP — the functional: how electron–electron interactions are approximated." data-ja="B3LYP — 汎関数。電子同士の相互作用の近似の仕方です。">B3LYP — 汎関数。電子同士の相互作用の近似の仕方です。</li>
+<li data-en="6-31G(d) — the basis set: the functions used to describe the electron distribution." data-ja="6-31G(d) — 基底関数。電子の分布を表す関数の組です。">6-31G(d) — 基底関数。電子の分布を表す関数の組です。</li>
+<li data-en="Opt Freq — optimize the geometry, then compute vibrational frequencies at the same geometry." data-ja="Opt Freq — 構造を最適化してから、同じ構造で振動数を計算します。">Opt Freq — 構造を最適化してから、同じ構造で振動数を計算します。</li>
+</ul>
+<p><span data-lang="ja">用語は<a href="./glossary.html">用語集</a>に、方法の選び方は<a href="./workflow.html#methods">計算ガイド</a>にまとめています。</span><template data-lang="en"><span data-lang="en" hidden>Terms are collected in the <a href="./glossary.html">glossary</a>; how to choose methods is in the <a href="./workflow.html#methods">Calculation guide</a>.</span></template></p>
+</section>
+<section class="content-section reading" id="example">
+<h2 data-en="2. Complete input: (+)-catechin" data-ja="2. 完成した入力：(+)-カテキン">2. 完成した入力：(+)-カテキン</h2>
+<p data-en="The input below runs as is. The coordinates are an MMFF94 starting geometry of (2R,3S)-(+)-catechin." data-ja="以下はそのまま実行できる入力です。座標は分子力学（MMFF94）で作った出発構造で、立体配置は(2R,3S)の(+)-カテキンです。">以下はそのまま実行できる入力です。座標は分子力学（MMFF94）で作った出発構造で、立体配置は(2R,3S)の(+)-カテキンです。</p>
+<pre class="input-block keep-lines" translate="no" lang="en">%nprocshared=8
+%mem=16GB
+%chk=catechin_opt_freq.chk
+#p B3LYP/6-31G(d) Opt Freq
+
+(+)-catechin  Opt+Freq  B3LYP/6-31G(d)  gas phase
+
+0 1
+C     -1.692270    -0.992002     1.262321
+C     -0.275413    -1.265444     0.763977
+C      0.359996     0.075278     0.347238
+O     -0.362839     0.709751    -0.719141
+C     -1.721402     0.750410    -0.559584
+C     -2.399931     1.625053    -1.411240
+C     -3.782927     1.733015    -1.321198
+C     -4.497826     0.980308    -0.398361
+C     -3.812279     0.100922     0.437140
+C     -2.421158    -0.039273     0.359634
+O     -4.496417    -0.647655     1.353807
+O     -4.483964     2.579895    -2.128671
+C      1.794961    -0.119185    -0.127505
+C      2.866932     0.222228     0.717316
+C      4.174249     0.013333     0.290343
+C      4.427791    -0.533543    -0.964179
+C      3.386975    -0.877698    -1.811742
+C      2.070836    -0.671661    -1.393503
+O      5.714705    -0.737781    -1.371761
+O      5.249491     0.327216     1.075158
+O      0.455570    -1.905857     1.816500
+H     -1.660785    -0.569950     2.275289
+H     -2.226434    -1.947366     1.336187
+H     -0.324185    -1.953600    -0.090252
+H      0.375749     0.768255     1.200550
+H     -1.834141     2.213394    -2.126717
+H     -5.576000     1.089550    -0.346669
+H     -5.442856    -0.438097     1.284796
+H     -3.859719     3.033391    -2.719896
+H      2.667981     0.641557     1.699693
+H      3.596981    -1.299968    -2.789756
+H      1.256500    -0.938557    -2.065200
+H      6.260965    -0.419339    -0.625759
+H      4.919057     0.716932     1.902900
+H      1.291806    -2.223515     1.428757
+
+</pre>
+<h3 data-en="Making one for your own molecule" data-ja="自分の分子で作るには">自分の分子で作るには</h3>
+<p data-en="One example workflow." data-ja="流れの一例です。">流れの一例です。</p>
+<ol class="step-list">
+<li><strong data-en="Draw the structure in ChemDraw (or the free ReShiki) and save as .mol" data-ja="ChemDraw（無料ならReShiki）で構造式を描き、.mol で保存する" class="step-title">ChemDraw（無料ならReShiki）で構造式を描き、.mol で保存する</strong><div class="step-body"><p><span data-lang="ja">くさび・破線で立体配置を指定しておきます。ソフトの入手先は<a href="./software.html#chemdraw">計算化学ソフト</a>にあります。</span><template data-lang="en"><span data-lang="en" hidden>Specify stereochemistry with wedge/hash bonds. Where to get the software is listed under <a href="./software.html#chemdraw">Computational chemistry software</a>.</span></template></p></div></li>
+<li><strong data-en="Open in Avogadro, make it 3D, check stereochemistry and optimize lightly" data-ja="Avogadroで3D化し、立体配置を確認して軽く最適化する" class="step-title">Avogadroで3D化し、立体配置を確認して軽く最適化する</strong><div class="step-body"><p data-en="Open the .mol in Avogadro 2 and add hydrogens if any are missing. Choose the MMFF94 force field, optimize the structure, check that the stereochemistry is correct, and save as .mol2." data-ja="Avogadro 2 で .mol を開き、水素が足りなければ追加します。力場に MMFF94 を選んで構造を最適化し、立体配置が意図どおりかを確認して、.mol2 で保存します。">Avogadro 2 で .mol を開き、水素が足りなければ追加します。力場に MMFF94 を選んで構造を最適化し、立体配置が意図どおりかを確認して、.mol2 で保存します。</p></div></li>
+<li><strong data-en="Run an MMFF conformer search in Spartan" data-ja="SpartanでMMFF配座探索を行う" class="step-title">SpartanでMMFF配座探索を行う</strong><div class="step-body"><p><span data-lang="ja">.mol2 を読み込み、Calculations → Conformer Distribution。得られた配座が<a href="./conformers.html">配座と安定構造</a>の出発点です。最初の練習では最低エネルギーの1配座だけを使います。</span><template data-lang="en"><span data-lang="en" hidden>Load the .mol2 and run Calculations → Conformer Distribution. The conformers are the starting point of <a href="./conformers.html">Conformers and stable structures</a>. For a first run, use only the lowest-energy one.</span></template></p></div></li>
+<li><strong data-en="Turn it into a Gaussian input" data-ja="Gaussian入力にする" class="step-title">Gaussian入力にする</strong><div class="step-body"><p data-en="Export coordinates from Spartan, or create the input with Input → Gaussian in Avogadro 2; write the job type, functional, basis set and solvent on the route line, and save the .gjf." data-ja="Spartan から座標を書き出すか、Avogadro 2 の Input → Gaussian で入力を作り、計算の種類・汎関数・基底関数・溶媒をルート行に書いて .gjf を保存します。">Spartan から座標を書き出すか、Avogadro 2 の Input → Gaussian で入力を作り、計算の種類・汎関数・基底関数・溶媒をルート行に書いて .gjf を保存します。</p></div></li>
+</ol>
+<p data-en="Check stereochemistry and charge before exporting." data-ja="立体化学と電荷は書き出す前に確認します。">立体化学と電荷は書き出す前に確認します。</p>
+</section>
+<section class="content-section reading" id="run">
+<h2 data-en="3. Run it" data-ja="3. 実行する">3. 実行する</h2>
+<p data-en="How you launch a job depends on the machine." data-ja="実行のしかたは計算機によって違います。">実行のしかたは計算機によって違います。</p>
+<pre class="input-block" translate="no" data-lang="ja"># Linuxで直接実行する場合
+g16 catechin_opt_freq.gjf
+
+# ジョブ管理システム（Slurmなど）がある場合は、利用する計算機の手順に従って投入
+# （run_g16.sh はその計算機で用意したジョブスクリプト）
+sbatch run_g16.sh
+
+# RCCS の場合
+g16sub catechin_opt_freq.gjf</pre><template data-lang="en"><pre class="input-block" translate="no" data-lang="en" hidden># Direct execution on Linux
+g16 catechin_opt_freq.gjf
+
+# With a job scheduler (e.g. Slurm), submit following the procedure of the machine you use
+# (run_g16.sh is a job script prepared for that machine)
+sbatch run_g16.sh
+
+# On RCCS
+g16sub catechin_opt_freq.gjf</pre></template>
+<p data-en="The output is written to catechin_opt_freq.log (.out on some systems). On shared machines, set %nprocshared and %mem to that machine&#x27;s rules (on RCCS, g16sub sets them from the resources requested at submission)." data-ja="出力は catechin_opt_freq.log（環境により .out）に書き出されます。共用計算機では %nprocshared と %mem の値をその計算機の規定に合わせます（RCCS の g16sub は、投入時の割り当てに合わせてこれらを設定します）。">出力は catechin_opt_freq.log（環境により .out）に書き出されます。共用計算機では %nprocshared と %mem の値をその計算機の規定に合わせます（RCCS の g16sub は、投入時の割り当てに合わせてこれらを設定します）。</p>
+</section>
+<section class="content-section reading" id="output">
+<h2 data-en="4. Reading the output: check three places" data-ja="4. 出力の見方：3か所だけ確認する">4. 出力の見方：3か所だけ確認する</h2>
+<p data-en="The output is long, but success is decided by three things. Use your text editor&#x27;s search." data-ja="出力は長いですが、成功したかどうかは次の3か所で分かります。テキストエディターの検索機能を使ってください。">出力は長いですが、成功したかどうかは次の3か所で分かります。テキストエディターの検索機能を使ってください。</p>
+<ol class="step-list">
+<li><strong data-en="Does it end with Normal termination?" data-ja="末尾に Normal termination があるか" class="step-title">末尾に Normal termination があるか</strong><div class="step-body"><pre class="input-block" translate="no" lang="en"> Normal termination of Gaussian 16 at ...</pre>
+<p data-en="With Opt Freq the frequency job follows the optimization, so this line appears twice. If you see Error termination instead, the cause is printed a few lines above it." data-ja="Opt Freq では最適化の後にFreqが走るので、この行は2回出ます。代わりに Error termination があれば、その数行上に原因が書かれています。">Opt Freq では最適化の後にFreqが走るので、この行は2回出ます。代わりに Error termination があれば、その数行上に原因が書かれています。</p></div></li>
+<li><strong data-en="Did the optimization converge?" data-ja="最適化が収束したか" class="step-title">最適化が収束したか</strong><div class="step-body"><pre class="input-block" translate="no" lang="en">         Item               Value     Threshold  Converged?
+ Maximum Force            0.000012     0.000450     YES
+ RMS     Force            0.000003     0.000300     YES
+ Maximum Displacement     0.000891     0.001800     YES
+ RMS     Displacement     0.000210     0.001200     YES
+ Predicted change in Energy=-1.234567D-08
+ Optimization completed.
+    -- Stationary point found.</pre>
+<p data-en="&quot;Stationary point found&quot; means converged (normally all four items are YES). The table is printed at every optimization cycle. With Opt Freq it is printed once more at the end of the frequency job; check that it is all YES there as well." data-ja="「Stationary point found」と出ていれば収束です（通常は4項目すべてが YES）。この表は最適化のサイクルごとに出ます。Opt Freq では振動数計算の最後にも同じ表が出るので、そこでも YES がそろっていることを確認します。">「Stationary point found」と出ていれば収束です（通常は4項目すべてが YES）。この表は最適化のサイクルごとに出ます。Opt Freq では振動数計算の最後にも同じ表が出るので、そこでも YES がそろっていることを確認します。</p></div></li>
+<li><strong data-en="Are there no imaginary frequencies?" data-ja="虚振動がないか" class="step-title">虚振動がないか</strong><div class="step-body"><pre class="input-block" translate="no" lang="en"> Frequencies --     35.1234     58.9012     84.5678
+ Red. masses --      3.4567      2.3456      4.5678</pre>
+<p data-en="If the values on the first Frequencies line are positive, the structure is a minimum. Even one negative value (e.g. -45.6) means it is not yet a minimum." data-ja="最初の Frequencies 行の値が正なら、安定構造（エネルギー極小）です。負の値（例：-45.6）が1つでもあれば、その構造はまだ極小ではありません。">最初の Frequencies 行の値が正なら、安定構造（エネルギー極小）です。負の値（例：-45.6）が1つでもあれば、その構造はまだ極小ではありません。</p>
+<p data-en="The Freq output also contains thermochemistry. The free energy used for conformer comparison is this line:" data-ja="Freqの出力には熱力学量も含まれます。配座比較に使う自由エネルギーは次の行です。">Freqの出力には熱力学量も含まれます。配座比較に使う自由エネルギーは次の行です。</p>
+<pre class="input-block" translate="no" lang="en"> Sum of electronic and thermal Free Energies=          -1066.123456</pre></div></li>
+</ol>
+</section>
+<section class="content-section reading" id="errors">
+<h2 data-en="5. When it stops: three common first errors" data-ja="5. 止まったとき：最初によく出る3つのエラー">5. 止まったとき：最初によく出る3つのエラー</h2>
+<div class="table-wrap"><table><thead><tr>
+<th data-en="Text in the output" data-ja="出力の文字列" scope="col">出力の文字列</th>
+<th data-en="Meaning" data-ja="意味" scope="col">意味</th>
+<th data-en="What to do" data-ja="対処" scope="col">対処</th></tr></thead><tbody>
+<tr>
+<td><pre class="input-block" translate="no" lang="en">Error termination via Lnk1e in .../l101.exe</pre></td>
+<td data-en="Input format error; the job stops before any calculation." data-ja="入力の書式エラー。計算が始まる前に止まります。">入力の書式エラー。計算が始まる前に止まります。</td>
+<td data-en="Check the blank lines, the charge/multiplicity line and the coordinate columns. Spelling errors on the route line stop in l1.exe." data-ja="空行の位置、電荷・多重度の行、座標の列数を確認します。ルート行の綴りの誤りは l1.exe で止まります。">空行の位置、電荷・多重度の行、座標の列数を確認します。ルート行の綴りの誤りは l1.exe で止まります。</td>
+</tr>
+<tr>
+<td><pre class="input-block" translate="no" lang="en">Convergence failure -- run terminated.</pre></td>
+<td data-en="The SCF (electronic-structure iteration) did not converge." data-ja="SCF（電子状態の反復計算）が収束しません。">SCF（電子状態の反復計算）が収束しません。</td>
+<td><p><span data-lang="ja">電荷・多重度と構造を確認し、ルート行に SCF=XQC を足して再実行します。<a href="./errors-opt-scf.html#scf">詳しく</a></span><template data-lang="en"><span data-lang="en" hidden>Check charge/multiplicity and the structure, add SCF=XQC to the route line and rerun. <a href="./errors-opt-scf.html#scf">Details</a></span></template></p></td>
+</tr>
+<tr>
+<td><pre class="input-block" translate="no" lang="en">Number of steps exceeded,  NStep= ...</pre></td>
+<td data-en="The optimization did not converge within the cycle limit." data-ja="最適化がサイクル上限内に収束しませんでした。">最適化がサイクル上限内に収束しませんでした。</td>
+<td><p><span data-lang="ja">出力の最後の構造を新しい入力にして続きを計算します。<a href="./errors-opt-scf.html#minimum">詳しく</a></span><template data-lang="en"><span data-lang="en" hidden>Continue from the last geometry in the output as a new input. <a href="./errors-opt-scf.html#minimum">Details</a></span></template></p></td>
+</tr>
+</tbody></table></div>
+<p><span data-lang="ja">エラー一覧は<a href="./troubleshooting.html">エラー対応</a>にあります。</span><template data-lang="en"><span data-lang="en" hidden>The full list is on <a href="./troubleshooting.html">Troubleshooting</a>.</span></template></p>
+</section>
+<section class="content-section reading" id="next">
+<h2 data-en="Next steps" data-ja="次のステップ">次のステップ</h2>
+<p data-en="Once you can optimize one structure, real work means handling the several conformers a molecule can adopt. For catechin, OH orientations and ring puckering give dozens." data-ja="1つの構造を最適化できたら、実際の研究では「その分子がとりうる複数の配座」を扱います。カテキンならOHの向きと環の形で数十の配座があります。">1つの構造を最適化できたら、実際の研究では「その分子がとりうる複数の配座」を扱います。カテキンならOHの向きと環の形で数十の配座があります。</p>
+<div class="task-grid">
+
+<a class="feature-card" href="./conformers.html"><h3 data-en="Conformer search → Opt/Freq → energy comparison" data-ja="配座探索 → Opt/Freq → エネルギー比較">配座探索 → Opt/Freq → エネルギー比較</h3><p data-en="Compute several candidates under the same conditions and obtain populations." data-ja="複数候補を同じ条件で計算し、存在率を求めます。">複数候補を同じ条件で計算し、存在率を求めます。</p></a>
+<a class="feature-card" href="./nmr.html"><h3 data-en="Calculate NMR chemical shifts and compare with experiment" data-ja="NMR化学シフトを計算して実測と比べる">NMR化学シフトを計算して実測と比べる</h3><p data-en="The ideas behind property calculations used for structure determination." data-ja="構造決定に使う物性計算の考え方。">構造決定に使う物性計算の考え方。</p></a>
+
+<a class="feature-card" href="./keywords.html"><h3 data-en="Gaussian keyword reference" data-ja="Gaussianキーワード一覧">Gaussianキーワード一覧</h3><p data-en="What route-line and Link 0 keywords mean and when to use them." data-ja="ルート行・Link 0のキーワードの意味と使いどころ。">ルート行・Link 0のキーワードの意味と使いどころ。</p></a>
+</div>
+</section>
+<aside class="callout callout-caution">
+<strong data-en="Notes" data-ja="注意" class="callout-title">注意</strong>
+<ul class="callout-list">
+<li data-en="The conditions here (B3LYP/6-31G(d), gas phase) are for practice. Choose research conditions for your purpose and system, and report all of them in the paper." data-ja="計算条件（B3LYP/6-31G(d)、気相）はこのページの練習用です。研究で使う条件は目的と対象に合わせて選び、論文には使った条件をすべて記載します。">計算条件（B3LYP/6-31G(d)、気相）はこのページの練習用です。研究で使う条件は目的と対象に合わせて選び、論文には使った条件をすべて記載します。</li>
+<li data-en="Numbers in the example output (energies, frequencies) only illustrate the format; they are not actual values for catechin." data-ja="この例の出力の数値（エネルギー、振動数）は書式を示すための見本で、カテキンの実際の計算値ではありません。">この例の出力の数値（エネルギー、振動数）は書式を示すための見本で、カテキンの実際の計算値ではありません。</li>
+</ul>
+</aside>
+</div>
+</main>
+<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月21日" data-en="Last updated: 21 November 2026" class="copyright">最終更新：2026年11月21日</p></footer>
+</body>
+</html>

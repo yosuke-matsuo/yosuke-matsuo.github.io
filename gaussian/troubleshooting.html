@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="description" content="出力末尾の文字列から原因を特定し、条件を直して再計算します。" data-ja="出力末尾の文字列から原因を特定し、条件を直して再計算します。" data-en="Identify the cause from the text at the end of the output, fix the settings and rerun."/>
+<link rel="canonical" href="https://yosuke-matsuo.github.io/gaussian/troubleshooting.html"/>
+<link rel="alternate" hreflang="ja" href="https://yosuke-matsuo.github.io/gaussian/troubleshooting.html"/>
+<link rel="alternate" hreflang="en" href="https://yosuke-matsuo.github.io/en/gaussian/troubleshooting.html"/>
+<link rel="alternate" hreflang="x-default" href="https://yosuke-matsuo.github.io/gaussian/troubleshooting.html"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Yosuke Matsuo（松尾洋介）"/>
+<meta property="og:title" content="Gaussianのエラー対応｜Gaussian入門"/>
+<meta property="og:description" content="出力末尾の文字列から原因を特定し、条件を直して再計算します。" data-ja="出力末尾の文字列から原因を特定し、条件を直して再計算します。" data-en="Identify the cause from the text at the end of the output, fix the settings and rerun."/>
+<meta property="og:url" content="https://yosuke-matsuo.github.io/gaussian/troubleshooting.html"/>
+<meta property="og:locale" content="ja_JP"/>
+<meta property="og:image" content="https://yosuke-matsuo.github.io/images/og-image.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="color-scheme" content="light"/>
+<title data-ja="Gaussianのエラー対応｜Gaussian入門" data-en="Troubleshooting Gaussian errors | Gaussian guide">Gaussianのエラー対応｜Gaussian入門</title>
+<link rel="stylesheet" href="../styles.css?v=20261121-1"/>
+<script defer src="../app.js?v=20261121-1"></script>
+</head>
+<body>
+<a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">本文へ移動</a>
+<header class="site-header">
+<a class="brand" href="../index.html">Yosuke Matsuo</a>
+<nav class="primary-nav" aria-label="Main"><a href="../research.html" data-ja="研究内容" data-en="Research">研究内容</a><a href="../publications.html" data-ja="業績" data-en="Publications">業績</a><a href="../tools.html" data-ja="ツール" data-en="Tools">ツール</a><a aria-current="location" href="./index.html" data-ja="Gaussian入門" data-en="Gaussian guide">Gaussian入門</a></nav>
+<div class="language-switch" role="group" aria-label="Language"><button type="button" data-language="ja" lang="ja" aria-pressed="true">日本語</button><button type="button" data-language="en" lang="en" aria-pressed="false">English</button></div>
+</header>
+<main class="page-shell guide" id="main">
+<div class="page-body">
+<section class="intro"><nav aria-label="Breadcrumb" class="breadcrumb"><a data-ja="Gaussian入門" data-en="Gaussian guide" href="./index.html">Gaussian入門</a></nav><h1 data-en="Troubleshooting Gaussian errors" data-ja="Gaussianのエラー対応">Gaussianのエラー対応</h1><p data-en="Identify the cause from the text at the end of the output, fix the settings and rerun." data-ja="出力末尾の文字列から原因を特定し、条件を直して再計算します。" class="lead">出力末尾の文字列から原因を特定し、条件を直して再計算します。</p></section>
+<nav aria-label="On this page" class="section-nav"><a href="#howto" data-ja="エラーの探し方" data-en="How to find the error">エラーの探し方</a><a href="#index" data-ja="エラー一覧" data-en="Error index">エラー一覧</a><a href="#first" data-ja="入力の書式エラー（計算が始まる前に止まる）" data-en="Input format errors (the job stops before calculating)">入力の書式エラー（計算が始まる前に止まる）</a></nav>
+<section class="content-section reading" id="howto">
+<h2 data-en="How to find the error" data-ja="エラーの探し方">エラーの探し方</h2>
+<p data-en="Look at the end of the output file. The cause is printed a few lines above Error termination. If there is no termination line at all, the job is still running or was killed by a time, memory or disk limit." data-ja="出力ファイルの末尾を見ます。Error termination の数行上に原因の文字列があります。終了行がなければ、まだ実行中か、時間・メモリ・ディスクの制限で強制終了されています。">出力ファイルの末尾を見ます。Error termination の数行上に原因の文字列があります。終了行がなければ、まだ実行中か、時間・メモリ・ディスクの制限で強制終了されています。</p>
+</section>
+<section class="content-section reading" id="index">
+<h2 data-en="Error index" data-ja="エラー一覧">エラー一覧</h2>
+<div class="table-wrap"><table><thead><tr>
+<th data-en="Job" data-ja="計算の種類" scope="col">計算の種類</th>
+<th data-en="Text in the output or symptom" data-ja="出力の文字列・症状" scope="col">出力の文字列・症状</th>
+<th data-en="Cause and remedy" data-ja="原因と対処" scope="col">原因と対処</th>
+</tr></thead><tbody>
+<tr>
+<td rowspan="2" class="group-cell" data-en="Any" data-ja="すべて">すべて</td>
+<td><pre class="input-block" translate="no" lang="en">Error termination via Lnk1e in .../l101.exe</pre></td>
+<td><p><span data-lang="ja"><a href="#first">入力の書式エラー（下）</a></span><template data-lang="en"><span data-lang="en" hidden><a href="#first">Input format error (below)</a></span></template></p></td>
+</tr>
+<tr>
+<td><pre class="input-block" translate="no" lang="en">Convergence failure -- run terminated.</pre></td>
+<td><p><span data-lang="ja"><a href="./errors-opt-scf.html#scf">SCFの収束失敗</a></span><template data-lang="en"><span data-lang="en" hidden><a href="./errors-opt-scf.html#scf">SCF convergence failure</a></span></template></p></td>
+</tr>
+<tr>
+<td rowspan="2" class="group-cell" data-en="Opt" data-ja="Opt">Opt</td>
+<td><pre class="input-block" translate="no" lang="en">Number of steps exceeded,  NStep= ...</pre></td>
+<td><p><span data-lang="ja"><a href="./errors-opt-scf.html#minimum">Optの回数上限</a></span><template data-lang="en"><span data-lang="en" hidden><a href="./errors-opt-scf.html#minimum">Opt step limit</a></span></template></p></td>
+</tr>
+<tr>
+<td data-en="(no error text) energy keeps oscillating" data-ja="（エラー文字列なし）エネルギーが上下し続ける">（エラー文字列なし）エネルギーが上下し続ける</td>
+<td><p><span data-lang="ja"><a href="./errors-opt-scf.html#oscillation">最適化が振動する</a></span><template data-lang="en"><span data-lang="en" hidden><a href="./errors-opt-scf.html#oscillation">Oscillating optimization</a></span></template></p></td>
+</tr>
+<tr>
+<td rowspan="3" class="group-cell" data-en="TS" data-ja="TS">TS</td>
+<td><pre class="input-block" translate="no" lang="en">Wrong number of Negative eigenvalues: Desired= 1 Actual= 2</pre></td>
+<td><p><span data-lang="ja"><a href="./errors-ts.html#ts-errors">負の固有値の数が合わない</a></span><template data-lang="en"><span data-lang="en" hidden><a href="./errors-ts.html#ts-errors">Wrong number of negative eigenvalues</a></span></template></p></td>
+</tr>
+<tr>
+<td><pre class="input-block" translate="no" lang="en">Number of steps exceeded,  NStep= ...</pre></td>
+<td><p><span data-lang="ja"><a href="./errors-ts.html#ts-steps">TSの回数上限</a></span><template data-lang="en"><span data-lang="en" hidden><a href="./errors-ts.html#ts-steps">TS step limit</a></span></template></p></td>
+</tr>
+<tr>
+<td data-en="Two or more imaginary frequencies in Freq" data-ja="Freqで虚振動が2つ以上">Freqで虚振動が2つ以上</td>
+<td><p><span data-lang="ja"><a href="./errors-ts.html#gjf-ts-modes">振動方向の確認と±変位</a></span><template data-lang="en"><span data-lang="en" hidden><a href="./errors-ts.html#gjf-ts-modes">Mode check and ± displacement</a></span></template></p></td>
+</tr>
+<tr>
+<td rowspan="2" class="group-cell" data-en="IRC" data-ja="IRC">IRC</td>
+<td><pre class="input-block" translate="no" lang="en">Maximum number of corrector steps exceded</pre></td>
+<td><p><span data-lang="ja"><a href="./errors-irc.html#irc-errors">correctorが収束しない</a></span><template data-lang="en"><span data-lang="en" hidden><a href="./errors-irc.html#irc-errors">Corrector does not converge</a></span></template></p></td>
+</tr>
+<tr>
+<td><pre class="input-block" translate="no" lang="en">Maximum number of steps reached.</pre></td>
+<td><p><span data-lang="ja"><a href="./errors-irc.html#irc-maxpoints">IRCの上限到達</a></span><template data-lang="en"><span data-lang="en" hidden><a href="./errors-irc.html#irc-maxpoints">IRC point limit reached</a></span></template></p></td>
+</tr>
+</tbody></table></div>
+</section>
+<section class="content-section reading" id="first">
+<h2 data-en="Input format errors (the job stops before calculating)" data-ja="入力の書式エラー（計算が始まる前に止まる）">入力の書式エラー（計算が始まる前に止まる）</h2>
+<p data-en="If the output is short and ends with Error termination in l1.exe (route-line errors), l101.exe or l301.exe, the input file is almost certainly the problem. Check in order:" data-ja="出力が短く、l1.exe（ルート行の誤り）、l101.exe、l301.exe で Error termination している場合は、ほぼ入力ファイルの問題です。次を順に確認します。">出力が短く、l1.exe（ルート行の誤り）、l101.exe、l301.exe で Error termination している場合は、ほぼ入力ファイルの問題です。次を順に確認します。</p>
+<ol class="compact-list">
+<li data-en="Blank lines: one after the route line, one after the title, one after the coordinates." data-ja="空行の位置：ルート行の後、タイトルの後、座標の後に1行ずつ。">空行の位置：ルート行の後、タイトルの後、座標の後に1行ずつ。</li>
+<li data-en="Spelling on the route line (Opt Freq, B3LYP, 6-31G(d))." data-ja="ルート行のスペル（Opt Freq、B3LYP、6-31G(d)）。">ルート行のスペル（Opt Freq、B3LYP、6-31G(d)）。</li>
+<li data-en="Exactly one charge/multiplicity line, and a possible combination (odd electron count with multiplicity 1 is an error)." data-ja="電荷と多重度の行が1行だけあること。電子数と多重度の組み合わせが可能かどうか（奇数電子で多重度1はエラー）。">電荷と多重度の行が1行だけあること。電子数と多重度の組み合わせが可能かどうか（奇数電子で多重度1はエラー）。</li>
+<li data-en="Coordinates in four columns (symbol x y z), with no tabs or full-width characters." data-ja="座標が「元素記号 x y z」の4列であること。タブや全角文字が混ざっていないこと。">座標が「元素記号 x y z」の4列であること。タブや全角文字が混ざっていないこと。</li>
+<li data-en="A blank line after any extra input such as ModRedundant or a basis-set block." data-ja="ModRedundant や基底関数の追加入力がある場合は、その後の空行。">ModRedundant や基底関数の追加入力がある場合は、その後の空行。</li>
+</ol>
+<p><span data-lang="ja"><a href="./start.html#input">入力ファイルの構造</a>に正しい例があります。</span><template data-lang="en"><span data-lang="en" hidden>A correct example is in <a href="./start.html#input">Input anatomy</a>.</span></template></p>
+</section>
+
+</div>
+</main>
+<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月21日" data-en="Last updated: 21 November 2026" class="copyright">最終更新：2026年11月21日</p></footer>
+</body>
+</html>

@@ -1,6 +1,8 @@
 // Browser checks for HRMS Calc and the personal site (run with an HTTP server; see README.txt)
 const { chromium } = require('playwright');
 const BASE = process.env.BASE_URL || 'http://localhost:8765';
+// Gaussian guide (gaussian/, English in en/gaussian/)
+const GUIDE = require('fs').readdirSync(require('path').join(__dirname, '..', '..', 'gaussian')).filter(f => f.endsWith('.html')).sort().map(f => 'gaussian/' + f);
 let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); if (!c) fails++; };
 (async () => {
   const browser = await chromium.launch(process.env.CHROMIUM ? { executablePath: process.env.CHROMIUM } : {});
@@ -99,7 +101,7 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
     await p.ctx.close();
   }
   // 6. pages (Japanese and English): internal links resolve; every shown image loads after scrolling through (lazy images included)
-  for (const lang of ['ja', 'en']) for (const path of ['/index.html', '/research.html', '/publications.html', '/tools.html', '/hrms-calc/index.html', '/404.html']) {
+  for (const lang of ['ja', 'en']) for (const path of ['/index.html', '/research.html', '/publications.html', '/tools.html', '/hrms-calc/index.html', '/404.html', ...GUIDE.map(f => '/' + f)]) {
     const p = await page(); const r = await p.goto(`${BASE}${path}?lang=${lang}`); await p.waitForLoadState('networkidle');
     await p.evaluate(async () => { for (let y = 0; y < document.body.scrollHeight; y += 300) { scrollTo(0, y); await new Promise(r => setTimeout(r, 50)); } });
     await p.waitForFunction(() => [...document.images].filter(i => i.getAttribute('src') && i.checkVisibility()).every(i => i.complete), null, { timeout: 15000 }).catch(() => {});
@@ -337,10 +339,10 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
   // 16. personal pages: one version of styles.css / app.js, the same footer, structured data, description and sharing tags follow the language
   {
     const fs = require('fs'), path = require('path'), root = path.join(__dirname, '..', '..');
-    const pages = ['index.html', 'research.html', 'publications.html', 'tools.html', '404.html'];
-    const refs = pages.flatMap(f => [...fs.readFileSync(path.join(root, f), 'utf8').matchAll(/(?:href|src)="\.?\/(?:styles\.css|app\.js)(\?v=[\w-]+)?"/g)].map(m => m[1] || 'none'));
+    const pages = ['index.html', 'research.html', 'publications.html', 'tools.html', '404.html', ...GUIDE];
+    const refs = pages.flatMap(f => [...fs.readFileSync(path.join(root, f), 'utf8').matchAll(/(?:href|src)="(?:\.\.\/|\.?\/)(?:styles\.css|app\.js)(\?v=[\w-]+)?"/g)].map(m => m[1] || 'none'));
     const vs = new Set(refs);
-    ok(refs.length === 10 && vs.size === 1 && !vs.has('none'), `personal pages load styles.css and app.js with one version (${[...vs]}, ${refs.length})`);
+    ok(refs.length === 2 * pages.length && vs.size === 1 && !vs.has('none'), `personal pages load styles.css and app.js with one version (${[...vs]}, ${refs.length})`);
     const feet = new Set(pages.map(f => /<footer>[\s\S]*?<\/footer>/.exec(fs.readFileSync(path.join(root, f), 'utf8'))[0]));
     ok(feet.size === 1 && [...feet][0].includes('最終更新'), 'every personal page has the same footer with the last update');
     for (const [f, type] of [['index.html', 'Person'], ['hrms-calc/index.html', 'WebApplication']]) {
@@ -371,7 +373,8 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
     const big = fs.readdirSync(path.join(root, 'images/toc')).filter(f => f.endsWith('.png') && png('images/toc/' + f)[0] > 1600);
     ok(!bad.length && !big.length, `publication PNGs: width/height match the files, none wider than 1600px (${bad.concat(big)})`);
     const sm = read('sitemap.xml'), locs = (sm.match(/<loc>/g) || []).length;
-    ok(locs === 10 && (sm.match(/<lastmod>\d{4}-\d\d-\d\d<\/lastmod>/g) || []).length === locs && ['en/', 'en/research.html', 'en/publications.html', 'en/tools.html', 'hrms-calc/', 'hrms-calc/en/'].every(u => sm.includes(`<loc>https://yosuke-matsuo.github.io/${u}</loc>`)),
+    const guideUrls = GUIDE.flatMap(f => [f, 'en/' + f]).map(f => f.replace(/index\.html$/, ''));
+    ok(locs === 10 + guideUrls.length && (sm.match(/<lastmod>\d{4}-\d\d-\d\d<\/lastmod>/g) || []).length === locs && ['en/', 'en/research.html', 'en/publications.html', 'en/tools.html', 'hrms-calc/', 'hrms-calc/en/', ...guideUrls].every(u => sm.includes(`<loc>https://yosuke-matsuo.github.io/${u}</loc>`)),
       `sitemap: Japanese and English pages, each with lastmod (${locs} URLs)`);
     ok(read('hrms-calc/index.html').includes('<noscript>') && read('hrms-calc/index.html').includes('This tool requires JavaScript.'), 'HRMS Calc: message without JavaScript');
     for (const lang of ['ja', 'en']) {
@@ -440,17 +443,19 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
     ok(sync, 'en/*.html is up to date with the Japanese pages (python3 _dev/build_en.py --check)');
     const B = 'https://yosuke-matsuo.github.io/';
     const bad = [];
-    for (const f of ['index.html', 'research.html', 'publications.html', 'tools.html']) {
-      const pth = f === 'index.html' ? '' : f;
+    for (const f of ['index.html', 'research.html', 'publications.html', 'tools.html', ...GUIDE]) {
+      const pth = f.replace(/index\.html$/, '');
       for (const [file, canon, lang] of [[f, B + pth, 'ja'], ['en/' + f, B + 'en/' + pth, 'en']]) {
         const t = fs.readFileSync(path.join(root, file), 'utf8');
         const want = [`<html lang="${lang}">`, `<link rel="canonical" href="${canon}"/>`, `hreflang="ja" href="${B + pth}"`, `hreflang="en" href="${B}en/${pth}"`, `hreflang="x-default" href="${B + pth}"`, `og:locale" content="${lang === 'en' ? 'en_US' : 'ja_JP'}"`];
         const miss = want.filter(w => !t.includes(w));
         const body = t.slice(t.indexOf('<body')).replace(/<script[\s\S]*?<\/script>/g, '').replace(/<[^>]+>/g, ' ').replace('日本語', '');
         if (miss.length || (lang === 'en' && /[\u3040-\u30ff\u4e00-\u9fff]/.test(body))) bad.push(`${file}: ${miss.join(' ')}${lang === 'en' && /[\u3040-\u30ff\u4e00-\u9fff]/.test(body) ? ' Japanese text' : ''}`);
+        if (lang === 'en') for (const m of t.matchAll(/\s(?:aria-label|title|alt)="([^"]*)"/g)) if (/[\u3040-\u30ff\u4e00-\u9fff]/.test(m[1])) bad.push(`${file}: Japanese in ${m[0].trim().slice(0, 40)}`);
+        for (const m of t.matchAll(/<a\b[^>]*>/g)) if (!/href="https?:/.test(m[0]) && m[0].includes('target=')) bad.push(`${file}: same-site link with target ${m[0].slice(0, 60)}`);
       }
     }
-    ok(!bad.length, `hreflang, canonical, language and English-only body on the 8 pages (${bad.join('; ')})`);
+    ok(!bad.length, `hreflang, canonical, language, English-only body and attributes, no target on same-site links on the ${2 * (4 + GUIDE.length)} pages (${bad.join('; ')})`);
     const p = await page();
     await p.goto(`${BASE}/publications.html?lang=en#papers`); await p.waitForURL(/\/en\/publications\.html/);
     const r1 = new URL(p.url());
@@ -461,6 +466,39 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
     const t3 = await p.title(), u3 = new URL(p.url()).pathname, pressed = await p.getAttribute('[data-language="ja"]', 'aria-pressed');
     ok(u3 === '/tools.html' && t3 === 'ツール — 松尾洋介（Yosuke Matsuo）' && pressed === 'true', `Japanese button on an English page opens the Japanese page (${u3}, ${t3})`);
     await p.ctx.close();
+  }
+  // 22b. Gaussian guide: linked from the menu, no example files, language buttons move between
+  //      gaussian/ and en/gaussian/, external links open in a new tab, no horizontal scroll on narrow screens
+  {
+    const fs = require('fs'), path = require('path'), root = path.join(__dirname, '..', '..');
+    const bad = [];
+    for (const f of GUIDE.flatMap(f => [f, 'en/' + f])) {
+      const t = fs.readFileSync(path.join(root, f), 'utf8');
+      if (/href="[^"]*(?:examples\/|\.gjf|\.md")/.test(t)) bad.push(`${f}: example file`);
+      for (const m of t.matchAll(/<a\b[^>]*href="https?:[^"]*"[^>]*>/g)) if (!m[0].includes('target="_blank"') || !m[0].includes('rel="noopener noreferrer"')) bad.push(`${f}: ${m[0].slice(0, 60)}`);
+    }
+    ok(!bad.length, `guide pages: no example files, external links open in a new tab (${GUIDE.length * 2} pages; ${bad.slice(0, 3).join('; ')})`);
+    const p = await page(); await p.goto(`${BASE}/research.html`);
+    await navClick(p, '.primary-nav a[href$="gaussian/index.html"]');
+    ok(new URL(p.url()).pathname === '/gaussian/index.html' && await p.getAttribute('.primary-nav a[aria-current="page"]', 'href') === './index.html', `menu opens the guide (${new URL(p.url()).pathname})`);
+    await p.goto(`${BASE}/gaussian/errors-ts.html#series`); await switchTo(p, 'en');
+    const u1 = new URL(p.url()), h1 = await p.textContent('h1');
+    await switchTo(p, 'ja'); const u2 = new URL(p.url());
+    ok(u1.pathname === '/en/gaussian/errors-ts.html' && u1.hash === '#series' && h1 === 'TS errors' && u2.pathname === '/gaussian/errors-ts.html', `guide language buttons (${u1.pathname}${u1.hash}, ${h1}, ${u2.pathname})`);
+    await p.goto(`${BASE}/gaussian/start.html?lang=en`); await p.waitForURL(u => new URL(u).pathname === '/en/gaussian/start.html');
+    ok(true, 'earlier ?lang=en link on a guide page opens the English page');
+    await p.ctx.close();
+    const wide = [];
+    for (const w of [360, 1280]) {
+      const q = await page({ viewport: { width: w, height: 800 } });
+      for (const f of GUIDE.flatMap(f => [f, 'en/' + f])) {
+        await q.goto(`${BASE}/${f}`);
+        const o = await q.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+        if (o > 0) wide.push(`${f} ${w}px +${o}`);
+      }
+      await q.ctx.close();
+    }
+    ok(!wide.length, `guide pages: no horizontal scroll at 360 and 1280px (${wide.join('; ')})`);
   }
   // 23. HRMS Calc pages: text written into the initial HTML (the same as the page script shows), hreflang pair,
   //     English page without Japanese, earlier ?lang=en links with inputs after # open the English page

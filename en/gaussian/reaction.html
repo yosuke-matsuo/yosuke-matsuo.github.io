@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<!-- English page generated from ../../gaussian/reaction.html by _dev/build_en.py. Edit the Japanese page and run the script. -->
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="description" content="Finding transition states with Gaussian and verifying them with Freq and IRC: QST2/QST3, settings and what to do when the search fails." data-ja="Gaussianで遷移状態（TS）を探し、FreqとIRCで確かめる手順。QST2/QST3、計算条件、うまくいかないときの再探索。" data-en="Finding transition states with Gaussian and verifying them with Freq and IRC: QST2/QST3, settings and what to do when the search fails."/>
+<link rel="canonical" href="https://yosuke-matsuo.github.io/en/gaussian/reaction.html"/>
+<link rel="alternate" hreflang="ja" href="https://yosuke-matsuo.github.io/gaussian/reaction.html"/>
+<link rel="alternate" hreflang="en" href="https://yosuke-matsuo.github.io/en/gaussian/reaction.html"/>
+<link rel="alternate" hreflang="x-default" href="https://yosuke-matsuo.github.io/gaussian/reaction.html"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Yosuke Matsuo（松尾洋介）"/>
+<meta property="og:title" content="Transition states and reaction paths (TS/IRC) | Gaussian guide"/>
+<meta property="og:description" content="Finding transition states with Gaussian and verifying them with Freq and IRC: QST2/QST3, settings and what to do when the search fails." data-ja="Gaussianで遷移状態（TS）を探し、FreqとIRCで確かめる手順。QST2/QST3、計算条件、うまくいかないときの再探索。" data-en="Finding transition states with Gaussian and verifying them with Freq and IRC: QST2/QST3, settings and what to do when the search fails."/>
+<meta property="og:url" content="https://yosuke-matsuo.github.io/en/gaussian/reaction.html"/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:image" content="https://yosuke-matsuo.github.io/images/og-image.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="color-scheme" content="light"/>
+<title data-ja="遷移状態と反応経路（TS・IRC）｜Gaussian入門" data-en="Transition states and reaction paths (TS/IRC) | Gaussian guide">Transition states and reaction paths (TS/IRC) | Gaussian guide</title>
+<link rel="stylesheet" href="../../styles.css?v=20261121-1"/>
+<script defer src="../../app.js?v=20261121-1"></script>
+</head>
+<body>
+<a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">Skip to content</a>
+<header class="site-header">
+<a class="brand" href="../index.html">Yosuke Matsuo</a>
+<nav class="primary-nav" aria-label="Main"><a href="../research.html" data-ja="研究内容" data-en="Research">Research</a><a href="../publications.html" data-ja="業績" data-en="Publications">Publications</a><a href="../tools.html" data-ja="ツール" data-en="Tools">Tools</a><a aria-current="location" href="./index.html" data-ja="Gaussian入門" data-en="Gaussian guide">Gaussian guide</a></nav>
+<div class="language-switch" role="group" aria-label="Language"><button type="button" data-language="ja" lang="ja" aria-pressed="false">日本語</button><button type="button" data-language="en" lang="en" aria-pressed="true">English</button></div>
+</header>
+<main class="page-shell guide" id="main">
+<div class="page-body">
+<section class="intro"><nav aria-label="Breadcrumb" class="breadcrumb"><a data-ja="Gaussian入門" data-en="Gaussian guide" href="./index.html">Gaussian guide</a> / <a data-ja="計算ガイド" data-en="Calculation guide" href="./workflow.html">Calculation guide</a></nav><h1 data-en="Transition states and reaction paths (TS/IRC)" data-ja="遷移状態と反応経路（TS・IRC）">Transition states and reaction paths (TS/IRC)</h1></section>
+<nav aria-label="On this page" class="section-nav"><a href="#theory" data-ja="遷移状態：直接TS・QST2・QST3" data-en="Transition states: direct TS, QST2 and QST3">Transition states: direct TS, QST2 and QST3</a><a href="#guess" data-ja="TS候補の準備" data-en="Prepare a TS guess">Prepare a TS guess</a><a href="#tsopt" data-ja="TS最適化" data-en="TS optimization">TS optimization</a><a href="#freq" data-ja="Freqで確認" data-en="Verify with Freq">Verify with Freq</a><a href="#irc" data-ja="両方向IRCと末端の確認" data-en="IRC in both directions and endpoint check">IRC in both directions and endpoint check</a><a href="#conditions" data-ja="計算条件：遷移状態" data-en="Conditions: transition states">Conditions: transition states</a><a href="#conditions-irc" data-ja="計算条件：IRC" data-en="Conditions: IRC">Conditions: IRC</a><a href="#recovery" data-ja="TS再探索：全体の流れ" data-en="TS re-search: overview">TS re-search: overview</a></nav>
+<section class="content-section reading" id="theory">
+<h2 data-en="Transition states: direct TS, QST2 and QST3" data-ja="遷移状態：直接TS・QST2・QST3">Transition states: direct TS, QST2 and QST3</h2>
+<p data-en="A transition state (TS) is the top of a reaction barrier: a maximum along the reaction direction and a minimum in every other direction (a first-order saddle point). Freq gives exactly one imaginary frequency whose motion corresponds to the bond changes of the reaction." data-ja="遷移状態（TS）は反応の障壁の頂点で、反応方向にだけエネルギーが極大、他のすべての方向に極小の点（一次の鞍点）です。Freqを行うと虚振動がちょうど1つ現れ、その動きが反応の結合変化に対応します。">A transition state (TS) is the top of a reaction barrier: a maximum along the reaction direction and a minimum in every other direction (a first-order saddle point). Freq gives exactly one imaginary frequency whose motion corresponds to the bond changes of the reaction.</p>
+<div class="table-wrap"><table><thead><tr>
+<th data-en="Method" data-ja="方法" scope="col">Method</th>
+<th data-en="Structures needed" data-ja="必要な構造" scope="col">Structures needed</th>
+<th data-en="Notes" data-ja="特徴" scope="col">Notes</th>
+</tr></thead><tbody>
+<tr>
+<td data-en="Direct TS (Opt=(TS,CalcFC))" data-ja="直接TS（Opt=(TS,CalcFC)）">Direct TS (Opt=(TS,CalcFC))</td>
+<td data-en="One guess close to the TS" data-ja="TSに近い候補構造1つ">One guess close to the TS</td>
+<td data-en="The most common method; success depends on a good guess." data-ja="最もよく使う方法。良い候補構造を作ることが成否を決めます。">The most common method; success depends on a good guess.</td>
+</tr>
+<tr>
+<td data-en="QST2" data-ja="QST2">QST2</td>
+<td data-en="Reactant and product" data-ja="反応物と生成物">Reactant and product</td>
+<td data-en="Interpolates between the two structures. Atom ordering must match exactly." data-ja="2構造の間を補間してTSを探します。原子の順序を完全に一致させる必要があります。">Interpolates between the two structures. Atom ordering must match exactly.</td>
+</tr>
+<tr>
+<td data-en="QST3" data-ja="QST3">QST3</td>
+<td data-en="Reactant, product and a TS guess" data-ja="反応物、生成物、TS候補">Reactant, product and a TS guess</td>
+<td data-en="QST2 stabilized with a TS guess." data-ja="QST2にTS候補を加えて安定させたもの。">QST2 stabilized with a TS guess.</td>
+</tr>
+</tbody></table></div>
+<p data-en="With QST2/QST3, do not also write Opt=TS on the route line." data-ja="QST2/QST3ではルート行に Opt=TS を重ねて書きません。">With QST2/QST3, do not also write Opt=TS on the route line.</p>
+<h3 data-en="References" data-ja="参考資料">References</h3>
+<ul class="compact-list reference-list">
+<li><a href="https://gaussian.com/qst2/" target="_blank" rel="noopener noreferrer" data-ja="Gaussian公式：QST2/QST3" data-en="Gaussian: QST2/QST3">Gaussian: QST2/QST3</a></li>
+<li><a href="https://doi.org/10.1002/ijch.199300051" target="_blank" rel="noopener noreferrer">Peng, C.; Schlegel, H.B. Combining Synchronous Transit and Quasi-Newton Methods to Find Transition States. <i>Isr. J. Chem.</i> 1993, 33, 449–454.</a></li>
+</ul>
+</section>
+<section class="content-section reading" id="guess">
+<h2 data-en="Prepare a TS guess" data-ja="TS候補の準備">Prepare a TS guess</h2>
+<p data-en="First decide which bonds form or break. A common approach: set that bond distance to an intermediate value (e.g. 2.0–2.2 Å for C–C formation), freeze it, and relax everything else with Opt." data-ja="まず、どの結合が形成・切断されるかを決めます。よく使う作り方は、その結合距離を中間的な値（例：C–C形成なら 2.0–2.2 Å）に設定し、距離を固定したまま他の自由度をOptで緩和する方法です。">First decide which bonds form or break. A common approach: set that bond distance to an intermediate value (e.g. 2.0–2.2 Å for C–C formation), freeze it, and relax everything else with Opt.</p>
+<pre class="input-block" translate="no" lang="en">#p B3LYP/6-31G(d) Opt=ModRedundant
+
+(title, blank, charge/mult, coordinates, blank line, then:)
+
+1 12 F</pre>
+<ul class="compact-list">
+<li data-en="Use the converged constrained geometry, with the constraint removed, as the starting point for the TS search." data-ja="拘束付きOptが収束した構造を、拘束を外してTS探索の出発点にします。">Use the converged constrained geometry, with the constraint removed, as the starting point for the TS search.</li>
+<li data-en="Constrain only the bonds involved in the reaction; extra constraints distort the structure." data-ja="拘束は反応に必要な結合だけにします。余分な拘束は構造を歪めます。">Constrain only the bonds involved in the reaction; extra constraints distort the structure.</li>
+</ul>
+<h3 data-en="References" data-ja="参考資料">References</h3>
+<ul class="compact-list reference-list">
+<li><a href="https://avogadro.cc/docs/optimizing-geometry/constraints.html" target="_blank" rel="noopener noreferrer" data-ja="Avogadro公式：構造拘束" data-en="Avogadro: Constraints">Avogadro: Constraints</a></li>
+</ul>
+</section>
+<section class="content-section reading" id="tsopt">
+<h2 data-en="TS optimization" data-ja="TS最適化">TS optimization</h2>
+<pre class="input-block" translate="no" lang="en">#p B3LYP/6-31G(d) Opt=(TS,CalcFC) Freq</pre>
+<p data-en="CalcFC computes the Hessian at the start. In a TS search the quality of the guess decides the outcome; when it fails, revising the guess is usually faster than changing settings." data-ja="CalcFC で最初にヘシアンを計算します。TS探索では出発構造の質が結果を決めるので、収束しないときは条件を変えるより候補構造を見直すほうが早いことが多いです。">CalcFC computes the Hessian at the start. In a TS search the quality of the guess decides the outcome; when it fails, revising the guess is usually faster than changing settings.</p>
+<p><span data-lang="en">For errors such as reaching the cycle limit or a wrong number of negative eigenvalues, see <a href="./errors-ts.html">TS errors</a> and <a href="./reaction.html#recovery">TS re-search</a>.</span></p>
+<h3 data-en="References" data-ja="参考資料">References</h3>
+<ul class="compact-list reference-list">
+<li><a href="https://gaussian.com/opt/" target="_blank" rel="noopener noreferrer" data-ja="Gaussian公式：Opt" data-en="Gaussian: Opt">Gaussian: Opt</a></li>
+</ul>
+</section>
+<section class="content-section reading" id="freq">
+<h2 data-en="Verify with Freq" data-ja="Freqで確認">Verify with Freq</h2>
+<p data-en="Run Freq at the converged TS under the same conditions and check two things." data-ja="収束したTSで同じ条件のFreqを行い、次の2点を確認します。">Run Freq at the converged TS under the same conditions and check two things.</p>
+<ul class="check-list">
+<li data-en="There is exactly one imaginary frequency." data-ja="虚振動がちょうど1つある。">There is exactly one imaginary frequency.</li>
+<li data-en="Play that mode in a viewer such as GaussView; its motion corresponds to the intended bond formation/cleavage." data-ja="GaussViewなどのビューアーでそのモードを再生し、動きが目的の結合の形成・切断に対応している。">Play that mode in a viewer such as GaussView; its motion corresponds to the intended bond formation/cleavage.</li>
+</ul>
+<p><span data-lang="en">If there are two or more, displace the structure along the extra mode and search again (see <a href="#recovery">TS re-search</a>).</span></p>
+<h3 data-en="References" data-ja="参考資料">References</h3>
+<ul class="compact-list reference-list">
+<li><a href="https://gaussian.com/freq/" target="_blank" rel="noopener noreferrer" data-ja="Gaussian公式：Freq" data-en="Gaussian: Freq">Gaussian: Freq</a></li>
+</ul>
+</section>
+<section class="content-section reading" id="irc">
+<h2 data-en="IRC in both directions and endpoint check" data-ja="両方向IRCと末端の確認">IRC in both directions and endpoint check</h2>
+<pre class="input-block" translate="no" lang="en">%oldchk=ts_freq.chk
+%chk=ts_irc_fwd.chk
+#p B3LYP/6-31G(d) IRC=(RCFC,Forward,MaxPoints=60,StepSize=10) Geom=AllCheck Guess=Read</pre>
+<p data-en="Run Reverse the same way. Look at the endpoint structures; if they are still changing, increase MaxPoints. Relax the endpoints with Opt Freq and confirm they fall into the reactant and product (or intermediate) minima." data-ja="Reverse も同様に実行します。末端の構造を見て、まだ大きく変化中なら MaxPoints を増やします。末端構造を Opt Freq で緩和し、反応物と生成物（または中間体）の極小に落ちることを確認して完了です。">Run Reverse the same way. Look at the endpoint structures; if they are still changing, increase MaxPoints. Relax the endpoints with Opt Freq and confirm they fall into the reactant and product (or intermediate) minima.</p>
+<p data-en="Forward/Reverse are just labels; identify the reactant side from the structures." data-ja="Forward/Reverse は計算上の名前で、どちらが反応物側かは構造で判断します。">Forward/Reverse are just labels; identify the reactant side from the structures.</p>
+<h3 data-en="References" data-ja="参考資料">References</h3>
+<ul class="compact-list reference-list">
+<li><a href="https://gaussian.com/irc/" target="_blank" rel="noopener noreferrer" data-ja="Gaussian公式：IRC" data-en="Gaussian: IRC">Gaussian: IRC</a></li>
+</ul>
+</section>
+<section class="content-section reading" id="conditions">
+<h2 data-en="Conditions: transition states" data-ja="計算条件：遷移状態">Conditions: transition states</h2><p class="note"><span data-lang="en">Below the route line, continue with a blank line, title, blank line, charge/multiplicity, coordinates and a final blank line (<a href="./start.html#input">input anatomy</a>). Keyword meanings are in the <a href="./keywords.html">keyword reference</a>.</span></p>
+<article class="method-entry"><h3 data-en="Direct TS (Opt=TS)" data-ja="直接TS探索（Opt=TS）" id="ts-direct">Direct TS (Opt=TS)</h3><p data-en="The standard form when a good TS guess exists. CalcFC computes the initial Hessian. MaxStep=2 caps each step at 0.02 Bohr (default 0.30 Bohr): a cautious setting that needs more cycles." data-ja="良いTS候補構造がある場合の標準形。CalcFC で最初にヘシアンを計算します。MaxStep=2 は1回の移動の上限を 0.02 Bohr（既定は 0.30 Bohr）に抑える慎重な設定で、サイクル数は増えます。">The standard form when a good TS guess exists. CalcFC computes the initial Hessian. MaxStep=2 caps each step at 0.02 Bohr (default 0.30 Bohr): a cautious setting that needs more cycles.</p><p class="muted"><span data-en="Relative time: strongly guess-dependent" data-ja="時間の目安：初期構造に強く依存">Relative time: strongly guess-dependent</span></p><pre class="input-block" translate="no" lang="en">%chk=ts-direct.chk
+#p M062X/6-31+G(d,p) Opt=(TS,CalcFC,Tight,MaxStep=2,MaxCycles=100)
+   SCRF=(SMD,Solvent=Acetonitrile) Integral=UltraFine SCF=Tight</pre><p class="muted"><span data-en="Source: " data-ja="出典：">Source: </span><a href="https://gaussian.com/opt/" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Gaussian: Opt</a></p></article>
+<article class="method-entry"><h3 data-en="QST2" data-ja="QST2" id="ts-qst2">QST2</h3><p data-en="Searches from reactant and product. Atom order must match exactly; write a title/charge-multiplicity/coordinate block for each. Do not also write Opt=TS." data-ja="反応物と生成物の2構造から探します。原子の順序を完全に一致させ、それぞれタイトル・電荷多重度・座標のブロックを続けて書きます。Opt=TS は重ねて書きません。">Searches from reactant and product. Atom order must match exactly; write a title/charge-multiplicity/coordinate block for each. Do not also write Opt=TS.</p><p class="muted"><span data-en="Relative time: depends on the two end structures" data-ja="時間の目安：両端構造に依存">Relative time: depends on the two end structures</span></p><pre class="input-block" translate="no" lang="en">%chk=ts-qst2.chk
+#p M062X/6-31+G(d,p) Opt=(QST2,CalcFC,Tight,MaxCycles=100)
+   SCRF=(SMD,Solvent=Acetonitrile) Integral=UltraFine SCF=Tight
+
+reactant
+
+0 1
+(coordinates)
+
+product
+
+0 1
+(coordinates, same atom order)
+</pre><p class="muted"><span data-en="Source: " data-ja="出典：">Source: </span><a href="https://gaussian.com/qst2/" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Gaussian: QST2/QST3</a></p></article>
+<article class="method-entry"><h3 data-en="Freq of the converged TS" data-ja="収束したTSのFreq" id="ts-freq">Freq of the converged TS</h3><p data-en="Run Freq under the same conditions; confirm one imaginary frequency whose motion is the intended reaction." data-ja="同じ条件でFreqを行い、虚振動が1つで、その動きが目的の反応であることを確認します。">Run Freq under the same conditions; confirm one imaginary frequency whose motion is the intended reaction.</p><p class="muted"><span data-en="Relative time: shorter than the TS search" data-ja="時間の目安：TS探索より短い">Relative time: shorter than the TS search</span></p><pre class="input-block" translate="no" lang="en">%chk=ts-freq.chk
+#p M062X/6-31+G(d,p) Freq
+   SCRF=(SMD,Solvent=Acetonitrile) Integral=UltraFine SCF=Tight</pre><p class="muted"><span data-en="Source: " data-ja="出典：">Source: </span><a href="https://gaussian.com/freq/" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Gaussian: Freq</a></p></article>
+</section>
+<section class="content-section reading" id="conditions-irc">
+<h2 data-en="Conditions: IRC" data-ja="計算条件：IRC">Conditions: IRC</h2>
+<article class="method-entry"><h3 data-en="HPC (default algorithm)" data-ja="HPC（既定のアルゴリズム）" id="irc-hpc">HPC (default algorithm)</h3><p data-en="Start from the coordinates of the TS confirmed by Freq. Run Forward and Reverse as separate jobs. If the TS Freq .chk exists, RCFC with %oldchk reuses the Hessian instead of CalcFC." data-ja="Freqで確認したTSの座標から始めます。Forward と Reverse を別ジョブで実行します。TSのFreqの .chk があれば CalcFC の代わりに RCFC と %oldchk でヘシアンを再利用できます。">Start from the coordinates of the TS confirmed by Freq. Run Forward and Reverse as separate jobs. If the TS Freq .chk exists, RCFC with %oldchk reuses the Hessian instead of CalcFC.</p><p class="muted"><span data-en="Relative time: depends on path length and step size" data-ja="時間の目安：経路長と刻みに依存">Relative time: depends on path length and step size</span></p><pre class="input-block" translate="no" lang="en">%chk=irc-hpc.chk
+#p M062X/6-31+G(d,p) IRC=(CalcFC,Forward,HPC,MaxPoints=80,StepSize=5)
+   SCRF=(SMD,Solvent=Acetonitrile) Integral=UltraFine SCF=Tight</pre><p class="muted"><span data-en="Source: " data-ja="出典：">Source: </span><a href="https://gaussian.com/irc/" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Gaussian: IRC</a></p></article>
+<article class="method-entry"><h3 data-en="LQA (when HPC fails in the corrector)" data-ja="LQA（HPCのcorrectorが収束しないとき）" id="irc-lqa">LQA (when HPC fails in the corrector)</h3><p data-en="Same TS, direction and step size; only the algorithm changes to LQA." data-ja="同じTS・同じ方向・同じ刻みで、アルゴリズムだけを LQA に変えます。">Same TS, direction and step size; only the algorithm changes to LQA.</p><p class="muted"><span data-en="Relative time: similar to HPC" data-ja="時間の目安：HPCと同程度">Relative time: similar to HPC</span></p><pre class="input-block" translate="no" lang="en">%chk=irc-lqa.chk
+#p M062X/6-31+G(d,p) IRC=(CalcFC,Forward,LQA,MaxPoints=80,StepSize=5)
+   SCRF=(SMD,Solvent=Acetonitrile) Integral=UltraFine SCF=Tight</pre><p class="muted"><span data-en="Source: " data-ja="出典：">Source: </span><a href="https://gaussian.com/irc/" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Gaussian: IRC</a></p></article>
+<p><span data-lang="en">Relax the IRC endpoints with Opt Freq and confirm they fall into the reactant and product minima. Compute the barrier from the <i>G</i> of TS and reactant under the same conditions and standard state.</span></p>
+</section>
+<section class="content-section reading" id="recovery">
+<h2 data-en="TS re-search: overview" data-ja="TS再探索：全体の流れ">TS re-search: overview</h2>
+<p data-en="The procedure when a TS search stops with an eigenvalue error, or converges with two or more imaginary frequencies. The key idea: find the direction of the extra imaginary mode, displace slightly along it, and search again." data-ja="TS探索が固有値エラーで止まったとき、または収束したのに虚振動が2つ以上あるときの手順です。要点は「余分な虚振動の方向を見つけ、その方向に少し動かして探し直す」ことです。">The procedure when a TS search stops with an eigenvalue error, or converges with two or more imaginary frequencies. The key idea: find the direction of the extra imaginary mode, displace slightly along it, and search again.</p>
+<ol class="step-list">
+<li><strong data-en="Check the guess and the reaction direction" data-ja="候補構造と反応方向を確認する" class="step-title">Check the guess and the reaction direction</strong><div class="step-body"><p data-en="Bond distances, atom orientation, clashes. Often fixable here." data-ja="結合距離、原子の向き、衝突。ここで直せることが多いです。">Bond distances, atom orientation, clashes. Often fixable here.</p></div></li>
+<li><strong data-en="(If conditions allow) one short NoEigenTest probe" data-ja="（条件が合えば）短いNoEigenTest試行を1回" class="step-title">(If conditions allow) one short NoEigenTest probe</strong><div class="step-body"><p><span data-lang="en">Only 5 cycles.</span></p></div></li>
+<li><strong data-en="Mode-check Freq" data-ja="モード確認用Freq" class="step-title">Mode-check Freq</strong><div class="step-body"><p data-en="Run Freq at the stopped geometry to get complete vibrational modes." data-ja="止まった構造で Freq を実行し、完全な振動モードを得ます。">Run Freq at the stopped geometry to get complete vibrational modes.</p></div></li>
+<li><strong data-en="Pick the extra mode and displace ±" data-ja="余分なモードを選び、±に変位" class="step-title">Pick the extra mode and displace ±</strong><div class="step-body"><p data-en="Distinguish the reaction mode from the extra mode in a viewer such as GaussView and build two structures displaced ±0.05 Å along the extra one." data-ja="GaussViewなどのビューアーで反応モードと余分なモードを見分け、余分なモードに沿って ±0.05 Å 動かした構造を2つ作ります。">Distinguish the reaction mode from the extra mode in a viewer such as GaussView and build two structures displaced ±0.05 Å along the extra one.</p></div></li>
+<li><strong data-en="Re-search the TS from both, then final Freq and IRC" data-ja="両方の構造からTSを再探索し、最終Freq・IRC" class="step-title">Re-search the TS from both, then final Freq and IRC</strong><div class="step-body"><p data-en="Search each with Opt=(TS,CalcFC); for the one that converges, run Freq and IRC in both directions." data-ja="Opt=(TS,CalcFC) で別々に探索し、収束したほうで Freq と両方向 IRC を行います。">Search each with Opt=(TS,CalcFC); for the one that converges, run Freq and IRC in both directions.</p></div></li>
+</ol>
+</section>
+<section class="content-section reading" id="established-mode-method">
+<h3 data-en="Conditions for a NoEigenTest probe" data-ja="NoEigenTest試行の条件">Conditions for a NoEigenTest probe</h3>
+<p data-en="Even when &quot;Desired=1 Actual=2&quot; appears, use it only when all of the following hold; then suspend the test for 5 cycles only:" data-ja="「Desired=1 Actual=2」が出ても、使うのは次の条件がすべてそろったときだけです。そのときは5サイクルに限って検査を外し、様子を見ます。">Even when &quot;Desired=1 Actual=2&quot; appears, use it only when all of the following hold; then suspend the test for 5 cycles only:</p>
+<ul class="compact-list">
+<li data-en="A direct TS search (Opt=TS) using CalcFC." data-ja="直接TS探索（Opt=TS）で、CalcFC を使っている。">A direct TS search (Opt=TS) using CalcFC.</li>
+<li data-en="The second negative eigenvalue has |value| ≤ 1×10⁻⁴ (optimizer units, not cm⁻¹)." data-ja="2番目の負の固有値の絶対値が 1×10⁻⁴ 以下（optimizerの単位。振動数 cm⁻¹ ではありません）。">The second negative eigenvalue has |value| ≤ 1×10⁻⁴ (optimizer units, not cm⁻¹).</li>
+<li data-en="The reaction geometry is intact at the stopped structure." data-ja="止まった構造で反応構造が保たれている。">The reaction geometry is intact at the stopped structure.</li>
+</ul>
+<pre class="input-block" translate="no" lang="en">Opt=(TS,CalcFC,NoEigenTest,MaxStep=2,MaxCycles=5)</pre>
+<p data-en="After 5 cycles, remove NoEigenTest and restore the test with a fresh CalcFC. If the extra negative curvature reappears, do not repeat NoEigenTest; proceed to the mode check." data-ja="5サイクル後は NoEigenTest を外し、新しい CalcFC で検査を戻します。余分な負の曲率がまた出るなら、NoEigenTest を繰り返さず、次のモード確認へ進みます。">After 5 cycles, remove NoEigenTest and restore the test with a fresh CalcFC. If the extra negative curvature reappears, do not repeat NoEigenTest; proceed to the mode check.</p>
+<pre class="input-block" translate="no" lang="en">Opt=(TS,CalcFC,MaxStep=2,MaxCycles=100)</pre>
+</section>
+<section class="content-section reading" id="mode-freq">
+<h3 data-en="Mode-check Freq" data-ja="モード確認用Freq">Mode-check Freq</h3>
+<p data-en="The eigenvectors printed by the Berny optimizer are partial, so they cannot be used as atomic displacements. Run Freq alone at the stopped geometry to obtain complete Cartesian modes." data-ja="Berny最適化の出力に出る固有ベクトルは一部の成分だけなので、原子の変位としては使えません。止まった構造で Freq だけを実行し、完全なCartesianモードを取ります。">The eigenvectors printed by the Berny optimizer are partial, so they cannot be used as atomic displacements. Run Freq alone at the stopped geometry to obtain complete Cartesian modes.</p>
+<pre class="input-block" translate="no" lang="en">#p B3LYP/6-31G(d) SCRF=(SMD,Solvent=Methanol) Freq</pre>
+<p data-en="This Freq is for finding directions only; use the same functional, basis set and solvent as the TS search. Do not use it for TS proof, thermochemistry or starting an IRC." data-ja="この Freq は方向を調べるためのものです。汎関数・基底関数・溶媒はTS探索と同じにします。TSの証明や熱化学値、IRCの出発点には使いません。">This Freq is for finding directions only; use the same functional, basis set and solvent as the TS search. Do not use it for TS proof, thermochemistry or starting an IRC.</p>
+</section>
+<section class="content-section reading" id="displace">
+<h3 data-en="Displacing ± along the extra mode" data-ja="余分なモードへの±変位">Displacing ± along the extra mode</h3>
+<p data-en="Play each imaginary mode in a viewer such as GaussView. The one matching the intended bond formation/cleavage is the reaction mode; any other is an extra mode. Do not decide by frequency magnitude or order." data-ja="GaussViewなどのビューアーで各虚振動を再生し、目的の結合の形成・切断に対応するモードを「反応モード」、それ以外を「余分なモード」として見分けます。振動数の大小や順番では決めません。">Play each imaginary mode in a viewer such as GaussView. The one matching the intended bond formation/cleavage is the reaction mode; any other is an extra mode. Do not decide by frequency magnitude or order.</p>
+<ul class="compact-list">
+<li data-en="Along the extra mode, build two structures with a maximum atomic displacement of 0.05 Å in the + and − directions (a guideline; range 0.01–0.20 Å)." data-ja="余分なモードに沿って、最大原子移動量 0.05 Å で＋方向と−方向の2構造を作ります（目安。範囲 0.01–0.20 Å）。">Along the extra mode, build two structures with a maximum atomic displacement of 0.05 Å in the + and − directions (a guideline; range 0.01–0.20 Å).</li>
+<li data-en="The sign of a mode (+/−) is arbitrary, so try both." data-ja="モードの符号（＋/−）に決まった意味はないので、両方を試します。">The sign of a mode (+/−) is arbitrary, so try both.</li>
+<li data-en="Re-search each independently with Opt=(TS,CalcFC,MaxStep=2,MaxCycles=100)." data-ja="それぞれを Opt=(TS,CalcFC,MaxStep=2,MaxCycles=100) で独立に再探索します。">Re-search each independently with Opt=(TS,CalcFC,MaxStep=2,MaxCycles=100).</li>
+<li data-en="If both fail, review the reason and the reaction geometry before increasing the displacement." data-ja="両方失敗したら変位量を増やす前に、失敗理由と反応構造を見直します。">If both fail, review the reason and the reaction geometry before increasing the displacement.</li>
+</ul>
+
+</section>
+<section class="content-section reading" id="final">
+<h3 data-en="Final Freq and IRC after convergence" data-ja="収束後の最終Freq・IRC">Final Freq and IRC after convergence</h3>
+<p data-en="Run Freq at the converged stationary point under the same conditions; confirm exactly one imaginary frequency whose motion is the intended reaction. Then confirm the connection to reactant and product with IRC in both directions and endpoint Opt/Freq." data-ja="収束した停留点で同じ条件の Freq を行い、虚振動が1つだけで、その動きが目的の反応であることを確認します。次に両方向の IRC と末端の Opt/Freq で反応物・生成物への接続を確かめます。">Run Freq at the converged stationary point under the same conditions; confirm exactly one imaginary frequency whose motion is the intended reaction. Then confirm the connection to reactant and product with IRC in both directions and endpoint Opt/Freq.</p>
+<p data-en="Record: the original TS, the probe, the mode-check Freq, the chosen mode, the displacement, the ± branches, and the final Freq/IRC." data-ja="記録：元TS、短期試行、モード確認Freq、選んだモード、変位量、＋−の枝、最終Freq・IRCの対応を残します。">Record: the original TS, the probe, the mode-check Freq, the chosen mode, the displacement, the ± branches, and the final Freq/IRC.</p>
+</section>
+<section class="content-section reading" id="basis">
+<h3 data-en="Basis of the method" data-ja="方法の根拠">Basis of the method</h3>
+<p data-en="Displacing along an extra imaginary mode and re-searching is an established approach; the TURBOMOLE manual §5.2.4 describes a similar procedure with screwer. The 5-cycle probe, 0.05 Å initial displacement and 0.01–0.20 Å range are guideline values." data-ja="余分な虚振動に沿って構造を変位させてTSを探し直す考え方は、一般的な方法です。TURBOMOLEのマニュアル §5.2.4 にも screwer による同様の手順があります。5サイクルの試行、0.05 Å の初期変位、0.01–0.20 Å の範囲は目安です。">Displacing along an extra imaginary mode and re-searching is an established approach; the TURBOMOLE manual §5.2.4 describes a similar procedure with screwer. The 5-cycle probe, 0.05 Å initial displacement and 0.01–0.20 Å range are guideline values.</p>
+<h3 data-en="References" data-ja="参考資料">References</h3>
+<ul class="compact-list reference-list">
+<li><a href="https://gaussian.com/opt/" target="_blank" rel="noopener noreferrer" data-ja="Gaussian公式：Opt" data-en="Gaussian: Opt">Gaussian: Opt</a></li>
+<li><a href="https://gaussian.com/freq/" target="_blank" rel="noopener noreferrer" data-ja="Gaussian公式：Freq" data-en="Gaussian: Freq">Gaussian: Freq</a></li>
+<li><a href="https://gaussian.com/faq3/" target="_blank" rel="noopener noreferrer" data-ja="Gaussian公式：Frequency FAQ" data-en="Gaussian: Frequency FAQ">Gaussian: Frequency FAQ</a></li>
+<li><a href="https://www.turbomole.org/downloads/doc/Turbomole_Manual_7-5.pdf#page=122" target="_blank" rel="noopener noreferrer" data-ja="TURBOMOLE 7.5 User&#x27;s Manual, §5.2.4" data-en="TURBOMOLE 7.5 User&#x27;s Manual, §5.2.4">TURBOMOLE 7.5 User&#x27;s Manual, §5.2.4</a></li>
+</ul>
+</section>
+<section class="content-section reading" id="early-ts-alternative">
+<h3 data-en="Alternative for a TS search that stopped early" data-ja="早期に止まったTS探索の別候補">Alternative for a TS search that stopped early</h3>
+<p data-en="When the first TS search hits a curvature error within a few cycles, a mode-check Freq at the stopped geometry is the first option and a fresh search from the original guess with MaxStep=2 is the second." data-ja="最初のTS探索が数サイクルで曲率エラーになった場合は、停止構造でのモード確認用Freqを第一候補、元の候補構造から MaxStep=2 で探索し直すことを第二候補とします。">When the first TS search hits a curvature error within a few cycles, a mode-check Freq at the stopped geometry is the first option and a fresh search from the original guess with MaxStep=2 is the second.</p>
+</section>
+<aside class="callout callout-caution">
+<strong data-en="Notes" data-ja="注意" class="callout-title">Notes</strong>
+<ul class="callout-list">
+<li data-en="A converged constrained Opt or the top of a scan becomes a TS only after TS optimization and Freq confirm it." data-ja="拘束付きOptの収束構造や走査の最高点は、TS最適化とFreqで確かめて初めてTSといえます。">A converged constrained Opt or the top of a scan becomes a TS only after TS optimization and Freq confirm it.</li>
+<li data-en="A converged TS with one imaginary frequency is the TS of your reaction only once IRC confirms the connection to the intended reactant and product." data-ja="虚振動が1つで収束したTSも、IRCで目的の反応物・生成物につながることを確かめて初めて、目的の反応のTSといえます。">A converged TS with one imaginary frequency is the TS of your reaction only once IRC confirms the connection to the intended reactant and product.</li>
+</ul>
+</aside>
+<section class="content-section reading" id="related">
+<h2 data-en="Related pages" data-ja="関連ページ">Related pages</h2>
+<ul class="compact-list">
+<li><a href="./errors-ts.html" data-ja="TSエラー（入力例）" data-en="TS errors (example inputs)">TS errors (example inputs)</a></li>
+<li><a href="./errors-irc.html" data-ja="IRCエラー" data-en="IRC errors">IRC errors</a></li>
+
+</ul>
+</section>
+</div>
+</main>
+<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月21日" data-en="Last updated: 21 November 2026" class="copyright">Last updated: 21 November 2026</p></footer>
+</body>
+</html>

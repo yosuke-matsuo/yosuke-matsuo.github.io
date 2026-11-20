@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="description" content="計算条件から配座の選別、補正式まで、再現に必要な記録の一覧。" data-ja="計算条件から配座の選別、補正式まで、再現に必要な記録の一覧。" data-en="A checklist of everything needed to reproduce the work, from conditions to conformer selection and calibration."/>
+<link rel="canonical" href="https://yosuke-matsuo.github.io/gaussian/reporting.html"/>
+<link rel="alternate" hreflang="ja" href="https://yosuke-matsuo.github.io/gaussian/reporting.html"/>
+<link rel="alternate" hreflang="en" href="https://yosuke-matsuo.github.io/en/gaussian/reporting.html"/>
+<link rel="alternate" hreflang="x-default" href="https://yosuke-matsuo.github.io/gaussian/reporting.html"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Yosuke Matsuo（松尾洋介）"/>
+<meta property="og:title" content="論文・SIに書くこと｜Gaussian入門"/>
+<meta property="og:description" content="計算条件から配座の選別、補正式まで、再現に必要な記録の一覧。" data-ja="計算条件から配座の選別、補正式まで、再現に必要な記録の一覧。" data-en="A checklist of everything needed to reproduce the work, from conditions to conformer selection and calibration."/>
+<meta property="og:url" content="https://yosuke-matsuo.github.io/gaussian/reporting.html"/>
+<meta property="og:locale" content="ja_JP"/>
+<meta property="og:image" content="https://yosuke-matsuo.github.io/images/og-image.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="color-scheme" content="light"/>
+<title data-ja="論文・SIに書くこと｜Gaussian入門" data-en="What to report in papers and SI | Gaussian guide">論文・SIに書くこと｜Gaussian入門</title>
+<link rel="stylesheet" href="../styles.css?v=20261121-1"/>
+<script defer src="../app.js?v=20261121-1"></script>
+</head>
+<body>
+<a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">本文へ移動</a>
+<header class="site-header">
+<a class="brand" href="../index.html">Yosuke Matsuo</a>
+<nav class="primary-nav" aria-label="Main"><a href="../research.html" data-ja="研究内容" data-en="Research">研究内容</a><a href="../publications.html" data-ja="業績" data-en="Publications">業績</a><a href="../tools.html" data-ja="ツール" data-en="Tools">ツール</a><a aria-current="location" href="./index.html" data-ja="Gaussian入門" data-en="Gaussian guide">Gaussian入門</a></nav>
+<div class="language-switch" role="group" aria-label="Language"><button type="button" data-language="ja" lang="ja" aria-pressed="true">日本語</button><button type="button" data-language="en" lang="en" aria-pressed="false">English</button></div>
+</header>
+<main class="page-shell guide" id="main">
+<div class="page-body">
+<section class="intro"><nav aria-label="Breadcrumb" class="breadcrumb"><a data-ja="Gaussian入門" data-en="Gaussian guide" href="./index.html">Gaussian入門</a> / <a data-ja="計算ガイド" data-en="Calculation guide" href="./workflow.html">計算ガイド</a></nav><h1 data-en="What to report in papers and SI" data-ja="論文・SIに書くこと">論文・SIに書くこと</h1></section>
+<nav aria-label="On this page" class="section-nav"><a href="#checklist" data-ja="論文・SIに書くこと" data-en="What to report in papers and SI">論文・SIに書くこと</a><a href="#by-property" data-ja="物性ごとに残す記録" data-en="Records to keep per property">物性ごとに残す記録</a></nav>
+<section class="content-section reading" id="checklist">
+<h2 data-en="What to report in papers and SI" data-ja="論文・SIに書くこと">論文・SIに書くこと</h2>
+<ul class="compact-list">
+<li data-en="Gaussian version, functional, basis set, dispersion correction, solvent model and solvent." data-ja="Gaussianの版、汎関数、基底関数、分散力補正、溶媒モデルと溶媒。">Gaussianの版、汎関数、基底関数、分散力補正、溶媒モデルと溶媒。</li>
+<li><span data-lang="ja">電荷・多重度、温度、エネルギーの定義（<i>E</i>か<i>G</i>か、SP補正の有無）。</span><template data-lang="en"><span data-lang="en" hidden>Charge/multiplicity, temperature, energy definition (<i>E</i> or <i>G</i>, with or without SP correction).</span></template></li>
+<li data-en="Conformer search method and selection criteria, number of conformers used and their populations." data-ja="配座探索の方法と選択基準、採用した配座の数と存在率。">配座探索の方法と選択基準、採用した配座の数と存在率。</li>
+<li><span data-lang="ja">NMR・<i>J</i>の校正式と係数の出典、原子の帰属。</span><template data-lang="en"><span data-lang="en" hidden>NMR/J calibration equations with the source of the coefficients, and atom assignments.</span></template></li>
+<li data-en="For a TS: the imaginary frequency and the IRC result." data-ja="TSは虚振動の値とIRCの結果。">TSは虚振動の値とIRCの結果。</li>
+<li data-en="Coordinates and energies of all optimized structures, and the number of imaginary frequencies." data-ja="最適化した全構造の座標とエネルギー、虚振動の数。">最適化した全構造の座標とエネルギー、虚振動の数。</li>
+</ul>
+</section>
+<section class="content-section reading" id="by-property"><h2 data-en="Records to keep per property" data-ja="物性ごとに残す記録">物性ごとに残す記録</h2>
+<p data-en="Keep the software versions, calculation settings, structures, energies, frequencies, conformer selection and weights, atom assignments, uncorrected values and conversion equations. Keeping concise tables for the paper separate from the traceable calculation record makes checking easier." data-ja="ソフトウェアの版、計算条件、構造、エネルギー、振動数、配座の選別と重み、原子帰属、補正前の値と変換式を保存します。本文用の簡潔な表と、追跡できる計算記録を分けると確認しやすくなります。">ソフトウェアの版、計算条件、構造、エネルギー、振動数、配座の選別と重み、原子帰属、補正前の値と変換式を保存します。本文用の簡潔な表と、追跡できる計算記録を分けると確認しやすくなります。</p>
+<ul><li data-en="Shared: energy used for weighting, temperature, conformers used and the share of the population they cover, reasons for exclusions, computational model." data-ja="共通：重みに使ったエネルギーの種類・温度・採用した配座と全体に占める割合（被覆率）・除外した理由・計算モデル。">共通：重みに使ったエネルギーの種類・温度・採用した配座と全体に占める割合（被覆率）・除外した理由・計算モデル。</li><li data-en="ECD/UV: gauge, band shape, width value and definition, units, display range and step, equation sources. If the curves were shifted or scaled, keep the uncorrected curves and a record of each operation." data-ja="ECD/UV：ゲージ・バンド形状・幅の数値と定義・単位・表示範囲と刻み・使用式の出典。波長シフトや強度の補正を行った場合は、補正前の曲線と行った操作も保存。">ECD/UV：ゲージ・バンド形状・幅の数値と定義・単位・表示範囲と刻み・使用式の出典。波長シフトや強度の補正を行った場合は、補正前の曲線と行った操作も保存。</li><li data-en="NMR: nuclide, atom mapping, raw shielding, reference standard or calibration direction, coefficients, source and applicability. State whether you used a published calibration or a fit to the same experimental data." data-ja="NMR：核種・原子対応・元の遮蔽・参照物質または校正式の方向・係数・出典・適用条件。文献の校正式を使ったのか、同じ実測データに合わせて求めた式なのかを区別。">NMR：核種・原子対応・元の遮蔽・参照物質または校正式の方向・係数・出典・適用条件。文献の校正式を使ったのか、同じ実測データに合わせて求めた式なのかを区別。</li></ul>
+</section>
+
+<section class="content-section reading" id="related">
+<h2 data-en="Related pages" data-ja="関連ページ">関連ページ</h2>
+<ul class="compact-list">
+<li><a href="./conformers.html" data-ja="配座と安定構造" data-en="Conformers and stable structures">配座と安定構造</a></li>
+<li><a href="./nmr.html" data-ja="NMR化学シフト" data-en="NMR chemical shifts">NMR化学シフト</a></li>
+<li><a href="./ecd.html" data-ja="ECD・UV・旋光度" data-en="ECD, UV and optical rotation">ECD・UV・旋光度</a></li>
+</ul>
+</section>
+</div>
+</main>
+<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月21日" data-en="Last updated: 21 November 2026" class="copyright">最終更新：2026年11月21日</p></footer>
+</body>
+</html>
