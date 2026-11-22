@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="description" content="Gaussianの入力と出力に出てくる用語。" data-ja="Gaussianの入力と出力に出てくる用語。" data-en="Terms used in Gaussian input and output."/>
+<link rel="canonical" href="https://yosuke-matsuo.github.io/gaussian/glossary.html"/>
+<link rel="alternate" hreflang="ja" href="https://yosuke-matsuo.github.io/gaussian/glossary.html"/>
+<link rel="alternate" hreflang="en" href="https://yosuke-matsuo.github.io/en/gaussian/glossary.html"/>
+<link rel="alternate" hreflang="x-default" href="https://yosuke-matsuo.github.io/gaussian/glossary.html"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Yosuke Matsuo（松尾洋介）"/>
+<meta property="og:title" content="用語集｜Gaussian入門"/>
+<meta property="og:description" content="Gaussianの入力と出力に出てくる用語。" data-ja="Gaussianの入力と出力に出てくる用語。" data-en="Terms used in Gaussian input and output."/>
+<meta property="og:url" content="https://yosuke-matsuo.github.io/gaussian/glossary.html"/>
+<meta property="og:locale" content="ja_JP"/>
+<meta property="og:image" content="https://yosuke-matsuo.github.io/images/og-image.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="color-scheme" content="light"/>
+<title data-ja="用語集｜Gaussian入門" data-en="Glossary | Gaussian guide">用語集｜Gaussian入門</title>
+<link rel="stylesheet" href="../styles.css?v=20261121-1"/>
+<script defer src="../app.js?v=20261121-1"></script>
+</head>
+<body>
+<a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">本文へ移動</a>
+<header class="site-header">
+<a class="brand" href="../index.html">Yosuke Matsuo</a>
+<nav class="primary-nav" aria-label="Main"><a href="../research.html" data-ja="研究内容" data-en="Research">研究内容</a><a href="../publications.html" data-ja="業績" data-en="Publications">業績</a><a href="../tools.html" data-ja="ツール" data-en="Tools">ツール</a><a aria-current="location" href="./index.html" data-ja="Gaussian入門" data-en="Gaussian guide">Gaussian入門</a></nav>
+<div class="language-switch" role="group" aria-label="Language"><button type="button" data-language="ja" lang="ja" aria-pressed="true">日本語</button><button type="button" data-language="en" lang="en" aria-pressed="false">English</button></div>
+</header>
+<main class="page-shell guide" id="main">
+<div class="page-body">
+<section class="intro"><nav aria-label="Breadcrumb" class="breadcrumb"><a data-ja="Gaussian入門" data-en="Gaussian guide" href="./index.html">Gaussian入門</a></nav><h1 data-en="Glossary" data-ja="用語集">用語集</h1></section>
+<nav aria-label="On this page" class="section-nav"><a href="#g-files" data-ja="ファイル" data-en="Files">ファイル</a><a href="#g-jobs" data-ja="計算の種類" data-en="Job types">計算の種類</a><a href="#g-methods" data-ja="方法と条件" data-en="Methods and settings">方法と条件</a><a href="#g-output" data-ja="出力の読み方" data-en="Reading output">出力の読み方</a></nav>
+<section class="content-section reading" id="g-files">
+<h2 data-en="Files" data-ja="ファイル">ファイル</h2>
+<div class="table-wrap"><table><thead><tr>
+<th data-en="Term" data-ja="用語" scope="col">用語</th>
+<th data-en="Meaning" data-ja="意味" scope="col">意味</th>
+</tr></thead><tbody>
+<tr>
+<td data-en=".gjf / .com" data-ja=".gjf / .com">.gjf / .com</td>
+<td data-en="Gaussian input file: a text file with the calculation settings and the molecular coordinates." data-ja="Gaussianの入力ファイル。計算条件と分子の座標を書いたテキストファイルです。">Gaussianの入力ファイル。計算条件と分子の座標を書いたテキストファイルです。</td>
+</tr>
+<tr>
+<td data-en=".log / .out" data-ja=".log / .out">.log / .out</td>
+<td data-en="Gaussian output file. Energies, geometries, frequencies and errors are all written as text. The extension depends on the environment." data-ja="Gaussianの出力ファイル。エネルギー、構造、振動数、エラーがすべてテキストで書かれています。拡張子は環境によって違います。">Gaussianの出力ファイル。エネルギー、構造、振動数、エラーがすべてテキストで書かれています。拡張子は環境によって違います。</td>
+</tr>
+<tr>
+<td data-en=".chk (checkpoint)" data-ja=".chk（チェックポイント）">.chk（チェックポイント）</td>
+<td data-en="A binary file holding intermediate results. Set with %chk=name; read from another job with %oldchk." data-ja="計算の途中結果を保存するバイナリファイル。%chk=名前 で指定し、%oldchk で別の計算から読み込めます。">計算の途中結果を保存するバイナリファイル。%chk=名前 で指定し、%oldchk で別の計算から読み込めます。</td>
+</tr>
+<tr>
+<td data-en="Route line" data-ja="ルート行">ルート行</td>
+<td data-en="The line in the input starting with #. Specifies the method (functional/basis set) and job type (Opt, Freq, NMR, ...)." data-ja="入力の # で始まる行。計算方法（汎関数/基底関数）と計算の種類（Opt, Freq, NMR など）を指定します。">入力の # で始まる行。計算方法（汎関数/基底関数）と計算の種類（Opt, Freq, NMR など）を指定します。</td>
+</tr>
+</tbody></table></div>
+</section>
+<section class="content-section reading" id="g-jobs">
+<h2 data-en="Job types" data-ja="計算の種類">計算の種類</h2>
+<div class="table-wrap"><table><thead><tr>
+<th data-en="Term" data-ja="用語" scope="col">用語</th>
+<th data-en="Meaning" data-ja="意味" scope="col">意味</th>
+</tr></thead><tbody>
+<tr>
+<td data-en="Opt (geometry optimization)" data-ja="Opt（構造最適化）">Opt（構造最適化）</td>
+<td data-en="Moves atoms step by step to find a structure where the forces are nearly zero (a minimum or a TS)." data-ja="原子の位置を少しずつ動かし、力がほぼゼロになる構造（極小またはTS）を探します。">原子の位置を少しずつ動かし、力がほぼゼロになる構造（極小またはTS）を探します。</td>
+</tr>
+<tr>
+<td data-en="Freq (frequency analysis)" data-ja="Freq（振動数解析）">Freq（振動数解析）</td>
+<td><span data-lang="ja">最適化した構造の振動数を計算します。すべて正なら安定構造、1つだけ負（虚振動）ならTSです。熱力学量（<i>G</i>, <i>H</i>）もここで得られます。</span><template data-lang="en"><span data-lang="en" hidden>Computes vibrational frequencies at the optimized structure. All positive: a minimum; exactly one negative (imaginary): a TS. Thermodynamic quantities (<i>G</i>, <i>H</i>) come from here too.</span></template></td>
+</tr>
+<tr>
+<td data-en="SP (single point)" data-ja="SP（シングルポイント計算）">SP（シングルポイント計算）</td>
+<td data-en="Computes the energy without moving the geometry. Used to refine energies with a larger basis set." data-ja="構造を動かさずにエネルギーだけを計算します。大きな基底関数でエネルギーを精密化するときに使います。">構造を動かさずにエネルギーだけを計算します。大きな基底関数でエネルギーを精密化するときに使います。</td>
+</tr>
+<tr>
+<td data-en="TS (transition-state search)" data-ja="TS（遷移状態探索）">TS（遷移状態探索）</td>
+<td data-en="Opt=TS. Searches for the top of a reaction barrier (first-order saddle point). Usually run with CalcFC to compute the initial Hessian." data-ja="Opt=TS。反応の障壁の頂点（一次の鞍点）を探します。CalcFC を付けて最初にヘシアンを計算するのが普通です。">Opt=TS。反応の障壁の頂点（一次の鞍点）を探します。CalcFC を付けて最初にヘシアンを計算するのが普通です。</td>
+</tr>
+<tr>
+<td data-en="IRC (intrinsic reaction coordinate)" data-ja="IRC（固有反応座標）">IRC（固有反応座標）</td>
+<td data-en="Follows the downhill path from a TS toward reactant and product to confirm which structures the TS connects." data-ja="TSから反応物側・生成物側へエネルギーを下る道をたどり、TSがどの構造をつないでいるかを確かめます。">TSから反応物側・生成物側へエネルギーを下る道をたどり、TSがどの構造をつないでいるかを確かめます。</td>
+</tr>
+<tr>
+<td data-en="NMR (GIAO)" data-ja="NMR（GIAO）">NMR（GIAO）</td>
+<td data-en="Computes nuclear shielding constants σ. Chemical shifts δ come from the difference with a reference or from a calibration equation." data-ja="核の遮蔽定数σを計算します。化学シフトδは参照物質との差や校正式で求めます。">核の遮蔽定数σを計算します。化学シフトδは参照物質との差や校正式で求めます。</td>
+</tr>
+<tr>
+<td data-en="TD (time-dependent DFT)" data-ja="TD（時間依存DFT）">TD（時間依存DFT）</td>
+<td data-en="Computes excited states; used for UV and ECD spectra." data-ja="励起状態を計算します。UVスペクトルとECDスペクトルの計算に使います。">励起状態を計算します。UVスペクトルとECDスペクトルの計算に使います。</td>
+</tr>
+</tbody></table></div>
+</section>
+<section class="content-section reading" id="g-methods">
+<h2 data-en="Methods and settings" data-ja="方法と条件">方法と条件</h2>
+<div class="table-wrap"><table><thead><tr>
+<th data-en="Term" data-ja="用語" scope="col">用語</th>
+<th data-en="Meaning" data-ja="意味" scope="col">意味</th>
+</tr></thead><tbody>
+<tr>
+<td data-en="Functional" data-ja="汎関数">汎関数</td>
+<td data-en="The approximation for electron–electron interactions in DFT. Specified by names such as B3LYP, M06-2X, ωB97X-D." data-ja="DFTで電子同士の相互作用を近似する式。B3LYP, M06-2X, ωB97X-D などの名前で指定します。">DFTで電子同士の相互作用を近似する式。B3LYP, M06-2X, ωB97X-D などの名前で指定します。</td>
+</tr>
+<tr>
+<td data-en="Basis set" data-ja="基底関数">基底関数</td>
+<td data-en="The set of functions describing the electron distribution: 6-31G(d), 6-311+G(d,p), def2-TZVP, ... Larger means more accurate and slower." data-ja="電子の広がりを表す関数の組。6-31G(d), 6-311+G(d,p), def2-TZVP など。大きいほど精密で、計算時間も増えます。">電子の広がりを表す関数の組。6-31G(d), 6-311+G(d,p), def2-TZVP など。大きいほど精密で、計算時間も増えます。</td>
+</tr>
+<tr>
+<td data-en="Dispersion correction (D3)" data-ja="分散力補正（D3）">分散力補正（D3）</td>
+<td data-en="Adds weak attractive (dispersion) interactions to DFT. EmpiricalDispersion=GD3BJ. Important for conformations and intermolecular interactions." data-ja="弱い引力（分散力）をDFTに足す補正。EmpiricalDispersion=GD3BJ。配座や分子間相互作用で重要です。">弱い引力（分散力）をDFTに足す補正。EmpiricalDispersion=GD3BJ。配座や分子間相互作用で重要です。</td>
+</tr>
+<tr>
+<td data-en="Solvent model (PCM, SMD)" data-ja="溶媒モデル（PCM, SMD）">溶媒モデル（PCM, SMD）</td>
+<td data-en="Approximates the solvent as a continuum. Specified as e.g. SCRF=(SMD,Solvent=Methanol)." data-ja="溶媒の影響を連続体として近似します。SCRF=(SMD,Solvent=Methanol) のように指定します。">溶媒の影響を連続体として近似します。SCRF=(SMD,Solvent=Methanol) のように指定します。</td>
+</tr>
+<tr>
+<td data-en="Charge and multiplicity" data-ja="電荷・多重度">電荷・多重度</td>
+<td data-en="Total charge and spin multiplicity (2S+1). Examples: neutral closed-shell 0 1; closed-shell monoanion −1 1; neutral doublet radical 0 2." data-ja="分子全体の電荷と、スピン多重度（2S+1）。例：中性の閉殻分子は 0 1、閉殻の一価アニオンは −1 1、中性の二重項ラジカルは 0 2。">分子全体の電荷と、スピン多重度（2S+1）。例：中性の閉殻分子は 0 1、閉殻の一価アニオンは −1 1、中性の二重項ラジカルは 0 2。</td>
+</tr>
+<tr>
+<td data-en="SCF" data-ja="SCF">SCF</td>
+<td data-en="The iterative solution of the electronic structure at one geometry. Failure to converge gives Convergence failure." data-ja="1つの構造で電子状態を求める反復計算。収束しないと Convergence failure になります。">1つの構造で電子状態を求める反復計算。収束しないと Convergence failure になります。</td>
+</tr>
+<tr>
+<td data-en="Hessian / CalcFC" data-ja="ヘシアン / CalcFC">ヘシアン / CalcFC</td>
+<td data-en="Second derivatives of the energy (force constants), used to choose optimization steps. CalcFC computes it exactly at the first cycle." data-ja="エネルギーの二階微分（力の定数）。最適化の方向を決めるのに使います。CalcFC は最初のサイクルでこれを正確に計算する指定です。">エネルギーの二階微分（力の定数）。最適化の方向を決めるのに使います。CalcFC は最初のサイクルでこれを正確に計算する指定です。</td>
+</tr>
+<tr>
+<td data-en="MM (molecular mechanics) / MMFF" data-ja="MM（分子力学）/ MMFF">MM（分子力学）/ MMFF</td>
+<td data-en="A fast method that treats bonds and angles as springs without electrons. Used for conformer searches and initial structures." data-ja="電子を扱わず、結合や角度をバネのような式で表す高速な方法。配座探索や初期構造の作成に使います。">電子を扱わず、結合や角度をバネのような式で表す高速な方法。配座探索や初期構造の作成に使います。</td>
+</tr>
+</tbody></table></div>
+</section>
+<section class="content-section reading" id="g-output">
+<h2 data-en="Reading output" data-ja="出力の読み方">出力の読み方</h2>
+<div class="table-wrap"><table><thead><tr>
+<th data-en="Term" data-ja="用語" scope="col">用語</th>
+<th data-en="Meaning" data-ja="意味" scope="col">意味</th>
+</tr></thead><tbody>
+<tr>
+<td data-en="Normal termination" data-ja="Normal termination">Normal termination</td>
+<td data-en="Shows that the program finished normally." data-ja="プログラムが正常に終了したことを示す出力。">プログラムが正常に終了したことを示す出力。</td>
+</tr>
+<tr>
+<td data-en="Error termination" data-ja="Error termination">Error termination</td>
+<td data-en="Abnormal end. The cause is printed a few lines above." data-ja="異常終了。原因はこの行の数行上に書かれています。">異常終了。原因はこの行の数行上に書かれています。</td>
+</tr>
+<tr>
+<td data-en="Stationary point found" data-ja="Stationary point found">Stationary point found</td>
+<td data-en="Shows that the optimization converged; normally printed when all four Converged? items are YES (it can also appear with displacements NO when the forces are very small)." data-ja="最適化が収束したことを示す出力。通常は Converged? の4項目がすべて YES のときに出ます（力が十分小さければ、変位が NO でも出ることがあります）。">最適化が収束したことを示す出力。通常は Converged? の4項目がすべて YES のときに出ます（力が十分小さければ、変位が NO でも出ることがあります）。</td>
+</tr>
+<tr>
+<td data-en="Imaginary frequency" data-ja="虚振動">虚振動</td>
+<td data-en="A frequency reported as negative; moving along it lowers the energy. A minimum has none; a TS has exactly one." data-ja="負の値で出力される振動数。その方向に構造を動かすとエネルギーが下がることを意味します。安定構造ではゼロ個、TSでは1個。">負の値で出力される振動数。その方向に構造を動かすとエネルギーが下がることを意味します。安定構造ではゼロ個、TSでは1個。</td>
+</tr>
+<tr>
+<td><span data-lang="ja"><i>E</i> と <i>G</i></span><template data-lang="en"><span data-lang="en" hidden><i>E</i> and <i>G</i></span></template></td>
+<td><span data-lang="ja"><i>E</i>（SCF Done の値）は電子エネルギー、<i>G</i>（Sum of electronic and thermal Free Energies）はGibbs自由エネルギー。配座の存在率は通常 <i>G</i> から求めます（手順によっては <i>E</i> を使うものもあります）。</span><template data-lang="en"><span data-lang="en" hidden><i>E</i> (the SCF Done value) is the electronic energy; <i>G</i> (Sum of electronic and thermal Free Energies) is the Gibbs free energy. Conformer populations are usually computed from <i>G</i> (some protocols use <i>E</i>).</span></template></td>
+</tr>
+<tr>
+<td data-en="Boltzmann distribution" data-ja="ボルツマン分布">ボルツマン分布</td>
+<td><span data-lang="ja">各配座の存在率を <i>G</i> の差から求める式。<i>p</i><sub><i>i</i></sub> ∝ exp(−Δ<i>G</i><sub><i>i</i></sub>/<i>RT</i>)。物性はこの重みで平均します。</span><template data-lang="en"><span data-lang="en" hidden>Gives conformer populations from differences in <i>G</i>: <i>p</i><sub><i>i</i></sub> ∝ exp(−Δ<i>G</i><sub><i>i</i></sub>/<i>RT</i>). Properties are averaged with these weights.</span></template></td>
+</tr>
+<tr>
+<td data-en="DP4+" data-ja="DP4+">DP4+</td>
+<td data-en="A statistical method that assigns probabilities to candidate structures from the agreement between calculated and experimental NMR." data-ja="計算したNMRと実測の一致度から、候補構造の確率を出す統計手法。">計算したNMRと実測の一致度から、候補構造の確率を出す統計手法。</td>
+</tr>
+</tbody></table></div>
+</section>
+<section class="content-section reading" id="related">
+<h2 data-en="Related pages" data-ja="関連ページ">関連ページ</h2>
+<ul class="compact-list">
+<li><a href="./keywords.html" data-ja="Gaussianキーワード一覧" data-en="Gaussian keyword reference">Gaussianキーワード一覧</a></li>
+<li><a href="./start.html" data-ja="はじめてのGaussian計算" data-en="Your first Gaussian calculation">はじめてのGaussian計算</a></li>
+</ul>
+</section>
+</div>
+</main>
+<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月21日" data-en="Last updated: 21 November 2026" class="copyright">最終更新：2026年11月21日</p></footer>
+</body>
+</html>

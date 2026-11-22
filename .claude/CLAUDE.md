@@ -17,9 +17,10 @@
 - 開発用のファイルやメモは _dev/ か .claude/ に置く（GitHub Pages で公開されない）。ルートに README や .md を置かない。.nojekyll は追加しない。
 - 依頼に必要のない変更（特に研究内容・業績のページ）はしない。デザイン・配色・簡潔な文章を保ち、装飾や冗長な説明を増やさない。
 
-## 個人ページ（index / research / publications / tools / 404）
+## 個人ページ（index / research / publications / tools / 404、Gaussian入門 gaussian/）
 - 日本語のページが元。英語は文字だけの要素なら data-ja・data-en 属性、リンクなどを含む文は <template data-lang="en"> に入れた <span data-lang="en" hidden>（初期 HTML の本文は日本語だけにする）。
-- 英語版 en/*.html（index・research・publications・tools）は `python3 _dev/build_en.py` で日本語のページから作る。手で編集しない。個人ページを変更したら実行する（テストで一致を確認）。日英のページは hreflang で対にし、言語ボタンはもう一方のページへ移る。?lang= の古いリンクも対応するページへ移す。404 はページ内で切り替える。
+- Gaussian入門（gaussian/）は Gaussian の計算の基礎・計算条件・エラー対応と計算化学ソフトのページ。未公開のソフトへの言及と実例ファイルへのリンクは載せない。
+- 英語版 en/*.html（index・research・publications・tools）と en/gaussian/*.html は `python3 _dev/build_en.py` で日本語のページから作る。手で編集しない。個人ページを変更したら実行する（テストで一致を確認）。日英のページは hreflang で対にし、言語ボタンはもう一方のページへ移る。?lang= の古いリンクも対応するページへ移す。404 はページ内で切り替える。
 - 外部リンクは target="_blank" rel="noopener noreferrer"。
 - 個人ページ（404 を含む）を変更したら、styles.css・app.js の版番号（?v=日付-番号）を全ページで同じ新しい値にし、フッターの最終更新日も全ページ同じ日付に更新する（テストで確認）。
 - 業績ページの画像は width・height に実寸、先頭以外は loading="lazy"、decoding="async"。画像の文字が読めなくなる圧縮はしない。

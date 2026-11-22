@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="description" content="反応経路計算が止まったときの対処と、LQAでの再追跡。" data-ja="反応経路計算が止まったときの対処と、LQAでの再追跡。" data-en="What to do when a reaction-path calculation stops, and retracing with LQA."/>
+<link rel="canonical" href="https://yosuke-matsuo.github.io/gaussian/errors-irc.html"/>
+<link rel="alternate" hreflang="ja" href="https://yosuke-matsuo.github.io/gaussian/errors-irc.html"/>
+<link rel="alternate" hreflang="en" href="https://yosuke-matsuo.github.io/en/gaussian/errors-irc.html"/>
+<link rel="alternate" hreflang="x-default" href="https://yosuke-matsuo.github.io/gaussian/errors-irc.html"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Yosuke Matsuo（松尾洋介）"/>
+<meta property="og:title" content="IRCエラー｜Gaussian入門"/>
+<meta property="og:description" content="反応経路計算が止まったときの対処と、LQAでの再追跡。" data-ja="反応経路計算が止まったときの対処と、LQAでの再追跡。" data-en="What to do when a reaction-path calculation stops, and retracing with LQA."/>
+<meta property="og:url" content="https://yosuke-matsuo.github.io/gaussian/errors-irc.html"/>
+<meta property="og:locale" content="ja_JP"/>
+<meta property="og:image" content="https://yosuke-matsuo.github.io/images/og-image.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="color-scheme" content="light"/>
+<title data-ja="IRCエラー｜Gaussian入門" data-en="IRC errors | Gaussian guide">IRCエラー｜Gaussian入門</title>
+<link rel="stylesheet" href="../styles.css?v=20261121-1"/>
+<script defer src="../app.js?v=20261121-1"></script>
+</head>
+<body>
+<a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">本文へ移動</a>
+<header class="site-header">
+<a class="brand" href="../index.html">Yosuke Matsuo</a>
+<nav class="primary-nav" aria-label="Main"><a href="../research.html" data-ja="研究内容" data-en="Research">研究内容</a><a href="../publications.html" data-ja="業績" data-en="Publications">業績</a><a href="../tools.html" data-ja="ツール" data-en="Tools">ツール</a><a aria-current="location" href="./index.html" data-ja="Gaussian入門" data-en="Gaussian guide">Gaussian入門</a></nav>
+<div class="language-switch" role="group" aria-label="Language"><button type="button" data-language="ja" lang="ja" aria-pressed="true">日本語</button><button type="button" data-language="en" lang="en" aria-pressed="false">English</button></div>
+</header>
+<main class="page-shell guide" id="main">
+
+<div class="page-body">
+<section class="intro"><nav aria-label="Breadcrumb" class="breadcrumb"><a data-ja="Gaussian入門" data-en="Gaussian guide" href="./index.html">Gaussian入門</a> / <a data-ja="Gaussianのエラー対応" data-en="Troubleshooting Gaussian errors" href="./troubleshooting.html">Gaussianのエラー対応</a></nav><h1 data-en="IRC errors" data-ja="IRCエラー">IRCエラー</h1><p data-en="What to do when a reaction-path calculation stops, and retracing with LQA." data-ja="反応経路計算が止まったときの対処と、LQAでの再追跡。" class="lead">反応経路計算が止まったときの対処と、LQAでの再追跡。</p></section>
+<section class="content-section reading" id="irc-errors">
+<h2 data-en="IRC errors" data-ja="IRCのエラー">IRCのエラー</h2>
+<article class="error-entry"><h3 data-en="Corrector does not converge" data-ja="correctorが収束しない" id="corrector">correctorが収束しない</h3><pre class="error-marker" translate="no" lang="en">Maximum number of corrector steps exceded</pre><p><strong data-en="Cause: " data-ja="原因：">原因：</strong><span data-en="The path-correction iterations (corrector) did not converge." data-ja="経路を補正する反復（corrector）が上限内に収束しません。">経路を補正する反復（corrector）が上限内に収束しません。</span></p><strong data-en="What to do" data-ja="対処" class="action-label">対処</strong><ol class="compact-list">
+<li data-en="Check whether an SCF failure or a memory/disk shortage happened first; fix that if so." data-ja="SCFの失敗やメモリ・ディスク不足が先に起きていないかを確認します。それらが原因ならそちらを直します。">SCFの失敗やメモリ・ディスク不足が先に起きていないかを確認します。それらが原因ならそちらを直します。</li>
+<li data-en="If this error occurs with the default algorithm (no option, or IRC=HPC), recompute from the same TS with IRC=LQA: read the TS Freq .chk with %oldchk and keep the direction, MaxPoints and StepSize of the original job (input below)." data-ja="既定のアルゴリズム（指定なし、または IRC=HPC）でこのエラーが出た場合は、IRC=LQA に変えて同じTSから計算し直します。TSのFreqの .chk を %oldchk で読み、方向・MaxPoints・StepSize は元の計算と同じにします（下の入力例）。">既定のアルゴリズム（指定なし、または IRC=HPC）でこのエラーが出た場合は、IRC=LQA に変えて同じTSから計算し直します。TSのFreqの .chk を %oldchk で読み、方向・MaxPoints・StepSize は元の計算と同じにします（下の入力例）。</li>
+<li data-en="Reducing StepSize (e.g. 10 → 5) also helps." data-ja="StepSize を小さくする（例：10 → 5）のも有効です。">StepSize を小さくする（例：10 → 5）のも有効です。</li>
+</ol></article>
+<article class="error-entry"><h3 data-en="IRC point limit reached" data-ja="IRCの上限到達" id="irc-maxpoints">IRCの上限到達</h3><pre class="error-marker" translate="no" lang="en">Maximum number of steps reached.</pre><p><strong data-en="Cause: " data-ja="原因：">原因：</strong><span data-en="The IRC ran to MaxPoints and stopped normally, but the endpoint may not have reached a minimum yet." data-ja="MaxPoints まで進んで正常に止まった状態です。末端がまだ極小構造に着いていないことがあります。">MaxPoints まで進んで正常に止まった状態です。末端がまだ極小構造に着いていないことがあります。</span></p><strong data-en="What to do" data-ja="対処" class="action-label">対処</strong><ol class="compact-list">
+<li data-en="Look at the endpoint structure. If it is still changing a lot, continue with a larger MaxPoints: either extend from the stopped IRC .chk with IRC=(Restart,MaxPoints=N), or recompute from the TS Freq .chk with a larger MaxPoints (same form as the input below, with IRC=(RCFC,…) and %oldchk)." data-ja="末端の構造を見ます。まだ大きく変化中なら、MaxPoints を増やして続けます。止まったIRCの .chk から IRC=(Restart,MaxPoints=N) で延長する方法と、TSのFreqの .chk から MaxPoints を増やして計算し直す方法（下の入力例と同じ形で、IRC=(RCFC,…) と %oldchk を使う）があります。">末端の構造を見ます。まだ大きく変化中なら、MaxPoints を増やして続けます。止まったIRCの .chk から IRC=(Restart,MaxPoints=N) で延長する方法と、TSのFreqの .chk から MaxPoints を増やして計算し直す方法（下の入力例と同じ形で、IRC=(RCFC,…) と %oldchk を使う）があります。</li>
+<li data-en="If it looks like reactant/product, relax the endpoint with Opt Freq and confirm a minimum." data-ja="反応物・生成物らしい構造に達していれば、末端構造を Opt Freq で緩和して極小を確認します。">反応物・生成物らしい構造に達していれば、末端構造を Opt Freq で緩和して極小を確認します。</li>
+</ol></article>
+<article class="error-entry"><h3 data-en="Endpoint Opt step limit" data-ja="末端Optの回数上限" id="endpoint">末端Optの回数上限</h3><pre class="error-marker" translate="no" lang="en">Number of steps exceeded,  NStep= 100</pre><p><strong data-en="Cause: " data-ja="原因：">原因：</strong><span data-en="The optimization from an IRC endpoint stopped at the cycle limit." data-ja="IRC末端からの構造最適化が回数上限で止まりました。">IRC末端からの構造最適化が回数上限で止まりました。</span></p><strong data-en="What to do" data-ja="対処" class="action-label">対処</strong><ol class="compact-list">
+<li><p><span data-lang="ja">通常のOptと同じ対処です（<a href="./errors-opt-scf.html#minimum">Optの回数上限</a>）。</span><template data-lang="en"><span data-lang="en" hidden>Same remedy as an ordinary Opt (<a href="./errors-opt-scf.html#minimum">Opt step limit</a>).</span></template></p></li>
+<li data-en="Decide which end is reactant or product from the final structure, not from the Forward/Reverse labels." data-ja="反応物か生成物かは、Forward/Reverse の名前ではなく、最終構造を見て判断します。">反応物か生成物かは、Forward/Reverse の名前ではなく、最終構造を見て判断します。</li>
+</ol></article>
+</section>
+<section class="content-section reading" id="gjf-lqa">
+<h2 data-en="Example input for retracing with LQA" data-ja="LQAで再追跡する入力例">LQAで再追跡する入力例</h2>
+<pre class="input-block" translate="no" lang="en">%oldchk=ts_freq.chk
+%chk=ts_irc_fwd_lqa.chk
+#p B3LYP/6-31G(d) SCRF=(SMD,Solvent=Methanol)
+ IRC=(RCFC,Forward,LQA,MaxPoints=80,StepSize=5) Geom=AllCheck Guess=Read</pre>
+<p data-en="If Reverse failed, change Forward to Reverse and %chk to ts_irc_rev_lqa.chk. Geom=AllCheck reads the title, geometry, charge and multiplicity from the .chk, so the title, charge/multiplicity line and coordinates are not written. Make sure the referenced ts_freq.chk (the checkpoint of the TS Freq) is in the same folder on the run machine." data-ja="Reverse が失敗した場合は Forward を Reverse に、%chk を ts_irc_rev_lqa.chk に変えます。Geom=AllCheck はタイトル・構造・電荷・多重度を .chk から読むので、タイトル行から座標欄までは書きません。参照する ts_freq.chk（TSのFreqのチェックポイント）が実行環境の同じフォルダーにあることを確認してください。">Reverse が失敗した場合は Forward を Reverse に、%chk を ts_irc_rev_lqa.chk に変えます。Geom=AllCheck はタイトル・構造・電荷・多重度を .chk から読むので、タイトル行から座標欄までは書きません。参照する ts_freq.chk（TSのFreqのチェックポイント）が実行環境の同じフォルダーにあることを確認してください。</p>
+</section>
+<section class="content-section reading" id="related">
+<h2 data-en="Related pages" data-ja="関連ページ">関連ページ</h2>
+<ul class="compact-list">
+<li><a href="./troubleshooting.html" data-ja="エラー対応トップ" data-en="Troubleshooting index">エラー対応トップ</a></li>
+<li><a href="./reaction.html#irc" data-ja="IRCの手順" data-en="IRC procedure">IRCの手順</a></li>
+<li><a href="./errors-opt-scf.html#scf" data-ja="SCFの収束失敗" data-en="SCF convergence failure">SCFの収束失敗</a></li>
+</ul>
+</section>
+</div>
+</main>
+<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月21日" data-en="Last updated: 21 November 2026" class="copyright">最終更新：2026年11月21日</p></footer>
+</body>
+</html>

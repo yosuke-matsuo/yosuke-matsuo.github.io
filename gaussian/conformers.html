@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="description" content="Gaussianによる配座探索、構造最適化と振動数解析（Opt Freq）、Gibbs自由エネルギーからの存在率の求め方と計算条件。" data-ja="Gaussianによる配座探索、構造最適化と振動数解析（Opt Freq）、Gibbs自由エネルギーからの存在率の求め方と計算条件。" data-en="Conformer search, Opt Freq and Boltzmann populations from Gibbs free energies with Gaussian, with calculation settings."/>
+<link rel="canonical" href="https://yosuke-matsuo.github.io/gaussian/conformers.html"/>
+<link rel="alternate" hreflang="ja" href="https://yosuke-matsuo.github.io/gaussian/conformers.html"/>
+<link rel="alternate" hreflang="en" href="https://yosuke-matsuo.github.io/en/gaussian/conformers.html"/>
+<link rel="alternate" hreflang="x-default" href="https://yosuke-matsuo.github.io/gaussian/conformers.html"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Yosuke Matsuo（松尾洋介）"/>
+<meta property="og:title" content="配座と安定構造｜Gaussian入門"/>
+<meta property="og:description" content="Gaussianによる配座探索、構造最適化と振動数解析（Opt Freq）、Gibbs自由エネルギーからの存在率の求め方と計算条件。" data-ja="Gaussianによる配座探索、構造最適化と振動数解析（Opt Freq）、Gibbs自由エネルギーからの存在率の求め方と計算条件。" data-en="Conformer search, Opt Freq and Boltzmann populations from Gibbs free energies with Gaussian, with calculation settings."/>
+<meta property="og:url" content="https://yosuke-matsuo.github.io/gaussian/conformers.html"/>
+<meta property="og:locale" content="ja_JP"/>
+<meta property="og:image" content="https://yosuke-matsuo.github.io/images/og-image.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="color-scheme" content="light"/>
+<title data-ja="配座と安定構造｜Gaussian入門" data-en="Conformers and stable structures | Gaussian guide">配座と安定構造｜Gaussian入門</title>
+<link rel="stylesheet" href="../styles.css?v=20261121-1"/>
+<script defer src="../app.js?v=20261121-1"></script>
+</head>
+<body>
+<a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">本文へ移動</a>
+<header class="site-header">
+<a class="brand" href="../index.html">Yosuke Matsuo</a>
+<nav class="primary-nav" aria-label="Main"><a href="../research.html" data-ja="研究内容" data-en="Research">研究内容</a><a href="../publications.html" data-ja="業績" data-en="Publications">業績</a><a href="../tools.html" data-ja="ツール" data-en="Tools">ツール</a><a aria-current="location" href="./index.html" data-ja="Gaussian入門" data-en="Gaussian guide">Gaussian入門</a></nav>
+<div class="language-switch" role="group" aria-label="Language"><button type="button" data-language="ja" lang="ja" aria-pressed="true">日本語</button><button type="button" data-language="en" lang="en" aria-pressed="false">English</button></div>
+</header>
+<main class="page-shell guide" id="main">
+<div class="page-body">
+<section class="intro"><nav aria-label="Breadcrumb" class="breadcrumb"><a data-ja="Gaussian入門" data-en="Gaussian guide" href="./index.html">Gaussian入門</a> / <a data-ja="計算ガイド" data-en="Calculation guide" href="./workflow.html">計算ガイド</a></nav><h1 data-en="Conformers and stable structures" data-ja="配座と安定構造">配座と安定構造</h1></section>
+<nav aria-label="On this page" class="section-nav"><a href="#theory" data-ja="MM・HF・DFTの違い" data-en="MM, HF and DFT">MM・HF・DFTの違い</a><a href="#energies"><span data-lang="ja"><i>E</i>と<i>G</i>と存在率（考え方）</span><template data-lang="en"><span data-lang="en" hidden><i>E</i>, <i>G</i> and populations (concepts)</span></template></a><a href="#build" data-ja="構造を作る" data-en="Build the structure">構造を作る</a><a href="#search" data-ja="配座探索" data-en="Conformer search">配座探索</a><a href="#opt" data-ja="構造最適化と振動数解析（Opt Freq）" data-en="Optimization and frequencies (Opt Freq)">構造最適化と振動数解析（Opt Freq）</a><a href="#energy" data-ja="エネルギーの比較と存在率" data-en="Energy comparison and populations">エネルギーの比較と存在率</a><a href="#population" data-ja="存在率と重みの式" data-en="Population and weight equations">存在率と重みの式</a><a href="#conditions" data-ja="計算条件（Opt Freq）" data-en="Calculation conditions (Opt Freq)">計算条件（Opt Freq）</a><a href="#sp" data-ja="計算条件：単点エネルギー（SP）" data-en="Conditions: single-point energies (SP)">計算条件：単点エネルギー（SP）</a></nav>
+<section class="content-section reading" id="theory">
+<h2 data-en="MM, HF and DFT" data-ja="MM・HF・DFTの違い">MM・HF・DFTの違い</h2>
+<p data-en="Molecular mechanics (MM) treats bond stretching and torsion with spring-like equations (a force field). It is fast because electrons are not computed, which makes it good for conformer searches. Bond formation/cleavage and electronic properties such as ECD are computed with quantum chemistry (QM)." data-ja="分子力学（MM）は結合の伸縮やねじれをバネのような式（力場）で扱います。電子を計算しないので速く、配座探索に向きます。結合の生成・切断やECDのような電子の性質は、量子化学（QM）で計算します。">分子力学（MM）は結合の伸縮やねじれをバネのような式（力場）で扱います。電子を計算しないので速く、配座探索に向きます。結合の生成・切断やECDのような電子の性質は、量子化学（QM）で計算します。</p>
+<p data-en="Quantum chemistry (QM) obtains energies and properties from the electronic structure. Hartree–Fock (HF) is the most basic method, without electron correlation; DFT works from the electron density and approximates exchange–correlation with a functional. Routine organic calculations are almost all DFT." data-ja="量子化学（QM）は電子状態からエネルギーと物性を求めます。Hartree–Fock（HF）は電子相関を含まない最も基本的な方法、DFTは電子密度を基本にして交換・相関を汎関数で近似する方法です。有機分子の日常的な計算はほぼDFTで行います。">量子化学（QM）は電子状態からエネルギーと物性を求めます。Hartree–Fock（HF）は電子相関を含まない最も基本的な方法、DFTは電子密度を基本にして交換・相関を汎関数で近似する方法です。有機分子の日常的な計算はほぼDFTで行います。</p>
+<p data-en="In DFT you choose a functional (the exchange–correlation approximation) and a basis set (the functions representing the orbitals). Larger basis sets are more accurate, but the right combination depends on the functional and on the goal (geometry, NMR or excited states)." data-ja="DFTで選ぶのは、汎関数（交換・相関の近似）と基底関数（軌道を表す関数の組）です。基底関数を大きくすれば精度は上がりますが、適切な組み合わせは汎関数と目的（構造か、NMRか、励起状態か）で決まります。">DFTで選ぶのは、汎関数（交換・相関の近似）と基底関数（軌道を表す関数の組）です。基底関数を大きくすれば精度は上がりますが、適切な組み合わせは汎関数と目的（構造か、NMRか、励起状態か）で決まります。</p>
+<h3 data-en="References" data-ja="参考資料">参考資料</h3>
+<ul class="compact-list reference-list">
+<li><a href="./workflow.html#methods" data-ja="MM・DFTと計算条件の詳しい説明" data-en="More on MM, DFT and calculation settings">MM・DFTと計算条件の詳しい説明</a></li>
+<li><a href="https://doi.org/10.1002/anie.202205735" target="_blank" rel="noopener noreferrer">Bursch, M.; Mewes, J.M.; Hansen, A.; Grimme, S. Best-Practice DFT Protocols for Basic Molecular Computational Chemistry. <i>Angew. Chem. Int. Ed.</i> 2022, 61, e202205735.</a> <span data-en="— practical DFT guidelines" data-ja="— DFTの実務指針">— DFTの実務指針</span></li>
+<li><a href="https://gaussian.com/dft/" target="_blank" rel="noopener noreferrer" data-ja="Gaussian公式：DFT" data-en="Gaussian: DFT">Gaussian公式：DFT</a></li>
+</ul>
+</section>
+<section class="content-section reading" id="energies">
+<h2><span data-lang="ja"><i>E</i>と<i>G</i>と存在率（考え方）</span><template data-lang="en"><span data-lang="en" hidden><i>E</i>, <i>G</i> and populations (concepts)</span></template></h2>
+<p><span data-lang="ja">電子エネルギー<i>E</i>（SCF Doneの値）とGibbs自由エネルギー<i>G</i>（Freq出力の Sum of electronic and thermal Free Energies）は別の量です。<i>G</i>には熱運動とエントロピーが入るので、配座の存在率は通常<i>G</i>から求めます（手順によっては<i>E</i>を使うものもあります）。</span><template data-lang="en"><span data-lang="en" hidden>The electronic energy <i>E</i> (the SCF Done value) and the Gibbs free energy <i>G</i> (Sum of electronic and thermal Free Energies in the Freq output) are different quantities. <i>G</i> includes thermal motion and entropy, so conformer populations are usually computed from <i>G</i> (some protocols use <i>E</i>).</span></template></p>
+<p><span data-lang="ja">存在率はボルツマン分布 <i>p</i><sub><i>i</i></sub> ∝ exp(−Δ<i>G</i><sub><i>i</i></sub>/<i>RT</i>) で求めます。Δ<i>G</i> は同じ条件で計算した配座同士の差です。異なる汎関数や基底関数で得た値を混ぜると意味のない存在率になります。</span><template data-lang="en"><span data-lang="en" hidden>Populations follow the Boltzmann distribution <i>p</i><sub><i>i</i></sub> ∝ exp(−Δ<i>G</i><sub><i>i</i></sub>/<i>RT</i>), where Δ<i>G</i> is the difference between conformers computed under the same conditions. Mixing values from different functionals or basis sets gives meaningless populations.</span></template></p>
+<p><span data-lang="ja">精度を上げたいときは、最適化した構造で大きな基底関数のシングルポイント計算（SP）を行い、<i>E</i><sub>high</sub> + (<i>G</i><sub>low</sub> − <i>E</i><sub>low</sub>) を使います。低レベルの熱補正を高レベルの電子エネルギーに足す、という組み合わせです。</span><template data-lang="en"><span data-lang="en" hidden>To improve accuracy, run a single-point (SP) calculation with a larger basis set at the optimized geometry and use <i>E</i><sub>high</sub> + (<i>G</i><sub>low</sub> − <i>E</i><sub>low</sub>): the low-level thermal correction added to the high-level electronic energy.</span></template></p>
+<h3 data-en="References" data-ja="参考資料">参考資料</h3>
+<ul class="compact-list reference-list">
+<li><a href="#population" data-ja="存在率と重みの式" data-en="Population and weight equations">存在率と重みの式</a></li>
+
+<li><a href="https://gaussian.com/thermo/" target="_blank" rel="noopener noreferrer" data-ja="Gaussian公式：熱化学" data-en="Gaussian: Thermochemistry">Gaussian公式：熱化学</a></li>
+</ul>
+</section>
+<section class="content-section reading" id="build">
+<h2 data-en="Build the structure" data-ja="構造を作る">構造を作る</h2>
+<p><span data-lang="ja">一例：ChemDraw（無料ならReShiki）で構造式を描いて .mol で保存 → Avogadroで3D化し、立体配置（<i>R</i>/S）・水素・プロトン化状態・電荷を確認して MMFF94 で軽く最適化 → .mol2 で保存 → Spartanへ。SpartanやAvogadroだけで組んでも構いません。</span><template data-lang="en"><span data-lang="en" hidden>Example: draw in ChemDraw (or the free ReShiki) and save as .mol → open in Avogadro, make it 3D, check stereochemistry (<i>R</i>/S), hydrogens, protonation state and charge, optimize lightly with MMFF94 → save as .mol2 → Spartan. Building directly in Spartan or Avogadro also works.</span></template></p>
+<h3 data-en="References" data-ja="参考資料">参考資料</h3>
+<ul class="compact-list reference-list">
+<li><a href="https://avogadro.cc/docs/optimizing-geometry/index.html" target="_blank" rel="noopener noreferrer" data-ja="Avogadro公式：構造の最適化" data-en="Avogadro: Optimizing geometry">Avogadro公式：構造の最適化</a></li>
+</ul>
+</section>
+<section class="content-section reading" id="search">
+<h2 data-en="Conformer search" data-ja="配座探索">配座探索</h2>
+<p data-en="Search candidates with MM by varying rotatable bonds, ring shapes and OH orientations. In Spartan, choose Calculations → Conformer Distribution and the method (e.g. MMFF). CREST/xTB performs a similar search." data-ja="回転可能な結合、環の形、OHの向きを変えた候補をMMで探索します。Spartanでは Calculations → Conformer Distribution で探索法（MMFFなど）を選びます。CREST/xTB でも同様の探索ができます。">回転可能な結合、環の形、OHの向きを変えた候補をMMで探索します。Spartanでは Calculations → Conformer Distribution で探索法（MMFFなど）を選びます。CREST/xTB でも同様の探索ができます。</p>
+<ul class="compact-list">
+<li data-en="Use a generous energy window (e.g. 10–20 kcal/mol at MMFF). MM and DFT rank conformers differently." data-ja="エネルギー窓は広めに取ります（例：MMFFで 10–20 kcal/mol）。MMとDFTでは順位が変わります。">エネルギー窓は広めに取ります（例：MMFFで 10–20 kcal/mol）。MMとDFTでは順位が変わります。</li>
+<li data-en="Record the search settings and selection criteria." data-ja="探索の設定と選別条件を記録します。">探索の設定と選別条件を記録します。</li>
+<li data-en="When importing from other software, check atom order and stereochemistry after conversion." data-ja="他のソフトの出力を使う場合は、変換後に原子順序と立体配置を確認します。">他のソフトの出力を使う場合は、変換後に原子順序と立体配置を確認します。</li>
+</ul>
+<h3 data-en="References" data-ja="参考資料">参考資料</h3>
+<ul class="compact-list reference-list">
+<li><a href="https://www.wavefun.com/spartan-documentation" target="_blank" rel="noopener noreferrer" data-ja="Wavefunction：Spartan公式マニュアル" data-en="Wavefunction: Spartan documentation">Wavefunction：Spartan公式マニュアル</a></li>
+</ul>
+</section>
+<section class="content-section reading" id="opt">
+<h2 data-en="Optimization and frequencies (Opt Freq)" data-ja="構造最適化と振動数解析（Opt Freq）">構造最適化と振動数解析（Opt Freq）</h2>
+<p data-en="Run Opt Freq on every candidate under the same conditions (functional, basis set, solvent). For each output, confirm convergence (Stationary point found) and zero imaginary frequencies." data-ja="すべての候補を同じ条件（汎関数・基底関数・溶媒）で Opt Freq します。各出力について、収束（Stationary point found）と虚振動ゼロを確認します。">すべての候補を同じ条件（汎関数・基底関数・溶媒）で Opt Freq します。各出力について、収束（Stationary point found）と虚振動ゼロを確認します。</p>
+<ul class="compact-list">
+<li data-en="If an imaginary frequency remains, look at its motion in a viewer such as GaussView, displace the structure slightly and reoptimize." data-ja="虚振動があれば、そのモードの動きをGaussViewなどのビューアーで見て、構造を少し動かして再最適化します。">虚振動があれば、そのモードの動きをGaussViewなどのビューアーで見て、構造を少し動かして再最適化します。</li>
+<li data-en="An optimization may slide into a different conformer. Check that the final structure is still the intended conformer." data-ja="最適化中に別の配座へ落ちることがあります。最終構造が出発配座と同じかを確認します。">最適化中に別の配座へ落ちることがあります。最終構造が出発配座と同じかを確認します。</li>
+</ul>
+<h3 data-en="References" data-ja="参考資料">参考資料</h3>
+<ul class="compact-list reference-list">
+<li><a href="https://gaussian.com/opt/" target="_blank" rel="noopener noreferrer" data-ja="Gaussian公式：Opt" data-en="Gaussian: Opt">Gaussian公式：Opt</a></li>
+<li><a href="https://gaussian.com/freq/" target="_blank" rel="noopener noreferrer" data-ja="Gaussian公式：Freq" data-en="Gaussian: Freq">Gaussian公式：Freq</a></li>
+</ul>
+</section>
+<section class="content-section reading" id="energy">
+<h2 data-en="Energy comparison and populations" data-ja="エネルギーの比較と存在率">エネルギーの比較と存在率</h2>
+<p><span data-lang="ja">Gibbs自由エネルギー<i>G</i>で相対エネルギーを出し、ボルツマン分布で存在率を計算します。温度は実験条件に合わせます（通常298.15 K）。</span><template data-lang="en"><span data-lang="en" hidden>Compute relative energies from the Gibbs free energy <i>G</i> and populations from the Boltzmann distribution. Use the experimental temperature (usually 298.15 K).</span></template></p>
+<h3 data-en="Removing duplicate conformers" data-ja="重複配座の整理">重複配座の整理</h3>
+<p data-en="When checking for duplicates, judge identity from heavy-atom overlay and O–H orientation, not energy alone, and record the keep/exclude decision. Keep the output files of excluded conformers as well." data-ja="重複の確認では、エネルギーが一致するだけでなく、重原子の重ね合わせとO–Hの向きを見て同一かどうかを判断し、採用・除外を記録します。除外した配座の出力ファイルも消さずに残します。">重複の確認では、エネルギーが一致するだけでなく、重原子の重ね合わせとO–Hの向きを見て同一かどうかを判断し、採用・除外を記録します。除外した配座の出力ファイルも消さずに残します。</p>
+<h3 data-en="Checking dihedral angles" data-ja="二面角の確認">二面角の確認</h3>
+<p data-en="Tabulating the key dihedral angles (signed, −180 to 180°) for each conformer makes it easy to spot duplicates and structures that moved to another conformer during optimization." data-ja="配座を区別する主な二面角（−180〜180° の符号付き）を配座ごとに表にしておくと、重複や、最適化で別の配座に移ったものを見つけやすくなります。">配座を区別する主な二面角（−180〜180° の符号付き）を配座ごとに表にしておくと、重複や、最適化で別の配座に移ったものを見つけやすくなります。</p>
+</section>
+<section class="content-section reading" id="population"><h2 data-en="Population and weight equations" data-ja="存在率と重みの式">存在率と重みの式</h2>
+<p data-en="First confirm that every conformer is a minimum. Then confirm that each property calculation uses the same geometry as the one used for its population. Record failed and excluded conformers as well." data-ja="まず、すべての配座が安定構造であることを確認します。次に、物性計算に使う構造が、存在率を出したときの構造と同じであることを確かめます。計算に失敗した配座や除外した配座も記録に残します。">まず、すべての配座が安定構造であることを確認します。次に、物性計算に使う構造が、存在率を出したときの構造と同じであることを確かめます。計算に失敗した配座や除外した配座も記録に残します。</p>
+
+<h3 data-en="Populations used for averaging" data-ja="平均化に使う存在率" id="population-method">平均化に使う存在率</h3>
+<p><span data-lang="ja">重複を除いた配座について、使うエネルギーと温度から存在率 <i>p</i> を求めます。下式の <i>X</i> はそのエネルギー（モルあたり）です。Gibbs自由エネルギーを使う場合と、電子エネルギーだけを使う近似とは区別します。<i>X</i> の単位は気体定数 <i>R</i>・温度 <i>T</i> とそろえます。</span><template data-lang="en"><span data-lang="en" hidden>Calculate populations <i>p</i> for the conformers left after removing duplicates, from the chosen energy and the temperature. <i>X</i> below is that energy per mole. Keep Gibbs free energies distinct from the electronic-energy-only approximation, and use units consistent with the gas constant <i>R</i> and temperature T.</span></template></p>
+<p class="equation"><i>p</i><sub>c</sub> = exp[−(<i>X</i><sub>c</sub> − <i>X</i><sub>min</sub>)/(RT)] / ∑<sub>d</sub> exp[−(<i>X</i><sub>d</sub> − <i>X</i><sub>min</sub>)/(RT)]</p>
+<p class="equation"><i>C</i> = ∑<sub>c ∈ <i>S</i></sub> <i>p</i><sub>c</sub>,&emsp;<i>w</i><sub>c</sub> = <i>p</i><sub>c</sub>/C,&emsp;∑<sub>c ∈ <i>S</i></sub> <i>w</i><sub>c</sub> = 1</p>
+<p><span data-lang="ja"><i>S</i> は物性計算に使うと前もって決めた配座の集まり、<i>C</i> はその存在率の合計（被覆率）です。全配座を使う場合は <i>C</i> = 1 です。選んだ配座・除外した配座と <i>C</i> を記録します。<i>S</i> の中に計算が失敗した配座があれば、残りの配座だけで重みを割り直さず、再計算して <i>S</i> の結果をすべてそろえます。平均は、原子と配座の対応を確認してから行います。</span><template data-lang="en"><span data-lang="en" hidden><i>S</i> is the conformer set chosen in advance for the property calculation, and <i>C</i> is its total population (coverage); <i>C</i> = 1 when all conformers are included. Record the selected and excluded conformers and C. If a calculation in <i>S</i> fails, rerun it rather than renormalizing the weights over the remaining conformers. Average only after all results for <i>S</i> are in and the atom and conformer correspondence is checked.</span></template></p>
+</section>
+<section class="content-section reading" id="conditions">
+<h2 data-en="Calculation conditions (Opt Freq)" data-ja="計算条件（Opt Freq）">計算条件（Opt Freq）</h2><p><span data-lang="ja">練習のときや、NMR・<i>J</i>の手順が構造の条件を B3LYP/6-31G(d) と決めているときは、この条件を使います。手順が別の条件を指定している場合はそれに合わせます。配座のエネルギー差を議論するときは、分散力補正や大きな基底関数のシングルポイント計算で補います。</span><template data-lang="en"><span data-lang="en" hidden>Use B3LYP/6-31G(d) for practice, or when an NMR or <i>J</i> protocol prescribes it for geometries; if a protocol prescribes another level, use that. When conformer energy differences matter, add a dispersion correction or single points with a larger basis set.</span></template></p><p class="note"><span data-lang="ja">ルート行の下には、空行・タイトル・空行・電荷と多重度・座標・空行を続けます（<a href="./start.html#input">入力ファイルの構造</a>）。各キーワードの意味は<a href="./keywords.html">キーワード一覧</a>にあります。時間の目安は、「基準（1）」と書いた条件に対するおおよその比です。</span><template data-lang="en"><span data-lang="en" hidden>Below the route line, continue with a blank line, title, blank line, charge/multiplicity, coordinates and a final blank line (<a href="./start.html#input">input anatomy</a>). Keyword meanings are in the <a href="./keywords.html">keyword reference</a>. Relative times are rough ratios to the setting marked “reference (1)”.</span></template></p>
+<article class="method-entry"><h3 data-en="B3LYP/6-31G(d)" data-ja="B3LYP/6-31G(d)" id="geom-b3">B3LYP/6-31G(d)</h3><p><span data-lang="ja">有機分子の基本条件。Bally–Rablen法の<i>J</i>計算はこの気相構造を前提にします。</span><template data-lang="en"><span data-lang="en" hidden>The basic choice for organic molecules. The Bally–Rablen <i>J</i> protocol assumes this gas-phase geometry.</span></template></p><p class="muted"><span data-en="Relative time: reference (1)" data-ja="時間の目安：基準（1）">時間の目安：基準（1）</span></p><pre class="input-block" translate="no" lang="en">%chk=geom-b3.chk
+#p B3LYP/6-31G(d) Opt=(Tight,MaxCycles=100) Freq</pre><p><strong data-en="Used in: " data-ja="使用例：">使用例：</strong><a href="https://doi.org/10.1021/jo200513q" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Bally &amp; Rablen, <i>J. Org. Chem.</i> 2011, 76, 4818</a> · <a href="https://doi.org/10.1021/acs.jnatprod.5c00578" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Zhang <i>et al.</i>, <i>J. Nat. Prod.</i> 2025, 88, 2325</a></p><p class="muted"><span data-en="Source: " data-ja="出典：">出典：</span><a href="https://doi.org/10.1063/1.464913" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Becke, <i>J. Chem. Phys.</i> 1993, 98, 5648</a></p></article>
+<article class="method-entry"><h3 data-en="B3LYP/6-31+G(d,p)" data-ja="B3LYP/6-31+G(d,p)" id="geom-diffuse">B3LYP/6-31+G(d,p)</h3><p data-en="Adds diffuse functions. Used as the geometry for PBE0 chemical-shift calculations (Li 2021, Grauso 2022)." data-ja="拡散関数を加えた条件。PBE0による化学シフト計算（Li 2021、Grauso 2022）の構造に使われました。">拡散関数を加えた条件。PBE0による化学シフト計算（Li 2021、Grauso 2022）の構造に使われました。</p><p class="muted"><span data-en="Relative time: longer than 1 (larger basis)" data-ja="時間の目安：1より長い（基底が大きい）">時間の目安：1より長い（基底が大きい）</span></p><pre class="input-block" translate="no" lang="en">%chk=geom-diffuse.chk
+#p B3LYP/6-31+G(d,p) Opt=(Tight,MaxCycles=100) Freq</pre><p><strong data-en="Used in: " data-ja="使用例：">使用例：</strong><a href="https://doi.org/10.1021/acs.orglett.1c02537" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Li <i>et al.</i>, <i>Org. Lett.</i> 2021, 23, 7134</a> · <a href="https://doi.org/10.1021/acs.jnatprod.2c00796" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Grauso <i>et al.</i>, <i>J. Nat. Prod.</i> 2022, 85, 2468</a></p><p class="muted"><span data-en="Source: " data-ja="出典：">出典：</span><a href="https://doi.org/10.1063/1.464913" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Becke, <i>J. Chem. Phys.</i> 1993, 98, 5648</a></p></article>
+<article class="method-entry"><h3 data-en="M06-2X/6-31++G(d,p), CPCM(water)" data-ja="M06-2X/6-31++G(d,p)・CPCM(水)" id="geom-m06">M06-2X/6-31++G(d,p)・CPCM(水)</h3><p data-en="A functional whose parameters cover medium-range dispersion. Used for polyphenol geometries and frequencies, without an added dispersion correction." data-ja="中距離の分散力を汎関数のパラメータに含む条件。ポリフェノールの構造・振動数計算に使われ、分散力補正は加えていません。">中距離の分散力を汎関数のパラメータに含む条件。ポリフェノールの構造・振動数計算に使われ、分散力補正は加えていません。</p><p class="muted"><span data-en="Relative time: longer than 1 (diffuse functions and solvent)" data-ja="時間の目安：1より長い（拡散関数と溶媒）">時間の目安：1より長い（拡散関数と溶媒）</span></p><pre class="input-block" translate="no" lang="en">%chk=geom-m06.chk
+#p M062X/6-31++G(d,p) Opt=(Tight,MaxCycles=100) Freq
+   SCRF=(CPCM,Solvent=Water) Integral=UltraFine SCF=Tight</pre><p><strong data-en="Used in: " data-ja="使用例：">使用例：</strong><a href="https://doi.org/10.3390/molecules31111876" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Karwowski, <i>Molecules</i> 2026, 31, 1876</a></p><p class="muted"><span data-en="Source: " data-ja="出典：">出典：</span><a href="https://doi.org/10.1007/s00214-007-0310-x" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Zhao &amp; Truhlar, <i>Theor. Chem. Acc.</i> 2008, 120, 215</a></p></article>
+</section>
+<section class="content-section reading" id="sp">
+<h2 data-en="Conditions: single-point energies (SP)" data-ja="計算条件：単点エネルギー（SP）">計算条件：単点エネルギー（SP）</h2>
+<article class="method-entry"><h3 data-en="M06-2X/aug-cc-pVTZ, CPCM(water) SP" data-ja="M06-2X/aug-cc-pVTZ・CPCM(水) SP" id="energy-sp-entry">M06-2X/aug-cc-pVTZ・CPCM(水) SP</h3><p data-en="Refines the electronic energy with a large basis set at the optimized geometry." data-ja="最適化済み構造で、大きな基底関数を使って電子エネルギーを精密化します。">最適化済み構造で、大きな基底関数を使って電子エネルギーを精密化します。</p><p class="muted"><span data-en="Relative time: a single point heavier than 1, but no optimization cycles" data-ja="時間の目安：1回の計算は1より重いが、構造最適化の繰り返しはない">時間の目安：1回の計算は1より重いが、構造最適化の繰り返しはない</span></p><pre class="input-block" translate="no" lang="en">%chk=energy-sp.chk
+#p M062X/aug-cc-pVTZ SP SCRF=(CPCM,Solvent=Water)
+   Integral=UltraFine SCF=Tight</pre><p><strong data-en="Used in: " data-ja="使用例：">使用例：</strong><a href="https://doi.org/10.3390/molecules31111876" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Karwowski, <i>Molecules</i> 2026, 31, 1876</a></p><p class="muted"><span data-en="Source: " data-ja="出典：">出典：</span><a href="https://doi.org/10.1007/s00214-007-0310-x" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Zhao &amp; Truhlar, <i>Theor. Chem. Acc.</i> 2008, 120, 215</a></p></article>
+<h3 data-en="Combining SP with thermal corrections" data-ja="SPと熱補正の組み合わせ">SPと熱補正の組み合わせ</h3>
+<p><span data-lang="ja">低レベルのFreqと高レベルのSPを同じ構造で行い、<i>G</i> = <i>E</i><sub>high</sub> + (<i>G</i><sub>low</sub> − <i>E</i><sub>low</sub>) とします。<i>G</i><sub>low</sub> − <i>E</i><sub>low</sub> はGaussianが出力する熱補正です。標準状態の換算（1 atm → 1 M など）が必要なら別に加えます。低振動数の準調和補正（GoodVibesなど）を使う場合は、二重に加えないように注意します。</span><template data-lang="en"><span data-lang="en" hidden>Run the low-level Freq and the high-level SP at the same geometry and use <i>G</i> = <i>E</i><sub>high</sub> + (<i>G</i><sub>low</sub> − <i>E</i><sub>low</sub>), where <i>G</i><sub>low</sub> − <i>E</i><sub>low</sub> is the thermal correction printed by Gaussian. Add any standard-state conversion (e.g. 1 atm → 1 M) separately. If you apply a quasi-harmonic low-frequency correction (e.g. GoodVibes), avoid double counting.</span></template></p>
+<p data-en="For IR comparison, choose the scaling factor s in ν_corr = s × ν_calc according to functional, basis set and purpose (fundamentals, ZPE). Do not apply it to free energies." data-ja="IRスペクトルと比べるときは ν_corr = s × ν_calc の倍率 s を、汎関数・基底関数・用途（基本振動、ZPE）に合わせて選びます。この倍率を自由エネルギーには掛けません。">IRスペクトルと比べるときは ν_corr = s × ν_calc の倍率 s を、汎関数・基底関数・用途（基本振動、ZPE）に合わせて選びます。この倍率を自由エネルギーには掛けません。</p>
+</section>
+<aside class="callout callout-caution">
+<strong data-en="Notes" data-ja="注意" class="callout-title">注意</strong>
+<ul class="callout-list">
+<li data-en="Treat different protonation states or species as separate conformer sets." data-ja="プロトン化状態や化学種が異なるものは、別々の配座集合として扱います。">プロトン化状態や化学種が異なるものは、別々の配座集合として扱います。</li>
+<li data-en="Populations are computed only from the conformers the search found, so the completeness of the search determines the result." data-ja="存在率は、探索で見つかった配座だけから計算されます。配座探索をどれだけ網羅できたかが結果を決めます。">存在率は、探索で見つかった配座だけから計算されます。配座探索をどれだけ網羅できたかが結果を決めます。</li>
+<li data-en="For SP corrections, confirm Freq and SP geometries are identical." data-ja="SP補正では、FreqとSPの構造が同一であることを確認します。">SP補正では、FreqとSPの構造が同一であることを確認します。</li>
+<li data-en="For metals, ions, radicals and bond formation/cleavage, check the applicability of the force field and functional." data-ja="金属、イオン、ラジカル、結合の生成・切断を含む系では力場・汎関数の適用範囲を確認します。">金属、イオン、ラジカル、結合の生成・切断を含む系では力場・汎関数の適用範囲を確認します。</li>
+</ul>
+</aside>
+<section class="content-section reading" id="related">
+<h2 data-en="Related pages" data-ja="関連ページ">関連ページ</h2>
+<ul class="compact-list">
+
+<li><a href="./nmr.html" data-ja="NMR化学シフト" data-en="NMR chemical shifts">NMR化学シフト</a></li>
+<li><a href="./software.html" data-ja="計算化学ソフト（Spartan, CREST, GoodVibes）" data-en="Computational chemistry software (Spartan, CREST, GoodVibes)">計算化学ソフト（Spartan, CREST, GoodVibes）</a></li>
+</ul>
+</section>
+</div>
+</main>
+<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月21日" data-en="Last updated: 21 November 2026" class="copyright">最終更新：2026年11月21日</p></footer>
+</body>
+</html>

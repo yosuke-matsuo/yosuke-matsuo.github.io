@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="description" content="計算化学で使うソフトと公式リンク。" data-ja="計算化学で使うソフトと公式リンク。" data-en="Software for computational chemistry, with official links."/>
+<link rel="canonical" href="https://yosuke-matsuo.github.io/gaussian/software.html"/>
+<link rel="alternate" hreflang="ja" href="https://yosuke-matsuo.github.io/gaussian/software.html"/>
+<link rel="alternate" hreflang="en" href="https://yosuke-matsuo.github.io/en/gaussian/software.html"/>
+<link rel="alternate" hreflang="x-default" href="https://yosuke-matsuo.github.io/gaussian/software.html"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Yosuke Matsuo（松尾洋介）"/>
+<meta property="og:title" content="計算化学ソフト｜Gaussian入門"/>
+<meta property="og:description" content="計算化学で使うソフトと公式リンク。" data-ja="計算化学で使うソフトと公式リンク。" data-en="Software for computational chemistry, with official links."/>
+<meta property="og:url" content="https://yosuke-matsuo.github.io/gaussian/software.html"/>
+<meta property="og:locale" content="ja_JP"/>
+<meta property="og:image" content="https://yosuke-matsuo.github.io/images/og-image.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="color-scheme" content="light"/>
+<title data-ja="計算化学ソフト｜Gaussian入門" data-en="Computational chemistry software | Gaussian guide">計算化学ソフト｜Gaussian入門</title>
+<link rel="stylesheet" href="../styles.css?v=20261121-1"/>
+<script defer src="../app.js?v=20261121-1"></script>
+</head>
+<body>
+<a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">本文へ移動</a>
+<header class="site-header">
+<a class="brand" href="../index.html">Yosuke Matsuo</a>
+<nav class="primary-nav" aria-label="Main"><a href="../research.html" data-ja="研究内容" data-en="Research">研究内容</a><a href="../publications.html" data-ja="業績" data-en="Publications">業績</a><a href="../tools.html" data-ja="ツール" data-en="Tools">ツール</a><a aria-current="location" href="./index.html" data-ja="Gaussian入門" data-en="Gaussian guide">Gaussian入門</a></nav>
+<div class="language-switch" role="group" aria-label="Language"><button type="button" data-language="ja" lang="ja" aria-pressed="true">日本語</button><button type="button" data-language="en" lang="en" aria-pressed="false">English</button></div>
+</header>
+<main class="page-shell guide" id="main">
+<div class="page-body">
+<section class="intro"><nav aria-label="Breadcrumb" class="breadcrumb"><a data-ja="Gaussian入門" data-en="Gaussian guide" href="./index.html">Gaussian入門</a></nav><h1 data-en="Computational chemistry software" data-ja="計算化学ソフト">計算化学ソフト</h1></section>
+<nav aria-label="On this page" class="section-nav"><a href="#sw-gaussian" data-ja="量子化学計算" data-en="Quantum chemistry programs">量子化学計算</a><a href="#sw-spartan" data-ja="構造の作成・表示" data-en="Building and viewing structures">構造の作成・表示</a><a href="#sw-censo" data-ja="配座の選別・熱化学・自動化" data-en="Conformer screening, thermochemistry and automation">配座の選別・熱化学・自動化</a><a href="#sw-specdis" data-ja="スペクトル・構造決定" data-en="Spectra and structure determination">スペクトル・構造決定</a><a href="#sw-autode" data-ja="反応経路" data-en="Reaction paths">反応経路</a></nav>
+<section class="content-section reading" id="sw-gaussian">
+<h2 data-en="Quantum chemistry programs" data-ja="量子化学計算">量子化学計算</h2>
+<div class="table-wrap"><table><thead><tr>
+<th data-en="Software" data-ja="ソフト" scope="col">ソフト</th>
+<th data-en="What it does" data-ja="何ができるか" scope="col">何ができるか</th>
+<th data-en="Interface" data-ja="操作" scope="col">操作</th>
+<th data-en="Cost" data-ja="費用" scope="col">費用</th>
+<th data-en="Links" data-ja="リンク" scope="col">リンク</th>
+</tr></thead><tbody>
+<tr>
+<td><span id="gaussian"><strong>Gaussian</strong></span></td>
+<td data-en="A long-established, widely used quantum chemistry program: Opt, Freq, NMR, TD, TS, IRC and more." data-ja="量子化学計算で古くから広く使われているプログラム。Opt・Freq・NMR・TD・TS・IRC など。">量子化学計算で古くから広く使われているプログラム。Opt・Freq・NMR・TD・TS・IRC など。</td>
+<td data-en="Command line / job scheduler" data-ja="コマンド／ジョブ投入">コマンド／ジョブ投入</td>
+<td data-en="Commercial" data-ja="有償">有償</td>
+<td><a href="https://gaussian.com/" target="_blank" rel="noopener noreferrer" data-ja="公式" data-en="Official">公式</a></td>
+</tr>
+<tr>
+<td><span id="orca"><strong>ORCA</strong></span></td>
+<td><span data-lang="ja">Gaussianとほぼ同じ範囲の計算ができる。</span><template data-lang="en"><span data-lang="en" hidden>Covers much the same range of calculations as Gaussian.</span></template></td>
+<td data-en="Command line" data-ja="コマンド">コマンド</td>
+<td data-en="Free for academic use" data-ja="学術利用は無償">学術利用は無償</td>
+<td><a href="https://www.faccts.de/orca/" target="_blank" rel="noopener noreferrer" data-ja="公式" data-en="Official">公式</a> · <a href="https://www.faccts.de/docs/orca/6.1/manual/index.html" target="_blank" rel="noopener noreferrer" data-ja="マニュアル" data-en="Manual">マニュアル</a> · <a href="https://doi.org/10.1002/wcms.70019" target="_blank" rel="noopener noreferrer">Neese, <i>WIREs Comput. Mol. Sci.</i> 2025</a></td>
+</tr>
+<tr>
+<td><span id="qchem"><strong>Q-Chem</strong></span></td>
+<td data-en="DFT, wavefunction methods, excited states, NMR." data-ja="DFT・波動関数法、励起状態、NMR。">DFT・波動関数法、励起状態、NMR。</td>
+<td data-en="Command line" data-ja="コマンド">コマンド</td>
+<td data-en="Commercial (trial available)" data-ja="有償（試用あり）">有償（試用あり）</td>
+<td><a href="https://www.q-chem.com/explore/" target="_blank" rel="noopener noreferrer" data-ja="公式" data-en="Official">公式</a> · <a href="https://doi.org/10.1063/5.0055522" target="_blank" rel="noopener noreferrer">Epifanovsky <i>et al.</i>, <i>J. Chem. Phys.</i> 2021</a></td>
+</tr>
+<tr>
+<td><span id="turbomole"><strong>TURBOMOLE</strong></span></td>
+<td data-en="DFT, MP2, NMR, excited states, optical rotation. The engine behind CENSO&#x27;s optical-rotation workflow." data-ja="DFT・MP2、NMR、励起状態、旋光度。CENSOで旋光度を計算するときに使われる。">DFT・MP2、NMR、励起状態、旋光度。CENSOで旋光度を計算するときに使われる。</td>
+<td data-en="Command line / GUI" data-ja="コマンド／GUI">コマンド／GUI</td>
+<td data-en="Commercial (educational license)" data-ja="有償（教育版あり）">有償（教育版あり）</td>
+<td><a href="https://www.turbomole.org/turbomole/turbomole-features/" target="_blank" rel="noopener noreferrer" data-ja="公式" data-en="Official">公式</a> · <a href="https://doi.org/10.1021/acs.jctc.3c00347" target="_blank" rel="noopener noreferrer">Franzke <i>et al.</i>, <i>J. Chem. Theory Comput.</i> 2023</a></td>
+</tr>
+<tr>
+<td><span id="crest"><strong>CREST / xTB</strong></span></td>
+<td data-en="Fast conformer searches with the semiempirical GFN-xTB methods." data-ja="半経験的GFN-xTBで高速に配座を探索する。">半経験的GFN-xTBで高速に配座を探索する。</td>
+<td data-en="Command line" data-ja="コマンド">コマンド</td>
+<td data-en="Free, open source" data-ja="無料・オープンソース">無料・オープンソース</td>
+<td><a href="https://crest-lab.github.io/crest-docs/" target="_blank" rel="noopener noreferrer" data-ja="CREST" data-en="CREST">CREST</a> · <a href="https://github.com/grimme-lab/xtb" target="_blank" rel="noopener noreferrer" data-ja="xTB" data-en="xTB">xTB</a> · <a href="https://doi.org/10.1063/5.0197592" target="_blank" rel="noopener noreferrer">Pracht <i>et al.</i>, <i>J. Chem. Phys.</i> 2024</a></td>
+</tr>
+</tbody></table></div>
+</section>
+<section class="content-section reading" id="sw-spartan">
+<h2 data-en="Building and viewing structures" data-ja="構造の作成・表示">構造の作成・表示</h2>
+<div class="table-wrap"><table><thead><tr>
+<th data-en="Software" data-ja="ソフト" scope="col">ソフト</th>
+<th data-en="What it does" data-ja="何ができるか" scope="col">何ができるか</th>
+<th data-en="Interface" data-ja="操作" scope="col">操作</th>
+<th data-en="Cost" data-ja="費用" scope="col">費用</th>
+<th data-en="Links" data-ja="リンク" scope="col">リンク</th>
+</tr></thead><tbody>
+<tr>
+<td><span id="chemdraw"><strong>ChemDraw</strong></span></td>
+<td data-en="Draws 2D structures. Set stereochemistry with wedge/hash bonds and save as .mol/.mol2 or similar for a 3D builder." data-ja="2Dの構造式を描く。くさび・破線で立体配置を指定し、.mol/.mol2 などで保存して3D化ソフトへ渡す。">2Dの構造式を描く。くさび・破線で立体配置を指定し、.mol/.mol2 などで保存して3D化ソフトへ渡す。</td>
+<td data-en="GUI" data-ja="GUI">GUI</td>
+<td data-en="Commercial (your institution may have a license)" data-ja="有償（所属機関のライセンスがある場合あり）">有償（所属機関のライセンスがある場合あり）</td>
+<td><a href="https://revvitysignals.com/products/research/chemdraw" target="_blank" rel="noopener noreferrer" data-ja="製品" data-en="Product">製品</a></td>
+</tr>
+<tr>
+<td><span id="reshiki"><strong>ReShiki</strong></span></td>
+<td data-en="A free program for drawing 2D structures. Exchanges structures with ChemDraw by copy and paste and saves .mol files." data-ja="2Dの構造式を描く無料ソフト。ChemDrawとコピー＆ペーストで構造をやりとりでき、.mol で保存できる。">2Dの構造式を描く無料ソフト。ChemDrawとコピー＆ペーストで構造をやりとりでき、.mol で保存できる。</td>
+<td data-en="GUI" data-ja="GUI">GUI</td>
+<td data-en="Free, open source" data-ja="無料・オープンソース">無料・オープンソース</td>
+<td><a href="https://reshiki.com/" target="_blank" rel="noopener noreferrer" data-ja="公式" data-en="Official">公式</a> · <a href="https://github.com/Ameyanagi/ReShiki" target="_blank" rel="noopener noreferrer" data-ja="GitHub" data-en="GitHub">GitHub</a></td>
+</tr>
+<tr>
+<td><span id="spartan"><strong>Spartan</strong></span></td>
+<td data-en="Integrated environment to build molecules, search conformers with MMFF and run DFT." data-ja="分子を組み、MMFFで配座探索し、DFTも実行できる統合環境。">分子を組み、MMFFで配座探索し、DFTも実行できる統合環境。</td>
+<td data-en="GUI" data-ja="GUI">GUI</td>
+<td data-en="Commercial" data-ja="有償">有償</td>
+<td><a href="https://www.wavefun.com/spartan" target="_blank" rel="noopener noreferrer" data-ja="製品" data-en="Product">製品</a></td>
+</tr>
+<tr>
+<td><span id="conflex"><strong>CONFLEX</strong></span></td>
+<td data-en="Exhaustive conformer searches with force fields." data-ja="分子力場で配座を網羅的に探索する。">分子力場で配座を網羅的に探索する。</td>
+<td data-en="GUI / command line" data-ja="GUI／コマンド">GUI／コマンド</td>
+<td data-en="Commercial" data-ja="有償">有償</td>
+<td><a href="https://www.conflex.co.jp/product_conflex.php" target="_blank" rel="noopener noreferrer" data-ja="製品" data-en="Product">製品</a> · <a href="https://www.conflex.net/" target="_blank" rel="noopener noreferrer" data-ja="英語サイト" data-en="English site">英語サイト</a></td>
+</tr>
+<tr>
+<td><span id="avogadro"><strong>Avogadro</strong></span></td>
+<td data-en="Builds and displays molecules, optimizes structures with force fields, and prepares inputs for quantum chemistry programs." data-ja="分子の作成・表示、力場による構造の最適化、量子化学計算プログラムの入力作成ができる。">分子の作成・表示、力場による構造の最適化、量子化学計算プログラムの入力作成ができる。</td>
+<td data-en="GUI" data-ja="GUI">GUI</td>
+<td data-en="Free, open source" data-ja="無料・オープンソース">無料・オープンソース</td>
+<td><a href="https://avogadro.cc/" target="_blank" rel="noopener noreferrer" data-ja="公式" data-en="Official">公式</a> · <a href="https://avogadro.cc/install/" target="_blank" rel="noopener noreferrer" data-ja="導入" data-en="Install">導入</a> · <a href="https://doi.org/10.1186/1758-2946-4-17" target="_blank" rel="noopener noreferrer">Hanwell <i>et al.</i>, <i>J. Cheminform.</i> 2012</a></td>
+</tr>
+<tr>
+<td><span id="openbabel"><strong>Open Babel</strong></span></td>
+<td data-en="Converts between more than 110 structure file formats; can also generate 3D coordinates from 2D structures." data-ja="110種類以上の構造ファイル形式を相互に変換する。2D構造から3D座標を作ることもできる。">110種類以上の構造ファイル形式を相互に変換する。2D構造から3D座標を作ることもできる。</td>
+<td data-en="GUI / command line" data-ja="GUI／コマンド">GUI／コマンド</td>
+<td data-en="Free, open source" data-ja="無料・オープンソース">無料・オープンソース</td>
+<td><a href="https://openbabel.org/" target="_blank" rel="noopener noreferrer" data-ja="公式" data-en="Official">公式</a> · <a href="https://doi.org/10.1186/1758-2946-3-33" target="_blank" rel="noopener noreferrer">O&#x27;Boyle <i>et al.</i>, <i>J. Cheminform.</i> 2011</a></td>
+</tr>
+<tr>
+<td><span id="gaussview"><strong>GaussView</strong></span></td>
+<td data-en="The official Gaussian GUI: input building, structure, vibration and IRC display." data-ja="Gaussian公式のGUI。入力作成、構造・振動・IRCの表示。">Gaussian公式のGUI。入力作成、構造・振動・IRCの表示。</td>
+<td data-en="GUI" data-ja="GUI">GUI</td>
+<td data-en="Commercial" data-ja="有償">有償</td>
+<td><a href="https://gaussian.com/gaussview6/" target="_blank" rel="noopener noreferrer" data-ja="開発元" data-en="Developer">開発元</a></td>
+</tr>
+<tr>
+<td><span id="facio"><strong>Facio</strong></span></td>
+<td data-en="Builds molecules, prepares inputs for Gaussian and other programs, and displays results." data-ja="分子を組み立て、Gaussianなどの入力作成と計算結果の表示を行う。">分子を組み立て、Gaussianなどの入力作成と計算結果の表示を行う。</td>
+<td data-en="GUI" data-ja="GUI">GUI</td>
+<td data-en="Free" data-ja="無料">無料</td>
+<td><a href="https://zzzfelis.sakura.ne.jp/" target="_blank" rel="noopener noreferrer" data-ja="公式" data-en="Official">公式</a></td>
+</tr>
+<tr>
+<td><span id="chemcraft"><strong>Chemcraft</strong></span></td>
+<td data-en="Displays structures, vibrations and optimization trajectories from Gaussian output." data-ja="Gaussian出力の構造・振動・最適化軌跡を表示。">Gaussian出力の構造・振動・最適化軌跡を表示。</td>
+<td data-en="GUI" data-ja="GUI">GUI</td>
+<td data-en="Commercial (trial)" data-ja="有償（試用あり）">有償（試用あり）</td>
+<td><a href="https://www.chemcraftprog.com/description.html" target="_blank" rel="noopener noreferrer" data-ja="機能" data-en="Features">機能</a> · <a href="https://www.chemcraftprog.com/download.html" target="_blank" rel="noopener noreferrer" data-ja="配布" data-en="Download">配布</a></td>
+</tr>
+<tr>
+<td><span id="cylview"><strong>CYLview</strong></span></td>
+<td data-en="Reads Gaussian outputs (.log/.out) and XYZ files to make publication-quality 3D structure figures; also shows optimization steps and vibrations." data-ja="Gaussianの出力（.log／.out）やXYZを読み、論文用の立体構造図を作る。最適化の推移や振動も表示できる。">Gaussianの出力（.log／.out）やXYZを読み、論文用の立体構造図を作る。最適化の推移や振動も表示できる。</td>
+<td data-en="GUI" data-ja="GUI">GUI</td>
+<td data-en="Free" data-ja="無料">無料</td>
+<td><a href="https://www.cylview.org/" target="_blank" rel="noopener noreferrer" data-ja="公式" data-en="Official">公式</a> · <a href="https://www.cylview.org/wiki.html" target="_blank" rel="noopener noreferrer" data-ja="マニュアル" data-en="Manual">マニュアル</a></td>
+</tr>
+<tr>
+<td><span id="mercury"><strong>Mercury</strong></span></td>
+<td data-en="CCDC's structure viewer. It displays .xyz files with several structures and is recommended by JOC for checking coordinate files before submission." data-ja="CCDCの構造表示ソフト。複数の構造を並べた .xyz を表示でき、JOCが投稿前の座標ファイルの確認用に推奨している。">CCDCの構造表示ソフト。複数の構造を並べた .xyz を表示でき、JOCが投稿前の座標ファイルの確認用に推奨している。</td>
+<td data-en="GUI" data-ja="GUI">GUI</td>
+<td data-en="Free version (non-commercial use)" data-ja="無料版あり（非営利利用）">無料版あり（非営利利用）</td>
+<td><a href="https://www.ccdc.cam.ac.uk/solutions/software/free-mercury/" target="_blank" rel="noopener noreferrer" data-ja="無料版" data-en="Free version">無料版</a></td>
+</tr>
+<tr>
+<td><span id="seqcrow"><strong>SEQCROW</strong></span></td>
+<td data-en="ChimeraX extension for viewing/editing quantum-chemistry output and building inputs." data-ja="ChimeraXに量子化学出力の表示・編集・入力作成を追加する拡張。">ChimeraXに量子化学出力の表示・編集・入力作成を追加する拡張。</td>
+<td data-en="GUI (ChimeraX plugin)" data-ja="GUI（ChimeraX拡張）">GUI（ChimeraX拡張）</td>
+<td data-en="Free" data-ja="無料">無料</td>
+<td><a href="https://github.com/QChASM/SEQCROW" target="_blank" rel="noopener noreferrer" data-ja="公式" data-en="Official">公式</a> · <a href="https://doi.org/10.1002/jcc.26700" target="_blank" rel="noopener noreferrer">Schaefer <i>et al.</i>, <i>J. Comput. Chem.</i> 2021</a></td>
+</tr>
+</tbody></table></div>
+</section>
+<section class="content-section reading" id="sw-censo">
+<h2 data-en="Conformer screening, thermochemistry and automation" data-ja="配座の選別・熱化学・自動化">配座の選別・熱化学・自動化</h2>
+<div class="table-wrap"><table><thead><tr>
+<th data-en="Software" data-ja="ソフト" scope="col">ソフト</th>
+<th data-en="What it does" data-ja="何ができるか" scope="col">何ができるか</th>
+<th data-en="Interface" data-ja="操作" scope="col">操作</th>
+<th data-en="Cost" data-ja="費用" scope="col">費用</th>
+<th data-en="Links" data-ja="リンク" scope="col">リンク</th>
+</tr></thead><tbody>
+<tr>
+<td><span id="censo"><strong>CENSO</strong></span></td>
+<td data-en="Refines conformer ensembles (such as CREST output) with DFT in stages and can automate NMR, optical rotation and UV calculations (requires a separate quantum chemistry program such as ORCA)." data-ja="配座の集合（CRESTの結果など）をDFTで段階的に再評価して絞り込む。NMR・旋光度・UVの計算まで自動化できる（ORCAなどの量子化学計算プログラムが別に必要）。">配座の集合（CRESTの結果など）をDFTで段階的に再評価して絞り込む。NMR・旋光度・UVの計算まで自動化できる（ORCAなどの量子化学計算プログラムが別に必要）。</td>
+<td data-en="Command line / Python" data-ja="コマンド／Python">コマンド／Python</td>
+<td data-en="Free" data-ja="無料">無料</td>
+<td><a href="https://github.com/grimme-lab/CENSO" target="_blank" rel="noopener noreferrer" data-ja="公式" data-en="Official">公式</a></td>
+</tr>
+<tr>
+<td><span id="goodvibes"><strong>GoodVibes</strong></span></td>
+<td data-en="Computes thermal corrections, populations and SP combinations from Freq outputs in one go." data-ja="Freq出力から熱化学補正・存在率・高レベルSPとの組み合わせを一括計算。">Freq出力から熱化学補正・存在率・高レベルSPとの組み合わせを一括計算。</td>
+<td data-en="Command line / Python" data-ja="コマンド／Python">コマンド／Python</td>
+<td data-en="Free" data-ja="無料">無料</td>
+<td><a href="https://goodvibespy.readthedocs.io/en/latest/source/README.html" target="_blank" rel="noopener noreferrer" data-ja="公式" data-en="Official">公式</a> · <a href="https://doi.org/10.12688/f1000research.22758.1" target="_blank" rel="noopener noreferrer">Luchini <i>et al.</i>, <i>F1000Research</i> 2020</a></td>
+</tr>
+<tr>
+<td><span id="shermo"><strong>Shermo</strong></span></td>
+<td data-en="Standalone program for thermochemistry and low-frequency corrections from Freq output." data-ja="Freq出力から熱化学量と低振動数補正を計算する単体プログラム。">Freq出力から熱化学量と低振動数補正を計算する単体プログラム。</td>
+<td data-en="Command line" data-ja="コマンド">コマンド</td>
+<td data-en="Free" data-ja="無料">無料</td>
+<td><a href="http://sobereva.com/soft/shermo/" target="_blank" rel="noopener noreferrer" data-ja="公式" data-en="Official">公式</a> · <a href="https://doi.org/10.1016/j.comptc.2021.113249" target="_blank" rel="noopener noreferrer">Lu &amp; Chen, <i>Comput. Theor. Chem.</i> 2021</a></td>
+</tr>
+<tr>
+<td><span id="aqme"><strong>AQME</strong></span></td>
+<td data-en="Automates input generation (QPREP) and output checking/fixing (QCORR) for many conformers." data-ja="多数の配座について入力作成（QPREP）と結果の確認・修正（QCORR）を自動化。">多数の配座について入力作成（QPREP）と結果の確認・修正（QCORR）を自動化。</td>
+<td data-en="Command line / Python" data-ja="コマンド／Python">コマンド／Python</td>
+<td data-en="Free" data-ja="無料">無料</td>
+<td><a href="https://aqme.readthedocs.io/en/latest/" target="_blank" rel="noopener noreferrer" data-ja="公式" data-en="Official">公式</a> · <a href="https://doi.org/10.1002/wcms.1663" target="_blank" rel="noopener noreferrer">Alegre-Requena <i>et al.</i>, <i>WIREs Comput. Mol. Sci.</i> 2023</a></td>
+</tr>
+<tr>
+<td><span id="accel"><strong>ACCeL</strong></span></td>
+<td data-en="Python library for conformer screening, populations and batch input generation." data-ja="配座の選別・存在率・入力の一括生成を行うPythonライブラリ。">配座の選別・存在率・入力の一括生成を行うPythonライブラリ。</td>
+<td data-en="Python" data-ja="Python">Python</td>
+<td data-en="Free" data-ja="無料">無料</td>
+<td><a href="https://github.com/kfchem/accel" target="_blank" rel="noopener noreferrer" data-ja="公式" data-en="Official">公式</a></td>
+</tr>
+<tr>
+<td><span id="cclib"><strong>cclib</strong></span></td>
+<td data-en="Python library that parses coordinates, energies and frequencies from Gaussian, ORCA and other outputs into one format." data-ja="Gaussian・ORCAなど複数プログラムの出力から座標・エネルギー・振動数を統一形式で読むPythonライブラリ。">Gaussian・ORCAなど複数プログラムの出力から座標・エネルギー・振動数を統一形式で読むPythonライブラリ。</td>
+<td data-en="Python" data-ja="Python">Python</td>
+<td data-en="Free" data-ja="無料">無料</td>
+<td><a href="https://cclib.github.io/" target="_blank" rel="noopener noreferrer" data-ja="公式" data-en="Official">公式</a></td>
+</tr>
+<tr>
+<td><span id="aarontools"><strong>AaronTools</strong></span></td>
+<td data-en="Python toolkit for molecule editing, input generation, output parsing and thermochemistry; the basis of SEQCROW." data-ja="分子編集、入力作成、出力解析、熱化学をまとめたPythonツール群。SEQCROWの基盤。">分子編集、入力作成、出力解析、熱化学をまとめたPythonツール群。SEQCROWの基盤。</td>
+<td data-en="Python" data-ja="Python">Python</td>
+<td data-en="Free" data-ja="無料">無料</td>
+<td><a href="https://github.com/QChASM/AaronTools.py" target="_blank" rel="noopener noreferrer" data-ja="公式" data-en="Official">公式</a></td>
+</tr>
+<tr>
+<td><span id="excelautomat"><strong>ExcelAutomat</strong></span></td>
+<td data-en="Excel macros for batch extraction, input generation and tabulation." data-ja="Excelを操作画面にして、出力の一括抽出・入力作成・集計を行うマクロ集。">Excelを操作画面にして、出力の一括抽出・入力作成・集計を行うマクロ集。</td>
+<td data-en="Excel" data-ja="Excel">Excel</td>
+<td data-en="Free (registration)" data-ja="無料（要登録）">無料（要登録）</td>
+<td><a href="https://sites.google.com/view/excelautomat/home" target="_blank" rel="noopener noreferrer" data-ja="公式" data-en="Official">公式</a> · <a href="https://doi.org/10.1007/s10822-017-0031-8" target="_blank" rel="noopener noreferrer">Laloo <i>et al.</i>, <i>J. Comput. Aided Mol. Des.</i> 2017</a></td>
+</tr>
+</tbody></table></div>
+</section>
+<section class="content-section reading" id="sw-specdis">
+<h2 data-en="Spectra and structure determination" data-ja="スペクトル・構造決定">スペクトル・構造決定</h2>
+<div class="table-wrap"><table><thead><tr>
+<th data-en="Software" data-ja="ソフト" scope="col">ソフト</th>
+<th data-en="What it does" data-ja="何ができるか" scope="col">何ができるか</th>
+<th data-en="Interface" data-ja="操作" scope="col">操作</th>
+<th data-en="Cost" data-ja="費用" scope="col">費用</th>
+<th data-en="Links" data-ja="リンク" scope="col">リンク</th>
+</tr></thead><tbody>
+<tr>
+<td><span id="specdis"><strong>SpecDis</strong></span></td>
+<td data-en="The standard tool for building ECD/UV curves from TD output, averaging conformers and overlaying experiment." data-ja="TD出力からECD/UV曲線を作り、配座平均して実測と重ね合わせる定番ソフト。">TD出力からECD/UV曲線を作り、配座平均して実測と重ね合わせる定番ソフト。</td>
+<td data-en="GUI" data-ja="GUI">GUI</td>
+<td data-en="Free for non-commercial use" data-ja="非商用は無料">非商用は無料</td>
+<td><a href="https://specdis-software.jimdofree.com/" target="_blank" rel="noopener noreferrer" data-ja="公式" data-en="Official">公式</a> · <a href="https://doi.org/10.1002/chir.22138" target="_blank" rel="noopener noreferrer">Bruhn <i>et al.</i>, <i>Chirality</i> 2013</a></td>
+</tr>
+<tr>
+<td><span id="spectroibis"><strong>SpectroIBIS</strong></span></td>
+<td data-en="Checks duplicate conformers and imaginary frequencies, averages NMR/ECD over conformers and builds SI tables." data-ja="配座の重複・虚振動の確認、NMR・ECDの配座平均、SI用の表を作る。">配座の重複・虚振動の確認、NMR・ECDの配座平均、SI用の表を作る。</td>
+<td data-en="GUI (Windows)" data-ja="GUI（Windows）">GUI（Windows）</td>
+<td data-en="Free" data-ja="無料">無料</td>
+<td><a href="https://github.com/bbulcock/SpectroIBIS" target="_blank" rel="noopener noreferrer" data-ja="公式" data-en="Official">公式</a> · <a href="https://doi.org/10.1021/acs.jnatprod.4c01321" target="_blank" rel="noopener noreferrer">Bulcock <i>et al.</i>, <i>J. Nat. Prod.</i> 2025</a></td>
+</tr>
+<tr>
+<td><span id="dp4plus"><strong>DP4+ App</strong></span></td>
+<td data-en="Official implementation of DP4+, which assigns probabilities to candidate structures from calculated NMR shifts." data-ja="計算したNMR化学シフトから候補構造の確率を出すDP4+法の公式実装。">計算したNMR化学シフトから候補構造の確率を出すDP4+法の公式実装。</td>
+<td data-en="Python (with GUI)" data-ja="Python（GUI付き）">Python（GUI付き）</td>
+<td data-en="Free" data-ja="無料">無料</td>
+<td><a href="https://github.com/RosarioCCLab/DP4plus-App" target="_blank" rel="noopener noreferrer" data-ja="公式" data-en="Official">公式</a> · <a href="https://doi.org/10.1021/acs.jnatprod.3c00566" target="_blank" rel="noopener noreferrer">DP4+App, <i>J. Nat. Prod.</i> 2023</a> · <a href="https://doi.org/10.1021/acs.joc.5b02396" target="_blank" rel="noopener noreferrer"><span data-lang="ja">DP4+ 原著 <i>J. Org. Chem.</i> 2015</span><template data-lang="en"><span data-lang="en" hidden>DP4+ original, <i>J. Org. Chem.</i> 2015</span></template></a></td>
+</tr>
+<tr>
+<td><span id="mljdp4"><strong>ML-<i>J</i>-DP4</strong></span></td>
+<td><span data-lang="ja">実測³<i>J</i><sub>H,H</sub>と機械学習補正した遮蔽で立体配置を評価する。</span><template data-lang="en"><span data-lang="en" hidden>Evaluates configuration from experimental ³<i>J</i><sub>H,H</sub> and machine-learning-corrected shieldings.</span></template></td>
+<td data-en="Python" data-ja="Python">Python</td>
+<td data-en="Free" data-ja="無料">無料</td>
+<td><a href="https://github.com/Sarotti-Lab/ML_J_DP4" target="_blank" rel="noopener noreferrer" data-ja="公式" data-en="Official">公式</a> · <a href="https://doi.org/10.1021/acs.orglett.2c01251" target="_blank" rel="noopener noreferrer">Tsai <i>et al.</i>, <i>Org. Lett.</i> 2022</a></td>
+</tr>
+<tr>
+<td><span id="cheshire"><strong>CHESHIRE</strong></span></td>
+<td><span data-lang="ja">NMR化学シフトと<i>J</i>の計算に使うスケーリング係数を、計算レベルごとにまとめたウェブサイト。</span><template data-lang="en"><span data-lang="en" hidden>A website collecting scaling factors for computed NMR chemical shifts and <i>J</i> couplings, by level of theory.</span></template></td>
+<td data-en="Web" data-ja="ウェブ">ウェブ</td>
+<td data-en="Free" data-ja="無料">無料</td>
+<td><a href="http://cheshirenmr.info/" target="_blank" rel="noopener noreferrer" data-ja="公式" data-en="Official">公式</a> · <a href="https://doi.org/10.1021/cr200106v" target="_blank" rel="noopener noreferrer">Lodewyk <i>et al.</i>, <i>Chem. Rev.</i> 2012</a></td>
+</tr>
+<tr>
+<td><span id="multiwfn"><strong>Multiwfn</strong></span></td>
+<td data-en="All-purpose wavefunction analysis: ECD/UV curves, NBO-like analyses, electron-density visualization." data-ja="波動関数解析の万能ツール。ECD/UV曲線の作成、NBO風解析、電子密度の可視化。">波動関数解析の万能ツール。ECD/UV曲線の作成、NBO風解析、電子密度の可視化。</td>
+<td data-en="Interactive command line" data-ja="コマンド（対話式）">コマンド（対話式）</td>
+<td data-en="Free" data-ja="無料">無料</td>
+<td><a href="http://sobereva.com/multiwfn/" target="_blank" rel="noopener noreferrer" data-ja="公式" data-en="Official">公式</a> · <a href="https://doi.org/10.1002/jcc.22885" target="_blank" rel="noopener noreferrer">Lu &amp; Chen, <i>J. Comput. Chem.</i> 2012</a></td>
+</tr>
+</tbody></table></div>
+</section>
+<section class="content-section reading" id="sw-autode">
+<h2 data-en="Reaction paths" data-ja="反応経路">反応経路</h2>
+<div class="table-wrap"><table><thead><tr>
+<th data-en="Software" data-ja="ソフト" scope="col">ソフト</th>
+<th data-en="What it does" data-ja="何ができるか" scope="col">何ができるか</th>
+<th data-en="Interface" data-ja="操作" scope="col">操作</th>
+<th data-en="Cost" data-ja="費用" scope="col">費用</th>
+<th data-en="Links" data-ja="リンク" scope="col">リンク</th>
+</tr></thead><tbody>
+<tr>
+<td><span id="autode"><strong>autodE</strong></span></td>
+<td data-en="Python library that automates TS searches and reaction profiles from reactant and product." data-ja="反応物・生成物からTS探索と反応エネルギー図を自動化するPythonライブラリ。">反応物・生成物からTS探索と反応エネルギー図を自動化するPythonライブラリ。</td>
+<td data-en="Python" data-ja="Python">Python</td>
+<td data-en="Free" data-ja="無料">無料</td>
+<td><a href="https://github.com/duartegroup/autodE" target="_blank" rel="noopener noreferrer" data-ja="公式" data-en="Official">公式</a> · <a href="https://doi.org/10.1002/anie.202011941" target="_blank" rel="noopener noreferrer">Young <i>et al.</i>, <i>Angew. Chem. Int. Ed.</i> 2021</a></td>
+</tr>
+<tr>
+<td><span id="pyqrc"><strong>pyQRC</strong></span></td>
+<td data-en="Builds inputs displaced along a chosen vibrational mode." data-ja="選んだ振動モードに沿って構造を変位させた入力を作る。">選んだ振動モードに沿って構造を変位させた入力を作る。</td>
+<td data-en="Command line / Python" data-ja="コマンド／Python">コマンド／Python</td>
+<td data-en="Free" data-ja="無料">無料</td>
+<td><a href="https://github.com/patonlab/pyQRC" target="_blank" rel="noopener noreferrer" data-ja="公式" data-en="Official">公式</a></td>
+</tr>
+</tbody></table></div>
+</section>
+</div>
+</main>
+<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月21日" data-en="Last updated: 21 November 2026" class="copyright">最終更新：2026年11月21日</p></footer>
+</body>
+</html>

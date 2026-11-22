@@ -17,13 +17,18 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-PAGES = ['index.html', 'research.html', 'publications.html', 'tools.html']
+
 BASE = 'https://yosuke-matsuo.github.io/'
+import posixpath
+
+# personal pages and the Gaussian guide (gaussian/); each gets en/<same path>
+PAGES = ['index.html', 'research.html', 'publications.html', 'tools.html'] + \
+    sorted('gaussian/' + p.name for p in (ROOT / 'gaussian').glob('*.html'))
 VOID = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr'}
 
 
 def page_url(page, en):
-    path = '' if page == 'index.html' else page
+    path = page[:-len('index.html')] if page.endswith('index.html') else page
     return BASE + ('en/' if en else '') + path
 
 
@@ -123,30 +128,34 @@ def english(page):
     s = s.replace('data-language="ja" lang="ja" aria-pressed="true"', 'data-language="ja" lang="ja" aria-pressed="false"', 1)
     s = s.replace('data-language="en" lang="en" aria-pressed="false"', 'data-language="en" lang="en" aria-pressed="true"', 1)
 
-    # 4. paths: personal pages are siblings in en/, everything else is one level up; HRMS Calc opens in English
+    # 4. paths: personal pages and the guide are in en/ at the same place, everything else stays where it is;
+    #    HRMS Calc opens in English
+    here = posixpath.dirname(page)
     def path(m):
         attr, value = m.group(1), m.group(2)
-        if not value.startswith('./'):
+        if re.match(r'(?:[a-z][a-z0-9+.-]*:|#|/)', value):
             return m.group(0)
-        rest = value[2:]
-        name = re.split(r'[?#]', rest)[0]
-        if name in PAGES:
-            return f'{attr}="./{rest}"'
-        if name == 'hrms-calc/index.html':
-            rest = 'hrms-calc/en/index.html' + rest[len(name):]  # the English page of HRMS Calc
-        return f'{attr}="../{rest}"'
+        name, rest = re.match(r'([^?#]*)(.*)', value).groups()
+        target = posixpath.normpath(posixpath.join(here, name))
+        if target in PAGES:
+            target = 'en/' + target
+        elif target == 'hrms-calc/index.html':
+            target = 'hrms-calc/en/index.html'
+        rel = posixpath.relpath(target, posixpath.join('en', here))
+        return f'{attr}="{rel if rel.startswith("../") else "./" + rel}{rest}"'
     s = re.sub(r'\b(href|src)="([^"]*)"', path, s)
 
     # researchmap in English (the Japanese page links to ?lang=ja)
     s = re.sub(r'(https://researchmap\.jp/read0135024[^"?]*)\?lang=ja', r'\1?lang=en', s)
 
-    note = f'<!-- English page generated from ../{page} by _dev/build_en.py. Edit the Japanese page and run the script. -->\n'
+    up = '../' * (page.count('/') + 1)
+    note = f'<!-- English page generated from {up}{page} by _dev/build_en.py. Edit the Japanese page and run the script. -->\n'
     return s.replace('<!DOCTYPE html>\n', '<!DOCTYPE html>\n' + note, 1)
 
 
 def main():
     check = '--check' in sys.argv
-    (ROOT / 'en').mkdir(exist_ok=True)
+    (ROOT / 'en' / 'gaussian').mkdir(parents=True, exist_ok=True)
     stale = []
     for page in PAGES:
         out = english(page)

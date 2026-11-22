@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<!-- English page generated from ../../gaussian/errors-opt-scf.html by _dev/build_en.py. Edit the Japanese page and run the script. -->
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="description" content="What to do when an optimization stops or the SCF fails to converge." data-ja="構造最適化が止まったとき、SCFが収束しないときの対処。" data-en="What to do when an optimization stops or the SCF fails to converge."/>
+<link rel="canonical" href="https://yosuke-matsuo.github.io/en/gaussian/errors-opt-scf.html"/>
+<link rel="alternate" hreflang="ja" href="https://yosuke-matsuo.github.io/gaussian/errors-opt-scf.html"/>
+<link rel="alternate" hreflang="en" href="https://yosuke-matsuo.github.io/en/gaussian/errors-opt-scf.html"/>
+<link rel="alternate" hreflang="x-default" href="https://yosuke-matsuo.github.io/gaussian/errors-opt-scf.html"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Yosuke Matsuo（松尾洋介）"/>
+<meta property="og:title" content="Opt and SCF errors | Gaussian guide"/>
+<meta property="og:description" content="What to do when an optimization stops or the SCF fails to converge." data-ja="構造最適化が止まったとき、SCFが収束しないときの対処。" data-en="What to do when an optimization stops or the SCF fails to converge."/>
+<meta property="og:url" content="https://yosuke-matsuo.github.io/en/gaussian/errors-opt-scf.html"/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:image" content="https://yosuke-matsuo.github.io/images/og-image.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="color-scheme" content="light"/>
+<title data-ja="Opt・SCFエラー｜Gaussian入門" data-en="Opt and SCF errors | Gaussian guide">Opt and SCF errors | Gaussian guide</title>
+<link rel="stylesheet" href="../../styles.css?v=20261121-1"/>
+<script defer src="../../app.js?v=20261121-1"></script>
+</head>
+<body>
+<a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">Skip to content</a>
+<header class="site-header">
+<a class="brand" href="../index.html">Yosuke Matsuo</a>
+<nav class="primary-nav" aria-label="Main"><a href="../research.html" data-ja="研究内容" data-en="Research">Research</a><a href="../publications.html" data-ja="業績" data-en="Publications">Publications</a><a href="../tools.html" data-ja="ツール" data-en="Tools">Tools</a><a aria-current="location" href="./index.html" data-ja="Gaussian入門" data-en="Gaussian guide">Gaussian guide</a></nav>
+<div class="language-switch" role="group" aria-label="Language"><button type="button" data-language="ja" lang="ja" aria-pressed="false">日本語</button><button type="button" data-language="en" lang="en" aria-pressed="true">English</button></div>
+</header>
+<main class="page-shell guide" id="main">
+
+<div class="page-body">
+<section class="intro"><nav aria-label="Breadcrumb" class="breadcrumb"><a data-ja="Gaussian入門" data-en="Gaussian guide" href="./index.html">Gaussian guide</a> / <a data-ja="Gaussianのエラー対応" data-en="Troubleshooting Gaussian errors" href="./troubleshooting.html">Troubleshooting Gaussian errors</a></nav><h1 data-en="Opt and SCF errors" data-ja="Opt・SCFエラー">Opt and SCF errors</h1><p data-en="What to do when an optimization stops or the SCF fails to converge." data-ja="構造最適化が止まったとき、SCFが収束しないときの対処。" class="lead">What to do when an optimization stops or the SCF fails to converge.</p></section>
+<section class="content-section reading" id="opt">
+<h2 data-en="Geometry optimization (Opt)" data-ja="構造最適化（Opt）">Geometry optimization (Opt)</h2>
+<article class="error-entry"><h3 data-en="Opt step limit" data-ja="Optの回数上限" id="minimum">Opt step limit</h3><pre class="error-marker" translate="no" lang="en">Number of steps exceeded,  NStep= 100</pre><p><strong data-en="Cause: " data-ja="原因：">Cause: </strong><span data-en="The structure did not converge within the cycle limit (MaxCycles; set by molecular size if not given). The output ends with Error termination, but the input is not wrong; the job simply stopped part-way." data-ja="サイクルの上限内に構造が収束しませんでした（上限は MaxCycles。指定しなければ分子の大きさで決まります）。出力は Error termination で終わりますが、入力の誤りではなく「途中で止まった」状態です。">The structure did not converge within the cycle limit (MaxCycles; set by molecular size if not given). The output ends with Error termination, but the input is not wrong; the job simply stopped part-way.</span></p><strong data-en="What to do" data-ja="対処" class="action-label">What to do</strong><ol class="compact-list">
+<li data-en="Use the last geometry in the output (the final Input/Standard orientation) as the coordinates of a new input and rerun with the same settings." data-ja="出力末尾の構造（最後の Input orientation / Standard orientation）を新しい入力の座標にして、同じ条件で再実行します。">Use the last geometry in the output (the final Input/Standard orientation) as the coordinates of a new input and rerun with the same settings.</li>
+<li data-en="If the energy was steadily decreasing, this usually suffices." data-ja="エネルギーが単調に下がっていれば、これだけでたいてい収束します。">If the energy was steadily decreasing, this usually suffices.</li>
+<li data-en="If it was oscillating, see &quot;Oscillating optimization&quot; below." data-ja="大きく上下している場合は下の「最適化が振動する」へ。">If it was oscillating, see &quot;Oscillating optimization&quot; below.</li>
+<li data-en="After convergence, always confirm with Freq that there are no imaginary frequencies." data-ja="収束後は必ず Freq で虚振動がないことを確認します。">After convergence, always confirm with Freq that there are no imaginary frequencies.</li>
+</ol></article>
+<article class="error-entry"><h3 data-en="Oscillating optimization (energy keeps going up and down)" data-ja="最適化が振動する（エネルギーが上下し続ける）" id="oscillation">Oscillating optimization (energy keeps going up and down)</h3><p><strong data-en="Cause: " data-ja="原因：">Cause: </strong><span data-en="Steps are too large, the Hessian approximation is poor, or there is a soft torsion, so the structure keeps bouncing. There is no error text; the job eventually ends with Number of steps exceeded." data-ja="更新幅が大きすぎる、ヘシアン近似が悪い、柔らかいねじれがある、などで構造が行ったり来たりしています。エラー文字列はなく、最終的に Number of steps exceeded になります。">Steps are too large, the Hessian approximation is poor, or there is a soft torsion, so the structure keeps bouncing. There is no error text; the job eventually ends with Number of steps exceeded.</span></p><strong data-en="What to do" data-ja="対処" class="action-label">What to do</strong><ol class="compact-list">
+<li data-en="Look at the energy trace and structures in a viewer such as GaussView: is the amplitude shrinking, or bouncing at constant size?" data-ja="GaussViewなどのビューアーでエネルギーの推移と構造を見て、振幅が小さくなっているか、同じ幅で往復しているかを判断します。">Look at the energy trace and structures in a viewer such as GaussView: is the amplitude shrinking, or bouncing at constant size?</li>
+<li data-en="If shrinking, continue from the last geometry as above." data-ja="小さくなっていれば、上と同じく最後の構造から続行します。">If shrinking, continue from the last geometry as above.</li>
+<li data-en="If it keeps bouncing, rerun from the last geometry with Opt=(CalcFC,MaxStep=5): start from an exact Hessian and take smaller steps." data-ja="往復し続けるなら、最後の構造から Opt=(CalcFC,MaxStep=5) で再実行します。CalcFC で正確なヘシアンから始め、MaxStep で1回の移動を小さくします。">If it keeps bouncing, rerun from the last geometry with Opt=(CalcFC,MaxStep=5): start from an exact Hessian and take smaller steps.</li>
+</ol><figure class="energy-figure"><img alt="" src="../../gaussian/assets/opt-energy-shrinking.svg" width="418" height="288" loading="lazy" decoding="async"/><img alt="" src="../../gaussian/assets/opt-energy-persistent.svg" width="418" height="288" loading="lazy" decoding="async"/><figcaption data-en="Schematic: first, a normal optimization with shrinking amplitude; second, persistent oscillation. x: optimization cycle, y: relative energy (synthetic data)." data-ja="模式図：1枚目は振幅が小さくなる正常な最適化、2枚目は同じ幅で往復し続ける例。横軸は最適化サイクル、縦軸は相対エネルギー（人工データ）。">Schematic: first, a normal optimization with shrinking amplitude; second, persistent oscillation. x: optimization cycle, y: relative energy (synthetic data).</figcaption></figure></article>
+</section>
+<section class="content-section reading" id="scf">
+<h2 data-en="SCF convergence failure" data-ja="SCFの収束失敗">SCF convergence failure</h2>
+<article class="error-entry"><h3 data-en="SCF does not converge" data-ja="SCFが収束しない" id="scf-body">SCF does not converge</h3><pre class="error-marker" translate="no" lang="en">Convergence failure -- run terminated.</pre><p><strong data-en="Cause: " data-ja="原因：">Cause: </strong><span data-en="The iterative electronic-structure calculation (SCF) at one geometry did not converge. It can happen in Opt, TS or IRC jobs." data-ja="1つの構造の電子状態を求める反復計算（SCF）が収束しません。Opt・TS・IRCのどの計算でも起こります。">The iterative electronic-structure calculation (SCF) at one geometry did not converge. It can happen in Opt, TS or IRC jobs.</span></p><strong data-en="What to do" data-ja="対処" class="action-label">What to do</strong><ol class="compact-list">
+<li data-en="Check charge/multiplicity and look for atom clashes or abnormal bond lengths in the structure. This is the most common cause." data-ja="電荷・多重度が正しいか、構造に原子の衝突や異常な結合距離がないかを確認します。ここが原因のことが最も多いです。">Check charge/multiplicity and look for atom clashes or abnormal bond lengths in the structure. This is the most common cause.</li>
+<li data-en="If those are fine, add SCF=XQC to the route line and rerun (switches to a quadratically convergent method)." data-ja="問題がなければ、ルート行に SCF=XQC を加えて再実行します（二次収束法に切り替え）。">If those are fine, add SCF=XQC to the route line and rerun (switches to a quadratically convergent method).</li>
+<li data-en="If XQC also fails, read the initial guess from the .chk of a nearby converged structure with Guess=Read, or reconsider the method. For an open-shell singlet with an unrestricted method, also try Guess=Mix." data-ja="XQCでも失敗するなら、収束した近い構造の .chk から Guess=Read で初期推測を読むか、計算方法を見直します。開殻一重項を非制限法で計算している場合は Guess=Mix も試します。">If XQC also fails, read the initial guess from the .chk of a nearby converged structure with Guess=Read, or reconsider the method. For an open-shell singlet with an unrestricted method, also try Guess=Mix.</li>
+</ol></article>
+<h3 data-en="Example rerun input for SCF failure" data-ja="SCF再計算の入力例" id="gjf-scf">Example rerun input for SCF failure</h3>
+<pre class="input-block" translate="no" lang="en">%chk=opt_scf.chk
+#p B3LYP/6-31G(d) SCRF=(SMD,Solvent=Methanol)
+ SCF=(XQC,MaxCycle=512) Opt=(CalcFC,MaxCycles=100) Freq</pre>
+<p class="note"><span data-lang="en">Below the route line, continue with a blank line, title, blank line, charge/multiplicity, coordinates and a final blank line (<a href="./start.html#input">input anatomy</a>). Keyword meanings are in the <a href="./keywords.html">keyword reference</a>. Match the functional, basis set and solvent of the original job.</span></p>
+</section>
+<aside class="callout callout-caution">
+<strong data-en="Notes" data-ja="注意" class="callout-title">Notes</strong>
+<ul class="callout-list">
+<li data-en="When continuing, keep the original settings (functional, basis set, solvent, convergence criteria). Changing them makes the result incomparable with earlier structures." data-ja="続行するときは元の計算条件（汎関数・基底関数・溶媒・収束条件）をそのまま使います。条件を変えると、それまでの構造と比べられなくなります。">When continuing, keep the original settings (functional, basis set, solvent, convergence criteria). Changing them makes the result incomparable with earlier structures.</li>
+</ul>
+</aside>
+<section class="content-section reading" id="related">
+<h2 data-en="Related pages" data-ja="関連ページ">Related pages</h2>
+<ul class="compact-list">
+<li><a href="./troubleshooting.html" data-ja="エラー対応トップ" data-en="Troubleshooting index">Troubleshooting index</a></li>
+<li><a href="./errors-ts.html" data-ja="TSエラー" data-en="TS errors">TS errors</a></li>
+<li><a href="./errors-irc.html" data-ja="IRCエラー" data-en="IRC errors">IRC errors</a></li>
+</ul>
+</section>
+</div>
+</main>
+<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月21日" data-en="Last updated: 21 November 2026" class="copyright">Last updated: 21 November 2026</p></footer>
+</body>
+</html>
