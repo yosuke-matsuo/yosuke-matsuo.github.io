@@ -20,8 +20,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="遷移状態と反応経路（TS・IRC）｜Gaussian入門" data-en="Transition states and reaction paths (TS/IRC) | Gaussian guide">遷移状態と反応経路（TS・IRC）｜Gaussian入門</title>
-<link rel="stylesheet" href="../styles.css?v=20261122-6"/>
-<script defer src="../app.js?v=20261122-6"></script>
+<link rel="stylesheet" href="../styles.css?v=20261122-7"/>
+<script defer src="../app.js?v=20261122-7"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">本文へ移動</a>
@@ -155,23 +155,11 @@ product
 <p data-en="The procedure when a TS search stops with an eigenvalue error, or converges with two or more imaginary frequencies. The key idea: find the direction of the extra imaginary mode, displace slightly along it, and search again." data-ja="TS探索が固有値エラーで止まったとき、または収束したのに虚振動が2つ以上あるときの手順です。要点は「余分な虚振動の方向を見つけ、その方向に少し動かして探し直す」ことです。">TS探索が固有値エラーで止まったとき、または収束したのに虚振動が2つ以上あるときの手順です。要点は「余分な虚振動の方向を見つけ、その方向に少し動かして探し直す」ことです。</p>
 <ol class="step-list">
 <li><strong data-en="Check the guess and the reaction direction" data-ja="候補構造と反応方向を確認する" class="step-title">候補構造と反応方向を確認する</strong><div class="step-body"><p data-en="Bond distances, atom orientation, clashes. Often fixable here." data-ja="結合距離、原子の向き、衝突。ここで直せることが多いです。">結合距離、原子の向き、衝突。ここで直せることが多いです。</p></div></li>
-<li><strong data-en="(If conditions allow) one short NoEigenTest probe" data-ja="（条件が合えば）短いNoEigenTest試行を1回" class="step-title">（条件が合えば）短いNoEigenTest試行を1回</strong><div class="step-body"><p><span data-lang="ja">5サイクルだけ。</span><template data-lang="en"><span data-lang="en" hidden>Only 5 cycles.</span></template></p></div></li>
+<li><strong data-en="(If the guess is reasonable) continue with NoEigenTest" data-ja="（候補が妥当なら）NoEigenTest を付けて続ける" class="step-title">（候補が妥当なら）NoEigenTest を付けて続ける</strong><div class="step-body"><p data-en="Suspend the check on the number of negative eigenvalues and continue the search. Confirm with the Freq after convergence that there is exactly one imaginary frequency." data-ja="負の固有値の数の検査を止めて探索を続けます。収束後の Freq で虚振動が1つかを確認します。">負の固有値の数の検査を止めて探索を続けます。収束後の Freq で虚振動が1つかを確認します。</p></div></li>
 <li><strong data-en="Mode-check Freq" data-ja="モード確認用Freq" class="step-title">モード確認用Freq</strong><div class="step-body"><p data-en="Run Freq at the stopped geometry to get complete vibrational modes." data-ja="止まった構造で Freq を実行し、完全な振動モードを得ます。">止まった構造で Freq を実行し、完全な振動モードを得ます。</p></div></li>
 <li><strong data-en="Pick the extra mode and displace ±" data-ja="余分なモードを選び、±に変位" class="step-title">余分なモードを選び、±に変位</strong><div class="step-body"><p data-en="Distinguish the reaction mode from the extra mode in a viewer such as GaussView and build two structures displaced ±0.05 Å along the extra one." data-ja="GaussViewなどのビューアーで反応モードと余分なモードを見分け、余分なモードに沿って ±0.05 Å 動かした構造を2つ作ります。">GaussViewなどのビューアーで反応モードと余分なモードを見分け、余分なモードに沿って ±0.05 Å 動かした構造を2つ作ります。</p></div></li>
 <li><strong data-en="Re-search the TS from both, then final Freq and IRC" data-ja="両方の構造からTSを再探索し、最終Freq・IRC" class="step-title">両方の構造からTSを再探索し、最終Freq・IRC</strong><div class="step-body"><p data-en="Search each with Opt=(TS,CalcFC); for the one that converges, run Freq and IRC in both directions." data-ja="Opt=(TS,CalcFC) で別々に探索し、収束したほうで Freq と両方向 IRC を行います。">Opt=(TS,CalcFC) で別々に探索し、収束したほうで Freq と両方向 IRC を行います。</p></div></li>
 </ol>
-</section>
-<section class="content-section reading" id="established-mode-method">
-<h3 data-en="Conditions for a NoEigenTest probe" data-ja="NoEigenTest試行の条件">NoEigenTest試行の条件</h3>
-<p data-en="Even when &quot;Desired=1 Actual=2&quot; appears, use it only when all of the following hold; then suspend the test for 5 cycles only:" data-ja="「Desired=1 Actual=2」が出ても、使うのは次の条件がすべてそろったときだけです。そのときは5サイクルに限って検査を外し、様子を見ます。">「Desired=1 Actual=2」が出ても、使うのは次の条件がすべてそろったときだけです。そのときは5サイクルに限って検査を外し、様子を見ます。</p>
-<ul class="compact-list">
-<li data-en="A direct TS search (Opt=TS) using CalcFC." data-ja="直接TS探索（Opt=TS）で、CalcFC を使っている。">直接TS探索（Opt=TS）で、CalcFC を使っている。</li>
-<li data-en="The second negative eigenvalue has |value| ≤ 1×10⁻⁴ (optimizer units, not cm⁻¹)." data-ja="2番目の負の固有値の絶対値が 1×10⁻⁴ 以下（optimizerの単位。振動数 cm⁻¹ ではありません）。">2番目の負の固有値の絶対値が 1×10⁻⁴ 以下（optimizerの単位。振動数 cm⁻¹ ではありません）。</li>
-<li data-en="The reaction geometry is intact at the stopped structure." data-ja="止まった構造で反応構造が保たれている。">止まった構造で反応構造が保たれている。</li>
-</ul>
-<pre class="input-block" translate="no" lang="en">Opt=(TS,CalcFC,NoEigenTest,MaxStep=2,MaxCycles=5)</pre>
-<p data-en="After 5 cycles, remove NoEigenTest and restore the test with a fresh CalcFC. If the extra negative curvature reappears, do not repeat NoEigenTest; proceed to the mode check." data-ja="5サイクル後は NoEigenTest を外し、新しい CalcFC で検査を戻します。余分な負の曲率がまた出るなら、NoEigenTest を繰り返さず、次のモード確認へ進みます。">5サイクル後は NoEigenTest を外し、新しい CalcFC で検査を戻します。余分な負の曲率がまた出るなら、NoEigenTest を繰り返さず、次のモード確認へ進みます。</p>
-<pre class="input-block" translate="no" lang="en">Opt=(TS,CalcFC,MaxStep=2,MaxCycles=100)</pre>
 </section>
 <section class="content-section reading" id="mode-freq">
 <h3 data-en="Mode-check Freq" data-ja="モード確認用Freq">モード確認用Freq</h3>
@@ -193,8 +181,8 @@ product
 <section class="content-section reading" id="final">
 <h3 data-en="Final Freq and IRC after convergence" data-ja="収束後の最終Freq・IRC">収束後の最終Freq・IRC</h3>
 <p data-en="Run Freq at the converged stationary point under the same conditions; confirm exactly one imaginary frequency whose motion is the intended reaction. Then confirm the connection to reactant and product with IRC in both directions and endpoint Opt Freq." data-ja="収束した停留点で同じ条件の Freq を行い、虚振動が1つだけで、その動きが目的の反応であることを確認します。次に両方向の IRC と末端の Opt Freq で反応物・生成物への接続を確かめます。">収束した停留点で同じ条件の Freq を行い、虚振動が1つだけで、その動きが目的の反応であることを確認します。次に両方向の IRC と末端の Opt Freq で反応物・生成物への接続を確かめます。</p>
-<p data-en="Record: the original TS, the probe, the mode-check Freq, the chosen mode, the displacement, the ± branches, and the final Freq/IRC." data-ja="記録：元TS、短期試行、モード確認Freq、選んだモード、変位量、＋−の枝、最終Freq・IRCの対応を残します。">記録：元TS、短期試行、モード確認Freq、選んだモード、変位量、＋−の枝、最終Freq・IRCの対応を残します。</p>
-<p data-en="Displacing along an extra imaginary mode and re-searching is an established approach; the TURBOMOLE manual §5.2.4 describes a similar procedure with screwer. The 5-cycle probe, 0.05 Å initial displacement and 0.01–0.20 Å range are guideline values." data-ja="余分な虚振動に沿って構造を変位させてTSを探し直す考え方は、一般的な方法です。TURBOMOLEのマニュアル §5.2.4 にも screwer による同様の手順があります。5サイクルの試行、0.05 Å の初期変位、0.01–0.20 Å の範囲は目安です。">余分な虚振動に沿って構造を変位させてTSを探し直す考え方は、一般的な方法です。TURBOMOLEのマニュアル §5.2.4 にも screwer による同様の手順があります。5サイクルの試行、0.05 Å の初期変位、0.01–0.20 Å の範囲は目安です。</p>
+<p data-en="Record: the original TS, the mode-check Freq, the chosen mode, the displacement, the ± branches, and the final Freq/IRC." data-ja="記録：元TS、モード確認Freq、選んだモード、変位量、＋−の枝、最終Freq・IRCの対応を残します。">記録：元TS、モード確認Freq、選んだモード、変位量、＋−の枝、最終Freq・IRCの対応を残します。</p>
+<p data-en="Displacing along an extra imaginary mode and re-searching is an established approach; the TURBOMOLE manual §5.2.4 describes a similar procedure with screwer. The 0.05 Å initial displacement and 0.01–0.20 Å range are guideline values." data-ja="余分な虚振動に沿って構造を変位させてTSを探し直す考え方は、一般的な方法です。TURBOMOLEのマニュアル §5.2.4 にも screwer による同様の手順があります。0.05 Å の初期変位、0.01–0.20 Å の範囲は目安です。">余分な虚振動に沿って構造を変位させてTSを探し直す考え方は、一般的な方法です。TURBOMOLEのマニュアル §5.2.4 にも screwer による同様の手順があります。0.05 Å の初期変位、0.01–0.20 Å の範囲は目安です。</p>
 </section>
 <section class="content-section reading" id="basis">
 <h3 data-en="References" data-ja="参考資料">参考資料</h3>
@@ -204,10 +192,6 @@ product
 <li><a href="https://gaussian.com/faq3/" target="_blank" rel="noopener noreferrer" data-ja="Gaussian公式：Frequency FAQ" data-en="Gaussian: Frequency FAQ">Gaussian公式：Frequency FAQ</a></li>
 <li><a href="https://www.turbomole.org/downloads/doc/Turbomole_Manual_7-5.pdf#page=122" target="_blank" rel="noopener noreferrer" data-ja="TURBOMOLE公式：マニュアル 7.5 §5.2.4" data-en="TURBOMOLE: User&#x27;s Manual 7.5, §5.2.4">TURBOMOLE公式：マニュアル 7.5 §5.2.4</a></li>
 </ul>
-</section>
-<section class="content-section reading" id="early-ts-alternative">
-<h3 data-en="Alternative for a TS search that stopped early" data-ja="早期に止まったTS探索の別候補">早期に止まったTS探索の別候補</h3>
-<p data-en="When the first TS search hits a curvature error within a few cycles, a mode-check Freq at the stopped geometry is the first option and a fresh search from the original guess with MaxStep=2 is the second." data-ja="最初のTS探索が数サイクルで曲率エラーになった場合は、停止構造でのモード確認用Freqを第一候補、元の候補構造から MaxStep=2 で探索し直すことを第二候補とします。">最初のTS探索が数サイクルで曲率エラーになった場合は、停止構造でのモード確認用Freqを第一候補、元の候補構造から MaxStep=2 で探索し直すことを第二候補とします。</p>
 </section>
 <aside class="callout callout-caution">
 <strong data-en="Notes" data-ja="注意" class="callout-title">注意</strong>
