@@ -21,8 +21,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="配座と安定構造｜Gaussian入門" data-en="Conformers and stable structures | Gaussian guide">Conformers and stable structures | Gaussian guide</title>
-<link rel="stylesheet" href="../../styles.css?v=20261122-8"/>
-<script defer src="../../app.js?v=20261122-8"></script>
+<link rel="stylesheet" href="../../styles.css?v=20261122-9"/>
+<script defer src="../../app.js?v=20261122-9"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">Skip to content</a>
@@ -127,7 +127,6 @@
    Integral=UltraFine SCF=Tight</pre><p><strong data-en="Used in: " data-ja="使用例：">Used in: </strong><a href="https://doi.org/10.3390/molecules31111876" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Karwowski, <i>Molecules</i> 2026, 31, 1876</a></p><p class="muted"><span data-en="Source: " data-ja="出典：">Source: </span><a href="https://doi.org/10.1007/s00214-007-0310-x" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Zhao &amp; Truhlar, <i>Theor. Chem. Acc.</i> 2008, 120, 215</a></p></article>
 <h3 data-en="Combining SP with thermal corrections" data-ja="SPと熱補正の組み合わせ">Combining SP with thermal corrections</h3>
 <p><span data-lang="en">Run the low-level Freq and the high-level SP at the same geometry and use <i>G</i> = <i>E</i><sub>high</sub> + (<i>G</i><sub>low</sub> − <i>E</i><sub>low</sub>), where <i>G</i><sub>low</sub> − <i>E</i><sub>low</sub> is the thermal correction printed by Gaussian. Add any standard-state conversion (e.g. 1 atm → 1 M) separately. If you apply a quasi-harmonic low-frequency correction (e.g. GoodVibes), avoid double counting.</span></p>
-<p data-en="For IR comparison, choose the scaling factor s in ν_corr = s × ν_calc according to functional, basis set and purpose (fundamentals, ZPE). Do not apply it to free energies." data-ja="IRスペクトルと比べるときは ν_corr = s × ν_calc の倍率 s を、汎関数・基底関数・用途（基本振動、ZPE）に合わせて選びます。この倍率を自由エネルギーには掛けません。">For IR comparison, choose the scaling factor s in ν_corr = s × ν_calc according to functional, basis set and purpose (fundamentals, ZPE). Do not apply it to free energies.</p>
 </section>
 <aside class="callout callout-caution">
 <strong data-en="Notes" data-ja="注意" class="callout-title">Notes</strong>

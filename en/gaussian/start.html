@@ -21,8 +21,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="はじめてのGaussian計算｜Gaussian入門" data-en="Your first Gaussian calculation | Gaussian guide">Your first Gaussian calculation | Gaussian guide</title>
-<link rel="stylesheet" href="../../styles.css?v=20261122-8"/>
-<script defer src="../../app.js?v=20261122-8"></script>
+<link rel="stylesheet" href="../../styles.css?v=20261122-9"/>
+<script defer src="../../app.js?v=20261122-9"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">Skip to content</a>
@@ -63,7 +63,6 @@
 <td data-en="Paid (usage fees)" data-ja="有償（利用負担金）">Paid (usage fees)</td>
 </tr>
 </tbody></table></div>
-<p data-en="This guide is written for Gaussian 16. Defaults, options and output formats may differ in Gaussian 09 and other versions; check the manual for the version you use." data-ja="Gaussian入門は Gaussian 16 を対象としています。Gaussian 09 やその他の版では、既定値・オプション・出力の書式が異なる場合があります。使用する版のマニュアルで確認してください。" class="note">This guide is written for Gaussian 16. Defaults, options and output formats may differ in Gaussian 09 and other versions; check the manual for the version you use.</p>
 <p data-en="The workflow is the same everywhere: write the input file (.gjf/.com) locally, send it to the machine and run it, then bring the output (.log/.out) back to inspect." data-ja="どの環境でも、計算の流れは同じです。手元で入力ファイル（.gjf/.com）を作り、計算機に送って実行し、出力ファイル（.log/.out）を手元に戻して確認します。">The workflow is the same everywhere: write the input file (.gjf/.com) locally, send it to the machine and run it, then bring the output (.log/.out) back to inspect.</p>
 </section>
 <section class="content-section reading" id="input">
@@ -195,7 +194,7 @@ g16sub catechin_opt_freq.gjf</pre>
 </section>
 <section class="content-section reading" id="output">
 <h2 data-en="4. Reading the output: check three places" data-ja="4. 出力の見方：3か所だけ確認する">4. Reading the output: check three places</h2>
-<p data-en="The output is long, but success is decided by three things. Use your text editor&#x27;s search." data-ja="出力は長いですが、成功したかどうかは次の3か所で分かります。テキストエディターの検索機能を使ってください。">The output is long, but success is decided by three things. Use your text editor&#x27;s search.</p>
+<p data-en="The output is long, but success is decided by three things. Use your text editor&#x27;s search." data-ja="出力は長いですが、成功したかどうかは次の3か所で分かります。テキストエディターの検索機能で探します。">The output is long, but success is decided by three things. Use your text editor&#x27;s search.</p>
 <ol class="step-list">
 <li><strong data-en="Does it end with Normal termination?" data-ja="末尾に Normal termination があるか" class="step-title">Does it end with Normal termination?</strong><div class="step-body"><pre class="input-block" translate="no" lang="en"> Normal termination of Gaussian 16 at ...</pre>
 <p data-en="With Opt Freq the frequency job follows the optimization, so this line appears twice. If you see Error termination instead, the cause is printed a few lines above it." data-ja="Opt Freq では最適化の後にFreqが走るので、この行は2回出ます。代わりに Error termination があれば、その数行上に原因が書かれています。">With Opt Freq the frequency job follows the optimization, so this line appears twice. If you see Error termination instead, the cause is printed a few lines above it.</p></div></li>

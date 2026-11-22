@@ -20,8 +20,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="遷移状態と反応経路（TS・IRC）｜Gaussian入門" data-en="Transition states and reaction paths (TS/IRC) | Gaussian guide">遷移状態と反応経路（TS・IRC）｜Gaussian入門</title>
-<link rel="stylesheet" href="../styles.css?v=20261122-8"/>
-<script defer src="../app.js?v=20261122-8"></script>
+<link rel="stylesheet" href="../styles.css?v=20261122-9"/>
+<script defer src="../app.js?v=20261122-9"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">本文へ移動</a>
@@ -58,7 +58,6 @@
 <td data-en="Adds a TS guess to QST2 to stabilize the search." data-ja="QST2にTS候補を加えて、探索を安定させます。">QST2にTS候補を加えて、探索を安定させます。</td>
 </tr>
 </tbody></table></div>
-<p data-en="With QST2/QST3, do not also write Opt=TS on the route line." data-ja="QST2/QST3ではルート行に Opt=TS を重ねて書きません。">QST2/QST3ではルート行に Opt=TS を重ねて書きません。</p>
 <h3 data-en="References" data-ja="参考資料">参考資料</h3>
 <ul class="compact-list reference-list">
 <li><a href="https://gaussian.com/qst2/" target="_blank" rel="noopener noreferrer" data-ja="Gaussian公式：QST2/QST3" data-en="Gaussian: QST2/QST3">Gaussian公式：QST2/QST3</a></li>
@@ -148,7 +147,7 @@ product
 <article class="method-entry"><h3 data-en="LQA (when HPC fails in the corrector)" data-ja="LQA（HPCのcorrectorが収束しないとき）" id="irc-lqa">LQA（HPCのcorrectorが収束しないとき）</h3><p data-en="Same TS, direction and step size; only the algorithm changes to LQA." data-ja="同じTS・同じ方向・同じ刻みで、アルゴリズムだけを LQA に変えます。">同じTS・同じ方向・同じ刻みで、アルゴリズムだけを LQA に変えます。</p><p class="muted"><span data-en="Relative time: similar to HPC" data-ja="時間の目安：HPCと同程度">時間の目安：HPCと同程度</span></p><pre class="input-block" translate="no" lang="en">%chk=irc-lqa.chk
 #p M062X/6-31+G(d,p) IRC=(CalcFC,Forward,LQA,MaxPoints=80,StepSize=5)
    SCRF=(SMD,Solvent=Acetonitrile) Integral=UltraFine SCF=Tight</pre><p class="muted"><span data-en="Source: " data-ja="出典：">出典：</span><a href="https://gaussian.com/irc/" target="_blank" rel="noopener noreferrer" data-ja="Gaussian公式：IRC" data-en="Gaussian: IRC">Gaussian公式：IRC</a></p></article>
-<p><span data-lang="ja">IRCの末端は Opt Freq で緩和し、反応物・生成物の極小に落ちることを確認します。障壁のエネルギーは、TSと反応物の<i>G</i>を同じ条件・同じ標準状態で比べます。</span><template data-lang="en"><span data-lang="en" hidden>Relax the IRC endpoints with Opt Freq and confirm they fall into the reactant and product minima. Compute the barrier from the <i>G</i> of TS and reactant under the same conditions and standard state.</span></template></p>
+<p><span data-lang="ja">障壁のエネルギーは、TSと反応物の<i>G</i>を同じ条件・同じ標準状態で比べます。</span><template data-lang="en"><span data-lang="en" hidden>Compute the barrier from the <i>G</i> of TS and reactant under the same conditions and standard state.</span></template></p>
 </section>
 <section class="content-section reading" id="recovery">
 <h2 data-en="TS re-search: overview" data-ja="TS再探索：全体の流れ">TS再探索：全体の流れ</h2>
