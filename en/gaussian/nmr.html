@@ -21,8 +21,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="NMR化学シフト｜Gaussian入門" data-en="NMR chemical shifts | Gaussian guide">NMR chemical shifts | Gaussian guide</title>
-<link rel="stylesheet" href="../../styles.css?v=20261122-4"/>
-<script defer src="../../app.js?v=20261122-4"></script>
+<link rel="stylesheet" href="../../styles.css?v=20261122-5"/>
+<script defer src="../../app.js?v=20261122-5"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">Skip to content</a>
@@ -34,25 +34,25 @@
 <main class="page-shell guide" id="main">
 <div class="page-body">
 <section class="intro"><nav aria-label="Breadcrumb" class="breadcrumb"><a data-ja="Gaussian入門" data-en="Gaussian guide" href="./index.html">Gaussian guide</a> / <a data-ja="計算ガイド" data-en="Calculation guide" href="./workflow.html">Calculation guide</a></nav><h1 data-en="NMR chemical shifts" data-ja="NMR化学シフト">NMR chemical shifts</h1></section>
-<nav aria-label="On this page" class="section-nav"><a href="#theory" data-ja="NMR：遮蔽定数から化学シフトへ" data-en="NMR: from shielding to chemical shift">NMR: from shielding to chemical shift</a><a href="#procedure" data-ja="手順" data-en="Procedure">Procedure</a><a href="#conditions" data-ja="計算条件（GIAO）" data-en="Calculation conditions (GIAO)">Calculation conditions (GIAO)</a><a href="#calibration" data-ja="遮蔽σから化学シフトδへ" data-en="From shielding σ to chemical shift δ">From shielding σ to chemical shift δ</a><a href="#nmr-hashimoto"><span data-lang="en">A protocol with dedicated corrections: Hehre <i>et al.</i> 2019</span></a><a href="#examples" data-ja="文献の条件一覧" data-en="Conditions in the literature">Conditions in the literature</a></nav>
+<nav aria-label="On this page" class="section-nav"><a href="#theory" data-ja="NMR：遮蔽定数から化学シフトへ" data-en="NMR: from shielding to chemical shift">NMR: from shielding to chemical shift</a><a href="#procedure" data-ja="手順" data-en="Procedure">Procedure</a><a href="#conditions" data-ja="計算条件：GIAO" data-en="Calculation conditions: GIAO">Calculation conditions: GIAO</a><a href="#calibration" data-ja="遮蔽σから化学シフトδへ" data-en="From shielding σ to chemical shift δ">From shielding σ to chemical shift δ</a><a href="#nmr-hashimoto"><span data-lang="en">A protocol with dedicated corrections: Hehre <i>et al.</i> 2019</span></a><a href="#examples" data-ja="文献の条件一覧" data-en="Conditions in the literature">Conditions in the literature</a></nav>
 <section class="content-section reading" id="theory">
 <h2 data-en="NMR: from shielding to chemical shift" data-ja="NMR：遮蔽定数から化学シフトへ">NMR: from shielding to chemical shift</h2>
 <p data-en="Gaussian&#x27;s NMR keyword (GIAO method) gives the shielding constant σ (ppm) of each nucleus. The chemical shift δ is obtained from σ in one of two ways." data-ja="Gaussianの NMR キーワード（GIAO法）が出すのは各核の遮蔽定数σ（ppm）です。化学シフトδは、σから次のどちらかで求めます。">Gaussian&#x27;s NMR keyword (GIAO method) gives the shielding constant σ (ppm) of each nucleus. The chemical shift δ is obtained from σ in one of two ways.</p>
 <ul class="compact-list">
-<li data-en="Reference difference: δ = σ_ref − σ, with σ_ref of TMS computed under the same conditions." data-ja="参照差：同じ条件で計算したTMSのσ_refを使い、δ = σ_ref − σ。">Reference difference: δ = σ_ref − σ, with σ_ref of TMS computed under the same conditions.</li>
-<li data-en="Calibration equation: δ = (b − σ)/m from a regression over many molecules. The coefficients depend on nucleus, functional, basis set and solvent (e.g. CHESHIRE)." data-ja="校正式：多数の分子で決めた回帰式 δ = (b − σ)/m を使う。係数は核種・汎関数・基底関数・溶媒の組み合わせごとに違います（CHESHIREなど）。">Calibration equation: δ = (b − σ)/m from a regression over many molecules. The coefficients depend on nucleus, functional, basis set and solvent (e.g. CHESHIRE).</li>
+<li data-en="Reference difference: δ = σ_ref − σ, with σ_ref of TMS computed under the same conditions." data-ja="参照差：同じ条件で計算したTMSのσ_refを使い、δ = σ_ref − σ とします。">Reference difference: δ = σ_ref − σ, with σ_ref of TMS computed under the same conditions.</li>
+<li data-en="Calibration equation: δ = (b − σ)/m from a regression over many molecules. The coefficients depend on nucleus, functional, basis set and solvent (e.g. CHESHIRE)." data-ja="校正式：多数の分子で決めた回帰式 δ = (b − σ)/m を使います。係数は核種・汎関数・基底関数・溶媒の組み合わせごとに違います（CHESHIREなど）。">Calibration equation: δ = (b − σ)/m from a regression over many molecules. The coefficients depend on nucleus, functional, basis set and solvent (e.g. CHESHIRE).</li>
 </ul>
 <p data-en="For flexible molecules, compute σ for each conformer, average by population, then convert to δ. This assumes conformer exchange is fast on the NMR time scale." data-ja="柔軟な分子では、配座ごとにσを計算し、存在率で平均してからδに変換します。NMRの時間尺度で配座交換が速い場合の平均です。">For flexible molecules, compute σ for each conformer, average by population, then convert to δ. This assumes conformer exchange is fast on the NMR time scale.</p>
 <h3 data-en="Watch the direction of the calibration equation" data-ja="校正式の向きに注意">Watch the direction of the calibration equation</h3>
-<p data-en="The same m and b mean different things depending on whether the paper writes δ = (b − σ)/m or σ = b + mδ. For example, the SI of Bally &amp; Rablen (2011) gives δ = (31.844 − σ)/1.0205 for ¹H at WP04/cc-pVDZ in chloroform. CHESHIRE tables use σ = mδ + b with a negative slope m (here −1.0205). These coefficients apply to this level only." data-ja="文献の m, b が δ = (b − σ)/m の形か σ = b + mδ の形かで、同じ数値でも意味が変わります。例として、Bally・Rablen（2011）のSIには WP04/cc-pVDZ（クロロホルム）の¹Hについて δ = (31.844 − σ)/1.0205 が示されています。CHESHIREの表は σ = mδ + b の形で、傾き m は負の値（この例では −1.0205）です。この係数はこの条件専用です。">The same m and b mean different things depending on whether the paper writes δ = (b − σ)/m or σ = b + mδ. For example, the SI of Bally &amp; Rablen (2011) gives δ = (31.844 − σ)/1.0205 for ¹H at WP04/cc-pVDZ in chloroform. CHESHIRE tables use σ = mδ + b with a negative slope m (here −1.0205). These coefficients apply to this level only.</p>
+<p data-en="The same m and b mean different things depending on whether the paper writes δ = (b − σ)/m or σ = b + mδ. For example, the SI of Bally &amp; Rablen (2011) gives δ = (31.844 − σ)/1.0205 for ¹H at WP04/cc-pVDZ in chloroform. CHESHIRE tables use σ = mδ + b with a negative slope m (here −1.0205). These coefficients apply to this level only." data-ja="文献の m, b が δ = (b − σ)/m の形か σ = b + mδ の形かで、同じ数値でも意味が変わります。例として、Bally &amp; Rablen（2011）のSIには WP04/cc-pVDZ（クロロホルム）の¹Hについて δ = (31.844 − σ)/1.0205 が示されています。CHESHIREの表は σ = mδ + b の形で、傾き m は負の値（この例では −1.0205）です。この係数はこの条件専用です。">The same m and b mean different things depending on whether the paper writes δ = (b − σ)/m or σ = b + mδ. For example, the SI of Bally &amp; Rablen (2011) gives δ = (31.844 − σ)/1.0205 for ¹H at WP04/cc-pVDZ in chloroform. CHESHIRE tables use σ = mδ + b with a negative slope m (here −1.0205). These coefficients apply to this level only.</p>
 <p data-en="Record σ, the averaged value and the converted δ separately, and compare residuals/MAE against experiment for each candidate structure." data-ja="σ、平均値、変換後のδは分けて記録し、候補構造ごとに実測との残差・MAEを比較します。">Record σ, the averaged value and the converted δ separately, and compare residuals/MAE against experiment for each candidate structure.</p>
 <h3 data-en="References" data-ja="参考資料">References</h3>
 <ul class="compact-list reference-list">
 <li><a href="#calibration" data-ja="参照差・校正式と出典" data-en="Reference difference, calibration equations and sources">Reference difference, calibration equations and sources</a></li>
 <li><a href="#conditions" data-ja="NMR計算のルート行の例" data-en="Example route lines for NMR calculations">Example route lines for NMR calculations</a></li>
-<li><a href="https://doi.org/10.1021/cr200106v" target="_blank" rel="noopener noreferrer">Lodewyk, M.W.; Siebert, M.R.; Tantillo, D.J. Computational Prediction of ¹H and ¹³C Chemical Shifts. <i>Chem. Rev.</i> 2012, 112, 1839–1862.</a> <span data-en="— review" data-ja="— 総説">— review</span></li>
-<li><a href="https://doi.org/10.1021/ja970112z" target="_blank" rel="noopener noreferrer">Forsyth, D.A.; Sebag, A.B. Computed ¹³C NMR Chemical Shifts via Empirically Scaled GIAO Shieldings. <i>J. Am. Chem. Soc.</i> 1997, 119, 9483–9494.</a> <span data-en="— basis of empirical scaling" data-ja="— 経験的校正の根拠">— basis of empirical scaling</span></li>
-<li><a href="https://pubs.acs.org/doi/suppl/10.1021/jo200513q" target="_blank" rel="noopener noreferrer" data-ja="Bally・Rablen（2011）SI S3" data-en="Bally &amp; Rablen (2011) SI S3">Bally &amp; Rablen (2011) SI S3</a></li>
+<li><a href="https://doi.org/10.1021/cr200106v" target="_blank" rel="noopener noreferrer">Lodewyk <i>et al.</i>, <i>Chem. Rev.</i> 2012, 112, 1839</a> <span data-en="— review" data-ja="— 総説">— review</span></li>
+<li><a href="https://doi.org/10.1021/ja970112z" target="_blank" rel="noopener noreferrer">Forsyth &amp; Sebag, <i>J. Am. Chem. Soc.</i> 1997, 119, 9483</a> <span data-en="— basis of empirical scaling" data-ja="— 経験的校正の根拠">— basis of empirical scaling</span></li>
+<li><a href="https://pubs.acs.org/doi/suppl/10.1021/jo200513q" target="_blank" rel="noopener noreferrer"><span data-lang="en">Bally &amp; Rablen, <i>J. Org. Chem.</i> 2011, 76, 4818 (SI p. S3)</span></a></li>
 </ul>
 </section>
 <section class="content-section reading" id="procedure">
@@ -65,11 +65,11 @@
 </ol>
 </section>
 <section class="content-section reading" id="conditions">
-<h2 data-en="Calculation conditions (GIAO)" data-ja="計算条件（GIAO）">Calculation conditions (GIAO)</h2><p class="note"><span data-lang="en">Below the route line, continue with a blank line, title, blank line, charge/multiplicity, coordinates and a final blank line (<a href="./start.html#input">input anatomy</a>). Keyword meanings are in the <a href="./keywords.html">keyword reference</a>. Relative times are rough ratios to the setting marked “reference (1)”.</span></p>
+<h2 data-en="Calculation conditions: GIAO" data-ja="計算条件：GIAO">Calculation conditions: GIAO</h2><p class="note"><span data-lang="en">Below the route line, continue with a blank line, title, blank line, charge/multiplicity, coordinates and a final blank line (<a href="./start.html#input">input anatomy</a>). Keyword meanings are in the <a href="./keywords.html">keyword reference</a>. Relative times are rough ratios to the setting marked “reference (1)”.</span></p>
 <article class="method-entry"><h3 data-en="mPW1PW91/6-31+G(d,p), PCM(CHCl₃)" data-ja="mPW1PW91/6-31+G(d,p)・PCM(CHCl₃)" id="nmr-mpw">mPW1PW91/6-31+G(d,p), PCM(CHCl₃)</h3><p data-en="One of the most common combinations for natural products, with B3LYP/6-31G(d) geometries. Also the standard level for DP4+." data-ja="天然物で最もよく見る組み合わせの一つ。構造は B3LYP/6-31G(d)。DP4+ の標準条件でもあります。">One of the most common combinations for natural products, with B3LYP/6-31G(d) geometries. Also the standard level for DP4+.</p><p class="muted"><span data-en="Relative time: reference (1)" data-ja="時間の目安：基準（1）">Relative time: reference (1)</span></p><pre class="input-block" translate="no" lang="en">%chk=nmr-mpw.chk
 #p mPW1PW91/6-31+G(d,p) NMR=GIAO
    SCRF=(PCM,Solvent=Chloroform)</pre><p><strong data-en="Used in: " data-ja="使用例：">Used in: </strong><a href="https://doi.org/10.1021/acs.orglett.4c01642" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Cuadrado <i>et al.</i>, <i>Org. Lett.</i> 2024</a> · <a href="https://doi.org/10.1021/acs.joc.3c01515" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Shi <i>et al.</i>, <i>J. Org. Chem.</i> 2023</a> · <a href="https://doi.org/10.1039/d3ra04688e" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Le <i>et al.</i>, <i>RSC Adv.</i> 2023, 13, 31811</a> · <a href="https://doi.org/10.1021/acs.jnatprod.5c00578" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Zhang <i>et al.</i>, <i>J. Nat. Prod.</i> 2025, 88, 2325</a></p><p class="muted"><span data-en="Source: " data-ja="出典：">Source: </span><a href="https://doi.org/10.1063/1.475428" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Adamo &amp; Barone, <i>J. Chem. Phys.</i> 1998, 108, 664</a></p></article>
-<article class="method-entry"><h3 data-en="PBE0/6-311+G(2d,p), PCM(CHCl₃)" data-ja="PBE0/6-311+G(2d,p)・PCM(CHCl₃)" id="nmr-pbe0">PBE0/6-311+G(2d,p), PCM(CHCl₃)</h3><p data-en="Geometries at B3LYP/6-31+G(d,p). PBE0 is written PBE1PBE in Gaussian. The papers cited use ¹³C δ = (187.3123 − σ)/1.0533 and ¹H δ = (31.7532 − σ)/1.0958 (CHESHIRE values, determined with SMD(chloroform) shieldings)." data-ja="構造は B3LYP/6-31+G(d,p)。GaussianではPBE0を PBE1PBE と書きます。使用例の論文は校正式 ¹³C δ = (187.3123 − σ)/1.0533、¹H δ = (31.7532 − σ)/1.0958 を使っています（CHESHIREの値で、SMD(クロロホルム)の遮蔽で決められたもの）。">Geometries at B3LYP/6-31+G(d,p). PBE0 is written PBE1PBE in Gaussian. The papers cited use ¹³C δ = (187.3123 − σ)/1.0533 and ¹H δ = (31.7532 − σ)/1.0958 (CHESHIRE values, determined with SMD(chloroform) shieldings).</p><p class="muted"><span data-en="Relative time: longer than 1 (larger basis)" data-ja="時間の目安：1より長い（基底が大きい）">Relative time: longer than 1 (larger basis)</span></p><pre class="input-block" translate="no" lang="en">%chk=nmr-pbe0.chk
+<article class="method-entry"><h3 data-en="PBE0/6-311+G(2d,p), PCM(CHCl₃)" data-ja="PBE0/6-311+G(2d,p)・PCM(CHCl₃)" id="nmr-pbe0">PBE0/6-311+G(2d,p), PCM(CHCl₃)</h3><p data-en="Geometries at B3LYP/6-31+G(d,p). PBE0 is written PBE1PBE in Gaussian. The papers cited use ¹³C δ = (187.3123 − σ)/1.0533 and ¹H δ = (31.7532 − σ)/1.0958 (CHESHIRE values, determined with SMD(CHCl₃) shieldings)." data-ja="構造は B3LYP/6-31+G(d,p)。GaussianではPBE0を PBE1PBE と書きます。使用例の論文は校正式 ¹³C δ = (187.3123 − σ)/1.0533、¹H δ = (31.7532 − σ)/1.0958 を使っています（CHESHIREの値で、SMD(CHCl₃)の遮蔽で決められたもの）。">Geometries at B3LYP/6-31+G(d,p). PBE0 is written PBE1PBE in Gaussian. The papers cited use ¹³C δ = (187.3123 − σ)/1.0533 and ¹H δ = (31.7532 − σ)/1.0958 (CHESHIRE values, determined with SMD(CHCl₃) shieldings).</p><p class="muted"><span data-en="Relative time: longer than 1 (larger basis)" data-ja="時間の目安：1より長い（基底が大きい）">Relative time: longer than 1 (larger basis)</span></p><pre class="input-block" translate="no" lang="en">%chk=nmr-pbe0.chk
 #p PBE1PBE/6-311+G(2d,p) NMR=GIAO
    SCRF=(PCM,Solvent=Chloroform)</pre><p><strong data-en="Used in: " data-ja="使用例：">Used in: </strong><a href="https://doi.org/10.1021/acs.orglett.1c02537" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Li <i>et al.</i>, <i>Org. Lett.</i> 2021, 23, 7134</a> · <a href="https://doi.org/10.1021/acs.jnatprod.2c00796" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Grauso <i>et al.</i>, <i>J. Nat. Prod.</i> 2022, 85, 2468</a></p><p class="muted"><span data-en="Source: " data-ja="出典：">Source: </span><a href="https://doi.org/10.1063/1.478522" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Adamo &amp; Barone, <i>J. Chem. Phys.</i> 1999, 110, 6158</a></p></article>
 <article class="method-entry"><h3 data-en="ωB97X-D/6-31G(d,p), IEFPCM(CHCl₃)" data-ja="ωB97X-D/6-31G(d,p)・IEFPCM(CHCl₃)" id="nmr-wb97xd">ωB97X-D/6-31G(d,p), IEFPCM(CHCl₃)</h3><p data-en="A long-range-corrected functional, evaluated for ¹³C of an oxime." data-ja="長距離補正を含む汎関数。オキシムの¹³C比較で評価されました。">A long-range-corrected functional, evaluated for ¹³C of an oxime.</p><p class="muted"><span data-en="Relative time: shorter than 1" data-ja="時間の目安：1より短い">Relative time: shorter than 1</span></p><pre class="input-block" translate="no" lang="en">%chk=nmr-wb97xd.chk
@@ -88,15 +88,15 @@
 <p data-en="The error from a regression fitted to the same compound&#x27;s own data is not evidence that the structure is correct. Compare candidates (e.g. DP4+) or use coefficients determined on other molecules, such as CHESHIRE&#x27;s." data-ja="同じ化合物の実測値で作った回帰式の誤差は、構造が正しい証拠にはなりません。候補どうしの比較（DP4+など）や、CHESHIREなど別の分子群で決めた係数を使います。">The error from a regression fitted to the same compound&#x27;s own data is not evidence that the structure is correct. Compare candidates (e.g. DP4+) or use coefficients determined on other molecules, such as CHESHIRE&#x27;s.</p>
 <h3 data-en="References" data-ja="参考資料">References</h3>
 <ul class="compact-list reference-list">
-<li><a href="http://cheshirenmr.info/" target="_blank" rel="noopener noreferrer" data-ja="CHESHIRE Chemical Shift Repository" data-en="CHESHIRE Chemical Shift Repository">CHESHIRE Chemical Shift Repository</a></li>
-<li><a href="https://doi.org/10.1021/cr200106v" target="_blank" rel="noopener noreferrer">Lodewyk, Siebert, Tantillo, <i>Chem. Rev.</i> 2012, 112, 1839</a></li>
-<li><a href="https://doi.org/10.1038/nprot.2014.042" target="_blank" rel="noopener noreferrer">Willoughby, Jansma, Hoye, <i>Nat. Protoc.</i> 2014, 9, 643</a></li>
-<li><a href="https://doi.org/10.1021/acs.joc.5b02396" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Grimblat, Zanardi, Sarotti, <i>J. Org. Chem.</i> 2015, 80, 12526 (DP4+)</a></li>
+<li><a href="http://cheshirenmr.info/" target="_blank" rel="noopener noreferrer" data-ja="CHESHIRE公式" data-en="CHESHIRE Chemical Shift Repository">CHESHIRE Chemical Shift Repository</a></li>
+<li><a href="https://doi.org/10.1021/cr200106v" target="_blank" rel="noopener noreferrer">Lodewyk <i>et al.</i>, <i>Chem. Rev.</i> 2012, 112, 1839</a></li>
+<li><a href="https://doi.org/10.1038/nprot.2014.042" target="_blank" rel="noopener noreferrer">Willoughby <i>et al.</i>, <i>Nat. Protoc.</i> 2014, 9, 643</a></li>
+<li><a href="https://doi.org/10.1021/acs.joc.5b02396" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Grimblat <i>et al.</i>, <i>J. Org. Chem.</i> 2015, 80, 12526</a> — DP4+</li>
 </ul>
 </section>
 <section class="content-section reading" id="nmr-hashimoto">
 <h2><span data-lang="en">A protocol with dedicated corrections: Hehre <i>et al.</i> 2019</span></h2>
-<p data-en="For ¹³C of flexible natural products: conformer screening in Spartan, ωB97X-D/6-31G(d) shieldings and empirical corrections depending on atom environment and bond lengths. Mean rms error below 4 ppm over about 925 compounds (for the full protocol)." data-ja="柔軟な天然物の¹³Cについて、Spartanでの配座選別と ωB97X-D/6-31G(d) の遮蔽、原子環境・結合長に依存する経験補正を組み合わせた手順です。約925化合物で平均rms誤差4 ppm未満（全手順の結果）。">For ¹³C of flexible natural products: conformer screening in Spartan, ωB97X-D/6-31G(d) shieldings and empirical corrections depending on atom environment and bond lengths. Mean rms error below 4 ppm over about 925 compounds (for the full protocol).</p>
+<p data-en="For ¹³C of flexible natural products: conformer screening in Spartan, ωB97X-D/6-31G(d) shieldings and empirical corrections depending on atom environment and bond lengths. Mean RMS error below 4 ppm over about 925 compounds (for the full protocol)." data-ja="柔軟な天然物の¹³Cについて、Spartanでの配座選別と ωB97X-D/6-31G(d) の遮蔽、原子環境・結合長に依存する経験補正を組み合わせた手順です。約925化合物で平均RMS誤差4 ppm未満（全手順の結果）。">For ¹³C of flexible natural products: conformer screening in Spartan, ωB97X-D/6-31G(d) shieldings and empirical corrections depending on atom environment and bond lengths. Mean RMS error below 4 ppm over about 925 compounds (for the full protocol).</p>
 <div class="table-wrap"><table><thead><tr>
 <th data-en="Step" data-ja="工程" scope="col">Step</th>
 <th data-en="Level" data-ja="計算条件" scope="col">Level</th>
@@ -113,7 +113,7 @@
 <td data-en="within 40 kJ/mol" data-ja="40 kJ/mol以内">within 40 kJ/mol</td>
 </tr>
 <tr>
-<td data-en="3. Single point" data-ja="3. 単点">3. Single point</td>
+<td data-en="3. Single point" data-ja="3. SP">3. Single point</td>
 <td>ωB97X-D/6-31G(d)//HF/3-21G</td>
 <td data-en="within 15 kJ/mol" data-ja="15 kJ/mol以内">within 15 kJ/mol</td>
 </tr>
@@ -125,11 +125,11 @@
 <tr>
 <td data-en="5. Populations" data-ja="5. 配座比">5. Populations</td>
 <td>ωB97X-V/6-311+G(2df,2p)[6-311G(d)]</td>
-<td data-en="Boltzmann weights from dual-basis SP" data-ja="二重基底SPからBoltzmann重み">Boltzmann weights from dual-basis SP</td>
+<td data-en="Boltzmann weights from dual-basis SP" data-ja="二重基底SPからボルツマン重み">Boltzmann weights from dual-basis SP</td>
 </tr>
 <tr>
 <td data-en="6. ¹³C shifts" data-ja="6. ¹³Cシフト">6. ¹³C shifts</td>
-<td data-en="ωB97X-D/6-31G(d) + empirical correction" data-ja="ωB97X-D/6-31G(d) ＋ 経験補正">ωB97X-D/6-31G(d) + empirical correction</td>
+<td data-en="ωB97X-D/6-31G(d) + empirical correction" data-ja="ωB97X-D/6-31G(d) + 経験補正">ωB97X-D/6-31G(d) + empirical correction</td>
 <td data-en="correct each conformer, then average" data-ja="各配座で補正してから平均">correct each conformer, then average</td>
 </tr>
 </tbody></table></div>
@@ -139,7 +139,7 @@
 <h3 data-en="References" data-ja="参考資料">References</h3>
 <ul class="compact-list reference-list">
 <li><a href="https://doi.org/10.1021/acs.jnatprod.9b00603" target="_blank" rel="noopener noreferrer">Hehre <i>et al.</i>, <i>J. Nat. Prod.</i> 2019, 82, 2299</a></li>
-<li><a href="https://pubs.acs.org/doi/suppl/10.1021/acs.jnatprod.9b00603" target="_blank" rel="noopener noreferrer" data-ja="Supporting Information（補正式・係数表）" data-en="Supporting Information (correction equations and coefficients)">Supporting Information (correction equations and coefficients)</a></li>
+<li><a href="https://pubs.acs.org/doi/suppl/10.1021/acs.jnatprod.9b00603" target="_blank" rel="noopener noreferrer"><span data-lang="en">Hehre <i>et al.</i>, <i>J. Nat. Prod.</i> 2019, 82, 2299 (SI: correction equations and coefficients)</span></a></li>
 <li><a href="https://doi.org/10.1039/B810189B" target="_blank" rel="noopener noreferrer">Chai &amp; Head-Gordon, <i>Phys. Chem. Chem. Phys.</i> 2008, 10, 6615</a></li>
 </ul>
 </section>
@@ -159,23 +159,23 @@
 <td>B3LYP/6-31G(d)</td>
 <td data-en="flexible natural product" data-ja="柔軟な天然物">flexible natural product</td>
 <td data-en="MMFF94 search, TMS reference, DP4+" data-ja="MMFF94探索、TMS参照、DP4+">MMFF94 search, TMS reference, DP4+</td>
-<td><a href="https://doi.org/10.1021/acs.orglett.4c01642" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Cuadrado 2024</a></td>
+<td><a href="https://doi.org/10.1021/acs.orglett.4c01642" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Cuadrado <i>et al.</i>, <i>Org. Lett.</i> 2024</a></td>
 </tr>
 <tr>
 <td>mPW1PW91/6-31+G(d,p)</td>
 <td data-en="not stated" data-ja="未記載">not stated</td>
 <td>M06-2X/def2-SVP</td>
 <td data-en="cytochalasins" data-ja="サイトカラシン">cytochalasins</td>
-<td data-en="Spartan search, Boltzmann average, DP4+" data-ja="Spartan探索、Boltzmann平均、DP4+">Spartan search, Boltzmann average, DP4+</td>
-<td><a href="https://doi.org/10.1021/acs.joc.3c01515" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Shi 2023</a></td>
+<td data-en="Spartan search, Boltzmann average, DP4+" data-ja="Spartan探索、ボルツマン平均、DP4+">Spartan search, Boltzmann average, DP4+</td>
+<td><a href="https://doi.org/10.1021/acs.joc.3c01515" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Shi <i>et al.</i>, <i>J. Org. Chem.</i> 2023</a></td>
 </tr>
 <tr>
 <td>mPW1PW91/6-31+G(d,p)</td>
 <td>SMD(MeOH)</td>
 <td>B3LYP-D3BJ/6-31G(d)/SMD</td>
 <td data-en="sesquiterpenoids" data-ja="セスキテルペノイド">sesquiterpenoids</td>
-<td data-en="6-311+G(d,p) SP + thermal, &gt;2% conformers, δ = σ_TMS − σ" data-ja="6-311+G(d,p) SP＋熱補正、&gt;2%配座、δ = σ_TMS − σ">6-311+G(d,p) SP + thermal, &gt;2% conformers, δ = σ_TMS − σ</td>
-<td><a href="https://doi.org/10.1007/s13659-020-00248-y" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Su 2020</a></td>
+<td data-en="6-311+G(d,p) SP + thermal, &gt;2% conformers, δ = σ_TMS − σ" data-ja="6-311+G(d,p) SP + 熱補正、&gt;2%配座、δ = σ_TMS − σ">6-311+G(d,p) SP + thermal, &gt;2% conformers, δ = σ_TMS − σ</td>
+<td><a href="https://doi.org/10.1007/s13659-020-00248-y" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Su <i>et al.</i>, <i>Nat. Prod. Bioprospect.</i> 2020</a></td>
 </tr>
 <tr>
 <td>ωB97X-D/6-31G(d) + DU8+</td>
@@ -183,7 +183,7 @@
 <td>B3LYP/6-31G(d)</td>
 <td data-en="oxygen-bridged natural products" data-ja="酸素架橋天然物">oxygen-bridged natural products</td>
 <td data-en="dedicated ¹³C correction (DU8+)" data-ja="専用¹³C補正（DU8+）">dedicated ¹³C correction (DU8+)</td>
-<td><a href="https://doi.org/10.1002/anie.201902777" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Kutateladze 2019</a></td>
+<td><a href="https://doi.org/10.1002/anie.201902777" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Kutateladze <i>et al.</i>, <i>Angew. Chem. Int. Ed.</i> 2019</a></td>
 </tr>
 </tbody></table></div>
 </section>
