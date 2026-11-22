@@ -480,7 +480,7 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
     ok(!bad.length, `guide pages: no example files, external links open in a new tab (${GUIDE.length * 2} pages; ${bad.slice(0, 3).join('; ')})`);
     const p = await page(); await p.goto(`${BASE}/research.html`);
     await navClick(p, '.primary-nav a[href$="gaussian/index.html"]');
-    ok(new URL(p.url()).pathname === '/gaussian/index.html' && await p.getAttribute('.primary-nav a[aria-current="page"]', 'href') === './index.html', `menu opens the guide (${new URL(p.url()).pathname})`);
+    ok(new URL(p.url()).pathname === '/gaussian/index.html' && await p.textContent('.brand') === 'Gaussian入門' && await p.getAttribute('.home-link', 'href') === '../index.html' && !(await p.$('.primary-nav')), `menu opens the guide, whose header shows the guide name and a link to the top page (${new URL(p.url()).pathname})`);
     await p.goto(`${BASE}/gaussian/errors-ts.html#series`); await switchTo(p, 'en');
     const u1 = new URL(p.url()), h1 = await p.textContent('h1');
     await switchTo(p, 'ja'); const u2 = new URL(p.url());

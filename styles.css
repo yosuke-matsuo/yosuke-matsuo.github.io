@@ -51,6 +51,9 @@ h2 { margin-bottom: .8rem; font-size: 1.35rem; font-weight: 600; line-height: 1.
 .primary-nav a:hover { color: #fff; }
 .primary-nav a[aria-current="page"], .primary-nav a[aria-current="location"] { color: #fff; border-bottom-color: var(--accent); }
 .language-switch { display: flex; align-items: center; }
+.home-link { margin-left: auto; color: var(--header-text); font-size: .88rem; white-space: nowrap; text-decoration: none; }
+.home-link:hover { color: #fff; text-decoration: underline; }
+.home-link ~ .language-switch { margin-left: 0; }
 .language-switch button { padding: .3rem .1rem; border: 0; background: none; color: var(--header-text); font: inherit; font-size: .875rem; cursor: pointer; }
 .language-switch button + button::before { content: "/"; margin: 0 .5rem; color: #6f9583; }
 .language-switch button:hover { color: #fff; }
@@ -173,6 +176,8 @@ td .input-block, td .error-marker { margin: 0; padding: .3rem .5rem; font-size: 
   .site-header { flex-wrap: wrap; gap: .5rem 1rem; }
   .brand { order: 1; }
   .language-switch { order: 2; margin-left: auto; }
+  .home-link { order: 2; }
+  .home-link ~ .language-switch { margin-left: 0; }
   .primary-nav { order: 3; flex: 0 0 100%; overflow-x: auto; gap: 1.2rem; padding-bottom: .3rem; }
 }
 @media (max-width: 700px) {
