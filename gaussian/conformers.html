@@ -20,8 +20,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="配座と安定構造｜Gaussian入門" data-en="Conformers and stable structures | Gaussian guide">配座と安定構造｜Gaussian入門</title>
-<link rel="stylesheet" href="../styles.css?v=20261122-5"/>
-<script defer src="../app.js?v=20261122-5"></script>
+<link rel="stylesheet" href="../styles.css?v=20261122-7"/>
+<script defer src="../app.js?v=20261122-7"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">本文へ移動</a>
@@ -121,7 +121,7 @@
 </section>
 <section class="content-section reading" id="sp">
 <h2 data-en="Calculation conditions: single-point calculation (SP)" data-ja="計算条件：シングルポイント計算（SP）">計算条件：シングルポイント計算（SP）</h2>
-<article class="method-entry"><h3 data-en="M06-2X/aug-cc-pVTZ, CPCM(H₂O) SP" data-ja="M06-2X/aug-cc-pVTZ・CPCM(H₂O) SP" id="energy-sp-entry">M06-2X/aug-cc-pVTZ・CPCM(H₂O) SP</h3><p data-en="Refines the electronic energy with a large basis set at the optimized geometry." data-ja="最適化済み構造で、大きな基底関数を使って電子エネルギーを精密化します。">最適化済み構造で、大きな基底関数を使って電子エネルギーを精密化します。</p><p class="muted"><span data-en="Relative time: one run longer than 1 (no optimization cycles)" data-ja="時間の目安：1回は1より長い（最適化の繰り返しはない）">時間の目安：1回は1より長い（最適化の繰り返しはない）</span></p><pre class="input-block" translate="no" lang="en">%chk=energy-sp.chk
+<article class="method-entry"><h3 data-en="M06-2X/aug-cc-pVTZ, CPCM(H₂O) SP" data-ja="M06-2X/aug-cc-pVTZ・CPCM(H₂O) SP" id="energy-sp-entry">M06-2X/aug-cc-pVTZ・CPCM(H₂O) SP</h3><p data-en="Refines the electronic energy with a large basis set at the optimized geometry." data-ja="最適化済み構造で、大きな基底関数を使って電子エネルギーを精密化します。">最適化済み構造で、大きな基底関数を使って電子エネルギーを精密化します。</p><p class="muted"><span data-en="Relative time: longer than 1 (larger basis)" data-ja="時間の目安：1より長い（基底が大きい）">時間の目安：1より長い（基底が大きい）</span></p><pre class="input-block" translate="no" lang="en">%chk=energy-sp.chk
 #p M062X/aug-cc-pVTZ SP SCRF=(CPCM,Solvent=Water)
    Integral=UltraFine SCF=Tight</pre><p><strong data-en="Used in: " data-ja="使用例：">使用例：</strong><a href="https://doi.org/10.3390/molecules31111876" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Karwowski, <i>Molecules</i> 2026, 31, 1876</a></p><p class="muted"><span data-en="Source: " data-ja="出典：">出典：</span><a href="https://doi.org/10.1007/s00214-007-0310-x" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Zhao &amp; Truhlar, <i>Theor. Chem. Acc.</i> 2008, 120, 215</a></p></article>
 <h3 data-en="Combining SP with thermal corrections" data-ja="SPと熱補正の組み合わせ">SPと熱補正の組み合わせ</h3>

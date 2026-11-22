@@ -20,8 +20,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="Opt・SCFエラー｜Gaussian入門" data-en="Opt and SCF errors | Gaussian guide">Opt・SCFエラー｜Gaussian入門</title>
-<link rel="stylesheet" href="../styles.css?v=20261122-5"/>
-<script defer src="../app.js?v=20261122-5"></script>
+<link rel="stylesheet" href="../styles.css?v=20261122-7"/>
+<script defer src="../app.js?v=20261122-7"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">本文へ移動</a>
@@ -52,7 +52,7 @@
 <h2 data-en="SCF convergence failure" data-ja="SCFの収束失敗">SCFの収束失敗</h2>
 <article class="error-entry"><h3 data-en="SCF does not converge" data-ja="SCFが収束しない" id="scf-body">SCFが収束しない</h3><pre class="error-marker" translate="no" lang="en">Convergence failure -- run terminated.</pre><p><strong data-en="Cause: " data-ja="原因：">原因：</strong><span data-en="The iterative electronic-structure calculation (SCF) at one geometry did not converge. It can happen in Opt, TS or IRC jobs." data-ja="1つの構造の電子状態を求める反復計算（SCF）が収束しません。Opt・TS・IRCのどの計算でも起こります。">1つの構造の電子状態を求める反復計算（SCF）が収束しません。Opt・TS・IRCのどの計算でも起こります。</span></p><strong data-en="What to do" data-ja="対処" class="action-label">対処</strong><ol class="compact-list">
 <li data-en="Check charge/multiplicity and look for atom clashes or abnormal bond lengths in the structure. This is the most common cause." data-ja="電荷・多重度が正しいか、構造に原子の衝突や異常な結合距離がないかを確認します。ここが原因のことが最も多いです。">電荷・多重度が正しいか、構造に原子の衝突や異常な結合距離がないかを確認します。ここが原因のことが最も多いです。</li>
-<li data-en="If those are fine, add SCF=XQC to the route line and rerun (switches to a quadratically convergent method)." data-ja="問題がなければ、ルート行に SCF=XQC を加えて再実行します（二次収束法に切り替え）。">問題がなければ、ルート行に SCF=XQC を加えて再実行します（二次収束法に切り替え）。</li>
+<li data-en="If those are fine, add SCF=XQC to the route line and rerun (adds quadratically convergent steps when the usual method fails)." data-ja="問題がなければ、ルート行に SCF=XQC を加えて再実行します（通常の方法で収束しないとき、二次収束法を追加で行います）。">問題がなければ、ルート行に SCF=XQC を加えて再実行します（通常の方法で収束しないとき、二次収束法を追加で行います）。</li>
 <li data-en="If XQC also fails, read the initial guess from the .chk of a nearby converged structure with Guess=Read, or reconsider the method. For an open-shell singlet with an unrestricted method, also try Guess=Mix." data-ja="XQCでも失敗するなら、収束した近い構造の .chk から Guess=Read で初期推測を読むか、計算方法を見直します。開殻一重項を非制限法で計算している場合は Guess=Mix も試します。">XQCでも失敗するなら、収束した近い構造の .chk から Guess=Read で初期推測を読むか、計算方法を見直します。開殻一重項を非制限法で計算している場合は Guess=Mix も試します。</li>
 </ol></article>
 <h3 data-en="Example rerun input for SCF failure" data-ja="SCF再計算の入力例" id="gjf-scf">SCF再計算の入力例</h3>

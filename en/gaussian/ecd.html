@@ -21,8 +21,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="ECD・UV・旋光度｜Gaussian入門" data-en="ECD, UV and optical rotation | Gaussian guide">ECD, UV and optical rotation | Gaussian guide</title>
-<link rel="stylesheet" href="../../styles.css?v=20261122-5"/>
-<script defer src="../../app.js?v=20261122-5"></script>
+<link rel="stylesheet" href="../../styles.css?v=20261122-7"/>
+<script defer src="../../app.js?v=20261122-7"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">Skip to content</a>
@@ -74,7 +74,7 @@
 </section>
 <section class="content-section reading" id="or">
 <h2 data-en="Optical rotation" data-ja="旋光度">Optical rotation</h2>
-<article class="method-entry"><h3 data-en="B3LYP/aug-cc-pVDZ, IEFPCM(CHCl₃)" data-ja="B3LYP/aug-cc-pVDZ・IEFPCM(CHCl₃)" id="or-dz">B3LYP/aug-cc-pVDZ, IEFPCM(CHCl₃)</h3><p data-en="Optical rotation depends strongly on the basis set, so this example uses aug-cc-pVDZ, which includes diffuse functions. After the coordinate block: a blank line, then the wavelength line (e.g. 589nm), then a blank line." data-ja="旋光度は基底関数の影響を強く受けるため、この例では拡散関数を含む aug-cc-pVDZ を使います。座標ブロックの後に空行、次に波長の行（例：589nm）、空行を続けます。">Optical rotation depends strongly on the basis set, so this example uses aug-cc-pVDZ, which includes diffuse functions. After the coordinate block: a blank line, then the wavelength line (e.g. 589nm), then a blank line.</p><p class="muted"><span data-en="Relative time: reference (1)" data-ja="時間の目安：基準（1）">Relative time: reference (1)</span></p><pre class="input-block" translate="no" lang="en">%chk=or-dz.chk
+<article class="method-entry"><h3 data-en="B3LYP/aug-cc-pVDZ, IEFPCM(CHCl₃)" data-ja="B3LYP/aug-cc-pVDZ・IEFPCM(CHCl₃)" id="or-dz">B3LYP/aug-cc-pVDZ, IEFPCM(CHCl₃)</h3><p data-en="Optical rotation depends strongly on the basis set, so this example uses aug-cc-pVDZ, which includes diffuse functions. After the coordinate block: a blank line, then the wavelength line (e.g. 589nm), then a blank line." data-ja="旋光度は基底関数の影響を強く受けるため、この例では拡散関数を含む aug-cc-pVDZ を使います。座標ブロックの後に空行、次に波長の行（例：589nm）、空行を続けます。">Optical rotation depends strongly on the basis set, so this example uses aug-cc-pVDZ, which includes diffuse functions. After the coordinate block: a blank line, then the wavelength line (e.g. 589nm), then a blank line.</p><p class="muted"><span data-en="Relative time: longer than 1 (larger basis)" data-ja="時間の目安：1より長い（基底が大きい）">Relative time: longer than 1 (larger basis)</span></p><pre class="input-block" translate="no" lang="en">%chk=or-dz.chk
 #p B3LYP/aug-cc-pVDZ Polar=OptRot CPHF=RdFreq
    SCRF=(IEFPCM,Solvent=Chloroform) Integral=UltraFine SCF=Tight
 

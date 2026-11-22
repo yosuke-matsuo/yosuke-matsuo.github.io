@@ -21,8 +21,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="Gaussianキーワード一覧｜Gaussian入門" data-en="Gaussian keyword reference | Gaussian guide">Gaussian keyword reference | Gaussian guide</title>
-<link rel="stylesheet" href="../../styles.css?v=20261122-5"/>
-<script defer src="../../app.js?v=20261122-5"></script>
+<link rel="stylesheet" href="../../styles.css?v=20261122-7"/>
+<script defer src="../../app.js?v=20261122-7"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">Skip to content</a>
@@ -169,7 +169,7 @@
 </tr>
 <tr>
 <td><code translate="no">Opt=NoEigenTest</code></td>
-<td data-en="Suspends the check on the number of negative Hessian eigenvalues; use only for a short, justified probe." data-ja="ヘシアンの負の固有値の数の検査を止めます。条件を満たす短い試行だけに使います。">Suspends the check on the number of negative Hessian eigenvalues; use only for a short, justified probe.</td>
+<td><span data-lang="en">Suspends the check on the number of negative Hessian eigenvalues during a TS search. Use it when an extra negative eigenvalue stops the search; because the search may then converge to an unintended structure, always confirm with the Freq after convergence that there is exactly one imaginary frequency (<a href="./errors-ts.html">TS errors</a>).</span></td>
 </tr>
 <tr>
 <td><code translate="no">Opt=Restart</code></td>
@@ -185,7 +185,7 @@
 </tr></thead><tbody>
 <tr>
 <td><code translate="no">SCF=XQC</code></td>
-<td data-en="Switches to a quadratically convergent method when the SCF fails; the first remedy for a convergence failure." data-ja="SCFが収束しないときに二次収束法へ切り替えます。Convergence failure の第一の対処です。">Switches to a quadratically convergent method when the SCF fails; the first remedy for a convergence failure.</td>
+<td data-en="Adds quadratically convergent steps when the usual SCF method fails; the first remedy for a convergence failure." data-ja="通常の方法でSCFが収束しないとき、二次収束法を追加で行います。Convergence failure の第一の対処です。">Adds quadratically convergent steps when the usual SCF method fails; the first remedy for a convergence failure.</td>
 </tr>
 <tr>
 <td><code translate="no">SCF=Tight</code></td>
