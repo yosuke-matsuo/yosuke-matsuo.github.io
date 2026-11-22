@@ -14,7 +14,7 @@
   font-family: "Segoe UI", "Yu Gothic UI", "Hiragino Kaku Gothic ProN", system-ui, sans-serif;
   color: var(--text);
   background: var(--bg);
-  font-synthesis: none;
+  font-synthesis: style;
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
