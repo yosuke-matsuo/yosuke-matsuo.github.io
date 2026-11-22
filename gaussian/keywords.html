@@ -20,8 +20,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="Gaussianキーワード一覧｜Gaussian入門" data-en="Gaussian keyword reference | Gaussian guide">Gaussianキーワード一覧｜Gaussian入門</title>
-<link rel="stylesheet" href="../styles.css?v=20261122-5"/>
-<script defer src="../app.js?v=20261122-5"></script>
+<link rel="stylesheet" href="../styles.css?v=20261122-6"/>
+<script defer src="../app.js?v=20261122-6"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">本文へ移動</a>
@@ -168,7 +168,7 @@
 </tr>
 <tr>
 <td><code translate="no">Opt=NoEigenTest</code></td>
-<td data-en="Suspends the check on the number of negative Hessian eigenvalues; use only for a short, justified probe." data-ja="ヘシアンの負の固有値の数の検査を止めます。条件を満たす短い試行だけに使います。">ヘシアンの負の固有値の数の検査を止めます。条件を満たす短い試行だけに使います。</td>
+<td><span data-lang="ja">TS探索中の、ヘシアンの負の固有値の数の検査を止めます。余分な負の固有値が出て探索が止まるときに使いますが、検査を止めたまま進めると目的と違う構造に収束することがあるので、収束後の Freq で虚振動が1つかを必ず確認します（<a href="./errors-ts.html">TSエラー</a>）。</span><template data-lang="en"><span data-lang="en" hidden>Suspends the check on the number of negative Hessian eigenvalues during a TS search. Use it when an extra negative eigenvalue stops the search; because the search may then converge to an unintended structure, always confirm with the Freq after convergence that there is exactly one imaginary frequency (<a href="./errors-ts.html">TS errors</a>).</span></template></td>
 </tr>
 <tr>
 <td><code translate="no">Opt=Restart</code></td>
