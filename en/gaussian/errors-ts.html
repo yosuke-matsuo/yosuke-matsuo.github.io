@@ -21,8 +21,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="TSエラー｜Gaussian入門" data-en="TS errors | Gaussian guide">TS errors | Gaussian guide</title>
-<link rel="stylesheet" href="../../styles.css?v=20261122-4"/>
-<script defer src="../../app.js?v=20261122-4"></script>
+<link rel="stylesheet" href="../../styles.css?v=20261122-5"/>
+<script defer src="../../app.js?v=20261122-5"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">Skip to content</a>
@@ -45,7 +45,7 @@
 <article class="error-entry"><h3 data-en="TS step limit" data-ja="TSの回数上限" id="ts-steps">TS step limit</h3><pre class="error-marker" translate="no" lang="en">Number of steps exceeded,  NStep= 100</pre><p><strong data-en="Cause: " data-ja="原因：">Cause: </strong><span data-en="The TS search did not converge within the cycle limit." data-ja="TS探索が指定回数で収束していません。">The TS search did not converge within the cycle limit.</span></p><strong data-en="What to do" data-ja="対処" class="action-label">What to do</strong><ol class="compact-list">
 <li data-en="Look at the trend of forces, displacements and the reacting bond distances in a viewer such as GaussView. In a TS search the energy can rise, so judge by these trends rather than by energy alone." data-ja="GaussViewなどのビューアーで力・変位・反応する結合の距離の推移を見ます。TS探索ではエネルギーが上がることもあるので、エネルギーだけでなく、これらの推移で判断します。">Look at the trend of forces, displacements and the reacting bond distances in a viewer such as GaussView. In a TS search the energy can rise, so judge by these trends rather than by energy alone.</li>
 <li data-en="If the reaction geometry is intact and converging, continue from the last computed geometry with Opt=(TS,CalcFC,MaxCycles=100)." data-ja="反応構造が保たれ、収束に向かっているなら、最後に計算した構造から Opt=(TS,CalcFC,MaxCycles=100) で続行します。">If the reaction geometry is intact and converging, continue from the last computed geometry with Opt=(TS,CalcFC,MaxCycles=100).</li>
-<li data-en="If it oscillates strongly, add MaxStep=2–5. If the reaction geometry has fallen apart, rebuild the guess." data-ja="往復が大きいなら MaxStep=2〜5 を加えます。反応構造が崩れていれば候補構造から作り直します。">If it oscillates strongly, add MaxStep=2–5. If the reaction geometry has fallen apart, rebuild the guess.</li>
+<li data-en="If it oscillates strongly, add MaxStep=2–5. If the reaction geometry has fallen apart, rebuild the guess." data-ja="往復が大きいなら MaxStep=2–5 を加えます。反応構造が崩れていれば候補構造から作り直します。">If it oscillates strongly, add MaxStep=2–5. If the reaction geometry has fallen apart, rebuild the guess.</li>
 </ol></article>
 </section>
 <section class="content-section reading" id="recipes">

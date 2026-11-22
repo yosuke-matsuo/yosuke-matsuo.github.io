@@ -21,8 +21,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="Gaussianキーワード一覧｜Gaussian入門" data-en="Gaussian keyword reference | Gaussian guide">Gaussian keyword reference | Gaussian guide</title>
-<link rel="stylesheet" href="../../styles.css?v=20261122-4"/>
-<script defer src="../../app.js?v=20261122-4"></script>
+<link rel="stylesheet" href="../../styles.css?v=20261122-5"/>
+<script defer src="../../app.js?v=20261122-5"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">Skip to content</a>
@@ -129,7 +129,7 @@
 </tr></thead><tbody>
 <tr>
 <td><code translate="no">Opt=Tight</code></td>
-<td data-en="Tightens the convergence criteria; makes subsequent Freq or NMR results more stable." data-ja="収束条件を厳しくします。振動数計算やNMRの前に使うと結果が安定します。">Tightens the convergence criteria; makes subsequent Freq or NMR results more stable.</td>
+<td data-en="Tightens the convergence criteria; makes subsequent Freq or NMR results more stable." data-ja="収束条件を厳しくします。振動数解析やNMRの前に使うと結果が安定します。">Tightens the convergence criteria; makes subsequent Freq or NMR results more stable.</td>
 </tr>
 <tr>
 <td><code translate="no">Opt=TS</code></td>
@@ -149,7 +149,7 @@
 </tr>
 <tr>
 <td><code translate="no">Opt=MaxCycles=N</code></td>
-<td data-en="Maximum number of optimization cycles; increase when the job stops at the default." data-ja="最適化のサイクル上限。既定を超えて止まる場合に増やします。">Maximum number of optimization cycles; increase when the job stops at the default.</td>
+<td data-en="Maximum number of optimization cycles; increase when the job stops at the default." data-ja="最適化の回数上限（サイクル数）。既定を超えて止まる場合に増やします。">Maximum number of optimization cycles; increase when the job stops at the default.</td>
 </tr>
 <tr>
 <td><code translate="no">Opt=MaxStep=N</code></td>
@@ -205,11 +205,11 @@
 </tr>
 <tr>
 <td><code translate="no">Guess=Read</code></td>
-<td data-en="Uses the wavefunction in %chk (or %oldchk) as the initial guess; good for continuing from a similar structure." data-ja="%chk（または %oldchk）の波動関数を初期推測に使います。似た構造の続きに。">Uses the wavefunction in %chk (or %oldchk) as the initial guess; good for continuing from a similar structure.</td>
+<td data-en="Uses the wavefunction in %chk (or %oldchk) as the initial guess; good for continuing from a similar structure." data-ja="%chk（または %oldchk）の波動関数を初期推測に使います。似た構造の続きを計算するときに使います。">Uses the wavefunction in %chk (or %oldchk) as the initial guess; good for continuing from a similar structure.</td>
 </tr>
 <tr>
 <td><code translate="no">Guess=Mix</code></td>
-<td data-en="Mixes the HOMO and LUMO to break α–β symmetry in the initial guess; for open-shell singlets with unrestricted methods (e.g. UB3LYP)." data-ja="HOMOとLUMOを混ぜて、α・βの対称性を崩した初期推測を作ります。非制限法（UB3LYPなど）で開殻一重項を求めるときに。">Mixes the HOMO and LUMO to break α–β symmetry in the initial guess; for open-shell singlets with unrestricted methods (e.g. UB3LYP).</td>
+<td data-en="Mixes the HOMO and LUMO to break α–β symmetry in the initial guess; for open-shell singlets with unrestricted methods (e.g. UB3LYP)." data-ja="HOMOとLUMOを混ぜて、α・βの対称性を崩した初期推測を作ります。非制限法（UB3LYPなど）で開殻一重項を求めるときに使います。">Mixes the HOMO and LUMO to break α–β symmetry in the initial guess; for open-shell singlets with unrestricted methods (e.g. UB3LYP).</td>
 </tr>
 <tr>
 <td><code translate="no">Geom=AllCheck</code></td>
@@ -321,7 +321,7 @@
 </tr>
 <tr>
 <td><code translate="no">IRC=CalcFC / RCFC</code></td>
-<td data-en="Compute the initial Hessian (CalcFC) or read it from the Freq %chk (or %oldchk) (RCFC)." data-ja="出発点のヘシアンを計算する（CalcFC）か、Freqの %chk（または %oldchk）から読む（RCFC）か。">Compute the initial Hessian (CalcFC) or read it from the Freq %chk (or %oldchk) (RCFC).</td>
+<td data-en="Compute the initial Hessian (CalcFC) or read it from the Freq %chk (or %oldchk) (RCFC)." data-ja="出発点のヘシアンを計算する（CalcFC）か、Freqの %chk（または %oldchk）から読む（RCFC）かを指定します。">Compute the initial Hessian (CalcFC) or read it from the Freq %chk (or %oldchk) (RCFC).</td>
 </tr>
 <tr>
 <td><code translate="no">IRC=MaxPoints=N</code></td>
@@ -353,7 +353,7 @@
 </tr>
 <tr>
 <td><code translate="no">NoSymm</code></td>
-<td data-en="Disables the use of symmetry; useful when the molecule is reoriented in ways that interfere." data-ja="対称性の利用を止めます。構造が対称性で勝手に向きを変えて困るときに。">Disables the use of symmetry; useful when the molecule is reoriented in ways that interfere.</td>
+<td data-en="Disables the use of symmetry; useful when the molecule is reoriented in ways that interfere." data-ja="対称性の利用を止めます。構造が対称性で勝手に向きを変えて困るときに使います。">Disables the use of symmetry; useful when the molecule is reoriented in ways that interfere.</td>
 </tr>
 <tr>
 <td><code translate="no">Symmetry=Loose</code></td>
