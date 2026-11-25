@@ -1,39 +1,33 @@
 #!/usr/bin/env python3
-"""Claude Code Stop hook: if a turn's prose is mainly English, ask for a Japanese rewrite.
+"""Claude Code の Stop hook。ターンの本文が英語主体なら、終了させずに日本語で書き直させる。
 
-Vendored from https://github.com/minorun365/claude-code-japanese-guard (commit
-4434ef4, Apache-2.0; see japanese-guard.LICENSE and japanese-guard.NOTICE).
-Modified for this repository: developer comments and docstrings are in English,
-and JSON responses are ASCII-escaped so that a non-UTF-8 stdout (for example
-CP1252 on Windows) cannot fail. The Japanese messages sent to Claude are
-unchanged.
+minorun365/claude-code-japanese-guard（コミット 4434ef4、Apache-2.0。japanese-guard.LICENSE と
+japanese-guard.NOTICE を参照）から取り込んだ。このリポジトリでの変更は1点だけ：JSON の応答を
+ASCII でエスケープして出力する（Windows の CP1252 など、UTF-8 でない標準出力でも止まらないように）。
 
-Three kinds of text are checked:
-1. The turn's final answer: the prose Claude wrote after its last tool call
-   (all prose when the turn called no tool).
-2. The desktop app's "next step" box (wrap_up tool): recap, ask and button
-   text. When the box replaces the final answer little prose remains, so 1
-   alone would let it pass.
-3. Progress reports between tool calls that are long enough to read: multi-line
-   reports with at least MIN_LATIN_MID Latin letters, or one-line reports with
-   at least MIN_LATIN_MID_LONG. A one-line preamble before a tool call is shown
-   small and is not checked; asking to rewrite it would add a second reply after
-   the Japanese final answer. Progress reports can also be recorded as thinking
-   blocks (thinkingDisplay "updates").
-The same check stops wrap_up as a PreToolUse hook, before an English box is
-shown. The final answer is also read from the hook input last_assistant_message,
-so a late transcript write is not missed; that field holds only the last reply,
-so the transcript is checked as well.
-Code blocks, inline code, URLs, e-mail addresses and Markdown links are not
-counted: showing English commands or drafts in code blocks is legitimate.
-A final answer that is only a JSON value (code fences allowed) is not checked,
-because a script reads it and a rewrite would break the JSON.
-JAPANESE_GUARD_DISABLE=1 turns the hook off (for claude -p output nobody reads).
+検査するのは次の3つ。
+1. そのターンの最終回答。つまり最後のツール呼び出しより後に Claude が書いた本文。
+   ツールを1回も呼ばなかったターンは、本文すべてが最終回答になる。
+2. デスクトップアプリの「次の一手」の箱（wrap_up ツール）に出る recap・ask・ボタンの文言。
+   箱が最終回答の代わりになるターンでは、本文がほとんど残らず、1だけでは素通りする。
+3. ツール呼び出しの間の途中報告のうち、読ませる量のあるもの。複数行なら英字 MIN_LATIN_MID 以上、
+   1行なら英字 MIN_LATIN_MID_LONG 以上を見る。ツールを呼ぶ前の1行の前置きは画面で小さく出るだけなので
+   対象にしない。差し戻すと、日本語の最終回答のあとに前置きだけを書き直す応答がもう1通出て、かえって
+   読みにくくなる。数行の途中報告は本文と同じ大きさで出るので見る。
+   途中報告は text ではなく thinking ブロック（thinkingDisplay が updates）として記録されることもある。
+wrap_up は PreToolUse hook としても同じ判定で止める。箱が英語のまま画面に出る前に差し戻すため。
+最終回答は hook の入力 last_assistant_message でも見る。transcript への書き込みが遅れても
+見逃さないため。入るのは最後の応答1件だけなので、transcript の判定も残して両方で見る。
+コードブロック・インラインコード・URL・メールアドレス・Markdown リンクは数えない。
+英語のコマンドや英文の下書きをコードブロックで見せるのは正当なため。
+最終回答が JSON の値そのもの（前後のコードフェンスは許す）なら判定しない。
+スクリプトが読む出力なので、差し戻すと説明文が混ざって JSON として読めなくなる。
+環境変数 JAPANESE_GUARD_DISABLE=1 のときは何もしない。claude -p で人が読まない出力を作るとき向け。
 
-A turn is sent back at most once (stop_hook_active passes it), so a second
-English reply ends the turn instead of looping.
+差し戻しは1ターンにつき1回だけ（stop_hook_active が立っていたら通す）。
+書き直しが再び英語になっても、そこで止めて無限に続かないようにする。
 
-Standalone check: python3 japanese-guard.py --check <transcript.jsonl>
+単体で試す: python3 japanese-guard.py --check <transcript.jsonl>
 """
 
 import json
@@ -42,17 +36,17 @@ import re
 import sys
 import time
 
-# Prose with fewer Latin letters is not judged (short replies such as "OK").
+# 英字がこれ未満の本文は判定しない（「OK」「Done」程度の短い返事は見逃す）
 MIN_LATIN = int(os.environ.get("JAPANESE_GUARD_MIN_LATIN", "25"))
-# Multi-line progress reports between tool calls are judged from this many letters.
+# ツール呼び出しの間の途中報告（複数行）は、英字がこれ以上あるときだけ判定する
 MIN_LATIN_MID = int(os.environ.get("JAPANESE_GUARD_MIN_LATIN_MID", "60"))
-# One-line progress reports are judged only as long paragraphs of this many letters.
+# 1行の途中報告は、英字がこれ以上ある長い段落のときだけ判定する
 MIN_LATIN_MID_LONG = int(os.environ.get("JAPANESE_GUARD_MIN_LATIN_MID_LONG", "250"))
-# Prose is mainly English when Latin letters exceed this multiple of Japanese characters.
+# 英字の数が日本語の文字数のこの倍を超えたら、英語主体とみなす
 RATIO = float(os.environ.get("JAPANESE_GUARD_RATIO", "3"))
-# Longest wait (seconds) for the final answer to reach the transcript.
+# 最終回答が transcript へ書き込まれるのを待つ上限（秒）
 WAIT_SECONDS = float(os.environ.get("JAPANESE_GUARD_WAIT", "3"))
-# "1" turns the hook off (claude -p output that nobody reads).
+# 1 なら何もしない（claude -p などで、人が読まない出力を作るとき）
 DISABLED = os.environ.get("JAPANESE_GUARD_DISABLE") == "1"
 
 JA = re.compile(r"[ぁ-んァ-ヶ一-龥]")
@@ -88,7 +82,7 @@ def is_english(text, min_latin=MIN_LATIN):
 
 
 def looks_like_json(text):
-    """True when the final answer is a JSON value (surrounding code fences allowed)."""
+    """最終回答が JSON の値そのもの（前後のコードフェンスは許す）なら True"""
     t = re.sub(r"^```(?:json)?\s*|\s*```$", "", text.strip())
     if not t or t[0] not in "[{":
         return False
@@ -100,7 +94,7 @@ def looks_like_json(text):
 
 
 def is_mid_report_english(text):
-    """Judge a progress report: skip one-line preambles, check multi-line or long ones."""
+    """途中報告の判定。1行の前置きは見逃し、複数行か長い段落だけを見る"""
     lines = [line for line in text.strip().splitlines() if line.strip()]
     if len(lines) >= 2:
         return is_english(text, MIN_LATIN_MID)
@@ -108,12 +102,12 @@ def is_mid_report_english(text):
 
 
 def is_wrap_up(name):
-    """Whether the tool shows the desktop "next step" box (an MCP tool, so prefixed)."""
+    """デスクトップアプリの「次の一手」の箱を出すツールか（MCP ツールなので名前に接頭辞が付く）"""
     return (name or "").endswith("wrap_up")
 
 
 def wrap_up_text(tool_input):
-    """Join the text shown in the next-step box (recap, ask and button labels)."""
+    """次の一手の箱に出る文字列（recap・ask・ボタンの文言）を1つにまとめる"""
     tool_input = tool_input or {}
     parts = [tool_input.get("recap") or "", tool_input.get("ask") or ""]
     actions = tool_input.get("actions")
@@ -133,7 +127,7 @@ def head(text, label=""):
 
 
 def is_user_turn(entry):
-    """Whether the entry is a user-typed message (not a tool result or meta entry)."""
+    """ユーザーが入力した発言か（ツール結果やメタ情報の user エントリを除く）"""
     if entry.get("type") != "user" or entry.get("isMeta"):
         return False
     content = entry.get("message", {}).get("content")
@@ -156,7 +150,7 @@ def read_entries(transcript_path):
 
 
 def turn_ended_in_text(entries):
-    """Whether this turn's latest assistant entry ends with prose."""
+    """このターンの最新の assistant エントリが、本文で終わっているか"""
     for entry in reversed(entries):
         if is_user_turn(entry):
             return False
@@ -164,15 +158,15 @@ def turn_ended_in_text(entries):
             content = entry.get("message", {}).get("content") or []
             last = next((c for c in reversed(content) if isinstance(c, dict)), None)
             return bool(last) and last.get("type") == "text"
-        if entry.get("type") == "user":  # A tool result last: the final answer is not written yet.
+        if entry.get("type") == "user":  # ツール結果が最後＝最終回答がまだ書き込まれていない
             return False
     return False
 
 
 def wait_for_final(transcript_path, timeout=WAIT_SECONDS):
-    """The Stop hook can run before the final answer reaches the transcript; read
-    at once, an English answer would pass unseen. Wait until it appears. A turn
-    that called no tool already ends with prose, so it does not wait."""
+    """Stop hook は、最終回答が transcript へ書き込まれる前に呼ばれることがある。
+    そのまま読むと最終回答が見えず、英語でも素通りする。最終回答が現れるまで待つ。
+    ツールを呼ばずに終わったターンは最初から本文で終わっているので、待たずに進む。"""
     deadline = time.time() + timeout
     entries = read_entries(transcript_path)
     while not turn_ended_in_text(entries) and time.time() < deadline:
@@ -188,7 +182,7 @@ def english_passages(transcript_path, entries=None):
     for i, entry in enumerate(entries):
         if is_user_turn(entry):
             start = i + 1
-    # Final answer = prose after the last tool call; restart collecting at each tool call.
+    # 最終回答＝最後のツール呼び出しより後の本文。ツール呼び出しが出るたびに集め直す
     final = []
     hits = []
     for entry in entries[start:]:
@@ -198,7 +192,7 @@ def english_passages(transcript_path, entries=None):
             if not isinstance(block, dict):
                 continue
             if block.get("type") == "tool_use":
-                # Prose that did not become the final answer is a progress report; check long ones.
+                # 最終回答にならなかった本文は途中報告。長いものだけ見る
                 hits += [head(t, "（途中の報告）") for t in final if is_mid_report_english(t)]
                 final = []
                 if is_wrap_up(block.get("name")):
@@ -208,7 +202,7 @@ def english_passages(transcript_path, entries=None):
             elif block.get("type") == "text":
                 final.append(block.get("text", ""))
             elif block.get("type") == "thinking" and entry.get("thinkingDisplay") == "updates":
-                # With thinkingDisplay "updates", non-empty thinking is shown as a progress report.
+                # thinkingDisplay が updates のとき、中身のある thinking は画面に途中報告として出る
                 text = block.get("thinking") or ""
                 if text.strip() and is_mid_report_english(text):
                     hits.append(head(text, "（途中の報告）"))
@@ -230,17 +224,17 @@ def main():
                 "hookEventName": "PreToolUse",
                 "permissionDecision": "deny",
                 "permissionDecisionReason": WRAP_UP_REASON,
-            }}))  # ASCII escapes: safe on any stdout encoding.
+            }}))  # ASCII でエスケープする（標準出力の文字コードによらず出せる）
         return
     if data.get("stop_hook_active"):
         return
-    # A JSON-only final answer is script output: a rewrite request would add prose
-    # and the result would no longer parse as JSON.
+    # 最終回答が JSON だけなら、スクリプトが読む出力として扱う。差し戻すと「英語の箇所を
+    # 日本語に直す」説明文が加わり、JSON として読めなくなる
     if looks_like_json(data.get("last_assistant_message") or ""):
         return
-    # The final answer is also in the hook input last_assistant_message: it can be
-    # judged without waiting for the transcript. It holds only the last reply, so
-    # the earlier part of a split reply is checked in the transcript (upstream issue #1).
+    # 最終回答の本文は hook の入力 last_assistant_message にも入っている。transcript の書き込みを
+    # 待たずに判定でき、書き込みが遅れても見逃さない。入るのは最後の応答1件だけなので、
+    # 応答が分かれたときの前半は transcript 側で見る（issue #1）
     message = data.get("last_assistant_message") or ""
     message_en = bool(message) and is_english(message)
     path = data.get("transcript_path")
