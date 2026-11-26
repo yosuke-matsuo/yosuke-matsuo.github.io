@@ -43,7 +43,7 @@
  }
 }
 </script>
-<link rel="stylesheet" href="style.css?v=20261126-2">
+<link rel="stylesheet" href="style.css?v=20261127-1">
 </head>
 <body>
 <a class="skip-link" href="#main" data-t="skip">本文へ移動</a>
@@ -182,7 +182,7 @@
 <p data-tabs="finder"><span data-t="filterMethod">分子式検索の絞り込み：DBE の条件は、中性分子 M の DBE が整数で、かつ0以上であることです。DBE は C・H・N・O・S・ハロゲンを通常の原子価（C 4、N 3、H とハロゲン 1、O・S 2）として計算するので、ほかの元素を含む組成は判定せずに残します。整数であることは窒素ルール（窒素の数と整数質量の偶奇）と同じ条件ですが、0以上であることは窒素ルールには含まれません（例：CH<sub>4</sub> より H の多い CH<sub>6</sub> は窒素ルールを満たしますが、DBE は −1 です）。元素比の条件は、Kind と Fiehn が示した「一般的な範囲」（データベースの分子式の99.7%を含む範囲）のうち、H・N・O・P・S・Si の炭素に対する比を使います。</span> <a href="https://doi.org/10.1186/1471-2105-8-105" target="_blank" rel="noopener noreferrer">Kind &amp; Fiehn, <i>BMC Bioinformatics</i> 2007</a></p>
 <p data-t="urlMethod" data-tabs="calculator finder">精密質量と分子式検索の入力は、ページのアドレスの「#」より後ろに入ります。この部分はサーバーに送られませんが、そのアドレスをブックマーク・共有すると、入力も一緒に伝わります。一括計算と記載チェックの入力はアドレスに入りません。</p>
 <p data-t="isotopes">84元素に対応し、各元素で天然存在比が最も高い同位体の質量を使います（例：B は ¹¹B、Fe は ⁵⁶Fe）。Tc・Pm など天然の同位体組成がない元素は使えません。</p>
-<p data-t="isoMethod" data-tabs="calculator">同位体パターンはNISTの存在比から計算し、同じ整数質量の同位体組成を1本にまとめます（<i>m</i>/<i>z</i> は存在比による加重平均）。高分解能では分かれて観測されることがあります。</p>
+<p data-t="isoMethod" data-tabs="calculator">同位体パターンはNISTの存在比から計算し、同じ整数質量の同位体組成を1本のピークにまとめます（<i>m</i>/<i>z</i> は存在比による加重平均）。これらは高分解能では別々のピークとして観測されることがあります。</p>
 <p data-t="checkMethod" data-tabs="checker">記載チェックでは、「calcd for」の後の分子式をイオンの組成として <i>m</i>/<i>z</i> を計算し直し、最終桁の丸めの範囲で一致するかを見ます。一致しない場合は、電子の質量の扱いの誤りや、中性分子の分子式のまま計算した可能性を調べます。</p>
 <details><summary data-t="constants">使用する同位体と質量を表示</summary><table id="constants"><thead></thead><tbody></tbody></table></details>
 </section>
@@ -199,6 +199,6 @@
 
 <footer><p>© 2026 <a href="../index.html" data-home="index">Yosuke Matsuo</a> · <a href="../tools.html" data-home="tools" data-t="toolsPage">ツール</a></p><p><a href="https://github.com/yosuke-matsuo/yosuke-matsuo.github.io/tree/main/hrms-calc" data-t="sourceCode" target="_blank" rel="noopener noreferrer">ソースコード</a> · <span data-t="codeLicense">HRMS Calcのプログラム：</span><a href="LICENSE.txt">MIT License</a></p></footer>
 </main>
-<script type="module" src="app.js?v=20261126-2"></script>
+<script type="module" src="app.js?v=20261127-1"></script>
 </body>
 </html>

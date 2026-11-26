@@ -44,7 +44,7 @@
  }
 }
 </script>
-<link rel="stylesheet" href="../style.css?v=20261126-2">
+<link rel="stylesheet" href="../style.css?v=20261127-1">
 </head>
 <body>
 <a class="skip-link" href="#main" data-t="skip">Skip to content</a>
@@ -56,7 +56,7 @@
 <main id="main">
 <div class="intro">
 <noscript><p class="electron-note">This tool requires JavaScript.</p></noscript>
-<p class="electron-note"><strong data-t="electronHead">The electron mass is taken into account.</strong><span data-t="electronShort"> It is subtracted for positive ions and added for negative ions; ignoring it shifts <i>m</i>/<i>z</i> 200 by about 2.7 ppm (more at lower <i>m</i>/<i>z</i>).</span><span data-t="electronSurvey"> A survey of about 3000 SI files from <i>Org. Lett.</i> (2023–2024) found errors in about 30% of the reported accurate-mass data; about two-thirds of these came from ignoring the electron mass (<a href="https://doi.org/10.1021/acs.orglett.4c03458" target="_blank" rel="noopener noreferrer">Christmann, <i>Org. Lett.</i> 2025, <i>27</i>, 4⁠–⁠7</a>).</span></p>
+<p class="electron-note"><strong data-t="electronHead">The electron mass is taken into account.</strong><span data-t="electronShort"> It is subtracted for positive ions and added for negative ions; ignoring it gives an error of about 2.7 ppm at <i>m</i>/<i>z</i> 200 (larger at lower <i>m</i>/<i>z</i>).</span><span data-t="electronSurvey"> A survey of about 3000 SI files from <i>Org. Lett.</i> (2023–2024) found errors in about 30% of the reported accurate-mass data; about two-thirds of these came from ignoring the electron mass (<a href="https://doi.org/10.1021/acs.orglett.4c03458" target="_blank" rel="noopener noreferrer">Christmann, <i>Org. Lett.</i> 2025, <i>27</i>, 4⁠–⁠7</a>).</span></p>
 </div>
 
 <div class="tabs" role="tablist" id="tabs">
@@ -183,7 +183,7 @@
 <p data-tabs="finder"><span data-t="filterMethod">Filters in Find formulas: the DBE condition requires the DBE of the neutral M to be an integer and not negative. DBE is calculated for C, H, N, O, S and halogens with the usual valences (C 4, N 3, H and halogens 1, O and S 2); compositions with other elements are not judged and are kept. Being an integer is the same condition as the nitrogen rule (parity of the number of nitrogens and of the nominal mass); being non-negative is not part of the nitrogen rule (CH<sub>6</sub> satisfies the nitrogen rule but has DBE −1). The element-ratio condition uses the ratios of H, N, O, P, S and Si to carbon in the “common range” given by Kind and Fiehn (covering 99.7% of the formulas in their database).</span> <a href="https://doi.org/10.1186/1471-2105-8-105" target="_blank" rel="noopener noreferrer">Kind &amp; Fiehn, <i>BMC Bioinformatics</i> 2007</a></p>
 <p data-t="urlMethod" data-tabs="calculator finder">The inputs of Exact mass and Find formulas are kept in the page address after “#”. That part is not sent to the server, but a bookmarked or shared address carries the inputs. The inputs of Batch and Check SI text are not kept in the address.</p>
 <p data-t="isotopes">84 elements are supported, each with the mass of its most abundant isotope (for example ¹¹B for B and ⁵⁶Fe for Fe). Elements without a natural isotopic composition, such as Tc and Pm, cannot be used.</p>
-<p data-t="isoMethod" data-tabs="calculator">Isotope patterns are calculated from the NIST abundances; isotopologues with the same nominal mass are combined into one peak (<i>m</i>/<i>z</i> is the abundance-weighted mean). They may be resolved at high resolution.</p>
+<p data-t="isoMethod" data-tabs="calculator">Isotope patterns are calculated from the NIST abundances; isotopologues with the same nominal mass are combined into one peak (<i>m</i>/<i>z</i> is the abundance-weighted mean). At high resolution, these isotopologues may appear as separate peaks.</p>
 <p data-t="checkMethod" data-tabs="checker">Check SI text takes the formula after “calcd for” as the composition of the ion, recalculates its <i>m</i>/<i>z</i> and checks agreement within rounding of the last digit. If they do not agree, it checks whether the electron mass was mishandled or the value was calculated for the neutral formula.</p>
 <details><summary data-t="constants">Show isotopes and masses used</summary><table id="constants"><thead></thead><tbody></tbody></table></details>
 </section>
@@ -200,6 +200,6 @@
 
 <footer><p>© 2026 <a href="../../en/index.html" data-home="index">Yosuke Matsuo</a> · <a href="../../en/tools.html" data-home="tools" data-t="toolsPage">Tools</a></p><p><a href="https://github.com/yosuke-matsuo/yosuke-matsuo.github.io/tree/main/hrms-calc" data-t="sourceCode" target="_blank" rel="noopener noreferrer">Source code</a> · <span data-t="codeLicense">HRMS Calc code: </span><a href="../LICENSE.txt">MIT License</a></p></footer>
 </main>
-<script type="module" src="../app.js?v=20261126-2"></script>
+<script type="module" src="../app.js?v=20261127-1"></script>
 </body>
 </html>
