@@ -21,8 +21,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="Gaussianキーワード一覧｜Gaussian入門" data-en="Gaussian keyword reference | Gaussian guide">Gaussian keyword reference | Gaussian guide</title>
-<link rel="stylesheet" href="../../styles.css?v=20261126-7"/>
-<script defer src="../../app.js?v=20261126-7"></script>
+<link rel="stylesheet" href="../../styles.css?v=20261127-1"/>
+<script defer src="../../app.js?v=20261127-1"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">Skip to content</a>
@@ -42,6 +42,7 @@
 <li data-en="Keywords are case-insensitive: Opt, opt and OPT are the same." data-ja="大文字・小文字は区別されません。Opt と opt と OPT は同じです。">Keywords are case-insensitive: Opt, opt and OPT are the same.</li>
 <li data-en="One option: Opt=Tight. Two or more: wrap in parentheses, Opt=(TS,CalcFC)." data-ja="オプションが1つなら Opt=Tight、2つ以上なら Opt=(TS,CalcFC) のように括弧でくくります。">One option: Opt=Tight. Two or more: wrap in parentheses, Opt=(TS,CalcFC).</li>
 <li data-en="Functional and basis set are joined with a slash: B3LYP/6-31G(d)." data-ja="汎関数と基底関数は B3LYP/6-31G(d) のようにスラッシュでつなぎます。">Functional and basis set are joined with a slash: B3LYP/6-31G(d).</li>
+<li data-en="Additional input lines written after the coordinates are called cards." data-ja="座標の後に書く追加の入力行を、カード（追加入力）と呼びます。">Additional input lines written after the coordinates are called cards.</li>
 </ul>
 <p><span data-lang="en">The complete list is in the <a href="https://gaussian.com/keywords/" target="_blank" rel="noopener noreferrer">official Gaussian keyword reference</a>.</span></p>
 </section>
@@ -69,7 +70,7 @@
 </tr>
 <tr>
 <td><code translate="no">%rwf</code></td>
-<td data-en="Location of the read-write scratch file; pointing it at fast disk can speed up a job." data-ja="一時作業ファイルの場所。読み書きの速いディスクを指定すると、計算が速くなることがあります。">Location of the read-write scratch file; pointing it at fast disk can speed up a job.</td>
+<td data-en="Location of the read-write file (scratch); putting it on a fast disk can speed up a job." data-ja="一時作業ファイルの場所。読み書きの速いディスクを指定すると、計算が速くなることがあります。">Location of the read-write file (scratch); putting it on a fast disk can speed up a job.</td>
 </tr>
 </tbody></table></div>
 </section>
@@ -113,7 +114,7 @@
 </tr>
 <tr>
 <td><code translate="no">Opt=ModRedundant</code><br><span class="kw-ex" translate="no">1 12 S 10 0.1</span></td>
-<td data-en="Relaxed scan: a line such as “1 12 S 10 0.1” (distance 1–12, ten steps of 0.1 Å) after the coordinates steps the coordinate while optimizing the rest, giving an energy profile. The Scan keyword is a rigid scan without optimization." data-ja="緩和走査。座標の後に「1 12 S 10 0.1」（原子1–12の距離を 0.1 Å ずつ10回）のように書き、各点でほかの座標を最適化してエネルギー曲線を描きます。Scan キーワードは各点を最適化しない剛体走査です。">Relaxed scan: a line such as “1 12 S 10 0.1” (distance 1–12, ten steps of 0.1 Å) after the coordinates steps the coordinate while optimizing the rest, giving an energy profile. The Scan keyword is a rigid scan without optimization.</td>
+<td data-en="Relaxed scan: add a line such as “1 12 S 10 0.1” (distance between atoms 1 and 12, ten steps of 0.1 Å) after the coordinates. The other coordinates are optimized at each step, giving an energy profile. The Scan keyword is a rigid scan without optimization." data-ja="緩和走査。座標の後に「1 12 S 10 0.1」（原子1–12の距離を 0.1 Å ずつ10回）のように書き、各点でほかの座標を最適化してエネルギー曲線を描きます。Scan キーワードは各点を最適化しない剛体走査です。">Relaxed scan: add a line such as “1 12 S 10 0.1” (distance between atoms 1 and 12, ten steps of 0.1 Å) after the coordinates. The other coordinates are optimized at each step, giving an energy profile. The Scan keyword is a rigid scan without optimization.</td>
 </tr>
 <tr>
 <td><code translate="no">Stable</code></td>
@@ -161,7 +162,7 @@
 </tr>
 <tr>
 <td><code translate="no">Opt=Cartesian</code></td>
-<td data-en="Optimizes in Cartesian rather than internal coordinates; useful when internal-coordinate generation fails." data-ja="内部座標ではなくデカルト座標で最適化します。内部座標の生成に失敗するときに使います。">Optimizes in Cartesian rather than internal coordinates; useful when internal-coordinate generation fails.</td>
+<td data-en="Optimizes in Cartesian rather than internal coordinates; useful when internal-coordinate generation fails." data-ja="内部座標ではなく直交座標（x, y, z）で最適化します。内部座標の生成に失敗するときに使います。">Optimizes in Cartesian rather than internal coordinates; useful when internal-coordinate generation fails.</td>
 </tr>
 <tr>
 <td><code translate="no">Opt=QST2 / QST3</code></td>
@@ -185,7 +186,7 @@
 </tr></thead><tbody>
 <tr>
 <td><code translate="no">SCF=XQC</code></td>
-<td data-en="Adds quadratically convergent steps when the usual SCF method fails; the first remedy for a convergence failure." data-ja="通常の方法でSCFが収束しないとき、二次収束法を追加で行います。Convergence failure の第一の対処です。">Adds quadratically convergent steps when the usual SCF method fails; the first remedy for a convergence failure.</td>
+<td data-en="Adds quadratically convergent steps when the usual SCF method fails; used for SCF convergence failures." data-ja="通常の方法でSCFが収束しないとき、二次収束法を追加で行います。Convergence failure のときに使います。">Adds quadratically convergent steps when the usual SCF method fails; used for SCF convergence failures.</td>
 </tr>
 <tr>
 <td><code translate="no">SCF=Tight</code></td>
@@ -213,7 +214,7 @@
 </tr>
 <tr>
 <td><code translate="no">Geom=AllCheck</code></td>
-<td data-en="Reads the title, charge, multiplicity and geometry from the checkpoint; so omit the title, the charge/multiplicity line and the coordinates." data-ja="タイトル・電荷・多重度・構造をチェックポイントから読みます。タイトル行から座標欄までは書きません。">Reads the title, charge, multiplicity and geometry from the checkpoint; so omit the title, the charge/multiplicity line and the coordinates.</td>
+<td data-en="Reads the title, charge, multiplicity and geometry from the checkpoint, so omit the title, the charge/multiplicity line and the coordinates." data-ja="タイトル・電荷・多重度・構造をチェックポイントから読みます。タイトル行から座標欄までは書きません。">Reads the title, charge, multiplicity and geometry from the checkpoint, so omit the title, the charge/multiplicity line and the coordinates.</td>
 </tr>
 <tr>
 <td><code translate="no">Geom=Check</code></td>
@@ -245,7 +246,7 @@
 </tr>
 <tr>
 <td><code translate="no">EmpiricalDispersion=GD3BJ</code></td>
-<td data-en="Empirical dispersion correction; add to functionals such as B3LYP. M05/M06-type functionals have no GD3BJ parameters; use GD3 for them." data-ja="分散力（弱い引力）の経験的補正。B3LYPなどに加えます。M06系には GD3BJ のパラメータがなく、加える場合は GD3 を使います。">Empirical dispersion correction; add to functionals such as B3LYP. M05/M06-type functionals have no GD3BJ parameters; use GD3 for them.</td>
+<td data-en="Empirical dispersion correction; add to functionals such as B3LYP. M06-type functionals have no GD3BJ parameters; use GD3 for them." data-ja="分散力（弱い引力）の経験的補正。B3LYPなどに加えます。M06系には GD3BJ のパラメーターがなく、加える場合は GD3 を使います。">Empirical dispersion correction; add to functionals such as B3LYP. M06-type functionals have no GD3BJ parameters; use GD3 for them.</td>
 </tr>
 <tr>
 <td><code translate="no">SCRF=(SMD,Solvent=Methanol)</code></td>
@@ -293,7 +294,7 @@
 </tr>
 <tr>
 <td><code translate="no">TD=(Singlets) / TD=(Triplets)</code></td>
-<td data-en="Spin multiplicity of the excited states; singlets for ordinary ECD and UV." data-ja="計算する励起状態のスピン多重度。ECD・UVでは通常一重項。">Spin multiplicity of the excited states; singlets for ordinary ECD and UV.</td>
+<td data-en="Spin multiplicity of the excited states; usually singlets for ECD and UV." data-ja="計算する励起状態のスピン多重度。ECD・UVでは通常一重項。">Spin multiplicity of the excited states; usually singlets for ECD and UV.</td>
 </tr>
 <tr>
 <td><code translate="no">CPHF=RdFreq</code></td>
@@ -361,7 +362,7 @@
 </tr>
 <tr>
 <td><code translate="no">MaxDisk=NGB</code></td>
-<td data-en="Disk space available for scratch files; used to choose algorithms, so not every job stays within it." data-ja="スクラッチに使えるディスク量。計算のアルゴリズムの選択に使われ、すべての計算でこの量以下に収まるとは限りません。">Disk space available for scratch files; used to choose algorithms, so not every job stays within it.</td>
+<td data-en="Disk space available for scratch files. It is used to choose algorithms; a job does not necessarily stay within it." data-ja="スクラッチに使えるディスク量。計算のアルゴリズムの選択に使われ、すべての計算でこの量以下に収まるとは限りません。">Disk space available for scratch files. It is used to choose algorithms; a job does not necessarily stay within it.</td>
 </tr>
 <tr>
 <td><code translate="no">FormCheck / Punch</code></td>
@@ -386,6 +387,6 @@
 </section>
 </div>
 </main>
-<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月26日" data-en="Last updated: 26 November 2026" class="copyright">Last updated: 26 November 2026</p></footer>
+<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月27日" data-en="Last updated: 27 November 2026" class="copyright">Last updated: 27 November 2026</p></footer>
 </body>
 </html>

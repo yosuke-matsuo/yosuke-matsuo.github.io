@@ -21,8 +21,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="ECD・UV・旋光度｜Gaussian入門" data-en="ECD, UV and optical rotation | Gaussian guide">ECD, UV and optical rotation | Gaussian guide</title>
-<link rel="stylesheet" href="../../styles.css?v=20261126-7"/>
-<script defer src="../../app.js?v=20261126-7"></script>
+<link rel="stylesheet" href="../../styles.css?v=20261127-1"/>
+<script defer src="../../app.js?v=20261127-1"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">Skip to content</a>
@@ -34,7 +34,7 @@
 <main class="page-shell guide" id="main">
 <div class="page-body">
 <section class="intro"><nav aria-label="Breadcrumb" class="breadcrumb"><a data-ja="Gaussian入門" data-en="Gaussian guide" href="./index.html">Gaussian guide</a> / <a data-ja="計算ガイド" data-en="Calculation guide" href="./workflow.html">Calculation guide</a></nav><h1 data-en="ECD, UV and optical rotation" data-ja="ECD・UV・旋光度">ECD, UV and optical rotation</h1></section>
-<nav aria-label="On this page" class="section-nav"><a href="#theory" data-ja="ECD：TD-DFTから配座平均曲線へ" data-en="ECD: from TD-DFT to conformer-averaged curves">ECD: from TD-DFT to conformer-averaged curves</a><a href="#conditions" data-ja="計算条件：TD-DFT（ECD・UV）" data-en="Calculation conditions: TD-DFT (ECD/UV)">Calculation conditions: TD-DFT (ECD/UV)</a><a href="#or" data-ja="旋光度" data-en="Optical rotation">Optical rotation</a><a href="#equations" data-ja="曲線の変換式（詳細）" data-en="Curve equations (details)">Curve equations (details)</a></nav>
+<nav aria-label="On this page" class="section-nav"><a href="#theory" data-ja="ECD：TD-DFTから配座平均曲線へ" data-en="ECD: from TD-DFT to conformer-averaged curves">ECD: from TD-DFT to conformer-averaged curves</a><a href="#conditions" data-ja="計算条件：TD-DFT（ECD・UV）" data-en="Calculation settings: TD-DFT (ECD/UV)">Calculation settings: TD-DFT (ECD/UV)</a><a href="#or" data-ja="旋光度" data-en="Optical rotation">Optical rotation</a><a href="#equations" data-ja="曲線の変換式（詳細）" data-en="Curve equations (details)">Curve equations (details)</a></nav>
 <section class="content-section reading" id="theory">
 <h2 data-en="ECD: from TD-DFT to conformer-averaged curves" data-ja="ECD：TD-DFTから配座平均曲線へ">ECD: from TD-DFT to conformer-averaged curves</h2>
 <p data-en="TD-DFT (e.g. TD=(NStates=30) on the route line) gives, for each excited state, the excitation energy, the oscillator strength (for UV) and the rotatory strength (for ECD). Each transition is broadened with a Gaussian function, summed into a curve per conformer, and averaged by population for comparison with experiment." data-ja="TD-DFT（ルート行の TD=(NStates=30) など）は励起状態ごとに、励起エネルギー、振動子強度（UV用）、旋光強度（ECD用）を出します。各遷移をガウス関数で広げて足し合わせ、配座ごとの曲線を存在率で平均して実測と比べます。">TD-DFT (e.g. TD=(NStates=30) on the route line) gives, for each excited state, the excitation energy, the oscillator strength (for UV) and the rotatory strength (for ECD). Each transition is broadened with a Gaussian function, summed into a curve per conformer, and averaged by population for comparison with experiment.</p>
@@ -48,7 +48,7 @@
 </ul>
 </section>
 <section class="content-section reading" id="conditions">
-<h2 data-en="Calculation conditions: TD-DFT (ECD/UV)" data-ja="計算条件：TD-DFT（ECD・UV）">Calculation conditions: TD-DFT (ECD/UV)</h2><p class="note"><span data-lang="en">Below the route line, continue with a blank line, title, blank line, charge/multiplicity, coordinates and a final blank line (<a href="./start.html#input">anatomy of an input file</a>). Keyword meanings are in the <a href="./keywords.html">keyword reference</a>. Relative times are rough ratios to the setting marked “reference (1)”.</span></p>
+<h2 data-en="Calculation settings: TD-DFT (ECD/UV)" data-ja="計算条件：TD-DFT（ECD・UV）">Calculation settings: TD-DFT (ECD/UV)</h2><p class="note"><span data-lang="en">Below the route line, continue with a blank line, title, blank line, charge/multiplicity, coordinates and a final blank line (<a href="./start.html#input">anatomy of an input file</a>). Keyword meanings are in the <a href="./keywords.html">keyword reference</a>. Relative times are rough ratios to the setting marked “reference (1)”.</span></p>
 <article class="method-entry"><h3 data-en="B3LYP/6-31G(d), IEFPCM(MeOH)" data-ja="B3LYP/6-31G(d)・IEFPCM(MeOH)" id="td-b3">B3LYP/6-31G(d), IEFPCM(MeOH)</h3><p data-en="The basic setting used for absolute-configuration work on natural products. 50 states is a generous example." data-ja="天然物の絶対配置検討で使われる基本条件。状態数50は余裕のある例です。">The basic setting used for absolute-configuration work on natural products. 50 states is a generous example.</p><p class="muted"><span data-en="Relative time: reference (1, 50 states)" data-ja="時間の目安：基準（1、50状態）">Relative time: reference (1, 50 states)</span></p><pre class="input-block keep-lines" translate="no" lang="en">%chk=td-b3.chk
 #p B3LYP/6-31G(d) TD=(Singlets,NStates=50)
    SCRF=(IEFPCM,Solvent=Methanol)</pre><p><strong data-en="Used in: " data-ja="使用例：">Used in: </strong><a href="https://doi.org/10.1021/acs.jnatprod.5c00578" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Zhang <i>et al.</i>, <i>J. Nat. Prod.</i> 2025, 88, 2325</a></p><p class="muted"><span data-en="Source: " data-ja="出典：">Source: </span><a href="https://doi.org/10.1063/1.464913" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Becke, <i>J. Chem. Phys.</i> 1993, 98, 5648</a> · <a href="https://doi.org/10.1002/chir.22600" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Pescitelli &amp; Bruhn, <i>Chirality</i> 2016, 28, 466</a></p></article>
@@ -61,7 +61,7 @@
 <li data-en="Broaden each transition with a Gaussian function (typically about 0.3 eV FWHM; SpecDis&#x27;s default σ = 0.16 eV is about 0.27 eV FWHM) and average the per-conformer curves by population." data-ja="各遷移をガウス関数で広げ（幅の目安は半値全幅 0.3 eV 前後。SpecDisの既定値 σ = 0.16 eV は半値全幅 約0.27 eV）、配座ごとの曲線を存在率で平均します。">Broaden each transition with a Gaussian function (typically about 0.3 eV FWHM; SpecDis&#x27;s default σ = 0.16 eV is about 0.27 eV FWHM) and average the per-conformer curves by population.</li>
 <li data-en="A wavelength shift is sometimes applied when comparing with experiment (e.g. −7 nm in Xu 2019). Decide it per compound." data-ja="実測と比べるときに波長をシフトすることがあります（例：Xu 2019 では −7 nm）。シフト量は化合物ごとに決めます。">A wavelength shift is sometimes applied when comparing with experiment (e.g. −7 nm in Xu 2019). Decide it per compound.</li>
 </ul>
-<p><span data-lang="en">Equations are in <a href="#equations">Curve equations</a> below; SpecDis and similar programs can do this processing.</span></p>
+<p><span data-lang="en">The equations are given under <a href="#equations">Curve equations</a> below. SpecDis and similar programs can do this.</span></p>
 <h3 data-en="References" data-ja="参考資料">References</h3>
 <ul class="compact-list reference-list">
 <li><a href="https://doi.org/10.1002/chir.22138" target="_blank" rel="noopener noreferrer">Bruhn <i>et al.</i>, <i>Chirality</i> 2013, 25, 243</a></li>
@@ -70,7 +70,17 @@
 </section>
 <section class="content-section reading" id="or">
 <h2 data-en="Optical rotation" data-ja="旋光度">Optical rotation</h2>
-<article class="method-entry"><h3 data-en="B3LYP/aug-cc-pVDZ, IEFPCM(CHCl₃)" data-ja="B3LYP/aug-cc-pVDZ・IEFPCM(CHCl₃)" id="or-dz">B3LYP/aug-cc-pVDZ, IEFPCM(CHCl₃)</h3><p data-en="Optical rotation depends strongly on the basis set, so this example uses aug-cc-pVDZ, which includes diffuse functions. After the coordinate block: a blank line, then the wavelength line (e.g. 589nm), then a blank line." data-ja="旋光度は基底関数の影響を強く受けるため、この例では拡散関数を含む aug-cc-pVDZ を使います。座標ブロックの後に空行、次に波長の行（例：589nm）、空行を続けます。">Optical rotation depends strongly on the basis set, so this example uses aug-cc-pVDZ, which includes diffuse functions. After the coordinate block: a blank line, then the wavelength line (e.g. 589nm), then a blank line.</p><p class="muted"><span data-en="Relative time: longer than 1 (larger basis)" data-ja="時間の目安：1より長い（基底が大きい）">Relative time: longer than 1 (larger basis)</span></p><pre class="input-block keep-lines" translate="no" lang="en">%chk=or-dz.chk
+<article class="method-entry"><h3 data-en="B3LYP/aug-cc-pVDZ, IEFPCM(CHCl₃)" data-ja="B3LYP/aug-cc-pVDZ・IEFPCM(CHCl₃)" id="or-dz">B3LYP/aug-cc-pVDZ, IEFPCM(CHCl₃)</h3><p data-en="Optical rotation depends strongly on the basis set, so this example uses aug-cc-pVDZ, which includes diffuse functions. After the coordinate block: a blank line, then the wavelength line (e.g. 589nm), then a blank line." data-ja="旋光度は基底関数の影響を強く受けるため、この例では拡散関数を含む aug-cc-pVDZ を使います。座標ブロックの後に空行、次に波長の行（例：589nm）、空行を続けます。">Optical rotation depends strongly on the basis set, so this example uses aug-cc-pVDZ, which includes diffuse functions. After the coordinate block: a blank line, then the wavelength line (e.g. 589nm), then a blank line.</p><p class="muted"><span data-en="Relative time: longer than 1 (larger basis)" data-ja="時間の目安：1より長い（基底が大きい）">Relative time: longer than 1 (larger basis)</span></p><pre class="input-block keep-lines" translate="no" data-ja="%chk=or-dz.chk
+#p B3LYP/aug-cc-pVDZ Polar=OptRot CPHF=RdFreq
+   SCRF=(IEFPCM,Solvent=Chloroform) Integral=UltraFine SCF=Tight
+
+（タイトル・電荷と多重度・座標・空行）
+589nm" data-en="%chk=or-dz.chk
+#p B3LYP/aug-cc-pVDZ Polar=OptRot CPHF=RdFreq
+   SCRF=(IEFPCM,Solvent=Chloroform) Integral=UltraFine SCF=Tight
+
+(title / charge mult / coordinates / blank line)
+589nm">%chk=or-dz.chk
 #p B3LYP/aug-cc-pVDZ Polar=OptRot CPHF=RdFreq
    SCRF=(IEFPCM,Solvent=Chloroform) Integral=UltraFine SCF=Tight
 
@@ -101,7 +111,7 @@ HWHH = σ_E √ln2,   FWHM = 2 HWHH,   E(eV) = 1239.84 / λ(nm)</pre>
 <li data-en="Put the experimental data in two columns, wavelength (nm) and intensity, with intensities converted to Δε or ε (L mol⁻¹ cm⁻¹)." data-ja="実測データは波長（nm）と強度の2列にまとめ、強度は Δε または ε（L mol⁻¹ cm⁻¹）に換算しておきます。">Put the experimental data in two columns, wavelength (nm) and intensity, with intensities converted to Δε or ε (L mol⁻¹ cm⁻¹).</li>
 <li data-en="Convert data measured in mdeg or absorbance using the concentration and path length." data-ja="mdeg や吸光度で測ったデータは、濃度と光路長から換算します。">Convert data measured in mdeg or absorbance using the concentration and path length.</li>
 <li data-en="If you apply a wavelength shift or intensity scaling for the comparison, record the values and reasons separately from the raw calculated curve. Inverting the ECD sign gives the enantiomer&#x27;s curve; do not use it to fit a curve of the same configuration to experiment." data-ja="比較のために波長シフトや強度倍率を使った場合は、値と理由を元の計算曲線とは別に記録します。ECDの符号反転は鏡像体の曲線を示す操作で、同じ立体配置の曲線を実測に合わせるためには使いません。">If you apply a wavelength shift or intensity scaling for the comparison, record the values and reasons separately from the raw calculated curve. Inverting the ECD sign gives the enantiomer&#x27;s curve; do not use it to fit a curve of the same configuration to experiment.</li>
-<li data-en="Choose length or velocity rotatory strengths and use the same for all conformers. The UV curve uses the oscillator strengths f (length form)." data-ja="旋光強度は length と velocity のどちらを使うかを決め、全配座でそろえます。UV曲線には振動子強度 f（length 形式）を使います。">Choose length or velocity rotatory strengths and use the same for all conformers. The UV curve uses the oscillator strengths f (length form).</li>
+<li data-en="Choose length or velocity rotatory strengths and use the same for all conformers. The UV curve uses the oscillator strengths f (length form)." data-ja="旋光強度は、長さ形式（length）と速度形式（velocity）のどちらを使うかを決め、全配座でそろえます。UV曲線には振動子強度 f（length 形式）を使います。">Choose length or velocity rotatory strengths and use the same for all conformers. The UV curve uses the oscillator strengths f (length form).</li>
 </ul>
 <h3 data-en="References" data-ja="参考資料">References</h3>
 <ul class="compact-list reference-list">
@@ -121,6 +131,6 @@ HWHH = σ_E √ln2,   FWHM = 2 HWHH,   E(eV) = 1239.84 / λ(nm)</pre>
 </section>
 </div>
 </main>
-<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月26日" data-en="Last updated: 26 November 2026" class="copyright">Last updated: 26 November 2026</p></footer>
+<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月27日" data-en="Last updated: 27 November 2026" class="copyright">Last updated: 27 November 2026</p></footer>
 </body>
 </html>
