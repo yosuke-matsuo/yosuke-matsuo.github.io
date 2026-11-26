@@ -20,8 +20,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="NMR化学シフト｜Gaussian入門" data-en="NMR chemical shifts | Gaussian guide">NMR化学シフト｜Gaussian入門</title>
-<link rel="stylesheet" href="../styles.css?v=20261125-2"/>
-<script defer src="../app.js?v=20261125-2"></script>
+<link rel="stylesheet" href="../styles.css?v=20261126-1"/>
+<script defer src="../app.js?v=20261126-1"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">本文へ移動</a>
@@ -33,7 +33,7 @@
 <main class="page-shell guide" id="main">
 <div class="page-body">
 <section class="intro"><nav aria-label="Breadcrumb" class="breadcrumb"><a data-ja="Gaussian入門" data-en="Gaussian guide" href="./index.html">Gaussian入門</a> / <a data-ja="計算ガイド" data-en="Calculation guide" href="./workflow.html">計算ガイド</a></nav><h1 data-en="NMR chemical shifts" data-ja="NMR化学シフト">NMR化学シフト</h1></section>
-<nav aria-label="On this page" class="section-nav"><a href="#theory" data-ja="NMR：遮蔽定数から化学シフトへ" data-en="NMR: from shielding to chemical shift">NMR：遮蔽定数から化学シフトへ</a><a href="#procedure" data-ja="手順" data-en="Procedure">手順</a><a href="#conditions" data-ja="計算条件：GIAO" data-en="Calculation conditions: GIAO">計算条件：GIAO</a><a href="#calibration" data-ja="遮蔽σから化学シフトδへ" data-en="From shielding σ to chemical shift δ">遮蔽σから化学シフトδへ</a><a href="#nmr-hashimoto"><span data-lang="ja">専用補正つきの手順：Hehre <i>et al.</i> 2019</span><template data-lang="en"><span data-lang="en" hidden>A protocol with dedicated corrections: Hehre <i>et al.</i> 2019</span></template></a><a href="#examples" data-ja="文献の条件一覧" data-en="Conditions in the literature">文献の条件一覧</a></nav>
+<nav aria-label="On this page" class="section-nav"><a href="#theory" data-ja="NMR：遮蔽定数から化学シフトへ" data-en="NMR: from shielding to chemical shift">NMR：遮蔽定数から化学シフトへ</a><a href="#procedure" data-ja="手順" data-en="Procedure">手順</a><a href="#conditions" data-ja="計算条件：GIAO" data-en="Calculation conditions: GIAO">計算条件：GIAO</a><a href="#calibration" data-ja="実測との比較" data-en="Comparison with experiment">実測との比較</a><a href="#nmr-hashimoto"><span data-lang="ja">専用補正つきの手順：Hehre <i>et al.</i> 2019</span><template data-lang="en"><span data-lang="en" hidden>A protocol with dedicated corrections: Hehre <i>et al.</i> 2019</span></template></a><a href="#examples" data-ja="文献の条件一覧" data-en="Conditions in the literature">文献の条件一覧</a></nav>
 <section class="content-section reading" id="theory">
 <h2 data-en="NMR: from shielding to chemical shift" data-ja="NMR：遮蔽定数から化学シフトへ">NMR：遮蔽定数から化学シフトへ</h2>
 <p data-en="Gaussian&#x27;s NMR keyword (GIAO method) gives the shielding constant σ (ppm) of each nucleus. The chemical shift δ is obtained from σ in one of two ways." data-ja="Gaussianの NMR キーワード（GIAO法）が出すのは各核の遮蔽定数σ（ppm）です。化学シフトδは、σから次のどちらかで求めます。">Gaussianの NMR キーワード（GIAO法）が出すのは各核の遮蔽定数σ（ppm）です。化学シフトδは、σから次のどちらかで求めます。</p>
@@ -44,11 +44,9 @@
 <p data-en="For flexible molecules, compute σ for each conformer, average by population, then convert to δ. This assumes conformer exchange is fast on the NMR time scale." data-ja="柔軟な分子では、配座ごとにσを計算し、存在率で平均してからδに変換します。NMRの時間尺度で配座交換が速い場合の平均です。">柔軟な分子では、配座ごとにσを計算し、存在率で平均してからδに変換します。NMRの時間尺度で配座交換が速い場合の平均です。</p>
 <h3 data-en="Watch the direction of the calibration equation" data-ja="校正式の向きに注意">校正式の向きに注意</h3>
 <p data-en="The same m and b mean different things depending on whether the paper writes δ = (b − σ)/m or σ = b + mδ. For example, the SI of Bally &amp; Rablen (2011) gives δ = (31.844 − σ)/1.0205 for ¹H at WP04/cc-pVDZ in chloroform. CHESHIRE tables use σ = mδ + b with a negative slope m (here −1.0205). These coefficients apply to this level only." data-ja="文献の m, b が δ = (b − σ)/m の形か σ = b + mδ の形かで、同じ数値でも意味が変わります。例として、Bally &amp; Rablen（2011）のSIには WP04/cc-pVDZ（クロロホルム）の¹Hについて δ = (31.844 − σ)/1.0205 が示されています。CHESHIREの表は σ = mδ + b の形で、傾き m は負の値（この例では −1.0205）です。この係数はこの条件専用です。">文献の m, b が δ = (b − σ)/m の形か σ = b + mδ の形かで、同じ数値でも意味が変わります。例として、Bally &amp; Rablen（2011）のSIには WP04/cc-pVDZ（クロロホルム）の¹Hについて δ = (31.844 − σ)/1.0205 が示されています。CHESHIREの表は σ = mδ + b の形で、傾き m は負の値（この例では −1.0205）です。この係数はこの条件専用です。</p>
-<p data-en="Record σ, the averaged value and the converted δ separately, and compare residuals/MAE against experiment for each candidate structure." data-ja="σ、平均値、変換後のδは分けて記録し、候補構造ごとに実測との残差・MAEを比較します。">σ、平均値、変換後のδは分けて記録し、候補構造ごとに実測との残差・MAEを比較します。</p>
+<p data-en="Record σ, the averaged value and the converted δ separately." data-ja="σ、平均値、変換後のδは分けて記録します。">σ、平均値、変換後のδは分けて記録します。</p>
 <h3 data-en="References" data-ja="参考資料">参考資料</h3>
 <ul class="compact-list reference-list">
-<li><a href="#calibration" data-ja="参照差・校正式と出典" data-en="Reference difference, calibration equations and sources">参照差・校正式と出典</a></li>
-<li><a href="#conditions" data-ja="NMR計算のルート行の例" data-en="Example route lines for NMR calculations">NMR計算のルート行の例</a></li>
 <li><a href="https://doi.org/10.1021/cr200106v" target="_blank" rel="noopener noreferrer">Lodewyk <i>et al.</i>, <i>Chem. Rev.</i> 2012, 112, 1839</a> <span data-en="— review" data-ja="— 総説">— 総説</span></li>
 <li><a href="https://doi.org/10.1021/ja970112z" target="_blank" rel="noopener noreferrer">Forsyth &amp; Sebag, <i>J. Am. Chem. Soc.</i> 1997, 119, 9483</a> <span data-en="— basis of empirical scaling" data-ja="— 経験的校正の根拠">— 経験的校正の根拠</span></li>
 <li><a href="https://pubs.acs.org/doi/suppl/10.1021/jo200513q" target="_blank" rel="noopener noreferrer"><span data-lang="ja">Bally &amp; Rablen, <i>J. Org. Chem.</i> 2011, 76, 4818（SI S3）</span><template data-lang="en"><span data-lang="en" hidden>Bally &amp; Rablen, <i>J. Org. Chem.</i> 2011, 76, 4818 (SI p. S3)</span></template></a></li>
@@ -65,7 +63,7 @@
 </section>
 <section class="content-section reading" id="conditions">
 <h2 data-en="Calculation conditions: GIAO" data-ja="計算条件：GIAO">計算条件：GIAO</h2><p class="note"><span data-lang="ja">ルート行の下には、空行・タイトル・空行・電荷と多重度・座標・空行を続けます（<a href="./start.html#input">入力ファイルの構造</a>）。各キーワードの意味は<a href="./keywords.html">キーワード一覧</a>にあります。時間の目安は、「基準（1）」と書いた条件に対するおおよその比です。</span><template data-lang="en"><span data-lang="en" hidden>Below the route line, continue with a blank line, title, blank line, charge/multiplicity, coordinates and a final blank line (<a href="./start.html#input">input anatomy</a>). Keyword meanings are in the <a href="./keywords.html">keyword reference</a>. Relative times are rough ratios to the setting marked “reference (1)”.</span></template></p>
-<article class="method-entry"><h3 data-en="mPW1PW91/6-31+G(d,p), PCM(CHCl₃)" data-ja="mPW1PW91/6-31+G(d,p)・PCM(CHCl₃)" id="nmr-mpw">mPW1PW91/6-31+G(d,p)・PCM(CHCl₃)</h3><p data-en="One of the most common combinations for natural products, with B3LYP/6-31G(d) geometries. Also the standard level for DP4+." data-ja="天然物で最もよく見る組み合わせの一つ。構造は B3LYP/6-31G(d)。DP4+ の標準条件でもあります。">天然物で最もよく見る組み合わせの一つ。構造は B3LYP/6-31G(d)。DP4+ の標準条件でもあります。</p><p class="muted"><span data-en="Relative time: reference (1)" data-ja="時間の目安：基準（1）">時間の目安：基準（1）</span></p><pre class="input-block" translate="no" lang="en">%chk=nmr-mpw.chk
+<article class="method-entry"><h3 data-en="mPW1PW91/6-31+G(d,p), PCM(CHCl₃)" data-ja="mPW1PW91/6-31+G(d,p)・PCM(CHCl₃)" id="nmr-mpw">mPW1PW91/6-31+G(d,p)・PCM(CHCl₃)</h3><p data-en="A combination widely used for natural products, with B3LYP/6-31G(d) geometries. Also the standard level for DP4+." data-ja="天然物でよく使われる組み合わせ。構造は B3LYP/6-31G(d)。DP4+ の標準条件でもあります。">天然物でよく使われる組み合わせ。構造は B3LYP/6-31G(d)。DP4+ の標準条件でもあります。</p><p class="muted"><span data-en="Relative time: reference (1)" data-ja="時間の目安：基準（1）">時間の目安：基準（1）</span></p><pre class="input-block" translate="no" lang="en">%chk=nmr-mpw.chk
 #p mPW1PW91/6-31+G(d,p) NMR=GIAO
    SCRF=(PCM,Solvent=Chloroform)</pre><p><strong data-en="Used in: " data-ja="使用例：">使用例：</strong><a href="https://doi.org/10.1021/acs.orglett.4c01642" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Cuadrado <i>et al.</i>, <i>Org. Lett.</i> 2024</a> · <a href="https://doi.org/10.1021/acs.joc.3c01515" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Shi <i>et al.</i>, <i>J. Org. Chem.</i> 2023</a> · <a href="https://doi.org/10.1039/d3ra04688e" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Le <i>et al.</i>, <i>RSC Adv.</i> 2023, 13, 31811</a> · <a href="https://doi.org/10.1021/acs.jnatprod.5c00578" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Zhang <i>et al.</i>, <i>J. Nat. Prod.</i> 2025, 88, 2325</a></p><p class="muted"><span data-en="Source: " data-ja="出典：">出典：</span><a href="https://doi.org/10.1063/1.475428" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Adamo &amp; Barone, <i>J. Chem. Phys.</i> 1998, 108, 664</a></p></article>
 <article class="method-entry"><h3 data-en="PBE0/6-311+G(2d,p), PCM(CHCl₃)" data-ja="PBE0/6-311+G(2d,p)・PCM(CHCl₃)" id="nmr-pbe0">PBE0/6-311+G(2d,p)・PCM(CHCl₃)</h3><p data-en="Geometries at B3LYP/6-31+G(d,p). PBE0 is written PBE1PBE in Gaussian. The papers cited use ¹³C δ = (187.3123 − σ)/1.0533 and ¹H δ = (31.7532 − σ)/1.0958 (CHESHIRE values, determined with SMD(CHCl₃) shieldings)." data-ja="構造は B3LYP/6-31+G(d,p)。GaussianではPBE0を PBE1PBE と書きます。使用例の論文は校正式 ¹³C δ = (187.3123 − σ)/1.0533、¹H δ = (31.7532 − σ)/1.0958 を使っています（CHESHIREの値で、SMD(CHCl₃)の遮蔽で決められたもの）。">構造は B3LYP/6-31+G(d,p)。GaussianではPBE0を PBE1PBE と書きます。使用例の論文は校正式 ¹³C δ = (187.3123 − σ)/1.0533、¹H δ = (31.7532 − σ)/1.0958 を使っています（CHESHIREの値で、SMD(CHCl₃)の遮蔽で決められたもの）。</p><p class="muted"><span data-en="Relative time: longer than 1 (larger basis)" data-ja="時間の目安：1より長い（基底が大きい）">時間の目安：1より長い（基底が大きい）</span></p><pre class="input-block" translate="no" lang="en">%chk=nmr-pbe0.chk
@@ -78,7 +76,7 @@
 #p B3LYP/6-31G(d) NMR=GIAO</pre><p class="muted"><span data-en="Source: " data-ja="出典：">出典：</span><a href="https://doi.org/10.1063/1.464913" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Becke, <i>J. Chem. Phys.</i> 1993, 98, 5648</a></p></article>
 </section>
 <section class="content-section reading" id="calibration">
-<h2 data-en="From shielding σ to chemical shift δ" data-ja="遮蔽σから化学シフトδへ">遮蔽σから化学シフトδへ</h2>
+<h2 data-en="Comparison with experiment" data-ja="実測との比較">実測との比較</h2>
 <ul class="compact-list">
 <li data-en="OH and NH protons are usually excluded because exchange and hydrogen bonding dominate." data-ja="OH・NHのプロトンは交換と水素結合の影響が大きいので、比較から外すのが普通です。">OH・NHのプロトンは交換と水素結合の影響が大きいので、比較から外すのが普通です。</li>
 </ul>
@@ -194,6 +192,6 @@
 </section>
 </div>
 </main>
-<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月25日" data-en="Last updated: 25 November 2026" class="copyright">最終更新：2026年11月25日</p></footer>
+<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月26日" data-en="Last updated: 26 November 2026" class="copyright">最終更新：2026年11月26日</p></footer>
 </body>
 </html>

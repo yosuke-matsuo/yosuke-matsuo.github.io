@@ -21,8 +21,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="計算ガイド｜Gaussian入門" data-en="Calculation guide | Gaussian guide">Calculation guide | Gaussian guide</title>
-<link rel="stylesheet" href="../../styles.css?v=20261125-2"/>
-<script defer src="../../app.js?v=20261125-2"></script>
+<link rel="stylesheet" href="../../styles.css?v=20261126-1"/>
+<script defer src="../../app.js?v=20261126-1"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">Skip to content</a>
@@ -39,12 +39,12 @@
 <h2 data-en="Choose a topic" data-ja="話題から選ぶ">Choose a topic</h2>
 <div class="task-grid">
 <a class="feature-card" href="./conformers.html"><h3 data-en="Conformers and stable structures" data-ja="配座と安定構造">Conformers and stable structures</h3><p data-en="Conformer search → Opt Freq → populations, with conditions." data-ja="配座探索 → Opt Freq → 存在率。計算条件も。">Conformer search → Opt Freq → populations, with conditions.</p></a>
-<a class="feature-card" href="./nmr.html"><h3 data-en="NMR chemical shifts" data-ja="NMR化学シフト">NMR chemical shifts</h3><p data-en="Shielding → shift, calibration, literature." data-ja="遮蔽→化学シフト、校正式、文献例。">Shielding → shift, calibration, literature.</p></a>
+<a class="feature-card" href="./nmr.html"><h3 data-en="NMR chemical shifts" data-ja="NMR化学シフト">NMR chemical shifts</h3><p data-en="Shielding → shift, calibration, literature." data-ja="遮蔽 → 化学シフト、校正式、文献例。">Shielding → shift, calibration, literature.</p></a>
 <a class="feature-card" href="./j.html"><h3><span data-lang="en"><i>J</i> coupling constants</span></h3><p><span data-lang="en">Bally–Rablen, total <i>J</i>, literature, <i>J</i>-DP4.</span></p></a>
 <a class="feature-card" href="./ecd.html"><h3 data-en="ECD, UV and optical rotation" data-ja="ECD・UV・旋光度">ECD, UV and optical rotation</h3><p data-en="From TD-DFT to averaged curves." data-ja="TD-DFTから配座平均曲線へ。">From TD-DFT to averaged curves.</p></a>
 <a class="feature-card" href="./reaction.html"><h3 data-en="Transition states and reaction paths" data-ja="遷移状態と反応経路">Transition states and reaction paths</h3><p data-en="TS guess → optimization → Freq → IRC → retries." data-ja="TS候補 → 最適化 → Freq → IRC → 再探索。">TS guess → optimization → Freq → IRC → retries.</p></a>
 <a class="feature-card" href="./reporting.html"><h3 data-en="What to report" data-ja="論文・SIに書くこと">What to report</h3><p data-en="Checklist for reproducibility." data-ja="再現に必要な記録の一覧。">Checklist for reproducibility.</p></a>
-<a class="feature-card" href="./keywords.html"><h3 data-en="Gaussian keyword reference" data-ja="Gaussianキーワード一覧">Gaussian keyword reference</h3><p data-en="What route-line and Link 0 keywords mean." data-ja="ルート行・Link 0のキーワードの意味。">What route-line and Link 0 keywords mean.</p></a>
+<a class="feature-card" href="./keywords.html"><h3 data-en="Gaussian keyword reference" data-ja="Gaussianキーワード一覧">Gaussian keyword reference</h3><p data-en="What route-line and Link 0 keywords mean and when to use them." data-ja="ルート行・Link 0のキーワードの意味と使いどころ。">What route-line and Link 0 keywords mean and when to use them.</p></a>
 
 </div>
 </section>
@@ -58,7 +58,7 @@
 </tr></thead><tbody>
 <tr>
 <td data-en="MM (molecular mechanics)" data-ja="MM（分子力学）">MM (molecular mechanics)</td>
-<td data-en="Represents bonds and angles with spring-like equations (a force field). No electrons. Under a second per structure." data-ja="結合や角度をバネのような式（力場）で表します。電子は扱いません。1構造あたり1秒以下。">Represents bonds and angles with spring-like equations (a force field). No electrons. Under a second per structure.</td>
+<td data-en="Represents bonds and angles with spring-like equations (a force field). No electrons." data-ja="結合や角度をバネのような式（力場）で表します。電子は扱いません。">Represents bonds and angles with spring-like equations (a force field). No electrons.</td>
 <td data-en="Initial structures, conformer searches" data-ja="初期構造の作成、配座探索">Initial structures, conformer searches</td>
 </tr>
 <tr>
@@ -68,12 +68,12 @@
 </tr>
 <tr>
 <td data-en="DFT" data-ja="DFT">DFT</td>
-<td data-en="Computes the electronic structure from the electron density. Tens of minutes to hours per structure." data-ja="電子密度から電子状態を計算します。1構造あたり数十分〜数時間。">Computes the electronic structure from the electron density. Tens of minutes to hours per structure.</td>
+<td data-en="Computes the electronic structure from the electron density." data-ja="電子密度から電子状態を計算します。">Computes the electronic structure from the electron density.</td>
 <td data-en="Optimization, energies, frequencies, NMR/ECD" data-ja="最適化、エネルギー、振動数、NMR・ECD">Optimization, energies, frequencies, NMR/ECD</td>
 </tr>
 </tbody></table></div>
 <p data-en="In DFT you choose three things: the functional (approximation of electron interactions, e.g. B3LYP), the basis set (how the electron distribution is represented, e.g. 6-31G(d)) and the solvent model (e.g. SMD)." data-ja="DFTでは3つの条件を選びます。汎関数（電子相互作用の近似、例：B3LYP）、基底関数（電子の広がりの表し方、例：6-31G(d)）、溶媒モデル（例：SMD）。">In DFT you choose three things: the functional (approximation of electron interactions, e.g. B3LYP), the basis set (how the electron distribution is represented, e.g. 6-31G(d)) and the solvent model (e.g. SMD).</p>
-<p data-en="MM and DFT often rank conformers differently. Keep a generous set of candidates at the MM stage." data-ja="MMとDFTでは配座のエネルギー順位が変わります。MMの段階では候補を多めに残します。">MM and DFT often rank conformers differently. Keep a generous set of candidates at the MM stage.</p>
+<p data-en="MM and DFT often rank conformers differently. Keep a generous set of candidates at the MM stage." data-ja="MMとDFTでは配座のエネルギー順位が変わることがよくあります。MMの段階では候補を多めに残します。">MM and DFT often rank conformers differently. Keep a generous set of candidates at the MM stage.</p>
 <h3 data-en="References" data-ja="参考資料">References</h3>
 <ul class="compact-list reference-list">
 <li><a href="https://downloads.wavefun.com/FAQ/AGuidetoMM.pdf" target="_blank" rel="noopener noreferrer" data-ja="Spartan公式：分子力学のガイド" data-en="Spartan: A Guide to Molecular Mechanics">Spartan: A Guide to Molecular Mechanics</a></li>
@@ -87,7 +87,7 @@
 <li><strong data-en="Build the molecule" data-ja="分子構造を作る" class="step-title">Build the molecule</strong><div class="step-body"><p data-en="Fix stereochemistry, charge and protonation state here." data-ja="立体配置・電荷・プロトン化状態をここで確定します。">Fix stereochemistry, charge and protonation state here.</p></div></li>
 <li><strong data-en="Search conformers with MM" data-ja="MMで配座を探索する" class="step-title">Search conformers with MM</strong><div class="step-body"><p data-en="Cover rotatable bonds, ring shapes and OH orientations." data-ja="回転可能な結合、環の形、OHの向きを網羅します。">Cover rotatable bonds, ring shapes and OH orientations.</p></div></li>
 <li><strong data-en="Remove duplicates and optimize with DFT (Opt Freq)" data-ja="重複を整理し、DFTで最適化する（Opt Freq）" class="step-title">Remove duplicates and optimize with DFT (Opt Freq)</strong><div class="step-body"><p data-en="Zero imaginary frequencies means a minimum." data-ja="虚振動がゼロなら安定構造です。">Zero imaginary frequencies means a minimum.</p></div></li>
-<li><strong data-en="Compare energies and obtain populations" data-ja="エネルギーを比べ、存在率を出す" class="step-title">Compare energies and obtain populations</strong><div class="step-body"><p><span data-lang="en">Compare <i>G</i> values obtained under the same conditions.</span></p></div></li>
+<li><strong data-en="Compare energies and obtain populations" data-ja="エネルギーを比べ、存在率を出す" class="step-title">Compare energies and obtain populations</strong><div class="step-body"><p><span data-lang="en">Compare energies (usually <i>G</i>).</span></p></div></li>
 <li><strong data-en="Compute properties and average by population" data-ja="物性を計算し、存在率で平均する" class="step-title">Compute properties and average by population</strong><div class="step-body"><p data-en="NMR, ECD, optical rotation, ..." data-ja="NMR、ECD、旋光度など。">NMR, ECD, optical rotation, ...</p></div></li>
 </ol>
 </section>
@@ -103,13 +103,12 @@
 <h2 data-en="Related pages" data-ja="関連ページ">Related pages</h2>
 <ul class="compact-list">
 <li><a href="./start.html" data-ja="はじめてのGaussian計算" data-en="Your first Gaussian calculation">Your first Gaussian calculation</a></li>
-<li><a href="./keywords.html" data-ja="Gaussianキーワード一覧" data-en="Gaussian keyword reference">Gaussian keyword reference</a></li>
 <li><a href="./glossary.html" data-ja="用語集" data-en="Glossary">Glossary</a></li>
 
 </ul>
 </section>
 </div>
 </main>
-<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月25日" data-en="Last updated: 25 November 2026" class="copyright">Last updated: 25 November 2026</p></footer>
+<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月26日" data-en="Last updated: 26 November 2026" class="copyright">Last updated: 26 November 2026</p></footer>
 </body>
 </html>

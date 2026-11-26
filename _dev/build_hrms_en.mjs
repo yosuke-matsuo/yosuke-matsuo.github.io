@@ -56,7 +56,7 @@ function page(lang) {
   if (en) {
     h = h.replace('<!doctype html>\n', '<!doctype html>\n<!-- English page generated from ../index.html and ../text.js by _dev/build_hrms_en.mjs. Do not edit by hand. -->\n');
     h = h.replace(`"url": "${BASE}",`, `"url": "${BASE}en/",`);
-    h = h.replace('このツールはJavaScriptが必要です。 / This tool requires JavaScript.', 'This tool requires JavaScript.');
+    h = h.replace('このツールにはJavaScriptが必要です。 / This tool requires JavaScript.', 'This tool requires JavaScript.');
     h = h.replace(/("description": ")[^"]*(",)/, (m0, a, b) => a + t.metaDescription.replace(/"/g, '\\"') + b);
     // one folder deeper: files of HRMS Calc are in ../, the personal pages in ../../en/
     h = h.replace(/\b(href|src)="(?!https?:|#|\.\.\/|\/)([^"]+)"/g, (m0, a, v) => `${a}="../${v}"`);

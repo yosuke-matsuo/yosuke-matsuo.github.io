@@ -21,8 +21,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="Gaussianのエラー対応｜Gaussian入門" data-en="Troubleshooting Gaussian errors | Gaussian guide">Troubleshooting Gaussian errors | Gaussian guide</title>
-<link rel="stylesheet" href="../../styles.css?v=20261125-2"/>
-<script defer src="../../app.js?v=20261125-2"></script>
+<link rel="stylesheet" href="../../styles.css?v=20261126-1"/>
+<script defer src="../../app.js?v=20261126-1"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">Skip to content</a>
@@ -37,7 +37,7 @@
 <nav aria-label="On this page" class="section-nav"><a href="#howto" data-ja="エラーの探し方" data-en="How to find the error">How to find the error</a><a href="#index" data-ja="エラー一覧" data-en="Error index">Error index</a><a href="#first" data-ja="入力の書式エラー（計算が始まる前に止まる）" data-en="Input format errors (the job stops before calculating)">Input format errors (the job stops before calculating)</a><a href="#resources" data-ja="メモリ・ディスク・チェックポイント" data-en="Memory, disk and checkpoint">Memory, disk and checkpoint</a></nav>
 <section class="content-section reading" id="howto">
 <h2 data-en="How to find the error" data-ja="エラーの探し方">How to find the error</h2>
-<p data-en="Look at the end of the output file (.log/.out). The cause is printed a few lines above Error termination. If there is no termination line at all, the job is still running or was killed by a time, memory or disk limit." data-ja="出力ファイル（.log/.out）の末尾を見ます。Error termination の数行上に原因の文字列があります。終了行がなければ、まだ実行中か、時間・メモリ・ディスクの制限で強制終了されています。">Look at the end of the output file (.log/.out). The cause is printed a few lines above Error termination. If there is no termination line at all, the job is still running or was killed by a time, memory or disk limit.</p>
+<p data-en="Look at the end of the output file (.log/.out). The cause is printed a few lines above Error termination. If there is no termination line at all, the job may still be running or may have been killed by a time, memory or disk limit." data-ja="出力ファイル（.log/.out）の末尾を見ます。Error termination の数行上に原因の文字列があります。終了行がなければ、まだ実行中か、時間・メモリ・ディスクの制限で強制終了された可能性があります。">Look at the end of the output file (.log/.out). The cause is printed a few lines above Error termination. If there is no termination line at all, the job may still be running or may have been killed by a time, memory or disk limit.</p>
 </section>
 <section class="content-section reading" id="index">
 <h2 data-en="Error index" data-ja="エラー一覧">Error index</h2>
@@ -135,7 +135,7 @@ FormBX had a problem.</pre></td>
 <ol class="compact-list">
 <li data-en="Blank lines: one after the route line, one after the title, one after the coordinates." data-ja="空行の位置：ルート行の後、タイトルの後、座標の後に1行ずつ。">Blank lines: one after the route line, one after the title, one after the coordinates.</li>
 <li data-en="Spelling on the route line (Opt Freq, B3LYP, 6-31G(d))." data-ja="ルート行の綴り（Opt Freq、B3LYP、6-31G(d)）。">Spelling on the route line (Opt Freq, B3LYP, 6-31G(d)).</li>
-<li data-en="Exactly one charge/multiplicity line, and a possible combination (odd electron count with multiplicity 1 is an error)." data-ja="電荷と多重度の行が1行だけあること。電子数と多重度の組み合わせが可能かどうか（奇数電子で多重度1はエラー）。">Exactly one charge/multiplicity line, and a possible combination (odd electron count with multiplicity 1 is an error).</li>
+<li data-en="Exactly one charge/multiplicity line." data-ja="電荷と多重度の行が1行だけあること。">Exactly one charge/multiplicity line.</li>
 <li data-en="Coordinates in four columns (symbol x y z), with no tabs or full-width characters." data-ja="座標が「元素記号 x y z」の4列であること。タブや全角文字が混ざっていないこと。">Coordinates in four columns (symbol x y z), with no tabs or full-width characters.</li>
 <li data-en="A blank line after any extra input such as ModRedundant or a basis-set block." data-ja="ModRedundant や基底関数の追加入力がある場合は、その後の空行。">A blank line after any extra input such as ModRedundant or a basis-set block.</li>
 </ol>
@@ -149,7 +149,7 @@ Problem with the distance matrix.</pre><p><strong data-en="Cause: " data-ja="原
 </section>
 <section class="content-section reading" id="resources">
 <h2 data-en="Memory, disk and checkpoint errors" data-ja="メモリ・ディスク・チェックポイントのエラー">Memory, disk and checkpoint errors</h2>
-<article class="error-entry"><h3 data-en="Memory cannot be allocated" data-ja="メモリを確保できない" id="memory">Memory cannot be allocated</h3><pre class="error-marker" translate="no" lang="en">galloc:  could not allocate memory.</pre><p><strong data-en="Cause: " data-ja="原因：">Cause: </strong><span data-en="The memory requested with %mem cannot be allocated." data-ja="%mem で指定したメモリを確保できません。">The memory requested with %mem cannot be allocated.</span></p><p><strong data-en="What to do: " data-ja="対処：">What to do: </strong><span data-en="Set %mem below the free memory of the machine. When running through a job scheduler, request at least 1 GB more memory than %mem, because Gaussian uses more than %mem." data-ja="%mem をマシンの空きメモリより小さくします。ジョブスケジューラーで実行する場合は、Gaussian は %mem より多く使うため、申請するメモリを %mem より1 GB以上多くします。">Set %mem below the free memory of the machine. When running through a job scheduler, request at least 1 GB more memory than %mem, because Gaussian uses more than %mem.</span></p></article>
+<article class="error-entry"><h3 data-en="Memory cannot be allocated" data-ja="メモリを確保できない" id="memory">Memory cannot be allocated</h3><pre class="error-marker" translate="no" lang="en">galloc:  could not allocate memory.</pre><p><strong data-en="Cause: " data-ja="原因：">Cause: </strong><span data-en="The memory requested with %mem cannot be allocated." data-ja="%mem で指定したメモリを確保できません。">The memory requested with %mem cannot be allocated.</span></p><p><strong data-en="What to do: " data-ja="対処：">What to do: </strong><span data-en="Set %mem below the free memory of the machine. When running through a job scheduler, request more memory than %mem, because Gaussian uses more than %mem." data-ja="%mem をマシンの空きメモリより小さくします。ジョブスケジューラーで実行する場合は、Gaussian は %mem より多く使うため、申請するメモリを %mem より多めにします。">Set %mem below the free memory of the machine. When running through a job scheduler, request more memory than %mem, because Gaussian uses more than %mem.</span></p></article>
 <article class="error-entry"><h3 data-en="Out of disk space" data-ja="ディスクの空きがない" id="disk">Out of disk space</h3><pre class="error-marker" translate="no" lang="en">Erroneous write. Write -1 instead of 3648000.</pre><p><strong data-en="Cause: " data-ja="原因：">Cause: </strong><span data-en="The disk for the scratch files is full, or the disk quota has been exceeded." data-ja="一時ファイル（スクラッチ）を書くディスクの空きがないか、容量の制限（quota）を超えています。">The disk for the scratch files is full, or the disk quota has been exceeded.</span></p><p><strong data-en="What to do: " data-ja="対処：">What to do: </strong><span data-en="Delete unneeded files (such as scratch files left by jobs that stopped), or put the scratch on a disk with more space (GAUSS_SCRDIR), and rerun." data-ja="不要なファイル（途中で止まった計算の一時ファイルなど）を消すか、空きの多いディスクをスクラッチにして（GAUSS_SCRDIR）再実行します。">Delete unneeded files (such as scratch files left by jobs that stopped), or put the scratch on a disk with more space (GAUSS_SCRDIR), and rerun.</span></p></article>
 <article class="error-entry"><h3 data-en="Checkpoint or scratch file cannot be read" data-ja="チェックポイント・一時ファイルが読めない" id="checkpoint">Checkpoint or scratch file cannot be read</h3><pre class="error-marker" translate="no" lang="en">Operation on file out of range.
 ...
@@ -159,6 +159,6 @@ NtrErr Called from FileIO.</pre><p><strong data-en="Cause: " data-ja="原因："
 
 </div>
 </main>
-<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月25日" data-en="Last updated: 25 November 2026" class="copyright">Last updated: 25 November 2026</p></footer>
+<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月26日" data-en="Last updated: 26 November 2026" class="copyright">Last updated: 26 November 2026</p></footer>
 </body>
 </html>

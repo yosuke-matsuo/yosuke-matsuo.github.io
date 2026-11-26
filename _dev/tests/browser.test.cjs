@@ -429,11 +429,11 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
       if (/data-lang="en"/.test(outside)) bad.push(f);
     }
     const top = fs.readFileSync(path.join(root, 'index.html'), 'utf8').replace(/<template[\s\S]*?<\/template>/g, '').replace(/<[^>]+>/g, ' ');
-    ok(!bad.length && !top.includes('See Research for details') && !/松尾 洋介）\s*Yosuke Matsuo/.test(top), `no English-only text outside <template> in the initial HTML (${bad})`);
+    ok(!bad.length && !top.includes('HRMS Exact Mass Calculator') && !/松尾 洋介）\s*Yosuke Matsuo/.test(top), `no English-only text outside <template> in the initial HTML (${bad})`);
     const p = await page(); await p.goto(`${BASE}/index.html?lang=en`);
-    const en = await p.evaluate(() => ({ t: document.querySelectorAll('template').length, h1: document.querySelector('h1').innerText, more: document.querySelector('#about').innerText }));
-    await p.click('[data-language="ja"]'); const ja = await p.evaluate(() => document.querySelector('#about').innerText);
-    ok(en.t === 0 && en.h1 === 'Yosuke Matsuo' && en.more.includes('See Research for details') && ja.includes('詳しくは') && !ja.includes('See Research'), `English text restored from <template> and switched with the language (${en.h1})`);
+    const en = await p.evaluate(() => ({ t: document.querySelectorAll('template').length, h1: document.querySelector('h1').innerText, more: document.querySelector('#tools').innerText }));
+    await p.click('[data-language="ja"]'); const ja = await p.evaluate(() => document.querySelector('#tools').innerText);
+    ok(en.t === 0 && en.h1 === 'Yosuke Matsuo' && en.more.includes('HRMS Exact Mass Calculator') && ja.includes('HRMS精密質量計算ツール') && !ja.includes('Exact Mass Calculator'), `English text restored from <template> and switched with the language (${en.h1})`);
     await p.ctx.close();
   }
   // 22. English pages (en/): up to date with the Japanese pages, hreflang pairs, English only, earlier ?lang= links, language buttons
@@ -483,10 +483,10 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
     ok(new URL(p.url()).pathname === '/gaussian/index.html' && await p.textContent('.brand') === 'Gaussian入門' && await p.getAttribute('.home-link', 'href') === '../index.html' && !(await p.$('.primary-nav')), `menu opens the guide, whose header shows the guide name and a link to the personal page (${new URL(p.url()).pathname})`);
     await p.goto(`${BASE}/gaussian/errors-ts.html`);
     ok(await p.getAttribute('.home-link', 'href') === './index.html', 'a deeper guide page links back to the guide home');
-    await p.goto(`${BASE}/gaussian/errors-ts.html#series`); await switchTo(p, 'en');
+    await p.goto(`${BASE}/gaussian/errors-ts.html#recipes`); await switchTo(p, 'en');
     const u1 = new URL(p.url()), h1 = await p.textContent('h1');
     await switchTo(p, 'ja'); const u2 = new URL(p.url());
-    ok(u1.pathname === '/en/gaussian/errors-ts.html' && u1.hash === '#series' && h1 === 'TS errors' && u2.pathname === '/gaussian/errors-ts.html', `guide language buttons (${u1.pathname}${u1.hash}, ${h1}, ${u2.pathname})`);
+    ok(u1.pathname === '/en/gaussian/errors-ts.html' && u1.hash === '#recipes' && h1 === 'TS errors' && u2.pathname === '/gaussian/errors-ts.html', `guide language buttons (${u1.pathname}${u1.hash}, ${h1}, ${u2.pathname})`);
     await p.goto(`${BASE}/gaussian/start.html?lang=en`); await p.waitForURL(u => new URL(u).pathname === '/en/gaussian/start.html');
     ok(true, 'earlier ?lang=en link on a guide page opens the English page');
     await p.ctx.close();
