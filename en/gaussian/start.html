@@ -21,8 +21,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="はじめてのGaussian計算｜Gaussian入門" data-en="Your first Gaussian calculation | Gaussian guide">Your first Gaussian calculation | Gaussian guide</title>
-<link rel="stylesheet" href="../../styles.css?v=20261126-4"/>
-<script defer src="../../app.js?v=20261126-4"></script>
+<link rel="stylesheet" href="../../styles.css?v=20261126-5"/>
+<script defer src="../../app.js?v=20261126-5"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">Skip to content</a>
@@ -206,7 +206,7 @@ g16sub catechin_opt_freq.gjf</pre>
  Predicted change in Energy=-1.234567D-08
  Optimization completed.
     -- Stationary point found.</pre>
-<p data-en="“Stationary point found” means converged (normally all four items are YES). The table is printed at every optimization cycle. With Opt Freq it is printed once more at the end of the frequency job; check that it is all YES there as well." data-ja="「Stationary point found」と出ていれば収束です（通常は4項目すべてが YES）。この表は最適化のサイクルごとに出ます。Opt Freq では振動数解析の最後にも同じ表が出るので、そこでも YES がそろっていることを確認します。">“Stationary point found” means converged (normally all four items are YES). The table is printed at every optimization cycle. With Opt Freq it is printed once more at the end of the frequency job; check that it is all YES there as well.</p></div></li>
+<p><span data-lang="en">“Stationary point found” means converged (normally all four items are YES). The table is printed at every optimization cycle. With Opt Freq it is printed once more at the end of the frequency job; check that it is all YES there as well. If that table has NO, the structure is not a stationary point even with 0 imaginary frequencies (see “<a href="./errors-opt-scf.html#freq-check">Not converged in the Freq after Opt</a>” in Troubleshooting).</span></p></div></li>
 <li><strong data-en="Are there any imaginary frequencies?" data-ja="虚振動がないか" class="step-title">Are there any imaginary frequencies?</strong><div class="step-body"><pre class="input-block keep-lines" translate="no" lang="en"> Frequencies --     35.1234     58.9012     84.5678
  Red. masses --      3.4567      2.3456      4.5678</pre>
 <p data-en="If the values on the first Frequencies line are positive, the structure is a minimum. Even one negative value (e.g. -45.6) means it is not yet a minimum." data-ja="最初の Frequencies 行の値が正なら、安定構造（エネルギー極小）です。負の値（例：-45.6）が1つでもあれば、その構造はまだ極小ではありません。">If the values on the first Frequencies line are positive, the structure is a minimum. Even one negative value (e.g. -45.6) means it is not yet a minimum.</p>
