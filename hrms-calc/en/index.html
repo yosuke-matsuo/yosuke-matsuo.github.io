@@ -44,7 +44,7 @@
  }
 }
 </script>
-<link rel="stylesheet" href="../style.css?v=20261126-1">
+<link rel="stylesheet" href="../style.css?v=20261126-2">
 </head>
 <body>
 <a class="skip-link" href="#main" data-t="skip">Skip to content</a>
@@ -56,7 +56,7 @@
 <main id="main">
 <div class="intro">
 <noscript><p class="electron-note">This tool requires JavaScript.</p></noscript>
-<p class="electron-note"><strong data-t="electronHead">The electron mass is taken into account.</strong> <span data-t="electronShort">It is subtracted for positive ions and added for negative ions; ignoring it shifts <i>m</i>/<i>z</i> 200 by about 2.7 ppm (more at lower <i>m</i>/<i>z</i>).</span> <span data-t="electronSurvey">A survey of about 3000 SI files from <i>Org. Lett.</i> (2023–2024) found errors in about 30% of the reported accurate-mass data; about two-thirds of these came from ignoring the electron mass (<a href="https://doi.org/10.1021/acs.orglett.4c03458" target="_blank" rel="noopener noreferrer">Christmann, <i>Org. Lett.</i> 2025, <i>27</i>, 4⁠–⁠7</a>).</span></p>
+<p class="electron-note"><strong data-t="electronHead">The electron mass is taken into account.</strong><span data-t="electronShort"> It is subtracted for positive ions and added for negative ions; ignoring it shifts <i>m</i>/<i>z</i> 200 by about 2.7 ppm (more at lower <i>m</i>/<i>z</i>).</span><span data-t="electronSurvey"> A survey of about 3000 SI files from <i>Org. Lett.</i> (2023–2024) found errors in about 30% of the reported accurate-mass data; about two-thirds of these came from ignoring the electron mass (<a href="https://doi.org/10.1021/acs.orglett.4c03458" target="_blank" rel="noopener noreferrer">Christmann, <i>Org. Lett.</i> 2025, <i>27</i>, 4⁠–⁠7</a>).</span></p>
 </div>
 
 <div class="tabs" role="tablist" id="tabs">
@@ -84,9 +84,9 @@
 <div id="calcSi" class="result-block" hidden>
 <h3 data-t="siTitle">Statement for papers and SI</h3>
 <div class="si-options">
-<label class="check"><input type="checkbox" data-si="append" checked><span data-t="siAppend">Write Na, K, Li or Cl at the end of the formula (e.g. C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>Na)</span></label>
+<label class="check"><input type="checkbox" data-si="append" checked><span data-t="siAppend">Write Na, K, Li or Cl at the end of the formula (e.g., C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>Na)</span></label>
 </div>
-<p class="hint si-source"><span data-t="siSource">Same format as the example in the J. Org. Chem. (ACS) author guidelines (without the ionization method).</span> <a href="https://researcher-resources.acs.org/publish/author_guidelines/pdf?coden=joceah" target="_blank" rel="noopener noreferrer">J. Org. Chem. Author Guidelines</a> · <a href="#journals" data-t="journalsLink">Other journals</a></p>
+<p class="hint si-source"><span data-t="siSource">Same format as the example in the <i>J. Org. Chem.</i> (ACS) author guidelines (without the ionization method).</span> <a href="https://researcher-resources.acs.org/publish/author_guidelines/pdf?coden=joceah" target="_blank" rel="noopener noreferrer"><i>J. Org. Chem.</i> Author Guidelines</a> · <a href="#journals" data-t="journalsLink">Other journals</a></p>
 <p id="siText" class="si-text"></p>
 <div class="actions"><button type="button" id="siCopy" data-t="siCopy">Copy statement</button><span id="siCopyStatus" class="hint" role="status"></span></div>
 </div>
@@ -134,7 +134,7 @@
 <p class="hint" data-t="savedNote">The ion type, tolerance, decimal places, atom-count ranges and filters are saved in this browser and used next time.</p>
 </form>
 <p id="searchStatus" aria-live="polite"></p>
-<p class="hint" data-t="candidateNote">Compositions within the tolerance, from the smallest error.</p>
+<p class="hint" data-t="candidateNote">Compositions within the tolerance, sorted by error (smallest first).</p>
 <div class="tableWrap"><table id="results"><thead></thead><tbody></tbody></table></div>
 <div class="actions"><button id="copy" type="button" data-t="copy" disabled>Copy results</button><button id="searchLink" type="button" data-t="linkCopy" disabled>Copy a link to these inputs</button><span id="copyStatus" class="hint" role="status"></span></div>
 </section>
@@ -152,9 +152,9 @@
 <div id="batchSi" class="result-block" hidden>
 <h3 data-t="siTitle">Statement for papers and SI</h3>
 <div class="si-options">
-<label class="check"><input type="checkbox" data-si="append" checked><span data-t="siAppend">Write Na, K, Li or Cl at the end of the formula (e.g. C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>Na)</span></label>
+<label class="check"><input type="checkbox" data-si="append" checked><span data-t="siAppend">Write Na, K, Li or Cl at the end of the formula (e.g., C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>Na)</span></label>
 </div>
-<p class="hint si-source"><span data-t="siSource">Same format as the example in the J. Org. Chem. (ACS) author guidelines (without the ionization method).</span> <a href="https://researcher-resources.acs.org/publish/author_guidelines/pdf?coden=joceah" target="_blank" rel="noopener noreferrer">J. Org. Chem. Author Guidelines</a></p>
+<p class="hint si-source"><span data-t="siSource">Same format as the example in the <i>J. Org. Chem.</i> (ACS) author guidelines (without the ionization method).</span> <a href="https://researcher-resources.acs.org/publish/author_guidelines/pdf?coden=joceah" target="_blank" rel="noopener noreferrer"><i>J. Org. Chem.</i> Author Guidelines</a></p>
 <div class="actions"><button type="button" id="batchCopySi" data-t="copySiAll">Copy all statements</button><span id="batchCopyStatus" class="hint" role="status"></span></div>
 </div>
 </section>
@@ -176,15 +176,15 @@
 
 <section id="method"><h2 data-t="method">Method</h2>
 <div class="equation"><i>m</i>/<i>z</i> = (Σ <i>n</i><sub>i</sub> <i>m</i><sub>i</sub> − <i>z</i> <i>m</i><sub>e</sub>) / |<i>z</i>|</div>
-<p data-t="definition"><i>n</i><sub>i</sub> is the number of atoms in the final ion, <i>m</i><sub>i</sub> the isotope mass of each element and <i>z</i> the signed charge. Ions with two or more charges are divided by |<i>z</i>|.</p>
+<p data-t="definition"><i>n</i><sub>i</sub> is the number of atoms of element <i>i</i> in the ion (after adduct formation or loss), <i>m</i><sub>i</sub> is the isotope mass of element <i>i</i> and <i>z</i> is the signed charge number; for multiply charged ions the mass is divided by |<i>z</i>|.</p>
 <p data-t="electron">One electron mass is subtracted per positive charge and added per negative charge (<i>m</i><sub>e</sub> = 0.0005485799090441 Da).</p>
 <p data-t="ppm">Error (ppm) = (measured − calculated) / calculated × 10⁶. Error (mDa) = (measured − calculated) × 1000.</p>
-<p data-t="dbe" data-tabs="calculator finder batch">DBE = 1 + C + N/2 − (H + F + Cl + Br + I)/2 (for the neutral M, shown with any fraction). Compositions with elements other than C, H, N, O, S and halogens show —.</p>
-<p data-tabs="finder"><span data-t="filterMethod">Candidate filters: the DBE condition requires the DBE of the neutral M to be an integer and not negative. DBE is calculated for C, H, N, O, S and halogens with the usual valences (C 4, N 3, H and halogens 1, O and S 2); compositions with other elements are not judged and are kept. Being an integer is the same condition as the nitrogen rule (parity of the number of nitrogens and of the nominal mass); being non-negative is not part of the nitrogen rule (CH<sub>6</sub> satisfies the nitrogen rule but has DBE −1). The element-ratio condition uses the ratios of H, N, O, P, S and Si to carbon in the “common range” given by Kind and Fiehn (covering 99.7% of the formulas in their database).</span> <a href="https://doi.org/10.1186/1471-2105-8-105" target="_blank" rel="noopener noreferrer">Kind &amp; Fiehn, <i>BMC Bioinformatics</i> 2007</a></p>
-<p data-t="urlMethod" data-tabs="calculator finder">The inputs of the calculator and the formula finder are kept in the page address after “#”. That part is not sent to the server, but a bookmarked or shared address carries the inputs. Inputs of the batch and the checker are not kept in the address.</p>
-<p data-t="isotopes">84 elements are supported, each with the mass of its most abundant isotope (for example ¹¹B for B and ⁵⁶Fe for Fe). Elements without a natural isotope composition, such as Tc and Pm, cannot be used.</p>
+<p data-t="dbe" data-tabs="calculator finder batch">DBE = 1 + C + N/2 − (H + F + Cl + Br + I)/2 (value for the neutral M; non-integer values are shown as they are). Compositions with elements other than C, H, N, O, S and halogens are shown as —.</p>
+<p data-tabs="finder"><span data-t="filterMethod">Filters in Find formulas: the DBE condition requires the DBE of the neutral M to be an integer and not negative. DBE is calculated for C, H, N, O, S and halogens with the usual valences (C 4, N 3, H and halogens 1, O and S 2); compositions with other elements are not judged and are kept. Being an integer is the same condition as the nitrogen rule (parity of the number of nitrogens and of the nominal mass); being non-negative is not part of the nitrogen rule (CH<sub>6</sub> satisfies the nitrogen rule but has DBE −1). The element-ratio condition uses the ratios of H, N, O, P, S and Si to carbon in the “common range” given by Kind and Fiehn (covering 99.7% of the formulas in their database).</span> <a href="https://doi.org/10.1186/1471-2105-8-105" target="_blank" rel="noopener noreferrer">Kind &amp; Fiehn, <i>BMC Bioinformatics</i> 2007</a></p>
+<p data-t="urlMethod" data-tabs="calculator finder">The inputs of Exact mass and Find formulas are kept in the page address after “#”. That part is not sent to the server, but a bookmarked or shared address carries the inputs. The inputs of Batch and Check SI text are not kept in the address.</p>
+<p data-t="isotopes">84 elements are supported, each with the mass of its most abundant isotope (for example ¹¹B for B and ⁵⁶Fe for Fe). Elements without a natural isotopic composition, such as Tc and Pm, cannot be used.</p>
 <p data-t="isoMethod" data-tabs="calculator">Isotope patterns are calculated from the NIST abundances; isotopologues with the same nominal mass are combined into one peak (<i>m</i>/<i>z</i> is the abundance-weighted mean). They may be resolved at high resolution.</p>
-<p data-t="checkMethod" data-tabs="checker">The checker takes the formula after “calcd for” as the composition of the ion, recalculates its <i>m</i>/<i>z</i> and checks agreement within rounding of the last digit. Otherwise it looks for errors in the electron mass or a value calculated from the neutral formula.</p>
+<p data-t="checkMethod" data-tabs="checker">Check SI text takes the formula after “calcd for” as the composition of the ion, recalculates its <i>m</i>/<i>z</i> and checks agreement within rounding of the last digit. If they do not agree, it checks whether the electron mass was mishandled or the value was calculated for the neutral formula.</p>
 <details><summary data-t="constants">Show isotopes and masses used</summary><table id="constants"><thead></thead><tbody></tbody></table></details>
 </section>
 
@@ -200,6 +200,6 @@
 
 <footer><p>© 2026 <a href="../../en/index.html" data-home="index">Yosuke Matsuo</a> · <a href="../../en/tools.html" data-home="tools" data-t="toolsPage">Tools</a></p><p><a href="https://github.com/yosuke-matsuo/yosuke-matsuo.github.io/tree/main/hrms-calc" data-t="sourceCode" target="_blank" rel="noopener noreferrer">Source code</a> · <span data-t="codeLicense">HRMS Calc code: </span><a href="../LICENSE.txt">MIT License</a></p></footer>
 </main>
-<script type="module" src="../app.js?v=20261126-1"></script>
+<script type="module" src="../app.js?v=20261126-2"></script>
 </body>
 </html>

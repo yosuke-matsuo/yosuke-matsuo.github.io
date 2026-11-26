@@ -21,8 +21,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="IRCエラー｜Gaussian入門" data-en="IRC errors | Gaussian guide">IRC errors | Gaussian guide</title>
-<link rel="stylesheet" href="../../styles.css?v=20261126-2"/>
-<script defer src="../../app.js?v=20261126-2"></script>
+<link rel="stylesheet" href="../../styles.css?v=20261126-3"/>
+<script defer src="../../app.js?v=20261126-3"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">Skip to content</a>
@@ -40,21 +40,21 @@
 <article class="error-entry"><h3 data-en="Corrector does not converge" data-ja="correctorが収束しない" id="corrector">Corrector does not converge</h3><pre class="error-marker" translate="no" lang="en">Maximum number of corrector steps exceded</pre><p><strong data-en="Cause: " data-ja="原因：">Cause: </strong><span data-en="The path-correction iterations (corrector) did not converge." data-ja="経路を補正する反復（corrector）が上限内に収束しません。">The path-correction iterations (corrector) did not converge.</span></p><strong data-en="What to do" data-ja="対処" class="action-label">What to do</strong><ol class="compact-list">
 <li data-en="Check whether an SCF failure or a memory/disk shortage happened first." data-ja="SCFの失敗やメモリ・ディスク不足が先に起きていないかを確認します。">Check whether an SCF failure or a memory/disk shortage happened first.</li>
 <li data-en="If this error occurs with the default algorithm (no option, or IRC=HPC), recompute from the same TS with IRC=LQA: read the TS Freq .chk with %oldchk and keep the direction, MaxPoints and StepSize of the original job (input below)." data-ja="既定のアルゴリズム（指定なし、または IRC=HPC）でこのエラーが出た場合は、IRC=LQA に変えて同じTSから計算し直します。TSのFreqの .chk を %oldchk で読み、方向・MaxPoints・StepSize は元の計算と同じにします（下の入力例）。">If this error occurs with the default algorithm (no option, or IRC=HPC), recompute from the same TS with IRC=LQA: read the TS Freq .chk with %oldchk and keep the direction, MaxPoints and StepSize of the original job (input below).</li>
-<li data-en="Reducing StepSize (e.g. 10 → 5) also helps." data-ja="StepSize を小さくする（例：10 → 5）のも有効です。">Reducing StepSize (e.g. 10 → 5) also helps.</li>
+<li data-en="Reducing StepSize (e.g. 10 → 5) can also help." data-ja="StepSize を小さくする（例：10 → 5）のも有効なことがあります。">Reducing StepSize (e.g. 10 → 5) can also help.</li>
 </ol></article>
 <article class="error-entry"><h3 data-en="IRC point limit reached" data-ja="IRCの上限到達" id="irc-maxpoints">IRC point limit reached</h3><pre class="error-marker" translate="no" lang="en">Maximum number of steps reached.</pre><p><strong data-en="Cause: " data-ja="原因：">Cause: </strong><span data-en="The IRC ran to MaxPoints and stopped normally, but the endpoint may not have reached a minimum yet." data-ja="MaxPoints まで進んで正常に止まった状態です。末端がまだ極小構造に着いていないことがあります。">The IRC ran to MaxPoints and stopped normally, but the endpoint may not have reached a minimum yet.</span></p><strong data-en="What to do" data-ja="対処" class="action-label">What to do</strong><ol class="compact-list">
 <li data-en="Look at the endpoint structure. If it is still changing a lot, continue with a larger MaxPoints: either extend from the stopped IRC .chk with IRC=(Restart,MaxPoints=N), or recompute from the TS Freq .chk with a larger MaxPoints (same form as the input below, with IRC=(RCFC,…) and %oldchk)." data-ja="末端の構造を見ます。まだ大きく変化中なら、MaxPoints を増やして続けます。止まったIRCの .chk から IRC=(Restart,MaxPoints=N) で延長する方法と、TSのFreqの .chk から MaxPoints を増やして計算し直す方法（下の入力例と同じ形で、IRC=(RCFC,…) と %oldchk を使う）があります。">Look at the endpoint structure. If it is still changing a lot, continue with a larger MaxPoints: either extend from the stopped IRC .chk with IRC=(Restart,MaxPoints=N), or recompute from the TS Freq .chk with a larger MaxPoints (same form as the input below, with IRC=(RCFC,…) and %oldchk).</li>
-<li data-en="If it looks like reactant/product, relax the endpoint with Opt Freq and confirm a minimum." data-ja="反応物・生成物らしい構造に達していれば、末端構造を Opt Freq で緩和して極小を確認します。">If it looks like reactant/product, relax the endpoint with Opt Freq and confirm a minimum.</li>
+<li data-en="If it looks like the reactant or product, relax the endpoint with Opt Freq and confirm a minimum." data-ja="反応物・生成物らしい構造に達していれば、末端構造を Opt Freq で緩和して極小を確認します。">If it looks like the reactant or product, relax the endpoint with Opt Freq and confirm a minimum.</li>
 </ol></article>
-<article class="error-entry"><h3 data-en="Endpoint Opt step limit" data-ja="末端Optの回数上限" id="endpoint">Endpoint Opt step limit</h3><pre class="error-marker" translate="no" lang="en">Number of steps exceeded,  NStep= 100</pre><p><strong data-en="Cause: " data-ja="原因：">Cause: </strong><span data-en="The optimization from an IRC endpoint stopped at the cycle limit." data-ja="IRC末端からの構造最適化が回数上限で止まりました。">The optimization from an IRC endpoint stopped at the cycle limit.</span></p><p><strong data-en="What to do: " data-ja="対処：">What to do: </strong><span data-lang="en">Same as an ordinary Opt (<a href="./errors-opt-scf.html#minimum">Opt step limit</a>).</span></p></article>
+<article class="error-entry"><h3 data-en="Endpoint Opt step limit" data-ja="末端Optの回数上限" id="endpoint">Endpoint Opt step limit</h3><pre class="error-marker" translate="no" lang="en">Number of steps exceeded,  NStep= 100</pre><p><strong data-en="Cause: " data-ja="原因：">Cause: </strong><span data-en="The optimization from an IRC endpoint stopped at the step limit." data-ja="IRC末端からの構造最適化が回数上限で止まりました。">The optimization from an IRC endpoint stopped at the step limit.</span></p><p><strong data-en="What to do: " data-ja="対処：">What to do: </strong><span data-lang="en">Same as an ordinary Opt (<a href="./errors-opt-scf.html#minimum">Opt step limit</a>).</span></p></article>
 </section>
 <section class="content-section reading" id="gjf-lqa">
 <h2 data-en="Example input for retracing with LQA" data-ja="LQAで再追跡する入力例">Example input for retracing with LQA</h2>
-<pre class="input-block" translate="no" lang="en">%oldchk=ts_freq.chk
+<pre class="input-block keep-lines" translate="no" lang="en">%oldchk=ts_freq.chk
 %chk=ts_irc_fwd_lqa.chk
 #p B3LYP/6-31G(d) SCRF=(SMD,Solvent=Methanol)
  IRC=(RCFC,Forward,LQA,MaxPoints=80,StepSize=5) Geom=AllCheck Guess=Read</pre>
-<p data-en="If Reverse failed, change Forward to Reverse and %chk to ts_irc_rev_lqa.chk. Geom=AllCheck reads the title, geometry, charge and multiplicity from the .chk, so the title, charge/multiplicity line and coordinates are not written." data-ja="Reverse が失敗した場合は Forward を Reverse に、%chk を ts_irc_rev_lqa.chk に変えます。Geom=AllCheck はタイトル・構造・電荷・多重度を .chk から読むので、タイトル行から座標欄までは書きません。">If Reverse failed, change Forward to Reverse and %chk to ts_irc_rev_lqa.chk. Geom=AllCheck reads the title, geometry, charge and multiplicity from the .chk, so the title, charge/multiplicity line and coordinates are not written.</p>
+<p data-en="If Reverse failed, change Forward to Reverse and %chk to ts_irc_rev_lqa.chk. Geom=AllCheck reads the title, geometry, charge and multiplicity from the .chk, so omit the title, the charge/multiplicity line and the coordinates." data-ja="Reverse が失敗した場合は Forward を Reverse に、%chk を ts_irc_rev_lqa.chk に変えます。Geom=AllCheck はタイトル・構造・電荷・多重度を .chk から読むので、タイトル行から座標欄までは書きません。">If Reverse failed, change Forward to Reverse and %chk to ts_irc_rev_lqa.chk. Geom=AllCheck reads the title, geometry, charge and multiplicity from the .chk, so omit the title, the charge/multiplicity line and the coordinates.</p>
 </section>
 <section class="content-section reading" id="related">
 <h2 data-en="Related pages" data-ja="関連ページ">Related pages</h2>
