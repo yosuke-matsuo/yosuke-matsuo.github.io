@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<meta name="description" content="Learn input, execution and output checking in one pass, with catechin." data-ja="入力の書き方から出力の確認までを、カテキンで一通り体験します。" data-en="Learn input, execution and output checking in one pass, with catechin."/>
+<meta name="description" content="A first calculation on catechin, from writing the input to checking the output." data-ja="入力の書き方から出力の確認までを、カテキンで一通り体験します。" data-en="A first calculation on catechin, from writing the input to checking the output."/>
 <link rel="canonical" href="https://yosuke-matsuo.github.io/en/gaussian/start.html"/>
 <link rel="alternate" hreflang="ja" href="https://yosuke-matsuo.github.io/gaussian/start.html"/>
 <link rel="alternate" hreflang="en" href="https://yosuke-matsuo.github.io/en/gaussian/start.html"/>
@@ -12,7 +12,7 @@
 <meta property="og:type" content="website"/>
 <meta property="og:site_name" content="Yosuke Matsuo（松尾洋介）"/>
 <meta property="og:title" content="Your first Gaussian calculation | Gaussian guide"/>
-<meta property="og:description" content="Learn input, execution and output checking in one pass, with catechin." data-ja="入力の書き方から出力の確認までを、カテキンで一通り体験します。" data-en="Learn input, execution and output checking in one pass, with catechin."/>
+<meta property="og:description" content="A first calculation on catechin, from writing the input to checking the output." data-ja="入力の書き方から出力の確認までを、カテキンで一通り体験します。" data-en="A first calculation on catechin, from writing the input to checking the output."/>
 <meta property="og:url" content="https://yosuke-matsuo.github.io/en/gaussian/start.html"/>
 <meta property="og:locale" content="en_US"/>
 <meta property="og:image" content="https://yosuke-matsuo.github.io/images/og-image.png"/>
@@ -21,8 +21,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="はじめてのGaussian計算｜Gaussian入門" data-en="Your first Gaussian calculation | Gaussian guide">Your first Gaussian calculation | Gaussian guide</title>
-<link rel="stylesheet" href="../../styles.css?v=20261126-2"/>
-<script defer src="../../app.js?v=20261126-2"></script>
+<link rel="stylesheet" href="../../styles.css?v=20261126-3"/>
+<script defer src="../../app.js?v=20261126-3"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">Skip to content</a>
@@ -33,12 +33,12 @@
 </header>
 <main class="page-shell guide" id="main">
 <div class="page-body">
-<section class="intro"><nav aria-label="Breadcrumb" class="breadcrumb"><a data-ja="Gaussian入門" data-en="Gaussian guide" href="./index.html">Gaussian guide</a></nav><h1 data-en="Your first Gaussian calculation" data-ja="はじめてのGaussian計算">Your first Gaussian calculation</h1><p data-en="Learn input, execution and output checking in one pass, with catechin." data-ja="入力の書き方から出力の確認までを、カテキンで一通り体験します。" class="lead">Learn input, execution and output checking in one pass, with catechin.</p></section>
+<section class="intro"><nav aria-label="Breadcrumb" class="breadcrumb"><a data-ja="Gaussian入門" data-en="Gaussian guide" href="./index.html">Gaussian guide</a></nav><h1 data-en="Your first Gaussian calculation" data-ja="はじめてのGaussian計算">Your first Gaussian calculation</h1><p data-en="A first calculation on catechin, from writing the input to checking the output." data-ja="入力の書き方から出力の確認までを、カテキンで一通り体験します。" class="lead">A first calculation on catechin, from writing the input to checking the output.</p></section>
 <nav aria-label="On this page" class="section-nav"><a href="#environment" data-ja="0. 環境を準備する" data-en="0. Set up an environment">0. Set up an environment</a><a href="#input" data-ja="1. 入力ファイルの中身" data-en="1. Anatomy of an input file">1. Anatomy of an input file</a><a href="#example" data-ja="2. 完成した入力：(+)-カテキン" data-en="2. Complete input: (+)-catechin">2. Complete input: (+)-catechin</a><a href="#run" data-ja="3. 実行する" data-en="3. Run it">3. Run it</a><a href="#output" data-ja="4. 出力の見方：3か所だけ確認する" data-en="4. Reading the output: check three places">4. Reading the output: check three places</a><a href="#errors" data-ja="5. 止まったとき：最初によく出る3つのエラー" data-en="5. When it stops: three common first errors">5. When it stops: three common first errors</a><a href="#next" data-ja="次のステップ" data-en="Next steps">Next steps</a></nav>
 <section class="content-section reading" id="about">
 
 <p><span data-lang="en">The subject is (+)-catechin (C<sub>15</sub>H<sub>14</sub>O<sub>6</sub>), one of the catechins found in tea and other plants.</span></p>
-<figure class="structure-figure"><img src="../../gaussian/assets/catechin.png" width="1539" height="861" alt="Structure of (2R,3S)-(+)-catechin" data-ja="(2R,3S)-(+)-カテキンの構造式" data-en="Structure of (2R,3S)-(+)-catechin" decoding="async"/></figure>
+<figure class="structure-figure"><img src="../../gaussian/assets/catechin.png" width="1539" height="861" alt="Structure of (+)-catechin" data-ja="(+)-カテキンの構造式" data-en="Structure of (+)-catechin" decoding="async"/></figure>
 </section>
 <section class="content-section reading" id="environment">
 <h2 data-en="0. Set up an environment" data-ja="0. 環境を準備する">0. Set up an environment</h2>
@@ -113,8 +113,8 @@ C   -4.360353  -1.556559  -0.095452
 </tbody></table></div>
 <h3 data-en="Reading the route line" data-ja="ルート行の読み方">Reading the route line</h3>
 <ul class="compact-list">
-<li data-en="#p — output verbosity. #n (or just #) is normal, #p adds per-step information, #t is terse." data-ja="#p — 出力の詳しさ。#n（または # だけ）が標準、#p は各ステップの情報を追加、#t は最小限。">#p — output verbosity. #n (or just #) is normal, #p adds per-step information, #t is terse.</li>
-<li data-en="B3LYP — the functional: how electron–electron interactions are approximated." data-ja="B3LYP — 汎関数。電子同士の相互作用の近似の仕方です。">B3LYP — the functional: how electron–electron interactions are approximated.</li>
+<li data-en="#p — output verbosity. #n (or just #) is normal, #p adds information such as the run time of each link and the progress of SCF convergence, #t is terse." data-ja="#p — 出力の詳しさ。#n（または # だけ）が標準、#p はリンクごとの実行時間などと SCF の収束の経過を追加、#t は最小限。">#p — output verbosity. #n (or just #) is normal, #p adds information such as the run time of each link and the progress of SCF convergence, #t is terse.</li>
+<li data-en="B3LYP — the functional: how electron exchange and correlation are approximated." data-ja="B3LYP — 汎関数。電子の交換と相関の近似の仕方です。">B3LYP — the functional: how electron exchange and correlation are approximated.</li>
 <li data-en="6-31G(d) — the basis set: the functions used to describe the electron distribution." data-ja="6-31G(d) — 基底関数。電子の分布を表す関数の組です。">6-31G(d) — the basis set: the functions used to describe the electron distribution.</li>
 <li data-en="Opt Freq — optimize the geometry, then compute vibrational frequencies at the same geometry." data-ja="Opt Freq — 構造を最適化してから、同じ構造で振動数を計算します。">Opt Freq — optimize the geometry, then compute vibrational frequencies at the same geometry.</li>
 </ul>
@@ -122,7 +122,8 @@ C   -4.360353  -1.556559  -0.095452
 </section>
 <section class="content-section reading" id="example">
 <h2 data-en="2. Complete input: (+)-catechin" data-ja="2. 完成した入力：(+)-カテキン">2. Complete input: (+)-catechin</h2>
-<p data-en="The input below runs as is. The coordinates are the lowest-energy conformer from a Spartan MMFF94 conformer search of (2R,3S)-(+)-catechin." data-ja="以下はそのまま実行できる入力です。座標は Spartan の MMFF94 配座探索で最も安定だった配座で、立体配置は(2R,3S)の(+)-カテキンです。">The input below runs as is. The coordinates are the lowest-energy conformer from a Spartan MMFF94 conformer search of (2R,3S)-(+)-catechin.</p>
+<p><span data-lang="en">The input below runs as is. The coordinates are the lowest-energy conformer from a Spartan MMFF94 conformer search of (2<i>R</i>,3<i>S</i>)-(+)-catechin.</span></p>
+<figure class="structure-figure structure-figure-3d"><img src="../../gaussian/assets/catechin-3d.webp" width="1000" height="462" alt="3D structure of (+)-catechin drawn from the input coordinates" data-ja="入力例の座標から描いた (+)-カテキンの立体構造" data-en="3D structure of (+)-catechin drawn from the input coordinates" loading="lazy" decoding="async"/><figcaption><span data-lang="en">The input coordinates drawn with CYLview</span></figcaption></figure>
 <pre class="input-block keep-lines" translate="no" lang="en">%nprocshared=8
 %mem=16GB
 %chk=catechin_opt_freq.chk
@@ -180,7 +181,7 @@ H     -5.207333     1.107551    -1.576955
 <section class="content-section reading" id="run">
 <h2 data-en="3. Run it" data-ja="3. 実行する">3. Run it</h2>
 <p data-en="How you launch a job depends on the machine." data-ja="実行のしかたは計算機によって違います。">How you launch a job depends on the machine.</p>
-<pre class="input-block" translate="no" data-lang="en"># Direct execution on Linux
+<pre class="input-block keep-lines" translate="no" data-lang="en"># Direct execution on Linux
 g16 catechin_opt_freq.gjf
 
 # With a job scheduler (e.g. Slurm), submit following the procedure of the machine you use
@@ -193,11 +194,11 @@ g16sub catechin_opt_freq.gjf</pre>
 </section>
 <section class="content-section reading" id="output">
 <h2 data-en="4. Reading the output: check three places" data-ja="4. 出力の見方：3か所だけ確認する">4. Reading the output: check three places</h2>
-<p data-en="The output is long, but success is decided by three things. Use your text editor&#x27;s search." data-ja="出力は長いですが、成功したかどうかは次の3か所で分かります。テキストエディターの検索機能で探します。">The output is long, but success is decided by three things. Use your text editor&#x27;s search.</p>
+<p data-en="The output is long, but three places tell you whether the job succeeded. Find them with your text editor&#x27;s search." data-ja="出力は長いですが、成功したかどうかは次の3か所で分かります。テキストエディターの検索機能で探します。">The output is long, but three places tell you whether the job succeeded. Find them with your text editor&#x27;s search.</p>
 <ol class="step-list">
-<li><strong data-en="Does it end with Normal termination?" data-ja="末尾に Normal termination があるか" class="step-title">Does it end with Normal termination?</strong><div class="step-body"><pre class="input-block" translate="no" lang="en"> Normal termination of Gaussian 16 at ...</pre>
+<li><strong data-en="Does it end with Normal termination?" data-ja="末尾に Normal termination があるか" class="step-title">Does it end with Normal termination?</strong><div class="step-body"><pre class="input-block keep-lines" translate="no" lang="en"> Normal termination of Gaussian 16 at ...</pre>
 <p data-en="With Opt Freq the frequency job follows the optimization, so this line appears twice. If you see Error termination instead, the cause is printed a few lines above it." data-ja="Opt Freq では最適化の後にFreqが走るので、この行は2回出ます。代わりに Error termination があれば、その数行上に原因が書かれています。">With Opt Freq the frequency job follows the optimization, so this line appears twice. If you see Error termination instead, the cause is printed a few lines above it.</p></div></li>
-<li><strong data-en="Did the optimization converge?" data-ja="最適化が収束したか" class="step-title">Did the optimization converge?</strong><div class="step-body"><pre class="input-block" translate="no" lang="en">         Item               Value     Threshold  Converged?
+<li><strong data-en="Did the optimization converge?" data-ja="最適化が収束したか" class="step-title">Did the optimization converge?</strong><div class="step-body"><pre class="input-block keep-lines" translate="no" lang="en">         Item               Value     Threshold  Converged?
  Maximum Force            0.000012     0.000450     YES
  RMS     Force            0.000003     0.000300     YES
  Maximum Displacement     0.000891     0.001800     YES
@@ -205,12 +206,12 @@ g16sub catechin_opt_freq.gjf</pre>
  Predicted change in Energy=-1.234567D-08
  Optimization completed.
     -- Stationary point found.</pre>
-<p data-en="&quot;Stationary point found&quot; means converged (normally all four items are YES). The table is printed at every optimization cycle. With Opt Freq it is printed once more at the end of the frequency job; check that it is all YES there as well." data-ja="「Stationary point found」と出ていれば収束です（通常は4項目すべてが YES）。この表は最適化のサイクルごとに出ます。Opt Freq では振動数解析の最後にも同じ表が出るので、そこでも YES がそろっていることを確認します。">&quot;Stationary point found&quot; means converged (normally all four items are YES). The table is printed at every optimization cycle. With Opt Freq it is printed once more at the end of the frequency job; check that it is all YES there as well.</p></div></li>
-<li><strong data-en="Are there no imaginary frequencies?" data-ja="虚振動がないか" class="step-title">Are there no imaginary frequencies?</strong><div class="step-body"><pre class="input-block" translate="no" lang="en"> Frequencies --     35.1234     58.9012     84.5678
+<p data-en="“Stationary point found” means converged (normally all four items are YES). The table is printed at every optimization cycle. With Opt Freq it is printed once more at the end of the frequency job; check that it is all YES there as well." data-ja="「Stationary point found」と出ていれば収束です（通常は4項目すべてが YES）。この表は最適化のサイクルごとに出ます。Opt Freq では振動数解析の最後にも同じ表が出るので、そこでも YES がそろっていることを確認します。">“Stationary point found” means converged (normally all four items are YES). The table is printed at every optimization cycle. With Opt Freq it is printed once more at the end of the frequency job; check that it is all YES there as well.</p></div></li>
+<li><strong data-en="Are there any imaginary frequencies?" data-ja="虚振動がないか" class="step-title">Are there any imaginary frequencies?</strong><div class="step-body"><pre class="input-block keep-lines" translate="no" lang="en"> Frequencies --     35.1234     58.9012     84.5678
  Red. masses --      3.4567      2.3456      4.5678</pre>
 <p data-en="If the values on the first Frequencies line are positive, the structure is a minimum. Even one negative value (e.g. -45.6) means it is not yet a minimum." data-ja="最初の Frequencies 行の値が正なら、安定構造（エネルギー極小）です。負の値（例：-45.6）が1つでもあれば、その構造はまだ極小ではありません。">If the values on the first Frequencies line are positive, the structure is a minimum. Even one negative value (e.g. -45.6) means it is not yet a minimum.</p>
 <p data-en="The Freq output also contains thermochemistry. The free energy used for conformer comparison is this line:" data-ja="Freqの出力には熱力学量も含まれます。配座比較に使う自由エネルギーは次の行です。">The Freq output also contains thermochemistry. The free energy used for conformer comparison is this line:</p>
-<pre class="input-block" translate="no" lang="en"> Sum of electronic and thermal Free Energies=          -1066.123456</pre></div></li>
+<pre class="input-block keep-lines" translate="no" lang="en"> Sum of electronic and thermal Free Energies=          -1066.123456</pre></div></li>
 </ol>
 </section>
 <section class="content-section reading" id="errors">
@@ -231,7 +232,7 @@ g16sub catechin_opt_freq.gjf</pre>
 </tr>
 <tr>
 <td><pre class="input-block" translate="no" lang="en">Number of steps exceeded,  NStep= ...</pre></td>
-<td data-en="The optimization did not converge within the cycle limit." data-ja="最適化が回数上限内に収束しませんでした。">The optimization did not converge within the cycle limit.</td>
+<td data-en="The optimization did not converge within the step limit." data-ja="最適化が回数上限内に収束しませんでした。">The optimization did not converge within the step limit.</td>
 <td><p><span data-lang="en">Continue from the last geometry in the output as a new input. <a href="./errors-opt-scf.html#minimum">Details</a></span></p></td>
 </tr>
 </tbody></table></div>

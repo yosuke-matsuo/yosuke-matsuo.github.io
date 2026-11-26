@@ -21,8 +21,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="TSエラー｜Gaussian入門" data-en="TS errors | Gaussian guide">TS errors | Gaussian guide</title>
-<link rel="stylesheet" href="../../styles.css?v=20261126-2"/>
-<script defer src="../../app.js?v=20261126-2"></script>
+<link rel="stylesheet" href="../../styles.css?v=20261126-3"/>
+<script defer src="../../app.js?v=20261126-3"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">Skip to content</a>
@@ -42,7 +42,7 @@
 <li><span data-lang="en">If the guess is reasonable, you can continue the search with NoEigenTest (<a href="#gjf-ts-probe">input example</a>). After convergence, always confirm with Freq that there is exactly one imaginary frequency.</span></li>
 <li data-en="If it still does not converge or the extra negative curvature remains, run a mode-check Freq at the same geometry, identify the extra mode and displace ± along it." data-ja="それでも収束しない、または余分な負の曲率が残る場合は、同じ構造で「モード確認用Freq」を行い、余分なモードを見つけて±変位します。">If it still does not converge or the extra negative curvature remains, run a mode-check Freq at the same geometry, identify the extra mode and displace ± along it.</li>
 </ol></article>
-<article class="error-entry"><h3 data-en="TS step limit" data-ja="TSの回数上限" id="ts-steps">TS step limit</h3><pre class="error-marker" translate="no" lang="en">Number of steps exceeded,  NStep= 100</pre><p><strong data-en="Cause: " data-ja="原因：">Cause: </strong><span data-en="The TS search did not converge within the cycle limit." data-ja="TS探索が回数上限内に収束しませんでした。">The TS search did not converge within the cycle limit.</span></p><strong data-en="What to do" data-ja="対処" class="action-label">What to do</strong><ol class="compact-list">
+<article class="error-entry"><h3 data-en="TS step limit" data-ja="TSの回数上限" id="ts-steps">TS step limit</h3><pre class="error-marker" translate="no" lang="en">Number of steps exceeded,  NStep= 100</pre><p><strong data-en="Cause: " data-ja="原因：">Cause: </strong><span data-en="The TS search did not converge within the step limit." data-ja="TS探索が回数上限内に収束しませんでした。">The TS search did not converge within the step limit.</span></p><strong data-en="What to do" data-ja="対処" class="action-label">What to do</strong><ol class="compact-list">
 <li data-en="Look at the trend of forces, displacements and the reacting bond distances in a viewer such as GaussView. In a TS search the energy can rise, so judge by these trends rather than by energy alone." data-ja="GaussViewなどのビューアーで力・変位・反応する結合の距離の推移を見ます。TS探索ではエネルギーが上がることもあるので、エネルギーだけでなく、これらの推移で判断します。">Look at the trend of forces, displacements and the reacting bond distances in a viewer such as GaussView. In a TS search the energy can rise, so judge by these trends rather than by energy alone.</li>
 <li data-en="If the reaction geometry is intact and converging, continue from the last computed geometry with Opt=(TS,CalcFC,MaxCycles=100)." data-ja="反応構造が保たれ、収束に向かっているなら、最後に計算した構造から Opt=(TS,CalcFC,MaxCycles=100) で続行します。">If the reaction geometry is intact and converging, continue from the last computed geometry with Opt=(TS,CalcFC,MaxCycles=100).</li>
 <li data-en="If it oscillates strongly, add MaxStep=2–5. If the reaction geometry has fallen apart, rebuild the guess." data-ja="往復が大きいなら MaxStep=2–5 を加えます。反応構造が崩れていれば候補構造から作り直します。">If it oscillates strongly, add MaxStep=2–5. If the reaction geometry has fallen apart, rebuild the guess.</li>
@@ -52,16 +52,16 @@
 <h2 data-en="Example rerun inputs" data-ja="再計算入力の例">Example rerun inputs</h2>
 <h3 data-en="Continuing with NoEigenTest" data-ja="NoEigenTest を付けて続ける" id="gjf-ts-probe">Continuing with NoEigenTest</h3>
 <p data-en="From the last computed geometry, continue the search with the check on the number of negative eigenvalues suspended. Because it may converge to an unintended structure, confirm with the Freq after convergence that there is exactly one imaginary frequency and that its motion is the intended reaction." data-ja="最後に計算した構造から、負の固有値の数の検査を止めて探索を続けます。目的と違う構造に収束することがあるので、収束後の Freq で虚振動が1つで、その動きが目的の反応であることを確認します。">From the last computed geometry, continue the search with the check on the number of negative eigenvalues suspended. Because it may converge to an unintended structure, confirm with the Freq after convergence that there is exactly one imaginary frequency and that its motion is the intended reaction.</p>
-<pre class="input-block" translate="no" lang="en">%chk=ts_noeigen.chk
+<pre class="input-block keep-lines" translate="no" lang="en">%chk=ts_noeigen.chk
 #p B3LYP/6-31G(d) SCRF=(SMD,Solvent=Methanol)
  Opt=(TS,CalcFC,NoEigenTest,MaxCycles=100)</pre>
 <h3 data-en="Mode-check Freq (identifying the extra mode)" data-ja="モード確認用Freq（振動方向の確認）" id="gjf-ts-modes">Mode-check Freq (identifying the extra mode)</h3>
 <p><span data-lang="en">The structure need not be converged. Run Freq alone at the stopped geometry to obtain complete vibrational modes, then distinguish the reaction mode from the extra mode in a viewer such as GaussView (<a href="./reaction.html#mode-freq">mode-check Freq</a>).</span></p>
-<pre class="input-block" translate="no" lang="en">%chk=ts_modes.chk
+<pre class="input-block keep-lines" translate="no" lang="en">%chk=ts_modes.chk
 #p B3LYP/6-31G(d) SCRF=(SMD,Solvent=Methanol)
  Freq</pre>
 <p><span data-lang="en">Then displace ± along the extra mode and search again (<a href="./reaction.html#recovery">TS re-search</a>).</span></p>
-<p class="note"><span data-lang="en">Below the route line, continue with a blank line, title, blank line, charge/multiplicity, coordinates and a final blank line (<a href="./start.html#input">input anatomy</a>). Keyword meanings are in the <a href="./keywords.html">keyword reference</a>. Match the functional, basis set and solvent of the original job.</span></p>
+<p class="note"><span data-lang="en">Below the route line, continue with a blank line, title, blank line, charge/multiplicity, coordinates and a final blank line (<a href="./start.html#input">anatomy of an input file</a>). Keyword meanings are in the <a href="./keywords.html">keyword reference</a>. Match the functional, basis set and solvent of the original job.</span></p>
 </section>
 <section class="content-section reading" id="related">
 <h2 data-en="Related pages" data-ja="関連ページ">Related pages</h2>

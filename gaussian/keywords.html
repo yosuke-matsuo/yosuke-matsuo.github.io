@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<meta name="description" content="ルート行とLink 0によく出てくるキーワードの意味と使いどころ。" data-ja="ルート行とLink 0によく出てくるキーワードの意味と使いどころ。" data-en="What the keywords on the route line and in Link 0 mean, and when to use them."/>
+<meta name="description" content="ルート行とLink 0によく出てくるキーワードの意味と使いどころ。" data-ja="ルート行とLink 0によく出てくるキーワードの意味と使いどころ。" data-en="What common route-line and Link 0 keywords mean, and when to use them."/>
 <link rel="canonical" href="https://yosuke-matsuo.github.io/gaussian/keywords.html"/>
 <link rel="alternate" hreflang="ja" href="https://yosuke-matsuo.github.io/gaussian/keywords.html"/>
 <link rel="alternate" hreflang="en" href="https://yosuke-matsuo.github.io/en/gaussian/keywords.html"/>
@@ -11,7 +11,7 @@
 <meta property="og:type" content="website"/>
 <meta property="og:site_name" content="Yosuke Matsuo（松尾洋介）"/>
 <meta property="og:title" content="Gaussianキーワード一覧｜Gaussian入門"/>
-<meta property="og:description" content="ルート行とLink 0によく出てくるキーワードの意味と使いどころ。" data-ja="ルート行とLink 0によく出てくるキーワードの意味と使いどころ。" data-en="What the keywords on the route line and in Link 0 mean, and when to use them."/>
+<meta property="og:description" content="ルート行とLink 0によく出てくるキーワードの意味と使いどころ。" data-ja="ルート行とLink 0によく出てくるキーワードの意味と使いどころ。" data-en="What common route-line and Link 0 keywords mean, and when to use them."/>
 <meta property="og:url" content="https://yosuke-matsuo.github.io/gaussian/keywords.html"/>
 <meta property="og:locale" content="ja_JP"/>
 <meta property="og:image" content="https://yosuke-matsuo.github.io/images/og-image.png"/>
@@ -20,8 +20,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="Gaussianキーワード一覧｜Gaussian入門" data-en="Gaussian keyword reference | Gaussian guide">Gaussianキーワード一覧｜Gaussian入門</title>
-<link rel="stylesheet" href="../styles.css?v=20261126-2"/>
-<script defer src="../app.js?v=20261126-2"></script>
+<link rel="stylesheet" href="../styles.css?v=20261126-3"/>
+<script defer src="../app.js?v=20261126-3"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">本文へ移動</a>
@@ -92,7 +92,7 @@
 </tr>
 <tr>
 <td><code translate="no">Opt Freq</code></td>
-<td data-en="Runs Freq at the optimized geometry immediately after Opt." data-ja="最適化の後に、同じ条件で振動数解析を続けて行います。">最適化の後に、同じ条件で振動数解析を続けて行います。</td>
+<td data-en="Runs Freq with the same settings at the optimized geometry, immediately after Opt." data-ja="最適化の後に、同じ条件で振動数解析を続けて行います。">最適化の後に、同じ条件で振動数解析を続けて行います。</td>
 </tr>
 <tr>
 <td><code translate="no">IRC</code></td>
@@ -112,7 +112,7 @@
 </tr>
 <tr>
 <td><code translate="no">Opt=ModRedundant</code><br><span class="kw-ex" translate="no">1 12 S 10 0.1</span></td>
-<td data-en="Relaxed scan: a line such as &quot;1 12 S 10 0.1&quot; (distance 1–12, ten steps of 0.1 Å) after the coordinates steps the coordinate while optimizing the rest, giving an energy profile. The Scan keyword is a rigid scan without optimization." data-ja="緩和走査。座標の後に「1 12 S 10 0.1」（原子1–12の距離を 0.1 Å ずつ10回）のように書き、各点でほかの座標を最適化してエネルギー曲線を描きます。Scan キーワードは各点を最適化しない剛体走査です。">緩和走査。座標の後に「1 12 S 10 0.1」（原子1–12の距離を 0.1 Å ずつ10回）のように書き、各点でほかの座標を最適化してエネルギー曲線を描きます。Scan キーワードは各点を最適化しない剛体走査です。</td>
+<td data-en="Relaxed scan: a line such as “1 12 S 10 0.1” (distance 1–12, ten steps of 0.1 Å) after the coordinates steps the coordinate while optimizing the rest, giving an energy profile. The Scan keyword is a rigid scan without optimization." data-ja="緩和走査。座標の後に「1 12 S 10 0.1」（原子1–12の距離を 0.1 Å ずつ10回）のように書き、各点でほかの座標を最適化してエネルギー曲線を描きます。Scan キーワードは各点を最適化しない剛体走査です。">緩和走査。座標の後に「1 12 S 10 0.1」（原子1–12の距離を 0.1 Å ずつ10回）のように書き、各点でほかの座標を最適化してエネルギー曲線を描きます。Scan キーワードは各点を最適化しない剛体走査です。</td>
 </tr>
 <tr>
 <td><code translate="no">Stable</code></td>
@@ -156,7 +156,7 @@
 </tr>
 <tr>
 <td><code translate="no">Opt=ModRedundant</code></td>
-<td data-en="Freezes bonds and angles; a card such as &quot;1 12 F&quot; follows the coordinates." data-ja="結合距離・角度を固定します。座標の後にカード（例：1 12 F）を書きます。">結合距離・角度を固定します。座標の後にカード（例：1 12 F）を書きます。</td>
+<td data-en="Freezes bonds and angles; a card such as “1 12 F” follows the coordinates." data-ja="結合距離・角度を固定します。座標の後にカード（例：1 12 F）を書きます。">結合距離・角度を固定します。座標の後にカード（例：1 12 F）を書きます。</td>
 </tr>
 <tr>
 <td><code translate="no">Opt=Cartesian</code></td>
@@ -188,7 +188,7 @@
 </tr>
 <tr>
 <td><code translate="no">SCF=Tight</code></td>
-<td data-en="SCF convergence setting; the default in Gaussian 16 (often written explicitly in published inputs)." data-ja="SCFの収束条件の指定。Gaussian 16 では既定です（文献の入力には明示されていることがあります）。">SCFの収束条件の指定。Gaussian 16 では既定です（文献の入力には明示されていることがあります）。</td>
+<td data-en="SCF convergence setting; the default in Gaussian 16 (sometimes written explicitly in published inputs)." data-ja="SCFの収束条件の指定。Gaussian 16 では既定です（文献の入力には明示されていることがあります）。">SCFの収束条件の指定。Gaussian 16 では既定です（文献の入力には明示されていることがあります）。</td>
 </tr>
 <tr>
 <td><code translate="no">SCF=MaxCycle=N</code></td>
@@ -196,11 +196,11 @@
 </tr>
 <tr>
 <td><code translate="no">Integral=UltraFine</code></td>
-<td data-en="Uses a finer integration grid; matters for Minnesota functionals and low frequencies. Default in Gaussian 16." data-ja="数値積分の格子を細かくします。M06系の汎関数や低振動数の精度に効きます。Gaussian 16 では既定です。">数値積分の格子を細かくします。M06系の汎関数や低振動数の精度に効きます。Gaussian 16 では既定です。</td>
+<td data-en="Uses a finer integration grid; matters for M06-type functionals and low frequencies. Default in Gaussian 16." data-ja="数値積分の格子を細かくします。M06系の汎関数や低振動数の精度に効きます。Gaussian 16 では既定です。">数値積分の格子を細かくします。M06系の汎関数や低振動数の精度に効きます。Gaussian 16 では既定です。</td>
 </tr>
 <tr>
 <td><code translate="no">Integral=NoBasisTransform</code></td>
-<td><span data-lang="ja">基底関数の自動変換を止めます。Gen で s 関数を明示する<i>J</i>計算などで使います。</span><template data-lang="en"><span data-lang="en" hidden>Disables automatic basis transformation; used for <i>J</i> calculations with explicit s functions via Gen.</span></template></td>
+<td><span data-lang="ja">一般化縮約の基底関数を、原始関数を減らすために変換する処理を止めます。Gen で s 関数を明示する<i>J</i>計算などで使います。</span><template data-lang="en"><span data-lang="en" hidden>Turns off the transformation of generally contracted basis functions that reduces the number of primitives; used for <i>J</i> calculations with explicit s functions via Gen.</span></template></td>
 </tr>
 <tr>
 <td><code translate="no">Guess=Read</code></td>
@@ -212,15 +212,15 @@
 </tr>
 <tr>
 <td><code translate="no">Geom=AllCheck</code></td>
-<td data-en="Reads the title, charge, multiplicity and geometry from the checkpoint; the title, charge/multiplicity line and coordinates are not written." data-ja="タイトル・電荷・多重度・構造をチェックポイントから読みます。タイトル行から座標欄までは書きません。">タイトル・電荷・多重度・構造をチェックポイントから読みます。タイトル行から座標欄までは書きません。</td>
+<td data-en="Reads the title, charge, multiplicity and geometry from the checkpoint; so omit the title, the charge/multiplicity line and the coordinates." data-ja="タイトル・電荷・多重度・構造をチェックポイントから読みます。タイトル行から座標欄までは書きません。">タイトル・電荷・多重度・構造をチェックポイントから読みます。タイトル行から座標欄までは書きません。</td>
 </tr>
 <tr>
 <td><code translate="no">Geom=Check</code></td>
-<td data-en="Reads only the geometry from the checkpoint; the title and the charge/multiplicity line are still written (no coordinate block)." data-ja="構造だけをチェックポイントから読みます。タイトル行と電荷・多重度の行は書きます（座標欄は不要）。">構造だけをチェックポイントから読みます。タイトル行と電荷・多重度の行は書きます（座標欄は不要）。</td>
+<td data-en="Reads only the geometry from the checkpoint; the title and the charge/multiplicity line are still needed, but not the coordinates." data-ja="構造だけをチェックポイントから読みます。タイトル行と電荷・多重度の行は書きます（座標欄は不要）。">構造だけをチェックポイントから読みます。タイトル行と電荷・多重度の行は書きます（座標欄は不要）。</td>
 </tr>
 <tr>
 <td><code translate="no">Restart</code></td>
-<td data-en="Restarts a failed job from a saved read-write file (%rwf), e.g. frequencies or NMR. Use Opt=Restart to continue an optimization and IRC=Restart to continue an IRC." data-ja="中断した計算を、保存しておいた read-write ファイル（%rwf）から再開します（振動数・NMRなど）。最適化の続きは Opt=Restart、IRCの続きは IRC=Restart を使います。">中断した計算を、保存しておいた read-write ファイル（%rwf）から再開します（振動数・NMRなど）。最適化の続きは Opt=Restart、IRCの続きは IRC=Restart を使います。</td>
+<td data-en="Restarts an interrupted job from a saved read-write file (%rwf), e.g. frequencies or NMR. Use Opt=Restart to continue an optimization and IRC=Restart to continue an IRC." data-ja="中断した計算を、保存しておいた read-write ファイル（%rwf）から再開します（振動数・NMRなど）。最適化の続きは Opt=Restart、IRCの続きは IRC=Restart を使います。">中断した計算を、保存しておいた read-write ファイル（%rwf）から再開します（振動数・NMRなど）。最適化の続きは Opt=Restart、IRCの続きは IRC=Restart を使います。</td>
 </tr>
 </tbody></table></div>
 </section>
@@ -236,15 +236,15 @@
 </tr>
 <tr>
 <td><code translate="no">6-31G(d) / 6-311+G(2d,p) / def2-TZVP / aug-cc-pVDZ</code></td>
-<td data-en="Basis sets. &quot;+&quot; adds diffuse functions (important for anions, excited states, optical rotation); (d) and (2d,p) indicate polarization functions." data-ja="基底関数。+ は拡散関数（アニオン・励起状態・旋光度で重要）、(d)・(2d,p) は分極関数の数を表します。">基底関数。+ は拡散関数（アニオン・励起状態・旋光度で重要）、(d)・(2d,p) は分極関数の数を表します。</td>
+<td data-en="Basis sets. “+” adds diffuse functions (important for anions, excited states, optical rotation); (d) and (2d,p) indicate the number of polarization functions." data-ja="基底関数。+ は拡散関数（アニオン・励起状態・旋光度で重要）、(d)・(2d,p) は分極関数の数を表します。">基底関数。+ は拡散関数（アニオン・励起状態・旋光度で重要）、(d)・(2d,p) は分極関数の数を表します。</td>
 </tr>
 <tr>
 <td><code translate="no">Gen / GenECP</code></td>
-<td data-en="Specifies basis sets per element; cards of the form &quot;element 0 / basis / ****&quot; follow the coordinates. GenECP adds effective core potentials." data-ja="元素ごとに基底関数を指定します。座標の後に「元素 0 / 基底名 / ****」の形でカードを書きます。GenECPは有効内殻ポテンシャル付き。">元素ごとに基底関数を指定します。座標の後に「元素 0 / 基底名 / ****」の形でカードを書きます。GenECPは有効内殻ポテンシャル付き。</td>
+<td data-en="Specifies basis sets per element; cards of the form “element 0 / basis / ****” follow the coordinates. GenECP adds effective core potentials." data-ja="元素ごとに基底関数を指定します。座標の後に「元素 0 / 基底名 / ****」の形でカードを書きます。GenECPは有効内殻ポテンシャル付き。">元素ごとに基底関数を指定します。座標の後に「元素 0 / 基底名 / ****」の形でカードを書きます。GenECPは有効内殻ポテンシャル付き。</td>
 </tr>
 <tr>
 <td><code translate="no">EmpiricalDispersion=GD3BJ</code></td>
-<td data-en="Empirical dispersion correction; add to functionals such as B3LYP. The Minnesota family has no GD3BJ parameters; use GD3 if you add one." data-ja="分散力（弱い引力）の経験的補正。B3LYPなどに加えます。M06系には GD3BJ のパラメータがなく、加える場合は GD3 を使います。">分散力（弱い引力）の経験的補正。B3LYPなどに加えます。M06系には GD3BJ のパラメータがなく、加える場合は GD3 を使います。</td>
+<td data-en="Empirical dispersion correction; add to functionals such as B3LYP. M05/M06-type functionals have no GD3BJ parameters; use GD3 for them." data-ja="分散力（弱い引力）の経験的補正。B3LYPなどに加えます。M06系には GD3BJ のパラメータがなく、加える場合は GD3 を使います。">分散力（弱い引力）の経験的補正。B3LYPなどに加えます。M06系には GD3BJ のパラメータがなく、加える場合は GD3 を使います。</td>
 </tr>
 <tr>
 <td><code translate="no">SCRF=(SMD,Solvent=Methanol)</code></td>
@@ -276,7 +276,7 @@
 </tr>
 <tr>
 <td><code translate="no">NMR=(SpinSpin,Mixed)</code></td>
-<td data-en="Two-step J calculation: the Fermi-contact term with an automatically augmented basis, the other three terms with the given basis." data-ja="J計算の2段階法。FC項だけ自動で拡張した基底関数で計算し、残り3項は指定した基底関数で計算します。">J計算の2段階法。FC項だけ自動で拡張した基底関数で計算し、残り3項は指定した基底関数で計算します。</td>
+<td><span data-lang="ja"><i>J</i>計算の2段階法。FC項だけ自動で拡張した基底関数で計算し、残り3項は指定した基底関数で計算します。</span><template data-lang="en"><span data-lang="en" hidden>Two-step <i>J</i> calculation: the Fermi-contact term with an automatically augmented basis, the other three terms with the given basis.</span></template></td>
 </tr>
 <tr>
 <td><code translate="no">NMR=FCOnly</code></td>
@@ -316,7 +316,7 @@
 </tr></thead><tbody>
 <tr>
 <td><code translate="no">IRC=Forward / Reverse</code></td>
-<td data-en="Direction to follow. Which side is the reactant must be judged from the structures." data-ja="たどる向き。どちらが反応物側かは構造を見て判断します。">たどる向き。どちらが反応物側かは構造を見て判断します。</td>
+<td data-en="Direction to follow. Judge from the structures which side is the reactant." data-ja="たどる向き。どちらが反応物側かは構造を見て判断します。">たどる向き。どちらが反応物側かは構造を見て判断します。</td>
 </tr>
 <tr>
 <td><code translate="no">IRC=CalcFC / RCFC</code></td>
@@ -348,11 +348,11 @@
 </tr></thead><tbody>
 <tr>
 <td><code translate="no">#n / # / #p / #t</code></td>
-<td data-en="Output verbosity: #n (or just #) is normal, #p adds per-step information, #t is terse." data-ja="出力の詳しさ。#n（または # だけ）が標準、#p は各ステップの情報を追加、#t は最小限。">出力の詳しさ。#n（または # だけ）が標準、#p は各ステップの情報を追加、#t は最小限。</td>
+<td data-en="Output verbosity: #n (or just #) is normal, #p adds information such as the run time of each link and the progress of SCF convergence, #t is terse." data-ja="出力の詳しさ。#n（または # だけ）が標準、#p はリンクごとの実行時間などと SCF の収束の経過を追加、#t は最小限。">出力の詳しさ。#n（または # だけ）が標準、#p はリンクごとの実行時間などと SCF の収束の経過を追加、#t は最小限。</td>
 </tr>
 <tr>
 <td><code translate="no">NoSymm</code></td>
-<td data-en="Disables the use of symmetry; use it to keep the input orientation." data-ja="対称性の利用を止めます。入力の向きを保ちたいときに使います。">対称性の利用を止めます。入力の向きを保ちたいときに使います。</td>
+<td data-en="Keeps the molecule in the input orientation instead of reorienting it (Symmetry=None turns off the use of symmetry completely)." data-ja="分子の向きを変えず、入力の向きのまま計算します（対称性の利用を完全に止めるのは Symmetry=None）。">分子の向きを変えず、入力の向きのまま計算します（対称性の利用を完全に止めるのは Symmetry=None）。</td>
 </tr>
 <tr>
 <td><code translate="no">Symmetry=Loose</code></td>
@@ -377,7 +377,7 @@
 <section class="content-section reading" id="related">
 <h2 data-en="Related pages" data-ja="関連ページ">関連ページ</h2>
 <ul class="compact-list">
-<li><a href="./start.html#input" data-ja="入力ファイルの構造" data-en="Input file anatomy">入力ファイルの構造</a></li>
+<li><a href="./start.html#input" data-ja="入力ファイルの中身" data-en="Anatomy of an input file">入力ファイルの中身</a></li>
 <li><a href="./glossary.html" data-ja="用語集" data-en="Glossary">用語集</a></li>
 <li><a href="./workflow.html" data-ja="計算ガイド（用途別の計算条件）" data-en="Calculation guide (conditions by purpose)">計算ガイド（用途別の計算条件）</a></li>
 <li><a href="./troubleshooting.html" data-ja="エラー対応" data-en="Troubleshooting">エラー対応</a></li>

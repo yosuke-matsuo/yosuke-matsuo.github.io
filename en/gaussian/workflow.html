@@ -21,8 +21,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="計算ガイド｜Gaussian入門" data-en="Calculation guide | Gaussian guide">Calculation guide | Gaussian guide</title>
-<link rel="stylesheet" href="../../styles.css?v=20261126-2"/>
-<script defer src="../../app.js?v=20261126-2"></script>
+<link rel="stylesheet" href="../../styles.css?v=20261126-3"/>
+<script defer src="../../app.js?v=20261126-3"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">Skip to content</a>
@@ -42,7 +42,7 @@
 <a class="feature-card" href="./nmr.html"><h3 data-en="NMR chemical shifts" data-ja="NMR化学シフト">NMR chemical shifts</h3><p data-en="Shielding → shift, calibration, literature." data-ja="遮蔽 → 化学シフト、校正式、文献例。">Shielding → shift, calibration, literature.</p></a>
 <a class="feature-card" href="./j.html"><h3><span data-lang="en"><i>J</i> coupling constants</span></h3><p><span data-lang="en">Bally–Rablen, total <i>J</i>, literature, <i>J</i>-DP4.</span></p></a>
 <a class="feature-card" href="./ecd.html"><h3 data-en="ECD, UV and optical rotation" data-ja="ECD・UV・旋光度">ECD, UV and optical rotation</h3><p data-en="From TD-DFT to averaged curves." data-ja="TD-DFTから配座平均曲線へ。">From TD-DFT to averaged curves.</p></a>
-<a class="feature-card" href="./reaction.html"><h3 data-en="Transition states and reaction paths" data-ja="遷移状態と反応経路">Transition states and reaction paths</h3><p data-en="TS guess → optimization → Freq → IRC → retries." data-ja="TS候補 → 最適化 → Freq → IRC → 再探索。">TS guess → optimization → Freq → IRC → retries.</p></a>
+<a class="feature-card" href="./reaction.html"><h3 data-en="Transition states and reaction paths" data-ja="遷移状態と反応経路">Transition states and reaction paths</h3><p data-en="TS guess → optimization → Freq → IRC → re-search." data-ja="TS候補 → 最適化 → Freq → IRC → 再探索。">TS guess → optimization → Freq → IRC → re-search.</p></a>
 <a class="feature-card" href="./reporting.html"><h3 data-en="What to report" data-ja="論文・SIに書くこと">What to report</h3><p data-en="Checklist for reproducibility." data-ja="再現に必要な記録の一覧。">Checklist for reproducibility.</p></a>
 <a class="feature-card" href="./keywords.html"><h3 data-en="Gaussian keyword reference" data-ja="Gaussianキーワード一覧">Gaussian keyword reference</h3><p data-en="What route-line and Link 0 keywords mean and when to use them." data-ja="ルート行・Link 0のキーワードの意味と使いどころ。">What route-line and Link 0 keywords mean and when to use them.</p></a>
 
@@ -63,7 +63,7 @@
 </tr>
 <tr>
 <td data-en="Semiempirical QM (e.g. xTB)" data-ja="半経験的QM（xTBなど）">Semiempirical QM (e.g. xTB)</td>
-<td data-en="Simplified quantum mechanics with fitted parameters. Handles electronic structure better than MM." data-ja="量子力学の式を簡略化し、パラメータで補います。MMより電子状態を扱えます。">Simplified quantum mechanics with fitted parameters. Handles electronic structure better than MM.</td>
+<td data-en="Simplified quantum mechanics with fitted parameters. Unlike MM, it treats electrons." data-ja="量子力学の式を簡略化し、パラメータで補います。MMと違い電子を扱います。">Simplified quantum mechanics with fitted parameters. Unlike MM, it treats electrons.</td>
 <td data-en="Intermediate screening of many candidates" data-ja="多数候補の中間選別">Intermediate screening of many candidates</td>
 </tr>
 <tr>
@@ -72,7 +72,7 @@
 <td data-en="Optimization, energies, frequencies, NMR/ECD" data-ja="最適化、エネルギー、振動数、NMR・ECD">Optimization, energies, frequencies, NMR/ECD</td>
 </tr>
 </tbody></table></div>
-<p data-en="In DFT you choose three things: the functional (approximation of electron interactions, e.g. B3LYP), the basis set (how the electron distribution is represented, e.g. 6-31G(d)) and the solvent model (e.g. SMD)." data-ja="DFTでは3つの条件を選びます。汎関数（電子相互作用の近似、例：B3LYP）、基底関数（電子の広がりの表し方、例：6-31G(d)）、溶媒モデル（例：SMD）。">In DFT you choose three things: the functional (approximation of electron interactions, e.g. B3LYP), the basis set (how the electron distribution is represented, e.g. 6-31G(d)) and the solvent model (e.g. SMD).</p>
+<p data-en="In DFT you choose three things: the functional (how electron exchange and correlation are approximated, e.g. B3LYP), the basis set (how the electron distribution is represented, e.g. 6-31G(d)) and the solvent model (e.g. SMD)." data-ja="DFTでは3つの条件を選びます。汎関数（電子の交換と相関の近似の仕方、例：B3LYP）、基底関数（電子の広がりの表し方、例：6-31G(d)）、溶媒モデル（例：SMD）。">In DFT you choose three things: the functional (how electron exchange and correlation are approximated, e.g. B3LYP), the basis set (how the electron distribution is represented, e.g. 6-31G(d)) and the solvent model (e.g. SMD).</p>
 <p data-en="MM and DFT often rank conformers differently. Keep a generous set of candidates at the MM stage." data-ja="MMとDFTでは配座のエネルギー順位が変わることがよくあります。MMの段階では候補を多めに残します。">MM and DFT often rank conformers differently. Keep a generous set of candidates at the MM stage.</p>
 <h3 data-en="References" data-ja="参考資料">References</h3>
 <ul class="compact-list reference-list">
@@ -84,9 +84,9 @@
 <section class="content-section reading" id="terms">
 <h2 data-en="The basic sequence" data-ja="基本の流れ">The basic sequence</h2>
 <ol class="step-list">
-<li><strong data-en="Build the molecule" data-ja="分子構造を作る" class="step-title">Build the molecule</strong><div class="step-body"><p data-en="Fix stereochemistry, charge and protonation state here." data-ja="立体配置・電荷・プロトン化状態をここで確定します。">Fix stereochemistry, charge and protonation state here.</p></div></li>
+<li><strong data-en="Build the molecule" data-ja="分子構造を作る" class="step-title">Build the molecule</strong><div class="step-body"><p data-en="Settle the stereochemistry, charge and protonation state at this step." data-ja="立体配置・電荷・プロトン化状態をここで確定します。">Settle the stereochemistry, charge and protonation state at this step.</p></div></li>
 <li><strong data-en="Search conformers with MM" data-ja="MMで配座を探索する" class="step-title">Search conformers with MM</strong><div class="step-body"><p data-en="Cover rotatable bonds, ring shapes and OH orientations." data-ja="回転可能な結合、環の形、OHの向きを網羅します。">Cover rotatable bonds, ring shapes and OH orientations.</p></div></li>
-<li><strong data-en="Remove duplicates and optimize with DFT (Opt Freq)" data-ja="重複を整理し、DFTで最適化する（Opt Freq）" class="step-title">Remove duplicates and optimize with DFT (Opt Freq)</strong><div class="step-body"><p data-en="Zero imaginary frequencies means a minimum." data-ja="虚振動がゼロなら安定構造です。">Zero imaginary frequencies means a minimum.</p></div></li>
+<li><strong data-en="Remove duplicates and optimize with DFT (Opt Freq)" data-ja="重複を整理し、DFTで最適化する（Opt Freq）" class="step-title">Remove duplicates and optimize with DFT (Opt Freq)</strong><div class="step-body"><p data-en="If there are no imaginary frequencies, the structure is a minimum." data-ja="虚振動がゼロなら安定構造です。">If there are no imaginary frequencies, the structure is a minimum.</p></div></li>
 <li><strong data-en="Compare energies and obtain populations" data-ja="エネルギーを比べ、存在率を出す" class="step-title">Compare energies and obtain populations</strong><div class="step-body"><p><span data-lang="en">Compare energies (usually <i>G</i>).</span></p></div></li>
 <li><strong data-en="Compute properties and average by population" data-ja="物性を計算し、存在率で平均する" class="step-title">Compute properties and average by population</strong><div class="step-body"><p data-en="NMR, ECD, optical rotation, ..." data-ja="NMR、ECD、旋光度など。">NMR, ECD, optical rotation, ...</p></div></li>
 </ol>
