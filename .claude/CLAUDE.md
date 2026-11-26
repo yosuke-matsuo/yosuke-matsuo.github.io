@@ -16,6 +16,7 @@
 - リポジトリ・PR（説明・コメント）・コミットメッセージはすべて公開され、push した内容は履歴に残る。未発表のデータ、投稿前の原稿、共同研究者とのやり取り、個人情報（メールアドレスなど）、ユーザーが貼り付けた資料の原文は、ファイル・PR・コミットに書かない（PR には変更の要約と結論だけを書く）。
 - 開発用のファイルやメモは _dev/ か .claude/ に置く（GitHub Pages で公開されない）。ルートに README や .md を置かない。.nojekyll は追加しない。
 - 依頼に必要のない変更（特に研究内容・業績のページ）はしない。デザイン・配色・簡潔な文章を保ち、装飾や冗長な説明を増やさない。
+- 文章・画面を直すときは、科学的な正確性を最優先する。日本語・英語とも、生成AIらしい書き方、冗長な説明、念押しだけの否定文を書かない。基準には [minorun365/unslop-ai-app](https://github.com/minorun365/unslop-ai-app) の skills/app-ui-design と tools/check-ui.mjs も使う。
 
 ## 個人ページ（index / research / publications / tools / 404、Gaussian入門 gaussian/）
 - 日本語のページが元。英語は文字だけの要素なら data-ja・data-en 属性、リンクなどを含む文は <template data-lang="en"> に入れた <span data-lang="en" hidden>（初期 HTML の本文は日本語だけにする）。
