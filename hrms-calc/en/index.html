@@ -44,7 +44,7 @@
  }
 }
 </script>
-<link rel="stylesheet" href="../style.css?v=20261127-1">
+<link rel="stylesheet" href="../style.css?v=20261127-2">
 </head>
 <body>
 <a class="skip-link" href="#main" data-t="skip">Skip to content</a>
@@ -178,6 +178,7 @@
 <div class="equation"><i>m</i>/<i>z</i> = (Σ <i>n</i><sub>i</sub> <i>m</i><sub>i</sub> − <i>z</i> <i>m</i><sub>e</sub>) / |<i>z</i>|</div>
 <p data-t="definition"><i>n</i><sub>i</sub> is the number of atoms of element <i>i</i> in the ion (after adduct formation or loss), <i>m</i><sub>i</sub> is the isotope mass of element <i>i</i> and <i>z</i> is the signed charge number; for multiply charged ions the mass is divided by |<i>z</i>|.</p>
 <p data-t="electron">One electron mass is subtracted per positive charge and added per negative charge (<i>m</i><sub>e</sub> = 0.0005485799090441 Da).</p>
+<p data-t="molecularWeightMethod" data-tabs="calculator">The molecular weight is calculated from the CIAAW abridged standard atomic weights and shown to two decimal places.</p>
 <p data-t="ppm">Error (ppm) = (measured − calculated) / calculated × 10⁶. Error (mDa) = (measured − calculated) × 1000.</p>
 <p data-t="dbe" data-tabs="calculator finder batch">DBE = 1 + C + N/2 − (H + F + Cl + Br + I)/2 (value for the neutral M; non-integer values are shown as they are). Compositions with elements other than C, H, N, O, S and halogens are shown as —.</p>
 <p data-tabs="finder"><span data-t="filterMethod">Filters in Find formulas: the DBE condition requires the DBE of the neutral M to be an integer and not negative. DBE is calculated for C, H, N, O, S and halogens with the usual valences (C 4, N 3, H and halogens 1, O and S 2); compositions with other elements are not judged and are kept. Being an integer is the same condition as the nitrogen rule (parity of the number of nitrogens and of the nominal mass); being non-negative is not part of the nitrogen rule (CH<sub>6</sub> satisfies the nitrogen rule but has DBE −1). The element-ratio condition uses the ratios of H, N, O, P, S and Si to carbon in the “common range” given by Kind and Fiehn (covering 99.7% of the formulas in their database).</span> <a href="https://doi.org/10.1186/1471-2105-8-105" target="_blank" rel="noopener noreferrer">Kind &amp; Fiehn, <i>BMC Bioinformatics</i> 2007</a></p>
@@ -192,6 +193,7 @@
 <dl class="sources">
 <dt data-t="isotopeSource">Isotope masses and abundances</dt><dd><a href="https://physics.nist.gov/cgi-bin/Compositions/stand_alone.pl?all=all&amp;ascii=ascii2" target="_blank" rel="noopener noreferrer">NIST — Atomic Weights and Isotopic Compositions</a></dd>
 <dt data-t="electronSource">Electron mass</dt><dd><a href="https://physics.nist.gov/cuu/Constants/Table/allascii.txt" target="_blank" rel="noopener noreferrer">NIST — 2022 CODATA Recommended Values</a></dd>
+<dt data-t="atomicWeightSource">Standard atomic weights (molecular weight)</dt><dd><a href="https://www.ciaaw.org/abridged-atomic-weights.htm" target="_blank" rel="noopener noreferrer">CIAAW — Abridged Standard Atomic Weights (2024)</a></dd>
 <dt data-t="paperIntro">Common errors in reporting HRMS data</dt><dd>Christmann, M. <a href="https://doi.org/10.1021/acs.orglett.4c03458" target="_blank" rel="noopener noreferrer">What I Learned from Analyzing Accurate Mass Data of 3000 Supporting Information Files.</a> <i>Org. Lett.</i> <b>2025</b>, <i>27</i>, 4–7.</dd>
 <dt data-t="ratioSource">Element-ratio ranges of formulas</dt><dd>Kind, T.; Fiehn, O. <a href="https://doi.org/10.1186/1471-2105-8-105" target="_blank" rel="noopener noreferrer">Seven Golden Rules for heuristic filtering of molecular formulas obtained by accurate mass spectrometry.</a> <i>BMC Bioinformatics</i> <b>2007</b>, <i>8</i>, 105.</dd>
 </dl>
@@ -200,6 +202,6 @@
 
 <footer><p>© 2026 <a href="../../en/index.html" data-home="index">Yosuke Matsuo</a> · <a href="../../en/tools.html" data-home="tools" data-t="toolsPage">Tools</a></p><p><a href="https://github.com/yosuke-matsuo/yosuke-matsuo.github.io/tree/main/hrms-calc" data-t="sourceCode" target="_blank" rel="noopener noreferrer">Source code</a> · <span data-t="codeLicense">HRMS Calc code: </span><a href="../LICENSE.txt">MIT License</a></p></footer>
 </main>
-<script type="module" src="../app.js?v=20261127-1"></script>
+<script type="module" src="../app.js?v=20261127-2"></script>
 </body>
 </html>

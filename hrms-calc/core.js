@@ -1,5 +1,6 @@
-import {ELEMENTS,ELECTRON_MASS} from './constants.js?v=20261127-1';
-import {ISOTOPES} from './isotopes.js?v=20261127-1';
+import {ELEMENTS,ELECTRON_MASS} from './constants.js?v=20261127-2';
+import {ISOTOPES} from './isotopes.js?v=20261127-2';
+import {ATOMIC_WEIGHTS} from './atomic-weights.js?v=20261127-2';
 export {ELEMENTS,ELECTRON_MASS};
 // [number of M, signed charge, atoms added (+) or removed (−)]
 export const IONS = {
@@ -48,7 +49,13 @@ export function ion(c,key){
  const neutral=mass(c); if(!(neutral>0))throw Error('formula');
  const mz=(mass(counts)-z*ELECTRON_MASS)/Math.abs(z);
  if(!(mz>0))throw Error('composition');
- return {formula:formula(c),ionFormula:formula(counts),z,neutral,mz};
+ return {formula:formula(c),ionFormula:formula(counts),z,neutral,mz,molecularWeight:molecularWeight(c)};
+}
+/* Molecular weight of the neutral formula from the CIAAW abridged standard atomic weights. */
+export function molecularWeight(c){
+ let w=0;
+ for(const [e,n] of Object.entries(c)){const a=ATOMIC_WEIGHTS[e];if(a===undefined)throw Error('formula');w+=n*Number(a);}
+ return w;
 }
 export const ppm=(found,calculated)=>(found-calculated)/calculated*1e6;
 export function dbe(c){
