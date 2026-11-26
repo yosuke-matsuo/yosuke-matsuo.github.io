@@ -166,6 +166,8 @@ td .input-block, td .error-marker { margin: 0; padding: .3rem .5rem; font-size: 
 .energy-figure { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 1rem; max-width: 820px; margin: 1rem 0 0; }
 .energy-figure img { width: 100%; height: auto; border: 1px solid var(--line); }
 .energy-figure figcaption { grid-column: 1 / -1; color: var(--muted); font-size: .85rem; }
+.structure-figure { margin: 1rem 0; }
+.structure-figure img { width: 100%; max-width: 320px; height: auto; }
 .guide p, .guide li, .guide td, .guide a { overflow-wrap: anywhere; }
 .guide tbody th, .guide td strong { overflow-wrap: normal; }
 .guide thead th { word-break: keep-all; }

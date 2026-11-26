@@ -20,8 +20,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="はじめてのGaussian計算｜Gaussian入門" data-en="Your first Gaussian calculation | Gaussian guide">はじめてのGaussian計算｜Gaussian入門</title>
-<link rel="stylesheet" href="../styles.css?v=20261126-1"/>
-<script defer src="../app.js?v=20261126-1"></script>
+<link rel="stylesheet" href="../styles.css?v=20261126-2"/>
+<script defer src="../app.js?v=20261126-2"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">本文へ移動</a>
@@ -37,6 +37,7 @@
 <section class="content-section reading" id="about">
 
 <p><span data-lang="ja">題材は、茶などに含まれるカテキン類の一つ、(+)-カテキン（C<sub>15</sub>H<sub>14</sub>O<sub>6</sub>）です。</span><template data-lang="en"><span data-lang="en" hidden>The subject is (+)-catechin (C<sub>15</sub>H<sub>14</sub>O<sub>6</sub>), one of the catechins found in tea and other plants.</span></template></p>
+<figure class="structure-figure"><img src="./assets/catechin.png" width="1539" height="861" alt="(2R,3S)-(+)-カテキンの構造式" data-ja="(2R,3S)-(+)-カテキンの構造式" data-en="Structure of (2R,3S)-(+)-catechin" decoding="async"/></figure>
 </section>
 <section class="content-section reading" id="environment">
 <h2 data-en="0. Set up an environment" data-ja="0. 環境を準備する">0. 環境を準備する</h2>
@@ -74,8 +75,8 @@
 (+)-catechin  Opt+Freq                             ← (3) タイトル: 自由記述
                                                    ← 空行
 0 1                                                ← (4) 電荷 多重度
-C   -1.692270  -0.992002   1.262321                ← (5) 座標: 元素記号 x y z（Å）
-C   -0.275413  -1.265444   0.763977
+C   -4.273953  -0.303693  -0.688531                ← (5) 座標: 元素記号 x y z（Å）
+C   -4.360353  -1.556559  -0.095452
  ...
                                                    ← 最後に空行</pre><template data-lang="en"><pre class="input-block keep-lines" translate="no" data-lang="en" hidden>%nprocshared=8                                    ← (1) Link 0: cores, memory, checkpoint name
 %mem=16GB
@@ -85,8 +86,8 @@ C   -0.275413  -1.265444   0.763977
 (+)-catechin  Opt+Freq                             ← (3) title: free text
                                                    ← blank line
 0 1                                                ← (4) charge multiplicity
-C   -1.692270  -0.992002   1.262321                ← (5) coordinates: symbol x y z (Å)
-C   -0.275413  -1.265444   0.763977
+C   -4.273953  -0.303693  -0.688531                ← (5) coordinates: symbol x y z (Å)
+C   -4.360353  -1.556559  -0.095452
  ...
                                                    ← blank line at the end</pre></template>
 <div class="table-wrap"><table><thead><tr>
@@ -131,7 +132,7 @@ C   -0.275413  -1.265444   0.763977
 </section>
 <section class="content-section reading" id="example">
 <h2 data-en="2. Complete input: (+)-catechin" data-ja="2. 完成した入力：(+)-カテキン">2. 完成した入力：(+)-カテキン</h2>
-<p data-en="The input below runs as is. The coordinates are an MMFF94 starting geometry of (2R,3S)-(+)-catechin." data-ja="以下はそのまま実行できる入力です。座標は分子力学（MMFF94）で作った出発構造で、立体配置は(2R,3S)の(+)-カテキンです。">以下はそのまま実行できる入力です。座標は分子力学（MMFF94）で作った出発構造で、立体配置は(2R,3S)の(+)-カテキンです。</p>
+<p data-en="The input below runs as is. The coordinates are the lowest-energy conformer from a Spartan MMFF94 conformer search of (2R,3S)-(+)-catechin." data-ja="以下はそのまま実行できる入力です。座標は Spartan の MMFF94 配座探索で最も安定だった配座で、立体配置は(2R,3S)の(+)-カテキンです。">以下はそのまま実行できる入力です。座標は Spartan の MMFF94 配座探索で最も安定だった配座で、立体配置は(2R,3S)の(+)-カテキンです。</p>
 <pre class="input-block keep-lines" translate="no" lang="en">%nprocshared=8
 %mem=16GB
 %chk=catechin_opt_freq.chk
@@ -140,41 +141,41 @@ C   -0.275413  -1.265444   0.763977
 (+)-catechin  Opt+Freq  B3LYP/6-31G(d)  gas phase
 
 0 1
-C     -1.692270    -0.992002     1.262321
-C     -0.275413    -1.265444     0.763977
-C      0.359996     0.075278     0.347238
-O     -0.362839     0.709751    -0.719141
-C     -1.721402     0.750410    -0.559584
-C     -2.399931     1.625053    -1.411240
-C     -3.782927     1.733015    -1.321198
-C     -4.497826     0.980308    -0.398361
-C     -3.812279     0.100922     0.437140
-C     -2.421158    -0.039273     0.359634
-O     -4.496417    -0.647655     1.353807
-O     -4.483964     2.579895    -2.128671
-C      1.794961    -0.119185    -0.127505
-C      2.866932     0.222228     0.717316
-C      4.174249     0.013333     0.290343
-C      4.427791    -0.533543    -0.964179
-C      3.386975    -0.877698    -1.811742
-C      2.070836    -0.671661    -1.393503
-O      5.714705    -0.737781    -1.371761
-O      5.249491     0.327216     1.075158
-O      0.455570    -1.905857     1.816500
-H     -1.660785    -0.569950     2.275289
-H     -2.226434    -1.947366     1.336187
-H     -0.324185    -1.953600    -0.090252
-H      0.375749     0.768255     1.200550
-H     -1.834141     2.213394    -2.126717
-H     -5.576000     1.089550    -0.346669
-H     -5.442856    -0.438097     1.284796
-H     -3.859719     3.033391    -2.719896
-H      2.667981     0.641557     1.699693
-H      3.596981    -1.299968    -2.789756
-H      1.256500    -0.938557    -2.065200
-H      6.260965    -0.419339    -0.625759
-H      4.919057     0.716932     1.902900
-H      1.291806    -2.223515     1.428757
+C     -4.273953    -0.303693    -0.688531
+C     -4.360353    -1.556559    -0.095452
+C     -3.212798    -2.131002     0.447241
+C     -1.978114    -1.471723     0.400333
+C     -1.922713    -0.200459    -0.180401
+C     -3.064357     0.379581    -0.738310
+C     -0.748360    -2.098376     0.989688
+C      0.525221    -1.407979     0.507751
+C      0.306825     0.117488     0.562554
+O     -0.778212     0.542255    -0.278594
+C      1.550077     0.867353     0.100565
+O      1.605531    -1.838617     1.343802
+C      2.406427     1.452857     1.046538
+C      3.552537     2.111458     0.622618
+C      3.867579     2.202085    -0.730020
+C      3.036580     1.628812    -1.683120
+C      1.881111     0.960352    -1.265823
+O      5.011923     2.866944    -1.073397
+O      4.378763     2.672402     1.553820
+O     -3.276686    -3.361912     1.038462
+O     -5.414027     0.229811    -1.214218
+H     -5.318474    -2.064636    -0.066428
+H     -2.989951     1.360817    -1.196191
+H     -0.688212    -3.162234     0.728534
+H     -0.813021    -2.046815     2.084457
+H      0.738666    -1.729514    -0.520082
+H      0.079252     0.432717     1.590721
+H      2.421197    -1.430259     1.000734
+H      2.189187     1.397446     2.110446
+H      3.262748     1.689122    -2.742720
+H      1.227879     0.514875    -2.014964
+H      5.083884     2.863486    -2.043427
+H      5.098299     3.078194     1.030209
+H     -4.195289    -3.677126     1.006539
+H     -5.207333     1.107551    -1.576955
 
 </pre>
 <h3 data-en="Making one for your own molecule" data-ja="自分の分子で作るには">自分の分子で作るには</h3>
