@@ -20,8 +20,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="ECD・UV・旋光度｜Gaussian入門" data-en="ECD, UV and optical rotation | Gaussian guide">ECD・UV・旋光度｜Gaussian入門</title>
-<link rel="stylesheet" href="../styles.css?v=20261125-2"/>
-<script defer src="../app.js?v=20261125-2"></script>
+<link rel="stylesheet" href="../styles.css?v=20261126-1"/>
+<script defer src="../app.js?v=20261126-1"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">本文へ移動</a>
@@ -38,13 +38,11 @@
 <h2 data-en="ECD: from TD-DFT to conformer-averaged curves" data-ja="ECD：TD-DFTから配座平均曲線へ">ECD：TD-DFTから配座平均曲線へ</h2>
 <p data-en="TD-DFT (e.g. TD=(NStates=30) on the route line) gives, for each excited state, the excitation energy, the oscillator strength (for UV) and the rotatory strength (for ECD). Each transition is broadened with a Gaussian, summed into a curve per conformer, and averaged by population for comparison with experiment." data-ja="TD-DFT（ルート行の TD=(NStates=30) など）は励起状態ごとに、励起エネルギー、振動子強度（UV用）、旋光強度（ECD用）を出します。各遷移をガウス関数で広げて足し合わせ、配座ごとの曲線を存在率で平均して実測と比べます。">TD-DFT（ルート行の TD=(NStates=30) など）は励起状態ごとに、励起エネルギー、振動子強度（UV用）、旋光強度（ECD用）を出します。各遷移をガウス関数で広げて足し合わせ、配座ごとの曲線を存在率で平均して実測と比べます。</p>
 <ul class="compact-list">
-<li data-en="The number of states (NStates) must cover the wavelength range you want to compare. Widening the plot does not add transitions that were not computed." data-ja="励起状態の数（NStates）は、比べたい波長域を覆うだけ必要です。表示範囲を広げても、計算していない遷移は現れません。">励起状態の数（NStates）は、比べたい波長域を覆うだけ必要です。表示範囲を広げても、計算していない遷移は現れません。</li>
+<li data-en="The number of states (NStates) must cover the wavelength range you want to compare." data-ja="励起状態の数（NStates）は、比べたい波長域を覆うだけ必要です。">励起状態の数（NStates）は、比べたい波長域を覆うだけ必要です。</li>
 </ul>
 <p data-en="The sign and shape of an ECD curve help decide absolute configuration, together with other evidence (NMR, optical rotation, X-ray)." data-ja="ECDの符号と形は絶対配置の判断に役立ちますが、他の証拠（NMR、旋光度、X線）と合わせて結論を出します。">ECDの符号と形は絶対配置の判断に役立ちますが、他の証拠（NMR、旋光度、X線）と合わせて結論を出します。</p>
 <h3 data-en="References" data-ja="参考資料">参考資料</h3>
 <ul class="compact-list reference-list">
-<li><a href="#equations" data-ja="ECD・UVの変換式・幅・ゲージ" data-en="ECD/UV equations, widths and gauge">ECD・UVの変換式・幅・ゲージ</a></li>
-<li><a href="#conditions" data-ja="TD・旋光度計算のルート行の例" data-en="Example route lines for TD and optical-rotation calculations">TD・旋光度計算のルート行の例</a></li>
 <li><a href="https://doi.org/10.1002/chir.22600" target="_blank" rel="noopener noreferrer">Pescitelli &amp; Bruhn, <i>Chirality</i> 2016, 28, 466</a></li>
 </ul>
 </section>
@@ -60,7 +58,7 @@
 <h3 data-en="Building the curves" data-ja="曲線の作り方">曲線の作り方</h3>
 <ul class="compact-list">
 <li data-en="Broaden each transition with a Gaussian (typically about 0.3 eV FWHM; SpecDis&#x27;s default σ = 0.16 eV is about 0.27 eV FWHM) and average the per-conformer curves by population." data-ja="各遷移をガウス関数で広げ（幅の目安は半値全幅 0.3 eV 前後。SpecDisの既定値 σ = 0.16 eV は半値全幅 約0.27 eV）、配座ごとの曲線を存在率で平均します。">各遷移をガウス関数で広げ（幅の目安は半値全幅 0.3 eV 前後。SpecDisの既定値 σ = 0.16 eV は半値全幅 約0.27 eV）、配座ごとの曲線を存在率で平均します。</li>
-<li data-en="A wavelength shift is sometimes applied when comparing with experiment (e.g. −7 nm in Xu 2019). Decide it per compound and record it." data-ja="実測と比べるときに波長をシフトすることがあります（例：Xu 2019 では −7 nm）。シフト量は化合物ごとに決め、記録します。">実測と比べるときに波長をシフトすることがあります（例：Xu 2019 では −7 nm）。シフト量は化合物ごとに決め、記録します。</li>
+<li data-en="A wavelength shift is sometimes applied when comparing with experiment (e.g. −7 nm in Xu 2019). Decide it per compound." data-ja="実測と比べるときに波長をシフトすることがあります（例：Xu 2019 では −7 nm）。シフト量は化合物ごとに決めます。">実測と比べるときに波長をシフトすることがあります（例：Xu 2019 では −7 nm）。シフト量は化合物ごとに決めます。</li>
 </ul>
 <p><span data-lang="ja">変換式は下の<a href="#equations">曲線の変換式</a>にあります。この処理は SpecDis などで行えます。</span><template data-lang="en"><span data-lang="en" hidden>Equations are in <a href="#equations">Curve equations</a> below; SpecDis and similar programs can do this processing.</span></template></p>
 <h3 data-en="References" data-ja="参考資料">参考資料</h3>
@@ -79,7 +77,7 @@
 589nm</pre><p><strong data-en="Used in: " data-ja="使用例：">使用例：</strong><a href="https://doi.org/10.3390/molecules28010439" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Yang <i>et al.</i>, <i>Molecules</i> 2023, 28, 439</a></p><p class="muted"><span data-en="Source: " data-ja="出典：">出典：</span><a href="https://doi.org/10.1063/1.464913" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Becke, <i>J. Chem. Phys.</i> 1993, 98, 5648</a> · <a href="https://doi.org/10.1002/anie.202205735" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Bursch <i>et al.</i>, <i>Angew. Chem. Int. Ed.</i> 2022, 61, e202205735</a></p></article>
 <ul class="compact-list">
 <li data-en="Average the signed specific rotation at the same wavelength over conformers, and compare with experiment, stating the temperature, solvent and concentration in the same way." data-ja="同じ波長の符号付き比旋光度を配座平均し、温度・溶媒・濃度の表記をそろえて実測と比べます。">同じ波長の符号付き比旋光度を配座平均し、温度・溶媒・濃度の表記をそろえて実測と比べます。</li>
-<li data-en="When the value is small (tens or less) or the sign varies between conformers, assign the configuration together with ECD or NMR." data-ja="値が小さい（数十以下）場合や配座間で符号が逆転する場合は、ECDやNMRと組み合わせて絶対配置を判断します。">値が小さい（数十以下）場合や配座間で符号が逆転する場合は、ECDやNMRと組み合わせて絶対配置を判断します。</li>
+<li data-en="When the value is small or the sign varies between conformers, assign the configuration together with ECD or NMR." data-ja="値が小さい場合や配座間で符号が逆転する場合は、ECDやNMRと組み合わせて絶対配置を判断します。">値が小さい場合や配座間で符号が逆転する場合は、ECDやNMRと組み合わせて絶対配置を判断します。</li>
 </ul>
 </section>
 <section class="content-section reading" id="equations">
@@ -122,6 +120,6 @@ HWHH = σ_E √ln2,   FWHM = 2 HWHH,   E(eV) = 1239.84 / λ(nm)</pre>
 </section>
 </div>
 </main>
-<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月25日" data-en="Last updated: 25 November 2026" class="copyright">最終更新：2026年11月25日</p></footer>
+<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月26日" data-en="Last updated: 26 November 2026" class="copyright">最終更新：2026年11月26日</p></footer>
 </body>
 </html>

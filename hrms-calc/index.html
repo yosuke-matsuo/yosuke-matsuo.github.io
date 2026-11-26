@@ -43,7 +43,7 @@
  }
 }
 </script>
-<link rel="stylesheet" href="style.css?v=20261125-1">
+<link rel="stylesheet" href="style.css?v=20261126-1">
 </head>
 <body>
 <a class="skip-link" href="#main" data-t="skip">本文へ移動</a>
@@ -54,8 +54,8 @@
 </header>
 <main id="main">
 <div class="intro">
-<noscript><p class="electron-note">このツールはJavaScriptが必要です。 / This tool requires JavaScript.</p></noscript>
-<p class="electron-note"><strong data-t="electronHead">電子の質量を考慮して計算します。</strong> <span data-t="electronShort">正イオンでは電子の質量を引き、負イオンでは足します。考慮しないと、<i>m</i>/<i>z</i> 200 では約2.7 ppm ずれます（<i>m</i>/<i>z</i> が小さいほど大きくずれます）。</span> <span data-t="electronSurvey">2023～2024年の<i>Org. Lett.</i>誌のSI約3000件の調査では、精密質量データの約3割に記載の誤りがあり、その約3分の2は電子の質量を考慮していないものでした（<a href="https://doi.org/10.1021/acs.orglett.4c03458" target="_blank" rel="noopener noreferrer">Christmann, <i>Org. Lett.</i> 2025, <i>27</i>, 4⁠–⁠7</a>）。</span></p>
+<noscript><p class="electron-note">このツールにはJavaScriptが必要です。 / This tool requires JavaScript.</p></noscript>
+<p class="electron-note"><strong data-t="electronHead">電子の質量を考慮して計算します。</strong> <span data-t="electronShort">正イオンでは電子の質量を引き、負イオンでは足します。考慮しないと、<i>m</i>/<i>z</i> 200 では約2.7 ppm ずれます（<i>m</i>/<i>z</i> が小さいほど大きくずれます）。</span> <span data-t="electronSurvey">2023〜2024年の<i>Org. Lett.</i>誌のSI約3000件の調査では、精密質量データの約3割に記載の誤りがあり、その約3分の2は電子の質量を考慮していないものでした（<a href="https://doi.org/10.1021/acs.orglett.4c03458" target="_blank" rel="noopener noreferrer">Christmann, <i>Org. Lett.</i> 2025, <i>27</i>, 4⁠–⁠7</a>）。</span></p>
 </div>
 
 <div class="tabs" role="tablist" id="tabs">
@@ -122,7 +122,7 @@
 <label><span data-t="tolerance">許容誤差 ±</span><div class="inline"><input id="tolerance" type="number" min="0" step="any" value="5" required><select id="unit" aria-label="Tolerance unit"><option>ppm</option><option>mDa</option></select></div></label>
 <label><span data-t="digits">計算値の小数点以下の桁数</span><select data-digits></select></label>
 </div>
-<p class="hint" data-t="rangeHelp">中性分子 M の原子数の範囲（最小〜最大）を元素ごとに指定します。使わない元素は最大を 0 にします。付加イオンの原子は含めません。</p>
+<p class="hint" data-t="rangeHelp">中性分子 M の原子数の範囲（最小〜最大）を元素ごとに指定します。使わない元素は最大を 0 にします。付加する原子（H・Na など）は含めません。</p>
 <div class="rangeGrid" id="ranges"></div>
 <details id="extraElements"><summary data-t="moreElements">その他の元素（金属・希土類など）</summary><div class="rangeGrid" id="extraRanges"></div></details>
 <fieldset class="filters"><legend data-t="filterTitle">候補の絞り込み（任意）</legend>
@@ -162,7 +162,7 @@
 <form id="checkForm" novalidate>
 <p class="hint" data-t="checkHelp">論文・SIのHRMSの記載を貼り付けると、計算値（calcd）を検算します。複数の化合物をまとめて確認できます。</p>
 <label class="block"><span data-t="checkInput">HRMSの記載</span><textarea id="checkInput" rows="7" spellcheck="false" autocomplete="off"></textarea></label>
-<div class="fields"><label><span data-t="checkTol">実測値の許容差 ±</span><div class="inline"><input id="checkTol" type="number" min="0" step="any" value="5"><select id="checkUnit" aria-label="Tolerance unit"><option>ppm</option><option>mDa</option></select></div></label></div>
+<div class="fields"><label><span data-t="checkTol">実測値の許容誤差 ±</span><div class="inline"><input id="checkTol" type="number" min="0" step="any" value="5"><select id="checkUnit" aria-label="Tolerance unit"><option>ppm</option><option>mDa</option></select></div></label></div>
 <div class="actions"><button class="primary" data-t="checkRun">チェックする</button><button type="button" id="checkExample" data-t="example">例を入れる</button></div>
 </form>
 <p id="checkSummary" role="status"></p>
@@ -177,7 +177,7 @@
 <div class="equation"><i>m</i>/<i>z</i> = (Σ <i>n</i><sub>i</sub> <i>m</i><sub>i</sub> − <i>z</i> <i>m</i><sub>e</sub>) / |<i>z</i>|</div>
 <p data-t="definition"><i>n</i><sub>i</sub> は付加・脱離後のイオンに含まれる原子数、<i>m</i><sub>i</sub> は各元素の同位体質量、<i>z</i> は符号付きの電荷数です。2価以上のイオンは |<i>z</i>| で割ります。</p>
 <p data-t="electron">正電荷1つにつき電子1個分の質量を引き、負電荷1つにつき足します（<i>m</i><sub>e</sub> = 0.0005485799090441 Da）。</p>
-<p data-t="ppm">誤差（ppm）=（実測値 − 計算値）/ 計算値 × 10⁶。誤差（mDa）=（実測値 − 計算値）× 1000。許容誤差は ± の範囲として使います。</p>
+<p data-t="ppm">誤差（ppm）=（実測値 − 計算値）/ 計算値 × 10⁶。誤差（mDa）=（実測値 − 計算値）× 1000。</p>
 <p data-t="dbe" data-tabs="calculator finder batch">DBE = 1 + C + N/2 − (H + F + Cl + Br + I)/2（中性分子 M の値。小数もそのまま表示）。C・H・N・O・S・ハロゲン以外を含む組成では「—」とします。</p>
 <p data-tabs="finder"><span data-t="filterMethod">分子式検索の絞り込み：DBE の条件は、中性分子 M の DBE が整数で、かつ0以上であることです。DBE は C・H・N・O・S・ハロゲンを通常の原子価（C 4、N 3、H とハロゲン 1、O・S 2）として計算するので、ほかの元素を含む組成は判定せずに残します。整数であることは窒素ルール（窒素の数と整数質量の偶奇）と同じ条件ですが、0以上であることは窒素ルールには含まれません（例：CH<sub>4</sub> より H の多い CH<sub>6</sub> は窒素ルールを満たしますが、DBE は −1 です）。元素比の条件は、Kind と Fiehn が示した「一般的な範囲」（データベースの分子式の99.7%を含む範囲）のうち、H・N・O・P・S・Si の炭素に対する比を使います。</span> <a href="https://doi.org/10.1186/1471-2105-8-105" target="_blank" rel="noopener noreferrer">Kind &amp; Fiehn, <i>BMC Bioinformatics</i> 2007</a></p>
 <p data-t="urlMethod" data-tabs="calculator finder">精密質量と分子式検索の入力は、ページのアドレスの「#」より後ろに入ります。この部分はサーバーに送られませんが、そのアドレスをブックマーク・共有すると、入力も一緒に伝わります。一括計算と記載チェックの入力はアドレスに入りません。</p>
@@ -199,6 +199,6 @@
 
 <footer><p>© 2026 <a href="../index.html" data-home="index">Yosuke Matsuo</a> · <a href="../tools.html" data-home="tools" data-t="toolsPage">ツール</a></p><p><a href="https://github.com/yosuke-matsuo/yosuke-matsuo.github.io/tree/main/hrms-calc" data-t="sourceCode" target="_blank" rel="noopener noreferrer">ソースコード</a> · <span data-t="codeLicense">HRMS Calcのプログラム：</span><a href="LICENSE.txt">MIT License</a></p></footer>
 </main>
-<script type="module" src="app.js?v=20261125-1"></script>
+<script type="module" src="app.js?v=20261126-1"></script>
 </body>
 </html>

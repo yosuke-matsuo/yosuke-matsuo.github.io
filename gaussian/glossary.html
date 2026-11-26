@@ -20,8 +20,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="用語集｜Gaussian入門" data-en="Glossary | Gaussian guide">用語集｜Gaussian入門</title>
-<link rel="stylesheet" href="../styles.css?v=20261125-2"/>
-<script defer src="../app.js?v=20261125-2"></script>
+<link rel="stylesheet" href="../styles.css?v=20261126-1"/>
+<script defer src="../app.js?v=20261126-1"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">本文へ移動</a>
@@ -52,10 +52,6 @@
 <td data-en=".chk (checkpoint)" data-ja=".chk（チェックポイント）">.chk（チェックポイント）</td>
 <td data-en="A binary file holding intermediate results. Set with %chk=name; read from another job with %oldchk." data-ja="計算の途中結果を保存するバイナリファイル。%chk=名前 で指定し、%oldchk で別の計算から読み込めます。">計算の途中結果を保存するバイナリファイル。%chk=名前 で指定し、%oldchk で別の計算から読み込めます。</td>
 </tr>
-<tr>
-<td data-en="Route line" data-ja="ルート行">ルート行</td>
-<td data-en="The line in the input starting with #. Specifies the method (functional/basis set) and job type (Opt, Freq, NMR, ...)." data-ja="入力の # で始まる行。計算方法（汎関数/基底関数）と計算の種類（Opt, Freq, NMR など）を指定します。">入力の # で始まる行。計算方法（汎関数/基底関数）と計算の種類（Opt, Freq, NMR など）を指定します。</td>
-</tr>
 </tbody></table></div>
 </section>
 <section class="content-section reading" id="g-jobs">
@@ -70,7 +66,7 @@
 </tr>
 <tr>
 <td data-en="Freq (frequency analysis)" data-ja="Freq（振動数解析）">Freq（振動数解析）</td>
-<td><span data-lang="ja">最適化した構造の振動数を計算します。すべて正なら安定構造、1つだけ負（虚振動）ならTSです。熱力学量（<i>G</i>, <i>H</i>）もここで得られます。</span><template data-lang="en"><span data-lang="en" hidden>Computes vibrational frequencies at the optimized structure. All positive: a minimum; exactly one negative (imaginary): a TS. Thermodynamic quantities (<i>G</i>, <i>H</i>) come from here too.</span></template></td>
+<td><span data-lang="ja">最適化した構造の振動数を計算します。熱力学量（<i>G</i>, <i>H</i>）もここで得られます。</span><template data-lang="en"><span data-lang="en" hidden>Computes vibrational frequencies at the optimized structure. Thermodynamic quantities (<i>G</i>, <i>H</i>) come from here too.</span></template></td>
 </tr>
 <tr>
 <td data-en="SP (single point)" data-ja="SP（シングルポイント計算）">SP（シングルポイント計算）</td>
@@ -78,7 +74,7 @@
 </tr>
 <tr>
 <td data-en="TS (transition-state search)" data-ja="TS（遷移状態探索）">TS（遷移状態探索）</td>
-<td data-en="Opt=TS. Searches for the top of a reaction barrier (first-order saddle point). Usually run with CalcFC to compute the initial Hessian." data-ja="Opt=TS。反応の障壁の頂点（一次の鞍点）を探します。CalcFC を付けて最初にヘシアンを計算するのが普通です。">Opt=TS。反応の障壁の頂点（一次の鞍点）を探します。CalcFC を付けて最初にヘシアンを計算するのが普通です。</td>
+<td data-en="Opt=TS. Searches for the top of a reaction barrier (first-order saddle point). CalcFC is often used (ReadFC can read the force constants instead)." data-ja="Opt=TS。反応の障壁の頂点（一次の鞍点）を探します。CalcFC をよく使います（ReadFC で読み込む方法もあります）。">Opt=TS。反応の障壁の頂点（一次の鞍点）を探します。CalcFC をよく使います（ReadFC で読み込む方法もあります）。</td>
 </tr>
 <tr>
 <td data-en="IRC (intrinsic reaction coordinate)" data-ja="IRC（固有反応座標）">IRC（固有反応座標）</td>
@@ -100,6 +96,10 @@
 <th data-en="Term" data-ja="用語" scope="col">用語</th>
 <th data-en="Meaning" data-ja="意味" scope="col">意味</th>
 </tr></thead><tbody>
+<tr>
+<td data-en="Route line" data-ja="ルート行">ルート行</td>
+<td data-en="The line in the input starting with #. Specifies the method (functional/basis set) and job type (Opt, Freq, NMR, ...)." data-ja="入力の # で始まる行。計算方法（汎関数/基底関数）と計算の種類（Opt, Freq, NMR など）を指定します。">入力の # で始まる行。計算方法（汎関数/基底関数）と計算の種類（Opt, Freq, NMR など）を指定します。</td>
+</tr>
 <tr>
 <td data-en="Functional" data-ja="汎関数">汎関数</td>
 <td data-en="The approximation for electron–electron interactions in DFT. Specified by names such as B3LYP, M06-2X, ωB97X-D." data-ja="DFTで電子同士の相互作用を近似する式。B3LYP, M06-2X, ωB97X-D などの名前で指定します。">DFTで電子同士の相互作用を近似する式。B3LYP, M06-2X, ωB97X-D などの名前で指定します。</td>
@@ -158,7 +158,7 @@
 </tr>
 <tr>
 <td><span data-lang="ja"><i>E</i> と <i>G</i></span><template data-lang="en"><span data-lang="en" hidden><i>E</i> and <i>G</i></span></template></td>
-<td><span data-lang="ja"><i>E</i>（SCF Done の値）は電子エネルギー、<i>G</i>（Sum of electronic and thermal Free Energies）はGibbs自由エネルギー。配座の存在率は通常 <i>G</i> から求めます（手順によっては <i>E</i> を使うものもあります）。</span><template data-lang="en"><span data-lang="en" hidden><i>E</i> (the SCF Done value) is the electronic energy; <i>G</i> (Sum of electronic and thermal Free Energies) is the Gibbs free energy. Conformer populations are usually computed from <i>G</i> (some protocols use <i>E</i>).</span></template></td>
+<td><span data-lang="ja"><i>E</i>（SCF Done の値）は電子エネルギー、<i>G</i>（Sum of electronic and thermal Free Energies）はGibbs自由エネルギー。配座の存在率は通常 <i>G</i> から求めます。</span><template data-lang="en"><span data-lang="en" hidden><i>E</i> (the SCF Done value) is the electronic energy; <i>G</i> (Sum of electronic and thermal Free Energies) is the Gibbs free energy. Conformer populations are usually computed from <i>G</i>.</span></template></td>
 </tr>
 <tr>
 <td data-en="Boltzmann distribution" data-ja="ボルツマン分布">ボルツマン分布</td>
@@ -179,6 +179,6 @@
 </section>
 </div>
 </main>
-<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月25日" data-en="Last updated: 25 November 2026" class="copyright">最終更新：2026年11月25日</p></footer>
+<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月26日" data-en="Last updated: 26 November 2026" class="copyright">最終更新：2026年11月26日</p></footer>
 </body>
 </html>

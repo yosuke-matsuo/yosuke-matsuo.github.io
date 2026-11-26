@@ -20,8 +20,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="Gaussianキーワード一覧｜Gaussian入門" data-en="Gaussian keyword reference | Gaussian guide">Gaussianキーワード一覧｜Gaussian入門</title>
-<link rel="stylesheet" href="../styles.css?v=20261125-2"/>
-<script defer src="../app.js?v=20261125-2"></script>
+<link rel="stylesheet" href="../styles.css?v=20261126-1"/>
+<script defer src="../app.js?v=20261126-1"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">本文へ移動</a>
@@ -40,9 +40,9 @@
 <li data-en="Link 0 lines start with % and come before the route line. The route line starts with # and may be wrapped over several lines, with no blank line in between." data-ja="Link 0 の行は % で始め、ルート行より前に書きます。ルート行は # で始め、複数行に折り返せます（行の間に空行を入れずに続けて書きます）。">Link 0 の行は % で始め、ルート行より前に書きます。ルート行は # で始め、複数行に折り返せます（行の間に空行を入れずに続けて書きます）。</li>
 <li data-en="Keywords are case-insensitive: Opt, opt and OPT are the same." data-ja="大文字・小文字は区別されません。Opt と opt と OPT は同じです。">大文字・小文字は区別されません。Opt と opt と OPT は同じです。</li>
 <li data-en="One option: Opt=Tight. Two or more: wrap in parentheses, Opt=(TS,CalcFC)." data-ja="オプションが1つなら Opt=Tight、2つ以上なら Opt=(TS,CalcFC) のように括弧でくくります。">オプションが1つなら Opt=Tight、2つ以上なら Opt=(TS,CalcFC) のように括弧でくくります。</li>
-<li data-en="Functional and basis set are joined with a slash: B3LYP/6-31G(d). With Gen, basis-set cards follow the coordinates." data-ja="汎関数と基底関数は B3LYP/6-31G(d) のようにスラッシュでつなぎます。Gen を使うときは座標の後に基底関数カードを書きます。">汎関数と基底関数は B3LYP/6-31G(d) のようにスラッシュでつなぎます。Gen を使うときは座標の後に基底関数カードを書きます。</li>
+<li data-en="Functional and basis set are joined with a slash: B3LYP/6-31G(d)." data-ja="汎関数と基底関数は B3LYP/6-31G(d) のようにスラッシュでつなぎます。">汎関数と基底関数は B3LYP/6-31G(d) のようにスラッシュでつなぎます。</li>
 </ul>
-<p><span data-lang="ja">入力全体の構造は<a href="./start.html#input">はじめてのGaussian計算</a>を見てください。すべてのキーワードとオプションは<a href="https://gaussian.com/keywords/" target="_blank" rel="noopener noreferrer">Gaussian公式のキーワード一覧</a>にあります。</span><template data-lang="en"><span data-lang="en" hidden>The overall input structure is on <a href="./start.html#input">Your first Gaussian calculation</a>. The complete list is in the <a href="https://gaussian.com/keywords/" target="_blank" rel="noopener noreferrer">official Gaussian keyword reference</a>.</span></template></p>
+<p><span data-lang="ja">すべてのキーワードとオプションは<a href="https://gaussian.com/keywords/" target="_blank" rel="noopener noreferrer">Gaussian公式のキーワード一覧</a>にあります。</span><template data-lang="en"><span data-lang="en" hidden>The complete list is in the <a href="https://gaussian.com/keywords/" target="_blank" rel="noopener noreferrer">official Gaussian keyword reference</a>.</span></template></p>
 </section>
 <section class="content-section reading" id="link0">
 <h2 data-en="Link 0 (% lines)" data-ja="Link 0（% で始まる行）">Link 0（% で始まる行）</h2>
@@ -64,11 +64,11 @@
 </tr>
 <tr>
 <td><code translate="no">%mem</code><br><span class="kw-ex" translate="no">%mem=16GB</span></td>
-<td data-en="Amount of memory. Exceeding the machine&#x27;s limit will kill the job." data-ja="使用するメモリ量。大きすぎると実行環境の制限で落ちます。">使用するメモリ量。大きすぎると実行環境の制限で落ちます。</td>
+<td data-en="Amount of memory. Exceeding the machine&#x27;s limit will stop the job." data-ja="使用するメモリ量。大きすぎると実行環境の制限を超えて止まります。">使用するメモリ量。大きすぎると実行環境の制限を超えて止まります。</td>
 </tr>
 <tr>
 <td><code translate="no">%rwf</code></td>
-<td data-en="Location of the read-write scratch file; pointing it at fast disk can speed up a job." data-ja="一時作業ファイルの場所。ディスクの速い領域を指定すると速くなることがあります。">一時作業ファイルの場所。ディスクの速い領域を指定すると速くなることがあります。</td>
+<td data-en="Location of the read-write scratch file; pointing it at fast disk can speed up a job." data-ja="一時作業ファイルの場所。読み書きの速いディスクを指定すると、計算が速くなることがあります。">一時作業ファイルの場所。読み書きの速いディスクを指定すると、計算が速くなることがあります。</td>
 </tr>
 </tbody></table></div>
 </section>
@@ -136,11 +136,11 @@
 </tr>
 <tr>
 <td><code translate="no">Opt=CalcFC</code></td>
-<td data-en="Computes exact force constants (the Hessian) at the first cycle; effectively required for TS searches." data-ja="最初のサイクルで力の定数（ヘシアン）を正確に計算します。TS探索ではほぼ必須です。">最初のサイクルで力の定数（ヘシアン）を正確に計算します。TS探索ではほぼ必須です。</td>
+<td data-en="Computes exact force constants (the Hessian) at the first cycle; often used for TS searches (ReadFC can read them instead)." data-ja="最初のサイクルで力の定数（ヘシアン）を正確に計算します。TS探索でよく使います（ReadFC で読み込む方法もあります）。">最初のサイクルで力の定数（ヘシアン）を正確に計算します。TS探索でよく使います（ReadFC で読み込む方法もあります）。</td>
 </tr>
 <tr>
 <td><code translate="no">Opt=CalcAll</code></td>
-<td data-en="Recomputes the Hessian every cycle: reliable but very expensive." data-ja="毎サイクルでヘシアンを計算します。確実ですが非常に重くなります。">毎サイクルでヘシアンを計算します。確実ですが非常に重くなります。</td>
+<td data-en="Recomputes the Hessian every cycle; the calculation becomes much more expensive." data-ja="毎サイクルでヘシアンを計算します。計算はかなり重くなります。">毎サイクルでヘシアンを計算します。計算はかなり重くなります。</td>
 </tr>
 <tr>
 <td><code translate="no">Opt=ReadFC</code></td>
@@ -156,7 +156,7 @@
 </tr>
 <tr>
 <td><code translate="no">Opt=ModRedundant</code></td>
-<td data-en="Freezes or scans bonds and angles; a card such as &quot;1 12 F&quot; follows the coordinates." data-ja="結合距離・角度を固定したり走査したりします。座標の後にカード（例：1 12 F）を書きます。">結合距離・角度を固定したり走査したりします。座標の後にカード（例：1 12 F）を書きます。</td>
+<td data-en="Freezes bonds and angles; a card such as &quot;1 12 F&quot; follows the coordinates." data-ja="結合距離・角度を固定します。座標の後にカード（例：1 12 F）を書きます。">結合距離・角度を固定します。座標の後にカード（例：1 12 F）を書きます。</td>
 </tr>
 <tr>
 <td><code translate="no">Opt=Cartesian</code></td>
@@ -196,7 +196,7 @@
 </tr>
 <tr>
 <td><code translate="no">Integral=UltraFine</code></td>
-<td data-en="Uses a finer integration grid; matters for Minnesota functionals and low frequencies. Default in Gaussian 16." data-ja="数値積分の格子を細かくします。M06系の汎関数や低振動数の精度に効きます。Gaussian 16の既定です。">数値積分の格子を細かくします。M06系の汎関数や低振動数の精度に効きます。Gaussian 16の既定です。</td>
+<td data-en="Uses a finer integration grid; matters for Minnesota functionals and low frequencies. Default in Gaussian 16." data-ja="数値積分の格子を細かくします。M06系の汎関数や低振動数の精度に効きます。Gaussian 16 では既定です。">数値積分の格子を細かくします。M06系の汎関数や低振動数の精度に効きます。Gaussian 16 では既定です。</td>
 </tr>
 <tr>
 <td><code translate="no">Integral=NoBasisTransform</code></td>
@@ -288,7 +288,7 @@
 </tr>
 <tr>
 <td><code translate="no">TD=(NStates=N)</code></td>
-<td data-en="Number of excited states to compute; must cover the wavelength range you want to compare." data-ja="計算する励起状態の数。比べたい波長域を覆うだけ必要です。">計算する励起状態の数。比べたい波長域を覆うだけ必要です。</td>
+<td data-en="Number of excited states to compute; set enough to cover the wavelength range you want to compare." data-ja="計算する励起状態の数。比べたい波長域を覆う数にします。">計算する励起状態の数。比べたい波長域を覆う数にします。</td>
 </tr>
 <tr>
 <td><code translate="no">TD=(Singlets) / TD=(Triplets)</code></td>
@@ -385,6 +385,6 @@
 </section>
 </div>
 </main>
-<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月25日" data-en="Last updated: 25 November 2026" class="copyright">最終更新：2026年11月25日</p></footer>
+<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月26日" data-en="Last updated: 26 November 2026" class="copyright">最終更新：2026年11月26日</p></footer>
 </body>
 </html>

@@ -21,8 +21,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="Opt・SCFエラー｜Gaussian入門" data-en="Opt and SCF errors | Gaussian guide">Opt and SCF errors | Gaussian guide</title>
-<link rel="stylesheet" href="../../styles.css?v=20261125-2"/>
-<script defer src="../../app.js?v=20261125-2"></script>
+<link rel="stylesheet" href="../../styles.css?v=20261126-1"/>
+<script defer src="../../app.js?v=20261126-1"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">Skip to content</a>
@@ -34,7 +34,7 @@
 <main class="page-shell guide" id="main">
 
 <div class="page-body">
-<section class="intro"><nav aria-label="Breadcrumb" class="breadcrumb"><a data-ja="Gaussian入門" data-en="Gaussian guide" href="./index.html">Gaussian guide</a> / <a data-ja="Gaussianのエラー対応" data-en="Troubleshooting Gaussian errors" href="./troubleshooting.html">Troubleshooting Gaussian errors</a></nav><h1 data-en="Opt and SCF errors" data-ja="Opt・SCFエラー">Opt and SCF errors</h1><p data-en="What to do when an optimization stops or the SCF fails to converge." data-ja="構造最適化が止まったとき、SCFが収束しないときの対処。" class="lead">What to do when an optimization stops or the SCF fails to converge.</p></section>
+<section class="intro"><nav aria-label="Breadcrumb" class="breadcrumb"><a data-ja="Gaussian入門" data-en="Gaussian guide" href="./index.html">Gaussian guide</a> / <a data-ja="Gaussianのエラー対応" data-en="Troubleshooting Gaussian errors" href="./troubleshooting.html">Troubleshooting Gaussian errors</a></nav><h1 data-en="Opt and SCF errors" data-ja="Opt・SCFエラー">Opt and SCF errors</h1></section>
 <section class="content-section reading" id="opt">
 <h2 data-en="Geometry optimization (Opt)" data-ja="構造最適化（Opt）">Geometry optimization (Opt)</h2>
 <article class="error-entry"><h3 data-en="Opt step limit" data-ja="Optの回数上限" id="minimum">Opt step limit</h3><pre class="error-marker" translate="no" lang="en">Number of steps exceeded,  NStep= 100</pre><p><strong data-en="Cause: " data-ja="原因：">Cause: </strong><span data-en="The structure did not converge within the cycle limit (MaxCycles; set by molecular size if not given). The output ends with Error termination, but the input is not wrong; the job simply stopped part-way." data-ja="回数上限内に構造が収束しませんでした（上限は MaxCycles。指定しなければ分子の大きさで決まります）。出力は Error termination で終わりますが、入力の誤りではなく「途中で止まった」状態です。">The structure did not converge within the cycle limit (MaxCycles; set by molecular size if not given). The output ends with Error termination, but the input is not wrong; the job simply stopped part-way.</span></p><strong data-en="What to do" data-ja="対処" class="action-label">What to do</strong><ol class="compact-list">
@@ -61,7 +61,7 @@ Error in internal coordinate system.</pre><p><strong data-en="Cause: " data-ja="
 <section class="content-section reading" id="scf">
 <h2 data-en="SCF convergence failure" data-ja="SCFの収束失敗">SCF convergence failure</h2>
 <article class="error-entry"><h3 data-en="SCF does not converge" data-ja="SCFが収束しない" id="scf-body">SCF does not converge</h3><pre class="error-marker" translate="no" lang="en">Convergence failure -- run terminated.</pre><p><strong data-en="Cause: " data-ja="原因：">Cause: </strong><span data-en="The iterative electronic-structure calculation (SCF) at one geometry did not converge. It can happen in Opt, TS or IRC jobs." data-ja="1つの構造の電子状態を求める反復計算（SCF）が収束しません。Opt・TS・IRCのどの計算でも起こります。">The iterative electronic-structure calculation (SCF) at one geometry did not converge. It can happen in Opt, TS or IRC jobs.</span></p><strong data-en="What to do" data-ja="対処" class="action-label">What to do</strong><ol class="compact-list">
-<li data-en="Check charge/multiplicity and look for atom clashes or abnormal bond lengths in the structure. This is the most common cause." data-ja="電荷・多重度が正しいか、構造に原子の衝突や異常な結合距離がないかを確認します。ここが原因のことが最も多いです。">Check charge/multiplicity and look for atom clashes or abnormal bond lengths in the structure. This is the most common cause.</li>
+<li data-en="Check charge/multiplicity and look for atom clashes or abnormal bond lengths in the structure. This is a common cause." data-ja="電荷・多重度が正しいか、構造に原子の衝突や異常な結合距離がないかを確認します。よくある原因です。">Check charge/multiplicity and look for atom clashes or abnormal bond lengths in the structure. This is a common cause.</li>
 <li data-en="If those are fine, add SCF=XQC to the route line and rerun (adds quadratically convergent steps when the usual method fails)." data-ja="問題がなければ、ルート行に SCF=XQC を加えて再実行します（通常の方法で収束しないとき、二次収束法を追加で行います）。">If those are fine, add SCF=XQC to the route line and rerun (adds quadratically convergent steps when the usual method fails).</li>
 <li data-en="If XQC also fails, read the initial guess from the .chk of a nearby converged structure with Guess=Read, or reconsider the method. For an open-shell singlet with an unrestricted method, also try Guess=Mix." data-ja="XQCでも失敗するなら、収束した近い構造の .chk から Guess=Read で初期推測を読むか、計算方法を見直します。開殻一重項を非制限法で計算している場合は Guess=Mix も試します。">If XQC also fails, read the initial guess from the .chk of a nearby converged structure with Guess=Read, or reconsider the method. For an open-shell singlet with an unrestricted method, also try Guess=Mix.</li>
 </ol></article>
@@ -81,6 +81,6 @@ Error in internal coordinate system.</pre><p><strong data-en="Cause: " data-ja="
 </section>
 </div>
 </main>
-<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月25日" data-en="Last updated: 25 November 2026" class="copyright">Last updated: 25 November 2026</p></footer>
+<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月26日" data-en="Last updated: 26 November 2026" class="copyright">Last updated: 26 November 2026</p></footer>
 </body>
 </html>

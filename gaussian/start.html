@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<meta name="description" content="カテキンで、入力の書き方から出力の確認までを一度に体験します。" data-ja="カテキンで、入力の書き方から出力の確認までを一度に体験します。" data-en="Learn input, execution and output checking in one pass, with catechin."/>
+<meta name="description" content="入力の書き方から出力の確認までを、カテキンで一通り体験します。" data-ja="入力の書き方から出力の確認までを、カテキンで一通り体験します。" data-en="Learn input, execution and output checking in one pass, with catechin."/>
 <link rel="canonical" href="https://yosuke-matsuo.github.io/gaussian/start.html"/>
 <link rel="alternate" hreflang="ja" href="https://yosuke-matsuo.github.io/gaussian/start.html"/>
 <link rel="alternate" hreflang="en" href="https://yosuke-matsuo.github.io/en/gaussian/start.html"/>
@@ -11,7 +11,7 @@
 <meta property="og:type" content="website"/>
 <meta property="og:site_name" content="Yosuke Matsuo（松尾洋介）"/>
 <meta property="og:title" content="はじめてのGaussian計算｜Gaussian入門"/>
-<meta property="og:description" content="カテキンで、入力の書き方から出力の確認までを一度に体験します。" data-ja="カテキンで、入力の書き方から出力の確認までを一度に体験します。" data-en="Learn input, execution and output checking in one pass, with catechin."/>
+<meta property="og:description" content="入力の書き方から出力の確認までを、カテキンで一通り体験します。" data-ja="入力の書き方から出力の確認までを、カテキンで一通り体験します。" data-en="Learn input, execution and output checking in one pass, with catechin."/>
 <meta property="og:url" content="https://yosuke-matsuo.github.io/gaussian/start.html"/>
 <meta property="og:locale" content="ja_JP"/>
 <meta property="og:image" content="https://yosuke-matsuo.github.io/images/og-image.png"/>
@@ -20,8 +20,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="はじめてのGaussian計算｜Gaussian入門" data-en="Your first Gaussian calculation | Gaussian guide">はじめてのGaussian計算｜Gaussian入門</title>
-<link rel="stylesheet" href="../styles.css?v=20261125-2"/>
-<script defer src="../app.js?v=20261125-2"></script>
+<link rel="stylesheet" href="../styles.css?v=20261126-1"/>
+<script defer src="../app.js?v=20261126-1"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">本文へ移動</a>
@@ -32,7 +32,7 @@
 </header>
 <main class="page-shell guide" id="main">
 <div class="page-body">
-<section class="intro"><nav aria-label="Breadcrumb" class="breadcrumb"><a data-ja="Gaussian入門" data-en="Gaussian guide" href="./index.html">Gaussian入門</a></nav><h1 data-en="Your first Gaussian calculation" data-ja="はじめてのGaussian計算">はじめてのGaussian計算</h1><p data-en="Learn input, execution and output checking in one pass, with catechin." data-ja="カテキンで、入力の書き方から出力の確認までを一度に体験します。" class="lead">カテキンで、入力の書き方から出力の確認までを一度に体験します。</p></section>
+<section class="intro"><nav aria-label="Breadcrumb" class="breadcrumb"><a data-ja="Gaussian入門" data-en="Gaussian guide" href="./index.html">Gaussian入門</a></nav><h1 data-en="Your first Gaussian calculation" data-ja="はじめてのGaussian計算">はじめてのGaussian計算</h1><p data-en="Learn input, execution and output checking in one pass, with catechin." data-ja="入力の書き方から出力の確認までを、カテキンで一通り体験します。" class="lead">入力の書き方から出力の確認までを、カテキンで一通り体験します。</p></section>
 <nav aria-label="On this page" class="section-nav"><a href="#environment" data-ja="0. 環境を準備する" data-en="0. Set up an environment">0. 環境を準備する</a><a href="#input" data-ja="1. 入力ファイルの中身" data-en="1. Anatomy of an input file">1. 入力ファイルの中身</a><a href="#example" data-ja="2. 完成した入力：(+)-カテキン" data-en="2. Complete input: (+)-catechin">2. 完成した入力：(+)-カテキン</a><a href="#run" data-ja="3. 実行する" data-en="3. Run it">3. 実行する</a><a href="#output" data-ja="4. 出力の見方：3か所だけ確認する" data-en="4. Reading the output: check three places">4. 出力の見方：3か所だけ確認する</a><a href="#errors" data-ja="5. 止まったとき：最初によく出る3つのエラー" data-en="5. When it stops: three common first errors">5. 止まったとき：最初によく出る3つのエラー</a><a href="#next" data-ja="次のステップ" data-en="Next steps">次のステップ</a></nav>
 <section class="content-section reading" id="about">
 
@@ -96,7 +96,7 @@ C   -0.275413  -1.265444   0.763977
 </tr></thead><tbody>
 <tr>
 <td data-en="(1) Link 0" data-ja="(1) Link 0">(1) Link 0</td>
-<td data-en="Lines starting with %: number of cores (%nprocshared), memory (%mem) and checkpoint name (%chk). Set cores and memory for the machine you run on." data-ja="%で始まる行。使うコア数（%nprocshared）、メモリ（%mem）、チェックポイントファイル名（%chk）。コア数とメモリは実行する計算機に合わせます。">%で始まる行。使うコア数（%nprocshared）、メモリ（%mem）、チェックポイントファイル名（%chk）。コア数とメモリは実行する計算機に合わせます。</td>
+<td data-en="Lines starting with %: number of cores (%nprocshared), memory (%mem) and checkpoint name (%chk)." data-ja="%で始まる行。使うコア数（%nprocshared）、メモリ（%mem）、チェックポイントファイル名（%chk）。">%で始まる行。使うコア数（%nprocshared）、メモリ（%mem）、チェックポイントファイル名（%chk）。</td>
 
 </tr>
 <tr>
@@ -122,7 +122,7 @@ C   -0.275413  -1.265444   0.763977
 </tbody></table></div>
 <h3 data-en="Reading the route line" data-ja="ルート行の読み方">ルート行の読み方</h3>
 <ul class="compact-list">
-<li data-en="#p — output verbosity. #n (or just #) is normal, #p adds per-step information, #t is terse. #p is easiest to check while learning." data-ja="#p — 出力の詳しさ。#n（または # だけ）が標準、#p は各ステップの情報を追加、#t は最小限。">#p — 出力の詳しさ。#n（または # だけ）が標準、#p は各ステップの情報を追加、#t は最小限。</li>
+<li data-en="#p — output verbosity. #n (or just #) is normal, #p adds per-step information, #t is terse." data-ja="#p — 出力の詳しさ。#n（または # だけ）が標準、#p は各ステップの情報を追加、#t は最小限。">#p — 出力の詳しさ。#n（または # だけ）が標準、#p は各ステップの情報を追加、#t は最小限。</li>
 <li data-en="B3LYP — the functional: how electron–electron interactions are approximated." data-ja="B3LYP — 汎関数。電子同士の相互作用の近似の仕方です。">B3LYP — 汎関数。電子同士の相互作用の近似の仕方です。</li>
 <li data-en="6-31G(d) — the basis set: the functions used to describe the electron distribution." data-ja="6-31G(d) — 基底関数。電子の分布を表す関数の組です。">6-31G(d) — 基底関数。電子の分布を表す関数の組です。</li>
 <li data-en="Opt Freq — optimize the geometry, then compute vibrational frequencies at the same geometry." data-ja="Opt Freq — 構造を最適化してから、同じ構造で振動数を計算します。">Opt Freq — 構造を最適化してから、同じ構造で振動数を計算します。</li>
@@ -185,7 +185,6 @@ H      1.291806    -2.223515     1.428757
 <li><strong data-en="Run an MMFF conformer search in Spartan" data-ja="SpartanでMMFF配座探索を行う" class="step-title">SpartanでMMFF配座探索を行う</strong><div class="step-body"><p><span data-lang="ja">.mol2 を読み込み、Calculations → Conformer Distribution。得られた配座が<a href="./conformers.html">配座と安定構造</a>の出発点です。最初の練習では最低エネルギーの1配座だけを使います。</span><template data-lang="en"><span data-lang="en" hidden>Load the .mol2 and run Calculations → Conformer Distribution. The conformers are the starting point of <a href="./conformers.html">Conformers and stable structures</a>. For a first run, use only the lowest-energy one.</span></template></p></div></li>
 <li><strong data-en="Turn it into a Gaussian input" data-ja="Gaussian入力にする" class="step-title">Gaussian入力にする</strong><div class="step-body"><p data-en="Export coordinates from Spartan, or create the input with Input → Gaussian in Avogadro 2; write the job type, functional, basis set and solvent on the route line, and save the .gjf." data-ja="Spartan から座標を書き出すか、Avogadro 2 の Input → Gaussian で入力を作り、計算の種類・汎関数・基底関数・溶媒をルート行に書いて .gjf を保存します。">Spartan から座標を書き出すか、Avogadro 2 の Input → Gaussian で入力を作り、計算の種類・汎関数・基底関数・溶媒をルート行に書いて .gjf を保存します。</p></div></li>
 </ol>
-<p data-en="Check stereochemistry and charge before exporting." data-ja="立体化学と電荷は書き出す前に確認します。">立体化学と電荷は書き出す前に確認します。</p>
 </section>
 <section class="content-section reading" id="run">
 <h2 data-en="3. Run it" data-ja="3. 実行する">3. 実行する</h2>
@@ -268,6 +267,6 @@ g16sub catechin_opt_freq.gjf</pre></template>
 </section>
 </div>
 </main>
-<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月25日" data-en="Last updated: 25 November 2026" class="copyright">最終更新：2026年11月25日</p></footer>
+<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月26日" data-en="Last updated: 26 November 2026" class="copyright">最終更新：2026年11月26日</p></footer>
 </body>
 </html>

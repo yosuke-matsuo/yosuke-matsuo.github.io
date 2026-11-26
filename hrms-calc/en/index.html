@@ -44,7 +44,7 @@
  }
 }
 </script>
-<link rel="stylesheet" href="../style.css?v=20261125-1">
+<link rel="stylesheet" href="../style.css?v=20261126-1">
 </head>
 <body>
 <a class="skip-link" href="#main" data-t="skip">Skip to content</a>
@@ -123,7 +123,7 @@
 <label><span data-t="tolerance">Tolerance ±</span><div class="inline"><input id="tolerance" type="number" min="0" step="any" value="5" required><select id="unit" aria-label="Tolerance unit"><option>ppm</option><option>mDa</option></select></div></label>
 <label><span data-t="digits">Decimal places of calculated values</span><select data-digits></select></label>
 </div>
-<p class="hint" data-t="rangeHelp">Set the range of atom counts (minimum–maximum) for each element of the neutral M. Set the maximum to 0 for unused elements. Do not include adduct atoms.</p>
+<p class="hint" data-t="rangeHelp">Set the range of atom counts (minimum–maximum) for each element of the neutral M. Set the maximum to 0 for unused elements. Do not include the added atoms (H, Na, etc.).</p>
 <div class="rangeGrid" id="ranges"></div>
 <details id="extraElements"><summary data-t="moreElements">More elements (metals, rare earths and others)</summary><div class="rangeGrid" id="extraRanges"></div></details>
 <fieldset class="filters"><legend data-t="filterTitle">Filter candidates (optional)</legend>
@@ -178,7 +178,7 @@
 <div class="equation"><i>m</i>/<i>z</i> = (Σ <i>n</i><sub>i</sub> <i>m</i><sub>i</sub> − <i>z</i> <i>m</i><sub>e</sub>) / |<i>z</i>|</div>
 <p data-t="definition"><i>n</i><sub>i</sub> is the number of atoms in the final ion, <i>m</i><sub>i</sub> the isotope mass of each element and <i>z</i> the signed charge. Ions with two or more charges are divided by |<i>z</i>|.</p>
 <p data-t="electron">One electron mass is subtracted per positive charge and added per negative charge (<i>m</i><sub>e</sub> = 0.0005485799090441 Da).</p>
-<p data-t="ppm">Error (ppm) = (measured − calculated) / calculated × 10⁶. Error (mDa) = (measured − calculated) × 1000. The tolerance is applied as a ± range.</p>
+<p data-t="ppm">Error (ppm) = (measured − calculated) / calculated × 10⁶. Error (mDa) = (measured − calculated) × 1000.</p>
 <p data-t="dbe" data-tabs="calculator finder batch">DBE = 1 + C + N/2 − (H + F + Cl + Br + I)/2 (for the neutral M, shown with any fraction). Compositions with elements other than C, H, N, O, S and halogens show —.</p>
 <p data-tabs="finder"><span data-t="filterMethod">Candidate filters: the DBE condition requires the DBE of the neutral M to be an integer and not negative. DBE is calculated for C, H, N, O, S and halogens with the usual valences (C 4, N 3, H and halogens 1, O and S 2); compositions with other elements are not judged and are kept. Being an integer is the same condition as the nitrogen rule (parity of the number of nitrogens and of the nominal mass); being non-negative is not part of the nitrogen rule (CH<sub>6</sub> satisfies the nitrogen rule but has DBE −1). The element-ratio condition uses the ratios of H, N, O, P, S and Si to carbon in the “common range” given by Kind and Fiehn (covering 99.7% of the formulas in their database).</span> <a href="https://doi.org/10.1186/1471-2105-8-105" target="_blank" rel="noopener noreferrer">Kind &amp; Fiehn, <i>BMC Bioinformatics</i> 2007</a></p>
 <p data-t="urlMethod" data-tabs="calculator finder">The inputs of the calculator and the formula finder are kept in the page address after “#”. That part is not sent to the server, but a bookmarked or shared address carries the inputs. Inputs of the batch and the checker are not kept in the address.</p>
@@ -200,6 +200,6 @@
 
 <footer><p>© 2026 <a href="../../en/index.html" data-home="index">Yosuke Matsuo</a> · <a href="../../en/tools.html" data-home="tools" data-t="toolsPage">Tools</a></p><p><a href="https://github.com/yosuke-matsuo/yosuke-matsuo.github.io/tree/main/hrms-calc" data-t="sourceCode" target="_blank" rel="noopener noreferrer">Source code</a> · <span data-t="codeLicense">HRMS Calc code: </span><a href="../LICENSE.txt">MIT License</a></p></footer>
 </main>
-<script type="module" src="../app.js?v=20261125-1"></script>
+<script type="module" src="../app.js?v=20261126-1"></script>
 </body>
 </html>

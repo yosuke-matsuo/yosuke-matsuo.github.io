@@ -20,8 +20,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="遷移状態と反応経路（TS・IRC）｜Gaussian入門" data-en="Transition states and reaction paths (TS/IRC) | Gaussian guide">遷移状態と反応経路（TS・IRC）｜Gaussian入門</title>
-<link rel="stylesheet" href="../styles.css?v=20261125-2"/>
-<script defer src="../app.js?v=20261125-2"></script>
+<link rel="stylesheet" href="../styles.css?v=20261126-1"/>
+<script defer src="../app.js?v=20261126-1"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">本文へ移動</a>
@@ -45,7 +45,7 @@
 <tr>
 <td data-en="Direct TS (Opt=(TS,CalcFC))" data-ja="直接TS（Opt=(TS,CalcFC)）">直接TS（Opt=(TS,CalcFC)）</td>
 <td data-en="One guess close to the TS" data-ja="TSに近い候補構造1つ">TSに近い候補構造1つ</td>
-<td data-en="The most common method; success depends on a good guess." data-ja="最もよく使う方法。良い候補構造を作ることが成否を決めます。">最もよく使う方法。良い候補構造を作ることが成否を決めます。</td>
+<td data-en="The most common method." data-ja="最もよく使う方法。">最もよく使う方法。</td>
 </tr>
 <tr>
 <td data-en="QST2" data-ja="QST2">QST2</td>
@@ -118,7 +118,7 @@
 </section>
 <section class="content-section reading" id="conditions">
 <h2 data-en="Conditions: transition states" data-ja="計算条件：遷移状態">計算条件：遷移状態</h2><p class="note"><span data-lang="ja">ルート行の下には、空行・タイトル・空行・電荷と多重度・座標・空行を続けます（<a href="./start.html#input">入力ファイルの構造</a>）。各キーワードの意味は<a href="./keywords.html">キーワード一覧</a>にあります。</span><template data-lang="en"><span data-lang="en" hidden>Below the route line, continue with a blank line, title, blank line, charge/multiplicity, coordinates and a final blank line (<a href="./start.html#input">input anatomy</a>). Keyword meanings are in the <a href="./keywords.html">keyword reference</a>.</span></template></p>
-<article class="method-entry"><h3 data-en="Direct TS (Opt=TS)" data-ja="直接TS探索（Opt=TS）" id="ts-direct">直接TS探索（Opt=TS）</h3><p data-en="The standard form when a good TS guess exists. CalcFC computes the initial Hessian. MaxStep=2 caps each step at 0.02 Bohr (default 0.30 Bohr): a cautious setting that needs more cycles." data-ja="良いTS候補構造がある場合の標準形。CalcFC で最初にヘシアンを計算します。MaxStep=2 は1回の移動の上限を 0.02 Bohr（既定は 0.30 Bohr）に抑える慎重な設定で、サイクル数は増えます。">良いTS候補構造がある場合の標準形。CalcFC で最初にヘシアンを計算します。MaxStep=2 は1回の移動の上限を 0.02 Bohr（既定は 0.30 Bohr）に抑える慎重な設定で、サイクル数は増えます。</p><p class="muted"><span data-en="Relative time: strongly guess-dependent" data-ja="時間の目安：初期構造に強く依存">時間の目安：初期構造に強く依存</span></p><pre class="input-block" translate="no" lang="en">%chk=ts-direct.chk
+<article class="method-entry"><h3 data-en="Direct TS (Opt=TS)" data-ja="直接TS探索（Opt=TS）" id="ts-direct">直接TS探索（Opt=TS）</h3><p data-en="The standard form when a good TS guess exists. CalcFC computes the initial Hessian. MaxStep=2 caps each step at 0.02 Bohr or 0.02 rad (default 0.30): a cautious setting that needs more cycles." data-ja="良いTS候補構造がある場合の標準形。CalcFC で最初にヘシアンを計算します。MaxStep=2 は1回の移動の上限を 0.02 Bohr または 0.02 rad（既定は 0.30）に抑える慎重な設定で、サイクル数は増えます。">良いTS候補構造がある場合の標準形。CalcFC で最初にヘシアンを計算します。MaxStep=2 は1回の移動の上限を 0.02 Bohr または 0.02 rad（既定は 0.30）に抑える慎重な設定で、サイクル数は増えます。</p><p class="muted"><span data-en="Relative time: strongly guess-dependent" data-ja="時間の目安：初期構造に強く依存">時間の目安：初期構造に強く依存</span></p><pre class="input-block" translate="no" lang="en">%chk=ts-direct.chk
 #p M062X/6-31+G(d,p) Opt=(TS,CalcFC,Tight,MaxStep=2,MaxCycles=100)
    SCRF=(SMD,Solvent=Acetonitrile) Integral=UltraFine SCF=Tight</pre><p class="muted"><span data-en="Source: " data-ja="出典：">出典：</span><a href="https://gaussian.com/opt/" target="_blank" rel="noopener noreferrer" data-ja="Gaussian公式：Opt" data-en="Gaussian: Opt">Gaussian公式：Opt</a></p></article>
 <article class="method-entry"><h3 data-en="QST2" data-ja="QST2" id="ts-qst2">QST2</h3><p data-en="Searches from reactant and product. Atom order must match exactly; write a title/charge-multiplicity/coordinate block for each. Do not also write Opt=TS." data-ja="反応物と生成物の2構造から探します。原子の順序を完全に一致させ、それぞれタイトル・電荷多重度・座標のブロックを続けて書きます。Opt=TS は重ねて書きません。">反応物と生成物の2構造から探します。原子の順序を完全に一致させ、それぞれタイトル・電荷多重度・座標のブロックを続けて書きます。Opt=TS は重ねて書きません。</p><p class="muted"><span data-en="Relative time: depends on the two end structures" data-ja="時間の目安：両端構造に依存">時間の目安：両端構造に依存</span></p><pre class="input-block" translate="no" lang="en">%chk=ts-qst2.chk
@@ -151,19 +151,19 @@ product
 </section>
 <section class="content-section reading" id="recovery">
 <h2 data-en="TS re-search: overview" data-ja="TS再探索：全体の流れ">TS再探索：全体の流れ</h2>
-<p data-en="The procedure when a TS search stops with an eigenvalue error, or converges with two or more imaginary frequencies. The key idea: find the direction of the extra imaginary mode, displace slightly along it, and search again." data-ja="TS探索が固有値エラーで止まったとき、または収束したのに虚振動が2つ以上あるときの手順です。要点は「余分な虚振動の方向を見つけ、その方向に少し動かして探し直す」ことです。">TS探索が固有値エラーで止まったとき、または収束したのに虚振動が2つ以上あるときの手順です。要点は「余分な虚振動の方向を見つけ、その方向に少し動かして探し直す」ことです。</p>
+<p data-en="The procedure when a TS search stops with an eigenvalue error, or converges with two or more imaginary frequencies." data-ja="TS探索が固有値エラーで止まったとき、または収束したのに虚振動が2つ以上あるときの手順です。">TS探索が固有値エラーで止まったとき、または収束したのに虚振動が2つ以上あるときの手順です。</p>
 <ol class="step-list">
 <li><strong data-en="Check the guess and the reaction direction" data-ja="候補構造と反応方向を確認する" class="step-title">候補構造と反応方向を確認する</strong><div class="step-body"><p data-en="Bond distances, atom orientation, clashes. Often fixable here." data-ja="結合距離、原子の向き、衝突。ここで直せることが多いです。">結合距離、原子の向き、衝突。ここで直せることが多いです。</p></div></li>
 <li><strong data-en="(If the guess is reasonable) continue with NoEigenTest" data-ja="（候補が妥当なら）NoEigenTest を付けて続ける" class="step-title">（候補が妥当なら）NoEigenTest を付けて続ける</strong><div class="step-body"><p data-en="Suspend the check on the number of negative eigenvalues and continue the search. Confirm with the Freq after convergence that there is exactly one imaginary frequency." data-ja="負の固有値の数の検査を止めて探索を続けます。収束後の Freq で虚振動が1つかを確認します。">負の固有値の数の検査を止めて探索を続けます。収束後の Freq で虚振動が1つかを確認します。</p></div></li>
 <li><strong data-en="Mode-check Freq" data-ja="モード確認用Freq" class="step-title">モード確認用Freq</strong><div class="step-body"><p data-en="Run Freq at the stopped geometry to get complete vibrational modes." data-ja="止まった構造で Freq を実行し、完全な振動モードを得ます。">止まった構造で Freq を実行し、完全な振動モードを得ます。</p></div></li>
 <li><strong data-en="Pick the extra mode and displace ±" data-ja="余分なモードを選び、±に変位" class="step-title">余分なモードを選び、±に変位</strong><div class="step-body"><p data-en="Distinguish the reaction mode from the extra mode in a viewer such as GaussView and build two structures displaced ±0.05 Å along the extra one." data-ja="GaussViewなどのビューアーで反応モードと余分なモードを見分け、余分なモードに沿って ±0.05 Å 動かした構造を2つ作ります。">GaussViewなどのビューアーで反応モードと余分なモードを見分け、余分なモードに沿って ±0.05 Å 動かした構造を2つ作ります。</p></div></li>
-<li><strong data-en="Re-search the TS from both, then final Freq and IRC" data-ja="両方の構造からTSを再探索し、最終Freq・IRC" class="step-title">両方の構造からTSを再探索し、最終Freq・IRC</strong><div class="step-body"><p data-en="Search each with Opt=(TS,CalcFC); for the one that converges, run Freq and IRC in both directions." data-ja="Opt=(TS,CalcFC) で別々に探索し、収束したほうで Freq と両方向 IRC を行います。">Opt=(TS,CalcFC) で別々に探索し、収束したほうで Freq と両方向 IRC を行います。</p></div></li>
+<li><strong data-en="Re-search the TS from both, then final Freq and IRC" data-ja="両方の構造からTSを再探索し、最終Freq・IRC" class="step-title">両方の構造からTSを再探索し、最終Freq・IRC</strong><div class="step-body"><p data-en="Search each with Opt=(TS,CalcFC) or similar; for the one that converges, run Freq and IRC in both directions." data-ja="Opt=(TS,CalcFC) などで別々に探索し、収束したほうで Freq と両方向 IRC を行います。">Opt=(TS,CalcFC) などで別々に探索し、収束したほうで Freq と両方向 IRC を行います。</p></div></li>
 </ol>
 </section>
 <section class="content-section reading" id="mode-freq">
 <h3 data-en="Mode-check Freq" data-ja="モード確認用Freq">モード確認用Freq</h3>
 <p data-en="The eigenvectors printed by the Berny optimizer are partial, so they cannot be used as atomic displacements. Run Freq alone at the stopped geometry to obtain complete Cartesian modes." data-ja="Berny最適化の出力に出る固有ベクトルは一部の成分だけなので、原子の変位としては使えません。止まった構造で Freq だけを実行し、完全なCartesianモードを取ります。">Berny最適化の出力に出る固有ベクトルは一部の成分だけなので、原子の変位としては使えません。止まった構造で Freq だけを実行し、完全なCartesianモードを取ります。</p>
-<pre class="input-block" translate="no" lang="en">#p B3LYP/6-31G(d) SCRF=(SMD,Solvent=Methanol) Freq</pre>
+<pre class="input-block" translate="no" lang="en">#p B3LYP/6-31G(d) Freq</pre>
 <p data-en="This Freq is for finding directions only; use the same functional, basis set and solvent as the TS search. Do not use it for TS proof, thermochemistry or starting an IRC." data-ja="この Freq は方向を調べるためのものです。汎関数・基底関数・溶媒はTS探索と同じにします。TSの証明や熱化学値、IRCの出発点には使いません。">この Freq は方向を調べるためのものです。汎関数・基底関数・溶媒はTS探索と同じにします。TSの証明や熱化学値、IRCの出発点には使いません。</p>
 </section>
 <section class="content-section reading" id="displace">
@@ -181,7 +181,7 @@ product
 <h3 data-en="Final Freq and IRC after convergence" data-ja="収束後の最終Freq・IRC">収束後の最終Freq・IRC</h3>
 <p data-en="Run Freq at the converged stationary point under the same conditions; confirm exactly one imaginary frequency whose motion is the intended reaction. Then confirm the connection to reactant and product with IRC in both directions and endpoint Opt Freq." data-ja="収束した停留点で同じ条件の Freq を行い、虚振動が1つだけで、その動きが目的の反応であることを確認します。次に両方向の IRC と末端の Opt Freq で反応物・生成物への接続を確かめます。">収束した停留点で同じ条件の Freq を行い、虚振動が1つだけで、その動きが目的の反応であることを確認します。次に両方向の IRC と末端の Opt Freq で反応物・生成物への接続を確かめます。</p>
 <p data-en="Record: the original TS, the mode-check Freq, the chosen mode, the displacement, the ± branches, and the final Freq/IRC." data-ja="記録：元TS、モード確認Freq、選んだモード、変位量、＋−の枝、最終Freq・IRCの対応を残します。">記録：元TS、モード確認Freq、選んだモード、変位量、＋−の枝、最終Freq・IRCの対応を残します。</p>
-<p data-en="Displacing along an extra imaginary mode and re-searching is an established approach; the TURBOMOLE manual §5.2.4 describes a similar procedure with screwer. The 0.05 Å initial displacement and 0.01–0.20 Å range are guideline values." data-ja="余分な虚振動に沿って構造を変位させてTSを探し直す考え方は、一般的な方法です。TURBOMOLEのマニュアル §5.2.4 にも screwer による同様の手順があります。0.05 Å の初期変位、0.01–0.20 Å の範囲は目安です。">余分な虚振動に沿って構造を変位させてTSを探し直す考え方は、一般的な方法です。TURBOMOLEのマニュアル §5.2.4 にも screwer による同様の手順があります。0.05 Å の初期変位、0.01–0.20 Å の範囲は目安です。</p>
+<p data-en="Displacing along an extra imaginary mode and re-searching is an established approach; the TURBOMOLE manual §5.2.4 describes a similar procedure with screwer." data-ja="余分な虚振動に沿って構造を変位させてTSを探し直すのは、一般的な方法です。TURBOMOLEのマニュアル §5.2.4 にも screwer による同様の手順があります。">余分な虚振動に沿って構造を変位させてTSを探し直すのは、一般的な方法です。TURBOMOLEのマニュアル §5.2.4 にも screwer による同様の手順があります。</p>
 </section>
 <section class="content-section reading" id="basis">
 <h3 data-en="References" data-ja="参考資料">参考資料</h3>
@@ -202,6 +202,6 @@ product
 </section>
 </div>
 </main>
-<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月25日" data-en="Last updated: 25 November 2026" class="copyright">最終更新：2026年11月25日</p></footer>
+<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月26日" data-en="Last updated: 26 November 2026" class="copyright">最終更新：2026年11月26日</p></footer>
 </body>
 </html>
