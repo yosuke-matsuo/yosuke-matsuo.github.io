@@ -341,6 +341,10 @@ test('Br/Cl isotopologues of the exact-mass result (T-14)', async () => {
   // no Br or Cl: no list
   assert.deepEqual(halogenIsotopologues(parseFormula('C6H12O6'), 1), []);
   assert.deepEqual(halogenIsotopologues(parseFormula('C6H5F'), 1), []);
+  // hundreds of Br and Cl atoms: the table stays small and does not throw (thresholded before the product)
+  const many = halogenIsotopologues(parseFormula('C800H802Br400Cl400'), 1);
+  assert.ok(many.length > 0 && many.length <= 6);
+  assert.ok(many.every(r => r.relative >= 1 && Number.isFinite(r.mz)));
 });
 
 test('formulas with an element without data (Tc, Ra, Po) get their own error (GC-9)', () => {

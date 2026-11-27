@@ -1,6 +1,8 @@
-import {ELEMENTS,IONS,parseFormula,ion,ionCounts,ppm,dbe,isotopePattern,halogenIsotopologues} from './core.js?v=20261127-7';
-import {ionLabel,formulaHtml,siFormula,siSentence,checkText,parseBatch,readFound} from './si.js?v=20261127-7';
-import {strings,rich} from './text.js?v=20261127-7';
+import {ELEMENTS,IONS,parseFormula,ion,ionCounts,ppm,dbe,isotopePattern,halogenIsotopologues} from './core.js?v=20261127-8';
+// the supplementary Br/Cl table never prevents an otherwise valid exact-mass result
+const optionalHalogens=(c,z)=>{try{return halogenIsotopologues(c,z);}catch{return [];}};
+import {ionLabel,formulaHtml,siFormula,siSentence,checkText,parseBatch,readFound} from './si.js?v=20261127-8';
+import {strings,rich} from './text.js?v=20261127-8';
 const $=id=>document.getElementById(id);
 const EXAMPLES={
  batch:'Glucose\tC6H12O6\t[M+Na]+\t203.0524\nCatechin\tC15H14O6\t[M-H]-\t289.0716\nPunicalagin\tC48H28O30\t[M-2H]2-\t541.0263\nCaffeine C8H10N4O2 [M+H]+ 195.0877',
@@ -119,7 +121,7 @@ function calculate(showErrors){
  if(!fRaw){calcState=null;renderCalc();clearCalcUrl();return;}
  try{
   const counts=parseFormula(fRaw),key=$('calcIon').value,r=ion(counts,key),found=readFound($('calcFound').value);
-  const ic=ionCounts(counts,key);calcState={counts,key,r,found,pattern:isotopePattern(ic,r.z),halogens:halogenIsotopologues(ic,r.z)};
+  const ic=ionCounts(counts,key);calcState={counts,key,r,found,pattern:isotopePattern(ic,r.z),halogens:optionalHalogens(ic,r.z)};
   setUrl({f:fRaw,ion:key,found},'calculator');
  }catch(e){calcState=showErrors?{error:e.message,symbol:e.symbol}:null;}
  renderCalc();
@@ -205,7 +207,7 @@ $('searchForm').onsubmit=event=>{event.preventDefault();clearSearch();
  const bad=checkRanges();if(bad){if(bad.input.closest('details'))bad.input.closest('details').open=true;bad.input.setAttribute('aria-invalid','true');bad.input.focus();$('searchStatus').textContent=bad.text;return;}
  try{
   const ranges=[...document.querySelectorAll('.range')].map(div=>{const inputs=div.querySelectorAll('input');return [inputs[0].dataset.element,Number(inputs[0].value),Number(inputs[1].value)];});
-  worker=new Worker(new URL('./worker.js?v=20261127-7',import.meta.url),{type:'module'});$('cancel').disabled=false;$('searchButton').disabled=true;$('searchStatus').textContent=t('running');
+  worker=new Worker(new URL('./worker.js?v=20261127-8',import.meta.url),{type:'module'});$('cancel').disabled=false;$('searchButton').disabled=true;$('searchStatus').textContent=t('running');
   worker.onmessage=({data})=>{cancel();if(data.error){say($('searchStatus'),errorText(data.error));return;}last=data;renderResults();$('copy').disabled=!data.results.length;$('searchLink').disabled=false;};
   worker.onerror=()=>{cancel();$('searchStatus').textContent=t('errorGeneric');};
   worker.postMessage({found:Number($('found').value),tolerance:Number($('tolerance').value),unit:$('unit').value,adduct:$('searchIon').value,ranges,filters:{dbe:$('filterDbe').checked,ratio:$('filterRatio').checked}});

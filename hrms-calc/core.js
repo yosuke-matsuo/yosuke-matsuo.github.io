@@ -1,6 +1,6 @@
-import {ELEMENTS,ELECTRON_MASS} from './constants.js?v=20261127-7';
-import {ISOTOPES} from './isotopes.js?v=20261127-7';
-import {ATOMIC_WEIGHTS} from './atomic-weights.js?v=20261127-7';
+import {ELEMENTS,ELECTRON_MASS} from './constants.js?v=20261127-8';
+import {ISOTOPES} from './isotopes.js?v=20261127-8';
+import {ATOMIC_WEIGHTS} from './atomic-weights.js?v=20261127-8';
 export {ELEMENTS,ELECTRON_MASS};
 // [number of M, signed charge, atoms added (+) or removed (−)]
 export const IONS = {
@@ -117,11 +117,15 @@ export function halogenIsotopologues(counts,z,{minRelative=1,maxRows=6}={}){
     all.forEach((k,j)=>{lp+=k*Math.log(iso[j][2])-lnf(k);dm+=k*(iso[j][1]-top[1]);});
     out.push({atoms:all.map((k,j)=>({a:iso[j][0],e,n:k})).filter(x=>x.n>0),p:Math.exp(lp),dm});return;}
    for(let k=left;k>=0;k--)rec(i+1,left-k,[...ks,k]);};
-  rec(0,n,[]);return out;
+  rec(0,n,[]);
+  // a combination is at most as intense, relative to the largest, as each of its parts, so parts below the
+  // threshold can be dropped before the product (keeps the table small for formulas with many Br/Cl atoms)
+  let top2=0;for(const x of out)if(x.p>top2)top2=x.p;
+  return out.filter(x=>x.p>=top2*minRelative/100);
  });
  let rows=[{atoms:[],p:1,dm:0}];
  for(const list of parts)rows=rows.flatMap(r=>list.map(x=>({atoms:[...r.atoms,...x.atoms],p:r.p*x.p,dm:r.dm+x.dm})));
- const max=Math.max(...rows.map(r=>r.p));
+ let max=0;for(const r of rows)if(r.p>max)max=r.p;
  rows=rows.map(r=>({atoms:r.atoms,mz:(base+r.dm-z*ELECTRON_MASS)/Math.abs(z),relative:r.p/max*100})).filter(r=>r.relative>=minRelative);
  if(rows.length>maxRows)rows=rows.sort((a,b)=>b.relative-a.relative).slice(0,maxRows);
  return rows.sort((a,b)=>a.mz-b.mz);
