@@ -1,6 +1,8 @@
-import {ELEMENTS,IONS,parseFormula,ion,ionCounts,ppm,dbe,isotopePattern} from './core.js?v=20261127-6';
-import {ionLabel,formulaHtml,siFormula,siSentence,checkText,parseBatch,readFound} from './si.js?v=20261127-6';
-import {strings,rich} from './text.js?v=20261127-6';
+import {ELEMENTS,IONS,parseFormula,ion,ionCounts,ppm,dbe,isotopePattern,halogenIsotopologues} from './core.js?v=20261127-8';
+// the supplementary Br/Cl table never prevents an otherwise valid exact-mass result
+const optionalHalogens=(c,z)=>{try{return halogenIsotopologues(c,z);}catch{return [];}};
+import {ionLabel,formulaHtml,siFormula,siSentence,checkText,parseBatch,readFound} from './si.js?v=20261127-8';
+import {strings,rich} from './text.js?v=20261127-8';
 const $=id=>document.getElementById(id);
 const EXAMPLES={
  batch:'Glucose\tC6H12O6\t[M+Na]+\t203.0524\nCatechin\tC15H14O6\t[M-H]-\t289.0716\nPunicalagin\tC48H28O30\t[M-2H]2-\t541.0263\nCaffeine C8H10N4O2 [M+H]+ 195.0877',
@@ -31,7 +33,7 @@ async function copyRich(text,markup,status){
   status.textContent=t('copyOk');
  }catch{try{await navigator.clipboard.writeText(text);status.textContent=t('copyOk');}catch{status.textContent=t('copyFail');}}
 }
-function errorText(code){return t({formula:'errorFormula',composition:'errorComposition',range:'errorRange',search:'errorSearch',found:'errorFound',lines:'errorLines'}[code]||'errorGeneric');}
+function errorText(code,symbol){if(code==='element')return t('errElement')(symbol||'');return t({formula:'errorFormula',composition:'errorComposition',range:'errorRange',search:'errorSearch',found:'errorFound',lines:'errorLines'}[code]||'errorGeneric');}
 
 // ---------- ion selects ----------
 const POS=Object.keys(IONS).filter(k=>IONS[k][1]>0),NEG=Object.keys(IONS).filter(k=>IONS[k][1]<0);
@@ -119,9 +121,9 @@ function calculate(showErrors){
  if(!fRaw){calcState=null;renderCalc();clearCalcUrl();return;}
  try{
   const counts=parseFormula(fRaw),key=$('calcIon').value,r=ion(counts,key),found=readFound($('calcFound').value);
-  calcState={counts,key,r,found,pattern:isotopePattern(ionCounts(counts,key),r.z)};
+  const ic=ionCounts(counts,key);calcState={counts,key,r,found,pattern:isotopePattern(ic,r.z),halogens:optionalHalogens(ic,r.z)};
   setUrl({f:fRaw,ion:key,found},'calculator');
- }catch(e){calcState=showErrors?{error:e.message}:null;}
+ }catch(e){calcState=showErrors?{error:e.message,symbol:e.symbol}:null;}
  renderCalc();
 }
 function renderCalc(){
@@ -131,7 +133,7 @@ function renderCalc(){
  main.replaceChildren();$('siCopyStatus').textContent='';$('calcLinkStatus').textContent='';
  $('calcLinkRow').hidden=!(calcState&&!calcState.error);
  if(!calcState)return;
- if(calcState.error){main.append(html('p',rich(errorText(calcState.error)),'error'));return;}
+ if(calcState.error){main.append(html('p',rich(errorText(calcState.error,calcState.symbol)),'error'));return;}
  const {counts,key,r,found}=calcState;
  main.append(html('p',`${ionLabel(key).html} <span class="sep">·</span> ${t('ionFormula')} ${formulaHtml(r.ionFormula)}${r.z>0?'<sup>'+(r.z>1?r.z:'')+'+</sup>':'<sup>'+(r.z<-1?-r.z:'')+'−</sup>'}`,'result-ion'));
  main.append(html('p',`<span>${rich(t('mz'),false)}</span> <strong>${r.mz.toFixed(digits)}</strong>`,'result-mz'));
@@ -167,6 +169,13 @@ function renderIso(){
    `<text x="${x}" y="${h+pad-bh-4}" class="val">${p.relative>=10?p.relative.toFixed(0):p.relative.toFixed(1)}</text>`+
    `<text x="${x}" y="${h+pad+14}" class="lab">${name(p.shift)}</text>`;});
  $('isoChart').innerHTML=svg+'</svg>';
+ renderHalogens();
+}
+// Br / Cl isotopologues (only for ions containing Br or Cl)
+function renderHalogens(){
+ const rows=calcState.halogens||[],table=$('haloTable');$('haloBlock').hidden=!rows.length;
+ tableHead(table,[t('haloComp'),'m/z',t('relative')]);table.querySelector('tbody').replaceChildren();
+ for(const x of rows)row(table,[H(x.atoms.map(a=>`<sup>${a.a}</sup>${a.e}${a.n>1?`<sub>${a.n}</sub>`:''}`).join('')),x.mz.toFixed(4),x.relative.toFixed(0)]);
 }
 $('calcForm').addEventListener('input',()=>calculate(false));
 $('calcForm').addEventListener('change',()=>calculate(true));
@@ -198,7 +207,7 @@ $('searchForm').onsubmit=event=>{event.preventDefault();clearSearch();
  const bad=checkRanges();if(bad){if(bad.input.closest('details'))bad.input.closest('details').open=true;bad.input.setAttribute('aria-invalid','true');bad.input.focus();$('searchStatus').textContent=bad.text;return;}
  try{
   const ranges=[...document.querySelectorAll('.range')].map(div=>{const inputs=div.querySelectorAll('input');return [inputs[0].dataset.element,Number(inputs[0].value),Number(inputs[1].value)];});
-  worker=new Worker(new URL('./worker.js?v=20261127-6',import.meta.url),{type:'module'});$('cancel').disabled=false;$('searchButton').disabled=true;$('searchStatus').textContent=t('running');
+  worker=new Worker(new URL('./worker.js?v=20261127-8',import.meta.url),{type:'module'});$('cancel').disabled=false;$('searchButton').disabled=true;$('searchStatus').textContent=t('running');
   worker.onmessage=({data})=>{cancel();if(data.error){say($('searchStatus'),errorText(data.error));return;}last=data;renderResults();$('copy').disabled=!data.results.length;$('searchLink').disabled=false;};
   worker.onerror=()=>{cancel();$('searchStatus').textContent=t('errorGeneric');};
   worker.postMessage({found:Number($('found').value),tolerance:Number($('tolerance').value),unit:$('unit').value,adduct:$('searchIon').value,ranges,filters:{dbe:$('filterDbe').checked,ratio:$('filterRatio').checked}});
@@ -208,9 +217,9 @@ $('cancel').onclick=()=>{cancel();$('searchStatus').textContent=t('stopped');};
 $('copy').onclick=async()=>{if(!last)return;const fl=[$('filterDbe').checked&&'DBE',$('filterRatio').checked&&(lang==='ja'?'元素比':'element ratios')].filter(Boolean).join(', ');const context=`${t('found')}: ${$('found').value}\t${$('searchIon').value}\t±${$('tolerance').value} ${$('unit').value}\t${last.complete?t('complete'):t('incomplete')}`+(fl?`\t${lang==='ja'?'絞り込み':'Filters'}: ${fl}`:'')+(last.excluded?`\t${t('excludedFmt')(last.excluded)}`:'');try{await navigator.clipboard.writeText([context,headers().join('\t'),...last.results.map(r=>resultValues(r).join('\t'))].join('\n'));$('copyStatus').textContent=t('copyOk');}catch{$('copyStatus').textContent=t('copyFail');}};
 
 // ---------- batch ----------
-function batchHeaders(){return [t('line'),t('label'),t('formula'),t('ion'),t('ionFormula'),t('mz'),t('measured'),'Δ ppm','DBE',t('note')];}
+function batchHeaders(){return [t('line'),t('label'),t('formula'),t('ion'),t('ionFormula'),t('mz'),t('measured'),lang==='ja'?`${t('diff')}（ppm）`:`${t('diff')} (ppm)`,'DBE',t('note')];}
 function batchValues(b){
- if(b.error)return [b.line,b.label,b.formula,b.error==='formula'?'':b.key,'','','','','',b.message];
+ if(b.error)return [b.line,b.label,b.formula,['formula','element'].includes(b.error)?'':b.key,'','','','','',b.message];
  return [b.line,b.label,b.r.formula,b.key,b.r.ionFormula,b.r.mz.toFixed(digits),b.found,b.found?ppm(Number(b.found),b.r.mz).toFixed(2):'',b.dbe??'—',''];
 }
 function runBatch(){
@@ -228,8 +237,10 @@ function renderBatch(){
  if(!batchRows){$('batchStatus').textContent='';return;}
  if(!batchRows.length){$('batchStatus').textContent=t('batchEmpty');return;}
  for(const b of batchRows){
-  if(b.error)b.message=b.code==='token'?t('errToken')(b.bad):b.code==='ion'?t('errIon')(b.bad):b.code==='ionConflict'?t('errIonConflict')(b.bad):errorText(b.code);
+  if(b.error)b.message=b.code==='element'?t('errElement')(b.bad):b.code==='token'?t('errToken')(b.bad):b.code==='ion'?t('errIon')(b.bad):b.code==='ionConflict'?t('errIonConflict')(b.bad):errorText(b.code);
   const v=batchValues(b);if(b.formula&&(!b.error||b.counts))v[2]=H(formulaHtml(b.error?b.formula:b.r.formula));if(v[3])v[3]=H(ionLabel(v[3]).html);if(v[4])v[4]=H(formulaHtml(v[4]));
+  // on screen a true minus sign; the copied table keeps ASCII '-' for spreadsheets
+  for(const i of [7,8])if(typeof v[i]==='string'||typeof v[i]==='number')v[i]=String(v[i]).replace(/^-/,'−');
   const tr=row(table,v);if(b.error)tr.className='row-error';
  }
  const bad=batchRows.filter(b=>b.error).length;
@@ -252,7 +263,7 @@ $('batchCopySi').onclick=()=>{
 };
 
 // ---------- checker ----------
-const CODE_TEXT={ok:'cOk',rounding:'cRounding',electron:'cElectron',electronSign:'cElectronSign',neutralFormula:'cNeutralFormula',neutralFormulaElectron:'cNeutralFormulaElectron',mismatch:'cMismatch',adductMissing:'cAdductMissing',foundUnread:'cFoundUnread',chargeAssumed:'cChargeAssumed',chargeConflict:'cChargeConflict',noFormula:'cNoFormula',noValue:'cNoValue',fewDigits:'cFewDigits',formula:'cFormula'};
+const CODE_TEXT={ok:'cOk',rounding:'cRounding',electron:'cElectron',electronSign:'cElectronSign',neutralFormula:'cNeutralFormula',neutralFormulaElectron:'cNeutralFormulaElectron',mismatch:'cMismatch',adductMissing:'cAdductMissing',foundUnread:'cFoundUnread',chargeAssumed:'cChargeAssumed',chargeConflict:'cChargeConflict',noFormula:'cNoFormula',noValue:'cNoValue',fewDigits:'cFewDigits',formula:'cFormula',element:'cElement'};
 const STATUS_TEXT={ok:'stOk',warn:'stWarn',error:'stError',unparsed:'stUnparsed'};
 function tolValue(){const v=Number($('checkTol').value);return Number.isFinite(v)&&v>=0?v:5;}
 const unitValue=()=>$('checkUnit').value==='mDa'?'mDa':'ppm';

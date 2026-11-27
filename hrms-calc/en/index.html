@@ -44,7 +44,7 @@
  }
 }
 </script>
-<link rel="stylesheet" href="../style.css?v=20261127-6">
+<link rel="stylesheet" href="../style.css?v=20261127-8">
 </head>
 <body>
 <a class="skip-link" href="#main" data-t="skip">Skip to content</a>
@@ -95,6 +95,11 @@
 <div id="isoChart" aria-hidden="true"></div>
 <div class="tableWrap"><table id="isoTable" class="compact"><thead></thead><tbody></tbody></table></div>
 <p class="hint" data-t="isoNote">Intensities are relative to the strongest peak (100).</p>
+<div id="haloBlock" hidden>
+<h3 data-t="haloTitle">Br and Cl isotope combinations</h3>
+<div class="tableWrap"><table id="haloTable" class="compact"><thead></thead><tbody></tbody></table></div>
+<p class="hint" data-t="haloNote">Values for each combination of Br and Cl isotopes. Other elements are at their most abundant isotope, and intensities come from the Br and Cl abundances only (so they differ slightly from the isotope pattern, which includes ¹³C and others).</p>
+</div>
 </div>
 </div>
 <div id="journals" class="journals"><h2 data-t="journals">How major journals ask for HRMS data</h2>
@@ -107,7 +112,7 @@
 <dt>Elsevier — <a href="https://www.sciencedirect.com/journal/tetrahedron/publish/guide-for-authors" target="_blank" rel="noopener noreferrer"><i>Tetrahedron</i></a></dt>
 <dd><p class="journal-example">HRMS (ES+): <i>m</i>/<i>z</i> [M + H]<sup>+</sup> calcd 333.1248, found 333.1229</p></dd>
 <dt>Thieme — <a href="https://www.thieme.de/statics/dokumente/thieme/final/de/dokumente/zw_synthesis/CFZ-Synthesis-Authors-Instructions-2025.pdf" target="_blank" rel="noopener noreferrer"><i>Synthesis</i></a></dt>
-<dd><p class="journal-example">HRMS–FAB: <i>m</i>/<i>z</i> [M + H]<sup>+</sup> calcd for C<sub>21</sub>H<sub>38</sub>N<sub>4</sub>O<sub>6</sub>S: 475.5285; found: 475.5267.</p></dd>
+<dd><p class="journal-example">HRMS–FAB: <i>m</i>/<i>z</i> [M + H]<sup>+</sup> calcd for C<sub>21</sub>H<sub>38</sub>N<sub>4</sub>O<sub>6</sub>S: 475.5285; found: 475.5267.</p><p class="note" data-t="synthesisNote">475.5285 appears to be a misprint for 475.2585 (the recalculated [M + H]<sup>+</sup> for C<sub>21</sub>H<sub>38</sub>N<sub>4</sub>O<sub>6</sub>S).</p></dd>
 <dt><span data-t="psj">Pharmaceutical Society of Japan</span> — <a href="https://cpb.pharm.or.jp/document/CPB_Instructions.pdf" target="_blank" rel="noopener noreferrer"><i>Chem. Pharm. Bull.</i></a>, <a href="https://bpb.pharm.or.jp/document/BPB_Instructions.pdf" target="_blank" rel="noopener noreferrer"><i>Biol. Pharm. Bull.</i></a>; <span data-t="jsp">Japanese Society of Pharmacognosy</span> — <a href="https://link.springer.com/journal/11418/submission-guidelines" target="_blank" rel="noopener noreferrer"><i>J. Nat. Med.</i></a></dt>
 <dd><p class="journal-example">FAB-MS <i>m</i>/<i>z</i>: 332.1258 (Calcd for C<sub>18</sub>H<sub>20</sub>O<sub>6</sub>: 332.1259)</p></dd>
 </dl>
@@ -178,7 +183,7 @@
 <div class="equation"><i>m</i>/<i>z</i> = (Σ <i>n</i><sub>i</sub> <i>m</i><sub>i</sub> − <i>z</i> <i>m</i><sub>e</sub>) / |<i>z</i>|</div>
 <p data-t="definition"><i>n</i><sub>i</sub> is the number of atoms of element <i>i</i> in the ion (after adduct formation or loss), <i>m</i><sub>i</sub> is the isotope mass of element <i>i</i> and <i>z</i> is the signed charge number; for multiply charged ions the mass is divided by |<i>z</i>|.</p>
 <p data-t="electron">One electron mass is subtracted per positive charge and added per negative charge (<i>m</i><sub>e</sub> = 0.0005485799090441 Da).</p>
-<p data-t="molecularWeightMethod" data-tabs="calculator">The molecular weight is calculated from the CIAAW abridged standard atomic weights and shown to two decimal places.</p>
+<p data-t="molecularWeightMethod" data-tabs="calculator">The molecular weight is calculated from the CIAAW abridged standard atomic weights and shown to two decimal places, or to fewer when an element in the formula has fewer in its abridged value (Pb).</p>
 <p data-t="ppm">Error (ppm) = (measured − calculated) / calculated × 10⁶. Error (mDa) = (measured − calculated) × 1000.</p>
 <p data-t="dbe" data-tabs="calculator finder batch">DBE = 1 + C + N/2 − (H + F + Cl + Br + I)/2 (value for the neutral M; non-integer values are shown as they are). Compositions with elements other than C, H, N, O, S and halogens are shown as —.</p>
 <p data-tabs="finder"><span data-t="filterMethod">Filters in Find formulas: the DBE condition requires the DBE of the neutral M to be an integer and not negative. DBE is calculated for C, H, N, O, S and halogens with the usual valences (C 4, N 3, H and halogens 1, O and S 2); compositions with other elements are not judged and are kept. An integer DBE is equivalent to the nitrogen rule (parity of the number of nitrogens and of the nominal mass); a non-negative DBE is not required by the nitrogen rule (for example, CH<sub>6</sub> satisfies the nitrogen rule but has DBE −1). The element-ratio condition uses the ratios of H, N, O, P, S and Si to carbon in the “common range” given by Kind and Fiehn (covering 99.7% of the formulas in their database).</span> <a href="https://doi.org/10.1186/1471-2105-8-105" target="_blank" rel="noopener noreferrer">Kind &amp; Fiehn, <i>BMC Bioinformatics</i> 2007</a></p>
@@ -202,6 +207,6 @@
 
 <footer><p>© 2026 <a href="../../en/index.html" data-home="index">Yosuke Matsuo</a> · <a href="../../en/tools.html" data-home="tools" data-t="toolsPage">Tools</a></p><p><a href="https://github.com/yosuke-matsuo/yosuke-matsuo.github.io/tree/main/hrms-calc" data-t="sourceCode" target="_blank" rel="noopener noreferrer">Source code</a> · <span data-t="codeLicense">HRMS Calc code: </span><a href="../LICENSE.txt">MIT License</a></p></footer>
 </main>
-<script type="module" src="../app.js?v=20261127-6"></script>
+<script type="module" src="../app.js?v=20261127-8"></script>
 </body>
 </html>

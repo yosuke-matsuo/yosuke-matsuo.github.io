@@ -1,6 +1,6 @@
-import {ELEMENTS,ELECTRON_MASS} from './constants.js?v=20261127-6';
-import {ISOTOPES} from './isotopes.js?v=20261127-6';
-import {ATOMIC_WEIGHTS} from './atomic-weights.js?v=20261127-6';
+import {ELEMENTS,ELECTRON_MASS} from './constants.js?v=20261127-8';
+import {ISOTOPES} from './isotopes.js?v=20261127-8';
+import {ATOMIC_WEIGHTS} from './atomic-weights.js?v=20261127-8';
 export {ELEMENTS,ELECTRON_MASS};
 // [number of M, signed charge, atoms added (+) or removed (−)]
 export const IONS = {
@@ -11,11 +11,14 @@ export const IONS = {
  '[M+Cl]-': [1,-1,{Cl:1}], '[M]-': [1,-1,{}], '[M-2H]2-': [1,-2,{H:-2}],
  '[2M-H]-': [2,-1,{H:-1}], '[2M]-': [2,-1,{}]
 };
+// every element symbol: one the tool has no data for (Tc, Po, Ra ...) gets its own error
+const SYMBOLS=new Set('H He Li Be B C N O F Ne Na Mg Al Si P S Cl Ar K Ca Sc Ti V Cr Mn Fe Co Ni Cu Zn Ga Ge As Se Br Kr Rb Sr Y Zr Nb Mo Tc Ru Rh Pd Ag Cd In Sn Sb Te I Xe Cs Ba La Ce Pr Nd Pm Sm Eu Gd Tb Dy Ho Er Tm Yb Lu Hf Ta W Re Os Ir Pt Au Hg Tl Pb Bi Po At Rn Fr Ra Ac Th Pa U Np Pu Am Cm Bk Cf Es Fm Md No Lr Rf Db Sg Bh Hs Mt Ds Rg Cn Nh Fl Mc Lv Ts Og'.split(' '));
 export function parseFormula(input) {
  if(typeof input!=='string'||!input.length||input.length>500) throw Error('formula');
  const s=input.trim(); const out={}; const re=/([A-Z][a-z]?)([0-9]*)/gy;let pos=0,m;
  while((m=re.exec(s))){
   const n=m[2]===''?1:Number(m[2]);
+  if(!Object.hasOwn(ELEMENTS,m[1])&&SYMBOLS.has(m[1])&&/^(?:[A-Z][a-z]?\d*)+$/.test(s)){const e=Error('element');e.symbol=m[1];throw e;}
   if(!Object.hasOwn(ELEMENTS,m[1])||!Number.isSafeInteger(n)||n<1||n>10000)throw Error('formula');
   out[m[1]]=(out[m[1]]||0)+n;if(out[m[1]]>10000)throw Error('formula');pos=re.lastIndex;
  }
@@ -59,8 +62,11 @@ function molecularWeightUnits(c){
  return u;
 }
 export const molecularWeight=c=>molecularWeightUnits(c)/1e4;
-// shown to two decimal places, rounding half up
-export function formatMolecularWeight(c){return (Math.floor(molecularWeightUnits(c)/100+0.5)/100).toFixed(2);}
+// shown to two decimal places, or fewer when an element's abridged value has fewer (Pb 207.2), rounding half up
+export function formatMolecularWeight(c){
+ let d=2;for(const [e,n] of Object.entries(c))if(n>0&&ATOMIC_WEIGHTS[e]!==undefined)d=Math.min(d,(String(ATOMIC_WEIGHTS[e]).split('.')[1]||'').length);
+ const step=10**(4-d);return (Math.floor(molecularWeightUnits(c)/step+0.5)/10**d).toFixed(d);
+}
 export const ppm=(found,calculated)=>(found-calculated)/calculated*1e6;
 export function dbe(c){
  if(Object.keys(c).some(k=>c[k]&&!['C','H','N','O','S','F','Cl','Br','I'].includes(k)))return null;
@@ -94,6 +100,35 @@ export function isotopePattern(counts,z,{minRelative=1e-3,maxPeaks=20}={}){
  peaks=peaks.filter(p=>p.relative>=minRelative*100);
  if(peaks.length>maxPeaks)peaks=peaks.sort((a,b)=>b.relative-a.relative).slice(0,maxPeaks).sort((a,b)=>a.shift-b.shift);
  return peaks;
+}
+/* Br and Cl isotopologues of an ion composition with signed charge z: each combination of their isotopes,
+   all other elements at their most abundant isotope. Relative intensity from the Br and Cl abundances only
+   (multinomial), largest = 100; rows below minRelative % are left out, at most maxRows (most intense), by mass.
+   Returns [] when the composition has no Br or Cl. */
+export function halogenIsotopologues(counts,z,{minRelative=1,maxRows=6}={}){
+ if(!Number.isInteger(z)||z===0)throw Error('charge');
+ const hal=['Br','Cl'].filter(e=>(counts[e]|0)>0);if(!hal.length)return [];
+ const base=mass(counts);
+ // per element: the distribution of its n atoms over its isotopes
+ const parts=hal.map(e=>{
+  const n=counts[e]|0,iso=[...ISOTOPES[e]].sort((a,b)=>a[0]-b[0]),top=iso.reduce((x,y)=>y[2]>x[2]?y:x);
+  const out=[];const lnf=k=>{let x=0;for(let i=2;i<=k;i++)x+=Math.log(i);return x;};
+  const rec=(i,left,ks)=>{if(i===iso.length-1){const all=[...ks,left];let lp=lnf(n),dm=0;
+    all.forEach((k,j)=>{lp+=k*Math.log(iso[j][2])-lnf(k);dm+=k*(iso[j][1]-top[1]);});
+    out.push({atoms:all.map((k,j)=>({a:iso[j][0],e,n:k})).filter(x=>x.n>0),p:Math.exp(lp),dm});return;}
+   for(let k=left;k>=0;k--)rec(i+1,left-k,[...ks,k]);};
+  rec(0,n,[]);
+  // a combination is at most as intense, relative to the largest, as each of its parts, so parts below the
+  // threshold can be dropped before the product (keeps the table small for formulas with many Br/Cl atoms)
+  let top2=0;for(const x of out)if(x.p>top2)top2=x.p;
+  return out.filter(x=>x.p>=top2*minRelative/100);
+ });
+ let rows=[{atoms:[],p:1,dm:0}];
+ for(const list of parts)rows=rows.flatMap(r=>list.map(x=>({atoms:[...r.atoms,...x.atoms],p:r.p*x.p,dm:r.dm+x.dm})));
+ let max=0;for(const r of rows)if(r.p>max)max=r.p;
+ rows=rows.map(r=>({atoms:r.atoms,mz:(base+r.dm-z*ELECTRON_MASS)/Math.abs(z),relative:r.p/max*100})).filter(r=>r.relative>=minRelative);
+ if(rows.length>maxRows)rows=rows.sort((a,b)=>b.relative-a.relative).slice(0,maxRows);
+ return rows.sort((a,b)=>a.mz-b.mz);
 }
 // Optional filters for candidate formulas of the neutral M.
 // Element ratios: "common range" (covering 99.7% of formulas) of Kind & Fiehn, BMC Bioinformatics 2007, 8, 105 (Table 2).

@@ -20,8 +20,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="遷移状態と反応経路（TS・IRC）｜Gaussian入門" data-en="Transition states and reaction paths (TS/IRC) | Gaussian guide">遷移状態と反応経路（TS・IRC）｜Gaussian入門</title>
-<link rel="stylesheet" href="../styles.css?v=20261127-5"/>
-<script defer src="../app.js?v=20261127-5"></script>
+<link rel="stylesheet" href="../styles.css?v=20261127-7"/>
+<script defer src="../app.js?v=20261127-7"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">本文へ移動</a>
@@ -66,14 +66,14 @@
 </section>
 <section class="content-section reading" id="guess">
 <h2 data-en="Prepare a TS guess" data-ja="TS候補の準備">TS候補の準備</h2>
-<p data-en="First decide which bonds form or break. A common approach: set that bond distance to an intermediate value (e.g. 2.0–2.2 Å for C–C formation), freeze it, and relax everything else with Opt." data-ja="まず、どの結合が形成・切断されるかを決めます。よく使う作り方は、その結合距離を中間的な値（例：C–C形成なら 2.0–2.2 Å）に設定し、距離を固定したまま他の自由度をOptで緩和する方法です。">まず、どの結合が形成・切断されるかを決めます。よく使う作り方は、その結合距離を中間的な値（例：C–C形成なら 2.0–2.2 Å）に設定し、距離を固定したまま他の自由度をOptで緩和する方法です。</p>
+<p data-en="First decide which bonds form or break. A common approach: set that bond distance to an intermediate value (e.g. 2.0–2.2 Å for C–C formation), freeze it and relax everything else with Opt." data-ja="まず、どの結合が形成・切断されるかを決めます。よく使う作り方は、その結合距離を中間的な値（例：C–C形成なら 2.0–2.2 Å）に設定し、距離を固定したまま他の自由度をOptで緩和する方法です。">まず、どの結合が形成・切断されるかを決めます。よく使う作り方は、その結合距離を中間的な値（例：C–C形成なら 2.0–2.2 Å）に設定し、距離を固定したまま他の自由度をOptで緩和する方法です。</p>
 <pre class="input-block keep-lines" translate="no" data-ja="#p B3LYP/6-31G(d) Opt=ModRedundant
 
 （タイトル、空行、電荷と多重度、座標、空行のあとに次の行）
 
 1 12 F" data-en="#p B3LYP/6-31G(d) Opt=ModRedundant
 
-(title, blank, charge/mult, coordinates, blank line, then:)
+(title, blank line, charge and multiplicity, coordinates, blank line, then:)
 
 1 12 F">#p B3LYP/6-31G(d) Opt=ModRedundant
 
@@ -106,7 +106,7 @@
 <li data-en="There is exactly one imaginary frequency." data-ja="虚振動がちょうど1つある。">虚振動がちょうど1つある。</li>
 <li data-en="Play that mode in a viewer such as GaussView; its motion corresponds to the intended bond formation/cleavage." data-ja="GaussViewなどのビューアーでそのモードを再生し、動きが目的の結合の形成・切断に対応している。">GaussViewなどのビューアーでそのモードを再生し、動きが目的の結合の形成・切断に対応している。</li>
 </ul>
-<p><span data-lang="ja">虚振動が2つ以上あれば、余分なモードに沿って構造を少し動かして再探索します（<a href="#recovery">TS再探索</a>）。</span><template data-lang="en"><span data-lang="en" hidden>If there are two or more imaginary frequencies, displace the structure along the extra mode and search again (see <a href="#recovery">Retrying a TS search</a>).</span></template></p>
+<p><span data-lang="ja">虚振動が2つ以上あれば、余分なモードに沿って構造を少し動かして再探索します（<a href="#recovery">TS再探索</a>）。虚振動がなければ極小に収束しているので、候補構造を作り直します（<a href="#guess">TS候補の準備</a>）。</span><template data-lang="en"><span data-lang="en" hidden>If there are two or more imaginary frequencies, displace the structure along the extra mode and search again (see <a href="#recovery">Retrying a TS search</a>). If there is none, the search has converged to a minimum; rebuild the guess (<a href="#guess">Prepare a TS guess</a>).</span></template></p>
 <h3 data-en="References" data-ja="参考資料">参考資料</h3>
 <ul class="compact-list reference-list">
 <li><a href="https://gaussian.com/freq/" target="_blank" rel="noopener noreferrer" data-ja="Gaussian公式：Freq" data-en="Gaussian: Freq">Gaussian公式：Freq</a></li>
@@ -128,7 +128,7 @@
 <h2 data-en="Calculation settings: transition states" data-ja="計算条件：遷移状態">計算条件：遷移状態</h2><p class="note"><span data-lang="ja">入力の残りの書き方は<a href="./start.html#input">入力ファイルの中身</a>、キーワードの意味は<a href="./keywords.html">キーワード一覧</a>にあります。</span><template data-lang="en"><span data-lang="en" hidden>For the rest of the input, see <a href="./start.html#input">Anatomy of an input file</a>; for what each keyword does, see the <a href="./keywords.html">keyword reference</a>.</span></template></p>
 <article class="method-entry"><h3 data-en="Direct TS (Opt=TS)" data-ja="直接TS探索（Opt=TS）" id="ts-direct">直接TS探索（Opt=TS）</h3><p data-en="The standard form when a good TS guess exists. CalcFC computes the initial Hessian. If the structure oscillates, reduce MaxStep (e.g. MaxStep=5; in units of 0.01 Bohr or 0.01 rad; default 30)." data-ja="良いTS候補構造がある場合の標準形。CalcFC で最初にヘシアンを計算します。構造が往復する場合は MaxStep を小さくします（例：MaxStep=5。単位は 0.01 Bohr または 0.01 rad、既定は30）。">良いTS候補構造がある場合の標準形。CalcFC で最初にヘシアンを計算します。構造が往復する場合は MaxStep を小さくします（例：MaxStep=5。単位は 0.01 Bohr または 0.01 rad、既定は30）。</p><pre class="input-block keep-lines" translate="no" lang="en">%chk=ts-direct.chk
 #p M062X/6-31+G(d,p) Opt=(TS,CalcFC,Tight,MaxCycles=100)
-   SCRF=(SMD,Solvent=Acetonitrile) Integral=UltraFine SCF=Tight</pre><p class="muted"><span data-en="Source: " data-ja="出典：">出典：</span><a href="https://gaussian.com/opt/" target="_blank" rel="noopener noreferrer" data-ja="Gaussian公式：Opt" data-en="Gaussian: Opt">Gaussian公式：Opt</a></p></article>
+   SCRF=(SMD,Solvent=Acetonitrile) Integral=UltraFine SCF=Tight</pre><p class="muted"><span data-en="See: " data-ja="参考：">参考：</span><a href="https://gaussian.com/opt/" target="_blank" rel="noopener noreferrer" data-ja="Gaussian公式：Opt" data-en="Gaussian: Opt">Gaussian公式：Opt</a></p></article>
 <article class="method-entry"><h3 data-en="QST2" data-ja="QST2" id="ts-qst2">QST2</h3><p data-en="Searches from reactant and product. Atom order must match exactly; write a title/charge-multiplicity/coordinate block for each. Do not also write Opt=TS." data-ja="反応物と生成物の2構造から探します。原子の順序を完全に一致させ、それぞれタイトル・電荷多重度・座標のブロックを続けて書きます。Opt=TS は重ねて書きません。">反応物と生成物の2構造から探します。原子の順序を完全に一致させ、それぞれタイトル・電荷多重度・座標のブロックを続けて書きます。Opt=TS は重ねて書きません。</p><pre class="input-block keep-lines" translate="no" data-ja="%chk=ts-qst2.chk
 #p M062X/6-31+G(d,p) Opt=(QST2,CalcFC,Tight,MaxCycles=100)
    SCRF=(SMD,Solvent=Acetonitrile) Integral=UltraFine SCF=Tight
@@ -168,19 +168,19 @@ product
 
 0 1
 （座標。反応物と同じ原子の順序）
-</pre><p class="muted"><span data-en="Source: " data-ja="出典：">出典：</span><a href="https://gaussian.com/qst2/" target="_blank" rel="noopener noreferrer" data-ja="Gaussian公式：QST2/QST3" data-en="Gaussian: QST2/QST3">Gaussian公式：QST2/QST3</a></p></article>
+</pre><p class="muted"><span data-en="See: " data-ja="参考：">参考：</span><a href="https://gaussian.com/qst2/" target="_blank" rel="noopener noreferrer" data-ja="Gaussian公式：QST2/QST3" data-en="Gaussian: QST2/QST3">Gaussian公式：QST2/QST3</a></p></article>
 <article class="method-entry"><h3 data-en="Freq of the converged TS" data-ja="収束したTSのFreq" id="ts-freq">収束したTSのFreq</h3><p data-en="Run Freq under the same conditions; confirm one imaginary frequency whose motion is the intended reaction." data-ja="同じ条件でFreqを行い、虚振動が1つで、その動きが目的の反応であることを確認します。">同じ条件でFreqを行い、虚振動が1つで、その動きが目的の反応であることを確認します。</p><pre class="input-block keep-lines" translate="no" lang="en">%chk=ts-freq.chk
 #p M062X/6-31+G(d,p) Freq
-   SCRF=(SMD,Solvent=Acetonitrile) Integral=UltraFine SCF=Tight</pre><p class="muted"><span data-en="Source: " data-ja="出典：">出典：</span><a href="https://gaussian.com/freq/" target="_blank" rel="noopener noreferrer" data-ja="Gaussian公式：Freq" data-en="Gaussian: Freq">Gaussian公式：Freq</a></p></article>
+   SCRF=(SMD,Solvent=Acetonitrile) Integral=UltraFine SCF=Tight</pre><p class="muted"><span data-en="See: " data-ja="参考：">参考：</span><a href="https://gaussian.com/freq/" target="_blank" rel="noopener noreferrer" data-ja="Gaussian公式：Freq" data-en="Gaussian: Freq">Gaussian公式：Freq</a></p></article>
 </section>
 <section class="content-section reading" id="conditions-irc">
 <h2 data-en="Calculation settings: IRC" data-ja="計算条件：IRC">計算条件：IRC</h2>
 <article class="method-entry"><h3 data-en="HPC (default algorithm)" data-ja="HPC（既定のアルゴリズム）" id="irc-hpc">HPC（既定のアルゴリズム）</h3><p data-en="Start from the coordinates of the TS confirmed by Freq. Run Forward and Reverse as separate jobs. If the .chk from the TS Freq job is available, reuse its Hessian with RCFC and %oldchk instead of CalcFC." data-ja="Freqで確認したTSの座標から始めます。Forward と Reverse を別ジョブで実行します。TSのFreqの .chk があれば CalcFC の代わりに RCFC と %oldchk でヘシアンを再利用できます。">Freqで確認したTSの座標から始めます。Forward と Reverse を別ジョブで実行します。TSのFreqの .chk があれば CalcFC の代わりに RCFC と %oldchk でヘシアンを再利用できます。</p><pre class="input-block keep-lines" translate="no" lang="en">%chk=irc-hpc.chk
 #p M062X/6-31+G(d,p) IRC=(CalcFC,Forward,HPC,MaxPoints=80,StepSize=5)
-   SCRF=(SMD,Solvent=Acetonitrile) Integral=UltraFine SCF=Tight</pre><p class="muted"><span data-en="Source: " data-ja="出典：">出典：</span><a href="https://gaussian.com/irc/" target="_blank" rel="noopener noreferrer" data-ja="Gaussian公式：IRC" data-en="Gaussian: IRC">Gaussian公式：IRC</a></p></article>
+   SCRF=(SMD,Solvent=Acetonitrile) Integral=UltraFine SCF=Tight</pre><p class="muted"><span data-en="See: " data-ja="参考：">参考：</span><a href="https://gaussian.com/irc/" target="_blank" rel="noopener noreferrer" data-ja="Gaussian公式：IRC" data-en="Gaussian: IRC">Gaussian公式：IRC</a></p></article>
 <article class="method-entry"><h3 data-en="LQA (when the HPC corrector does not converge)" data-ja="LQA（HPCの補正の反復（corrector）が収束しないとき）" id="irc-lqa">LQA（HPCの補正の反復（corrector）が収束しないとき）</h3><p data-en="Same TS, direction and step size; only the algorithm changes to LQA." data-ja="同じTS・同じ方向・同じ刻みで、アルゴリズムだけを LQA に変えます。">同じTS・同じ方向・同じ刻みで、アルゴリズムだけを LQA に変えます。</p><pre class="input-block keep-lines" translate="no" lang="en">%chk=irc-lqa.chk
 #p M062X/6-31+G(d,p) IRC=(CalcFC,Forward,LQA,MaxPoints=80,StepSize=5)
-   SCRF=(SMD,Solvent=Acetonitrile) Integral=UltraFine SCF=Tight</pre><p class="muted"><span data-en="Source: " data-ja="出典：">出典：</span><a href="https://gaussian.com/irc/" target="_blank" rel="noopener noreferrer" data-ja="Gaussian公式：IRC" data-en="Gaussian: IRC">Gaussian公式：IRC</a></p></article>
+   SCRF=(SMD,Solvent=Acetonitrile) Integral=UltraFine SCF=Tight</pre><p class="muted"><span data-en="See: " data-ja="参考：">参考：</span><a href="https://gaussian.com/irc/" target="_blank" rel="noopener noreferrer" data-ja="Gaussian公式：IRC" data-en="Gaussian: IRC">Gaussian公式：IRC</a></p></article>
 <p><span data-lang="ja">障壁のエネルギーは、TSと反応物の<i>G</i>を同じ条件・同じ標準状態で比べます。</span><template data-lang="en"><span data-lang="en" hidden>Compute the barrier from the <i>G</i> of the TS and the reactant, calculated under the same conditions and standard state.</span></template></p>
 </section>
 <section class="content-section reading" id="recovery">

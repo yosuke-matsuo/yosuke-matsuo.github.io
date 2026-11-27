@@ -43,7 +43,7 @@
  }
 }
 </script>
-<link rel="stylesheet" href="style.css?v=20261127-6">
+<link rel="stylesheet" href="style.css?v=20261127-8">
 </head>
 <body>
 <a class="skip-link" href="#main" data-t="skip">本文へ移動</a>
@@ -94,6 +94,11 @@
 <div id="isoChart" aria-hidden="true"></div>
 <div class="tableWrap"><table id="isoTable" class="compact"><thead></thead><tbody></tbody></table></div>
 <p class="hint" data-t="isoNote">相対強度は最も強いピークを100とします。</p>
+<div id="haloBlock" hidden>
+<h3 data-t="haloTitle">Br・Cl の同位体の組み合わせ</h3>
+<div class="tableWrap"><table id="haloTable" class="compact"><thead></thead><tbody></tbody></table></div>
+<p class="hint" data-t="haloNote">Br・Cl の同位体の組み合わせごとの値です。ほかの元素は最も多い同位体で、強度は Br・Cl の存在比だけから求めています（¹³C などを含む同位体パターンとは少し違います）。</p>
+</div>
 </div>
 </div>
 <div id="journals" class="journals"><h2 data-t="journals">主な雑誌のHRMSの書き方</h2>
@@ -106,7 +111,7 @@
 <dt>Elsevier — <a href="https://www.sciencedirect.com/journal/tetrahedron/publish/guide-for-authors" target="_blank" rel="noopener noreferrer"><i>Tetrahedron</i></a></dt>
 <dd><p class="journal-example">HRMS (ES+): <i>m</i>/<i>z</i> [M + H]<sup>+</sup> calcd 333.1248, found 333.1229</p></dd>
 <dt>Thieme — <a href="https://www.thieme.de/statics/dokumente/thieme/final/de/dokumente/zw_synthesis/CFZ-Synthesis-Authors-Instructions-2025.pdf" target="_blank" rel="noopener noreferrer"><i>Synthesis</i></a></dt>
-<dd><p class="journal-example">HRMS–FAB: <i>m</i>/<i>z</i> [M + H]<sup>+</sup> calcd for C<sub>21</sub>H<sub>38</sub>N<sub>4</sub>O<sub>6</sub>S: 475.5285; found: 475.5267.</p></dd>
+<dd><p class="journal-example">HRMS–FAB: <i>m</i>/<i>z</i> [M + H]<sup>+</sup> calcd for C<sub>21</sub>H<sub>38</sub>N<sub>4</sub>O<sub>6</sub>S: 475.5285; found: 475.5267.</p><p class="note" data-t="synthesisNote">475.5285 は 475.2585 の誤植と見られます（C<sub>21</sub>H<sub>38</sub>N<sub>4</sub>O<sub>6</sub>S の [M + H]<sup>+</sup> を計算し直した値）。</p></dd>
 <dt><span data-t="psj">日本薬学会</span> — <a href="https://cpb.pharm.or.jp/document/CPB_Instructions.pdf" target="_blank" rel="noopener noreferrer"><i>Chem. Pharm. Bull.</i></a>, <a href="https://bpb.pharm.or.jp/document/BPB_Instructions.pdf" target="_blank" rel="noopener noreferrer"><i>Biol. Pharm. Bull.</i></a>; <span data-t="jsp">日本生薬学会</span> — <a href="https://link.springer.com/journal/11418/submission-guidelines" target="_blank" rel="noopener noreferrer"><i>J. Nat. Med.</i></a></dt>
 <dd><p class="journal-example">FAB-MS <i>m</i>/<i>z</i>: 332.1258 (Calcd for C<sub>18</sub>H<sub>20</sub>O<sub>6</sub>: 332.1259)</p></dd>
 </dl>
@@ -177,7 +182,7 @@
 <div class="equation"><i>m</i>/<i>z</i> = (Σ <i>n</i><sub>i</sub> <i>m</i><sub>i</sub> − <i>z</i> <i>m</i><sub>e</sub>) / |<i>z</i>|</div>
 <p data-t="definition"><i>n</i><sub>i</sub> は付加・脱離後のイオンに含まれる元素 <i>i</i> の原子数、<i>m</i><sub>i</sub> は元素 <i>i</i> の同位体質量、<i>z</i> は符号付きの電荷数です。2価以上のイオンは |<i>z</i>| で割ります。</p>
 <p data-t="electron">正電荷1つにつき電子1個分の質量を引き、負電荷1つにつき足します（<i>m</i><sub>e</sub> = 0.0005485799090441 Da）。</p>
-<p data-t="molecularWeightMethod" data-tabs="calculator">分子量は、CIAAW の標準原子量（簡略値）から計算し、小数第2位まで表示します。</p>
+<p data-t="molecularWeightMethod" data-tabs="calculator">分子量は、CIAAW の標準原子量（簡略値）から計算し、小数第2位まで表示します。簡略値の桁が少ない元素（Pb）を含むときは、その桁までにします。</p>
 <p data-t="ppm">誤差（ppm）=（実測値 − 計算値）/ 計算値 × 10⁶。誤差（mDa）=（実測値 − 計算値）× 1000。</p>
 <p data-t="dbe" data-tabs="calculator finder batch">DBE = 1 + C + N/2 − (H + F + Cl + Br + I)/2（中性分子 M の値。小数もそのまま表示）。C・H・N・O・S・ハロゲン以外を含む組成では「—」とします。</p>
 <p data-tabs="finder"><span data-t="filterMethod">分子式検索の絞り込み：DBE の条件は、中性分子 M の DBE が整数で、かつ0以上であることです。DBE は C・H・N・O・S・ハロゲンを通常の原子価（C 4、N 3、H とハロゲン 1、O・S 2）として計算するので、ほかの元素を含む組成は判定せずに残します。整数であることは窒素ルール（窒素の数と整数質量の偶奇）と同じ条件ですが、0以上であることは窒素ルールには含まれません（例：CH<sub>4</sub> より H の多い CH<sub>6</sub> は窒素ルールを満たしますが、DBE は −1 です）。元素比の条件は、Kind と Fiehn が示した「一般的な範囲」（データベースの分子式の99.7%を含む範囲）のうち、H・N・O・P・S・Si の炭素に対する比を使います。</span> <a href="https://doi.org/10.1186/1471-2105-8-105" target="_blank" rel="noopener noreferrer">Kind &amp; Fiehn, <i>BMC Bioinformatics</i> 2007</a></p>
@@ -201,6 +206,6 @@
 
 <footer><p>© 2026 <a href="../index.html" data-home="index">Yosuke Matsuo</a> · <a href="../tools.html" data-home="tools" data-t="toolsPage">ツール</a></p><p><a href="https://github.com/yosuke-matsuo/yosuke-matsuo.github.io/tree/main/hrms-calc" data-t="sourceCode" target="_blank" rel="noopener noreferrer">ソースコード</a> · <span data-t="codeLicense">HRMS Calcのプログラム：</span><a href="LICENSE.txt">MIT License</a></p></footer>
 </main>
-<script type="module" src="app.js?v=20261127-6"></script>
+<script type="module" src="app.js?v=20261127-8"></script>
 </body>
 </html>

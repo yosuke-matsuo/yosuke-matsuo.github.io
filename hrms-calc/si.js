@@ -1,5 +1,5 @@
 // Sentences for papers / Supporting Information, a checker for reported HRMS values, and batch input.
-import {IONS,ELECTRON_MASS,parseFormula,formula,mass,ionCounts} from './core.js?v=20261127-6';
+import {IONS,ELECTRON_MASS,parseFormula,formula,mass,ionCounts} from './core.js?v=20261127-8';
 const MINUS='−';
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
@@ -176,7 +176,7 @@ export function checkText(text,{tolerancePpm=5,tolerance=tolerancePpm,toleranceU
   const rec={snippet:quote(start,end),formula:written,ion:br?br.text:'',stated:vm[1],found,z:null,
    recalculated:null,diffMDa:null,ppm:null,status:'unparsed',codes:[]};
   records.push(rec);
-  let F;try{F=parseFormula(written);}catch{rec.codes.push('formula');return;}
+  let F;try{F=parseFormula(written);}catch(e){rec.codes.push(e.message==='element'?'element':'formula');return;}
   // every charge written for this record
   const charges=notes.map(n=>n.z);
   if(fm[3]){const q=/(\d*)([+-])/.exec(fm[3]);charges.push((q[1]?Number(q[1]):1)*(q[2]==='+'?1:-1));}
@@ -236,6 +236,7 @@ export function readFound(raw){
  return v;
 }
 const isFormula=c=>{if(!/^(?:[A-Z][a-z]?\d*)+$/.test(c))return false;try{parseFormula(c);return true;}catch{return false;}};
+const elementOf=c=>{try{parseFormula(c);}catch(e){if(e.message==='element')return e.symbol;}return null;};
 const isNumberLike=c=>/^[+-]?\d*\.?\d+(?:e[+-]?\d+)?$/i.test(c);
 /* One compound per line: [label] formula [ion] [measured m/z], separated by tabs (Excel), spaces or commas.
    Lines starting with # are ignored. The formula is the cell after which only an ion and a measured m/z
@@ -259,7 +260,11 @@ export function parseBatch(text,defaultKey){
   const fits=[];for(let fi=0;fi<cells.length;fi++)if(isFormula(cells[fi])&&!tail(fi+1).bad)fits.push(fi);
   if(!fits.length){
    const any=cells.findIndex(isFormula);
-   if(any<0){row.label=cells.join(' ');row.error='formula';rows.push(row);return;}
+   if(any<0){
+    // a formula with an element the tool has no data for (Tc, Ra ...) is named in the message
+    const ei=cells.findIndex(c=>elementOf(c));
+    if(ei>=0){row.label=cells.slice(0,ei).join(' ');row.formula=cells[ei];row.error='element';row.bad=elementOf(cells[ei]);rows.push(row);return;}
+    row.label=cells.join(' ');row.error='formula';rows.push(row);return;}
    const last=cells.map((c,j)=>j).filter(j=>isFormula(cells[j])).pop();
    row.label=cells.slice(0,last).join(' ');row.formula=cells[last];
    const {keys,nums,bad}=tail(last+1);if(keys.length)row.key=keys[0];if(nums.length)row.found=nums[0];

@@ -301,3 +301,60 @@ test('SI checker: the quoted record keeps the text as written (review 2026-11, F
   // the verdicts do not change
   assert.equal(checkText('HRMS m/z: [M − H]⁻ Calcd for C₆H₁₁O₆⁻ 179.0561; Found 179.0560.')[0].status, 'ok');
 });
+
+test('Br/Cl isotopologues of the exact-mass result (T-14)', async () => {
+  const { halogenIsotopologues } = await load('core.js');
+  const { ISOTOPES } = await load('isotopes.js');
+  const fact = n => { let f = 1; for (let i = 2; i <= n; i++) f *= i; return f; };
+  const binom = (n, k) => fact(n) / (fact(k) * fact(n - k));
+  // independent expectation: other atoms at their most abundant isotope (typed above), Br and Cl from isotopes.js
+  const expect = (other, hal, z) => {
+    const [e1, e2] = hal.map(([e]) => e), [n1, n2 = 0] = hal.map(([, n]) => n);
+    const [l1, h1] = ISOTOPES[e1], [l2, h2] = e2 ? ISOTOPES[e2] : [[0, 0, 1], [0, 0, 0]];
+    const base = Object.entries(other).reduce((s, [e, n]) => s + n * ISO[e].reduce((a, b) => (b[2] > a[2] ? b : a))[1], 0);
+    const rows = [];
+    for (let k1 = 0; k1 <= n1; k1++) for (let k2 = 0; k2 <= n2; k2++) {
+      const p = binom(n1, k1) * l1[2] ** (n1 - k1) * h1[2] ** k1 * binom(n2, k2) * l2[2] ** (n2 - k2) * h2[2] ** k2;
+      const m = base + (n1 - k1) * l1[1] + k1 * h1[1] + (n2 - k2) * l2[1] + k2 * h2[1];
+      rows.push({ p, mz: (m - z * ME) / Math.abs(z) });
+    }
+    const max = Math.max(...rows.map(r => r.p));
+    return rows.map(r => ({ mz: r.mz, relative: r.p / max * 100 })).filter(r => r.relative >= 1).sort((a, b) => a.mz - b.mz);
+  };
+  const same = (got, exp) => { assert.equal(got.length, exp.length); got.forEach((g, i) => { close(g.mz, exp[i].mz, 1e-9, 'm/z'); close(g.relative, exp[i].relative, 1e-9, 'relative'); }); };
+  // C8H6Br2O [M+H]+: 79Br2 276.8858 (51), 79Br81Br 278.8838 (100), 81Br2 280.8817 (49)
+  const br2 = halogenIsotopologues(ionCounts(parseFormula('C8H6Br2O'), '[M+H]+'), 1);
+  same(br2, expect({ C: 8, H: 7, O: 1 }, [['Br', 2]], 1));
+  assert.deepEqual(br2.map(r => r.mz.toFixed(4)), ['276.8858', '278.8838', '280.8817']);
+  assert.deepEqual(br2.map(r => Math.round(r.relative)), [51, 100, 49]);
+  assert.deepEqual(br2.map(r => r.atoms.map(a => `${a.a}${a.e}${a.n}`).join(' ')), ['79Br2', '79Br1 81Br1', '81Br2']);
+  // Cl3 (CHCl3 [M]+): four rows, 35Cl3 the largest
+  const cl3 = halogenIsotopologues(parseFormula('CHCl3'), 1);
+  same(cl3, expect({ C: 1, H: 1 }, [['Cl', 3]], 1));
+  assert.deepEqual(cl3.map(r => r.atoms.map(a => `${a.a}${a.e}${a.n}`).join(' ')), ['35Cl3', '35Cl2 37Cl1', '35Cl1 37Cl2', '37Cl3']);
+  // Br and Cl together (C6H4BrCl [M]+): 79Br37Cl and 81Br35Cl are listed separately
+  const mixed = halogenIsotopologues(parseFormula('C6H4BrCl'), 1);
+  same(mixed, expect({ C: 6, H: 4 }, [['Br', 1], ['Cl', 1]], 1));
+  assert.equal(mixed.length, 4);
+  // negative ion: the electron mass is added
+  close(halogenIsotopologues(ionCounts(parseFormula('C6H5Cl'), '[M-H]-'), -1)[0].mz, ion(parseFormula('C6H5Cl'), '[M-H]-').mz, 1e-9);
+  // no Br or Cl: no list
+  assert.deepEqual(halogenIsotopologues(parseFormula('C6H12O6'), 1), []);
+  assert.deepEqual(halogenIsotopologues(parseFormula('C6H5F'), 1), []);
+  // hundreds of Br and Cl atoms: the table stays small and does not throw (thresholded before the product)
+  const many = halogenIsotopologues(parseFormula('C800H802Br400Cl400'), 1);
+  assert.ok(many.length > 0 && many.length <= 6);
+  assert.ok(many.every(r => r.relative >= 1 && Number.isFinite(r.mz)));
+});
+
+test('formulas with an element without data (Tc, Ra, Po) get their own error (GC-9)', () => {
+  for (const [f, s] of [['TcCl4', 'Tc'], ['RaCl2', 'Ra'], ['C2H6Po', 'Po']]) {
+    assert.throws(() => parseFormula(f), e => e.message === 'element' && e.symbol === s, f);
+  }
+  // other unreadable input stays a formula error
+  for (const f of ['Xx2', 'C6H12O6+', 'c6h12o6', 'Tc(Cl)4']) assert.throws(() => parseFormula(f), e => e.message === 'formula', f);
+  // batch and checker name the reason
+  const b = parseBatch('Pertechnetate TcO4 [M]-', '[M+H]+');
+  assert.equal(b[0].error, 'element'); assert.equal(b[0].bad, 'Tc'); assert.equal(b[0].formula, 'TcO4');
+  assert.deepEqual(checkText('HRMS m/z: [M]+ Calcd for TcCl4 239.8; Found 239.8.')[0].codes, ['element']);
+});

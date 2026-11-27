@@ -174,10 +174,11 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
     // batch
     await p.click('#batchExample');
     const rows = await p.$$eval('#batchResults tbody tr', rs => rs.map(r => [...r.cells].map(c => c.textContent)));
-    ok(rows.length === 4 && rows[2][3] === '[M − 2H]2−' && rows[2][5] === '541.0260' && rows[0][7] === '-1.03', `batch: ${rows.map(r => r.slice(1, 8).join(' ')).join(' | ')}`);
+    ok(rows.length === 4 && rows[2][3] === '[M − 2H]2−' && rows[2][5] === '541.0260' && rows[0][7] === '−1.03', `batch: ${rows.map(r => r.slice(1, 8).join(' ')).join(' | ')}`);
     await p.click('#batchCopyTsv'); await p.waitForTimeout(150);
     const tsv = await p.evaluate(() => navigator.clipboard.readText());
     ok(tsv.split('\n').length === 5 && tsv.split('\n')[1].split('\t')[5] === '203.0526', 'batch: table copied as tab-separated text');
+    ok(tsv.split('\n')[1].split('\t')[7] === '-1.03' && tsv.split('\n')[0].split('\t')[7] === 'Error (ppm)' && (await p.textContent('#batchResults thead')).includes('Error (ppm)'), 'batch: true minus sign on screen, ASCII in the copied table; header Error (ppm)');
     await p.click('#batchCopySi'); await p.waitForTimeout(150);
     const sis = (await p.evaluate(() => navigator.clipboard.readText())).split('\n');
     ok(sis.length === 4 && sis[0] === 'Glucose: HRMS m/z: [M + Na]+ Calcd for C6H12O6Na 203.0526; Found 203.0524.', `batch: statements copied (${sis[0]})`);
@@ -563,6 +564,45 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
       }
       await q.ctx.close();
     }
+  }
+  // 23. HRMS Calc: Br / Cl isotopologues in the exact-mass result (both languages, 390 px), element without data (GC-9)
+  for (const l of ['ja', 'en']) {
+    const p = await page({ viewport: { width: 390, height: 800 } });
+    await p.goto(`${BASE}/hrms-calc/${l === 'en' ? 'en/' : ''}index.html#calculator?f=C8H6Br2O&ion=%5BM%2BH%5D%2B`);
+    await p.waitForSelector('#haloTable tbody tr');
+    const rows = await p.$$eval('#haloTable tbody tr', rs => rs.map(r => [...r.cells].map(c => c.textContent)));
+    const box = await p.evaluate(() => { const b = document.querySelector('#haloBlock'); const r = b.getBoundingClientRect(); return { right: r.right, over: document.documentElement.scrollWidth - innerWidth, note: b.querySelector('.hint').textContent, title: b.querySelector('h3').textContent }; });
+    ok(rows.length === 3 && rows[0][0] === '79Br2' && rows[1].join(' ') === '79Br81Br 278.8838 100' && rows[2][1] === '280.8817' && rows[0][2] === '51' && box.right <= 390 && box.over === 0
+      && (l === 'ja' ? box.note.startsWith('Br・Cl の同位体') && box.title.includes('組み合わせ') : box.note.startsWith('Values for each combination') && box.title.includes('combinations')), `${l}: Br/Cl isotopologues shown inside 390 px (${rows.map(r => r.join(' ')).join(' | ')})`);
+    await p.fill('#formula', 'C6H12O6'); await p.waitForFunction(() => document.querySelector('.result-mz strong')?.textContent === '181.0707');
+    ok(await p.isHidden('#haloBlock'), `${l}: no Br/Cl list without Br or Cl`);
+    await p.fill('#formula', 'TcCl4'); await p.press('#formula', 'Enter');
+    const msg = await p.textContent('#calcMain');
+    ok(l === 'ja' ? msg.includes('Tc は天然の同位体組成がない') : msg.includes('Tc has no natural isotopic composition'), `${l}: element without data explained (${msg})`);
+    await p.ctx.close();
+  }
+  // 24. personal pages: input examples and tables that scroll sideways can be focused (named region); 404 under /en/ in English
+  for (const l of ['ja', 'en']) {
+    const p = await page({ viewport: { width: 390, height: 800 } });
+    await p.goto(`${BASE}/${l === 'en' ? 'en/' : ''}gaussian/start.html`); await p.waitForLoadState('load');
+    const r = await p.evaluate(() => [...document.querySelectorAll('pre.input-block.keep-lines, .table-wrap')].map(e => ({ over: e.scrollWidth > e.clientWidth + 1, tab: e.getAttribute('tabindex'), role: e.getAttribute('role'), label: e.getAttribute('aria-label') })));
+    const over = r.filter(x => x.over), fit = r.filter(x => !x.over);
+    ok(over.length > 0 && over.every(x => x.tab === '0' && x.role === 'region' && (l === 'ja' ? /横にスクロール/.test(x.label) : /scrolls sideways/.test(x.label))) && fit.every(x => x.tab === null && x.role === null),
+      `${l}: ${over.length} scrolling blocks focusable with a ${l} label, ${fit.length} others untouched`);
+    await p.ctx.close();
+  }
+  {
+    const fs = require('fs'), path = require('path');
+    const nf = fs.readFileSync(path.join(__dirname, '..', '..', '404.html'), 'utf8');
+    const p = await page();
+    await p.route(`${BASE}/en/no-such-page.html`, route => route.fulfill({ status: 404, contentType: 'text/html', body: nf }));
+    await p.goto(`${BASE}/en/no-such-page.html`); await p.waitForLoadState('load');
+    const r = await p.evaluate(() => ({ lang: document.documentElement.lang, h1: document.querySelector('h1').textContent, links: [...document.querySelectorAll('header a, main a')].map(a => a.getAttribute('href')) }));
+    ok(r.lang === 'en' && r.h1 === 'Page not found' && r.links.includes('/en/index.html') && r.links.includes('/en/gaussian/index.html') && !r.links.some(h => h.includes('lang=')), `404 under /en/ starts in English and links to /en/ pages (${r.links.join(' ')})`);
+    await p.click('[data-language="ja"]');
+    const j = await p.evaluate(() => [...document.querySelectorAll('main a')].map(a => a.getAttribute('href')));
+    ok(j.includes('/index.html'), `404 in Japanese links to the Japanese pages (${j})`);
+    await p.ctx.close();
   }
   await browser.close(); console.log(fails ? `${fails} check(s) failed` : 'all browser checks passed'); process.exit(fails ? 1 : 0);
 })();
