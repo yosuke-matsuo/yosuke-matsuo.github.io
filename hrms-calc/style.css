@@ -34,6 +34,7 @@ section.panel{border-top:0;padding-top:1.6rem}
 .result-facts div{display:flex;gap:.45rem}.result-facts dt{color:var(--muted);white-space:nowrap;flex-shrink:0}.result-facts dd{margin:0;font-variant-numeric:tabular-nums}
 .result-block{margin-top:1.1rem;padding-top:1rem;border-top:1px solid var(--line)}
 .result-block h2{margin:0 0 .7rem;font-size:.98rem;font-weight:600;line-height:inherit}
+.result-block h3{margin:1rem 0 .2rem;font-size:.92rem;font-weight:600;line-height:inherit}
 .si-options{display:flex;flex-wrap:wrap;align-items:flex-end;gap:.7rem 1.2rem;margin-bottom:.8rem}
 .si-options label span{font-size:.82rem;font-weight:600}
 .si-options label{flex:0 0 auto}.si-options select{width:auto;max-width:none}

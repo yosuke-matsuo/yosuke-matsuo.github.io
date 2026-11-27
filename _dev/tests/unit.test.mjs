@@ -179,3 +179,9 @@ test('molecular weight uses the CIAAW abridged standard atomic weights typed her
   for (const [f, w] of [['C10H10Fe', '186.04'], ['CH2N4', '70.06'], ['CH2N2O6', '138.04'], ['C6H12O6', '180.16']])
     assert.equal(core.formatMolecularWeight(core.parseFormula(f)), w, f);
 });
+
+test('molecular weight: decimals follow the coarsest abridged value, at most two (GC-2)', () => {
+  for (const [f, w] of [['PbCl2', '278.1'], ['C2H6Pb', '237.3'], ['C10H10Fe', '186.04'], ['C6H12O6', '180.16'], ['H2O', '18.02']])
+    assert.equal(core.formatMolecularWeight(core.parseFormula(f)), w, f);
+  assert.equal(core.ion(core.parseFormula('PbCl2'), '[M]+').molecularWeightText, '278.1');
+});
