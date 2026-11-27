@@ -1,5 +1,5 @@
 // Sentences for papers / Supporting Information, a checker for reported HRMS values, and batch input.
-import {IONS,ELECTRON_MASS,parseFormula,formula,mass,ionCounts} from './core.js?v=20261127-4';
+import {IONS,ELECTRON_MASS,parseFormula,formula,mass,ionCounts} from './core.js?v=20261127-5';
 const MINUS='−';
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
@@ -34,12 +34,38 @@ export function siSentence({key,ionFormula,calcd,found=''}){
 
 // ---------- reading pasted text ----------
 const SUP='⁰¹²³⁴⁵⁶⁷⁸⁹',SUB='₀₁₂₃₄₅₆₇₈₉',FULL='０１２３４５６７８９';
-export function normalize(s){
- // a superscript charge (O₆²⁺, [M+H]⁺) is kept apart from the atom count before the digits are mapped
- return String(s).replace(/[⁰¹²³⁴-⁹]*[⁺⁻]/g,' $&').replace(/[−‐‑‒–—﹣－⁻₋]/g,'-').replace(/[＋⁺₊]/g,'+')
-  .replace(/[·•∙⋅]/g,'').replace(/[   　]/g,' ').replace(/／/g,'/')
-  .replace(/：/g,':').replace(/，/g,',').replace(/．/g,'.').replace(/；/g,';').replace(/[（]/g,'(').replace(/[）]/g,')')
-  .replace(/[⁰-⁹₀-₉０-９¹²³]/g,c=>{for(const t of [SUP,SUB,FULL]){const i=t.indexOf(c);if(i>=0)return String(i);}return c;});
+// a superscript charge (O₆²⁺, [M+H]⁺) is kept apart from the atom count before the digits are mapped
+const NORMALIZE=[
+ [/[⁰¹²³⁴-⁹]*[⁺⁻]/g,m=>' '+m],
+ [/[−‐‑‒–—﹣－⁻₋]/g,'-'],
+ [/[＋⁺₊]/g,'+'],
+ [/[·•∙⋅]/g,''],
+ [/[   　]/g,' '],
+ [/／/g,'/'],
+ [/：/g,':'],
+ [/，/g,','],
+ [/．/g,'.'],
+ [/；/g,';'],
+ [/[（]/g,'('],
+ [/[）]/g,')'],
+ [/[⁰-⁹₀-₉０-９¹²³]/g,c=>{for(const t of [SUP,SUB,FULL]){const i=t.indexOf(c);if(i>=0)return String(i);}return c;}]];
+export function normalize(s){return NORMALIZE.reduce((t,[re,r])=>t.replace(re,r),String(s));}
+// the same, with the position in the original text of each character (for quoting the text as written)
+function normalizeMapped(s){
+ let text=String(s),map=Array.from({length:text.length+1},(_,i)=>i);
+ for(const [re,r] of NORMALIZE){
+  let out='',next=[],last=0;
+  for(const m of text.matchAll(re)){
+   const rep=typeof r==='function'?r(m[0]):r;
+   out+=text.slice(last,m.index)+rep;
+   for(let i=last;i<m.index;i++)next.push(map[i]);
+   for(let k=0;k<rep.length;k++)next.push(map[m.index]);
+   last=m.index+m[0].length;
+  }
+  for(let i=last;i<=text.length;i++)next.push(map[i]);
+  text=out+text.slice(last);map=next;
+ }
+ return {text,map};
 }
 const BRACKET=/[\[(]\s*(\d*)\s*M\s*((?:[+-]\s*\d*\s*(?:[A-Z][a-z]?\d*)+\s*)*)[\])]\s*(\d*)\s*([+-])/g;
 // '[M+HCOO]-' style notation -> {mult, z, delta, text}
@@ -83,7 +109,13 @@ function writtenFormula(f){if(!formulaShape(f))return false;try{parseFormula(f);
 const RANK=['ok','rounding','neutralFormula','electron','electronSign','neutralFormulaElectron','mismatch'];
 export function checkText(text,{tolerancePpm=5,tolerance=tolerancePpm,toleranceUnit='ppm'}={}){
  // a comma used as the decimal mark (203,0526): four or more digits and no other decimal point
- const s=normalize(text).replace(/(\d),(\d{4,6})(?!\d|\.\d)/g,'$1.$2');const records=[];const hits=[...s.matchAll(CALC)];let prevEnd=0;
+ const n=normalizeMapped(text),src=String(text);
+ const s=n.text.replace(/(\d),(\d{4,6})(?!\d|\.\d)/g,'$1.$2');const records=[];
+ // the record as written in the pasted text (the reading above normalizes −, ⁺, subscripts and so on),
+ // with a closing bracket right after it when the record leaves one open ("(calcd for … 203.0526)")
+ const quote=(a,e)=>{const open=t=>(t.match(/[(\[]/g)||[]).length-(t.match(/[)\]]/g)||[]).length;
+  const c=/^\s*[)\]]/.exec(s.slice(e));if(c&&open(s.slice(a,e))>0)e+=c[0].length;
+  return src.slice(n.map[a],n.map[e]).replace(/\s+/g,' ').trim().slice(0,240);};const hits=[...s.matchAll(CALC)];let prevEnd=0;
  hits.forEach((h,hi)=>{
   if(h.index<prevEnd)return;
   // elemental analysis ("Anal. Calcd for C19H21NO3: C, 73.29; ...") is not an accurate mass
@@ -96,7 +128,7 @@ export function checkText(text,{tolerancePpm=5,tolerance=tolerancePpm,toleranceU
    if(!msLike&&!forWord)return;
    let e=Math.min(nextKw,h.index+160);const stop=/[.;。](?=\s|$)|\n/.exec(s.slice(h.index+h[0].length,e));if(stop)e=h.index+h[0].length+stop.index;
    const from=Math.max(prevEnd,h.index-60);
-   records.push({snippet:s.slice(from,e).replace(/\s+/g,' ').trim().slice(0,240),formula:'',ion:'',stated:'',found:null,z:null,
+   records.push({snippet:quote(from,e),formula:'',ion:'',stated:'',found:null,z:null,
     recalculated:null,diffMDa:null,ppm:null,status:'unparsed',codes:[code]});
    prevEnd=e;
   };
@@ -141,7 +173,7 @@ export function checkText(text,{tolerancePpm=5,tolerance=tolerancePpm,toleranceU
   const br=notes[0]||null;
   prevEnd=end;
   const written=fm[1]+(fm[2]||'');
-  const rec={snippet:s.slice(start,end).replace(/\s+/g,' ').trim().slice(0,240),formula:written,ion:br?br.text:'',stated:vm[1],found,z:null,
+  const rec={snippet:quote(start,end),formula:written,ion:br?br.text:'',stated:vm[1],found,z:null,
    recalculated:null,diffMDa:null,ppm:null,status:'unparsed',codes:[]};
   records.push(rec);
   let F;try{F=parseFormula(written);}catch{rec.codes.push('formula');return;}
