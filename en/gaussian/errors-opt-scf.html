@@ -21,8 +21,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="Opt・SCFエラー｜Gaussian入門" data-en="Opt and SCF errors | Gaussian guide">Opt and SCF errors | Gaussian guide</title>
-<link rel="stylesheet" href="../../styles.css?v=20261127-3"/>
-<script defer src="../../app.js?v=20261127-3"></script>
+<link rel="stylesheet" href="../../styles.css?v=20261127-5"/>
+<script defer src="../../app.js?v=20261127-5"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">Skip to content</a>
@@ -72,6 +72,7 @@ Error in internal coordinate system.</pre><p><strong data-en="Cause: " data-ja="
 <pre class="input-block keep-lines" translate="no" lang="en">%chk=opt_scf.chk
 #p B3LYP/6-31G(d) SCRF=(SMD,Solvent=Methanol)
  SCF=(XQC,MaxCycle=512) Opt=(CalcFC,MaxCycles=100) Freq</pre>
+<p data-en="MaxCycle=512 raises the SCF iteration limit (default 64); it changes nothing for an SCF that converges within 64 cycles." data-ja="MaxCycle=512 は SCF の反復回数の上限を増やす指定です（既定は64）。64回以内に収束する計算では、結果も計算時間も変わりません。">MaxCycle=512 raises the SCF iteration limit (default 64); it changes nothing for an SCF that converges within 64 cycles.</p>
 <p class="note"><span data-lang="en">For the rest of the input, see <a href="./start.html#input">Anatomy of an input file</a>; for what each keyword does, see the <a href="./keywords.html">keyword reference</a>. Match the functional, basis set and solvent of the original job.</span></p>
 </section>
 <section class="content-section reading" id="related">

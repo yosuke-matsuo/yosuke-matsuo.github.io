@@ -174,5 +174,8 @@ test('molecular weight uses the CIAAW abridged standard atomic weights typed her
   const glucose = core.parseFormula('C6H12O6');
   assert.ok(Math.abs(core.molecularWeight(glucose) - (6 * 12.011 + 12 * 1.0080 + 6 * 15.999)) < 1e-9);
   assert.equal(core.molecularWeight(glucose).toFixed(2), '180.16');
-  assert.equal(core.ion(glucose, '[M+Na]+').molecularWeight.toFixed(2), '180.16');
+  assert.equal(core.ion(glucose, '[M+Na]+').molecularWeightText, '180.16');
+  // exact ties (C10H10Fe 186.035, CH2N4 70.055, CH2N2O6 138.035) round up, not down by floating-point error
+  for (const [f, w] of [['C10H10Fe', '186.04'], ['CH2N4', '70.06'], ['CH2N2O6', '138.04'], ['C6H12O6', '180.16']])
+    assert.equal(core.formatMolecularWeight(core.parseFormula(f)), w, f);
 });
