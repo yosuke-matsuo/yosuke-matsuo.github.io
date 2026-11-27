@@ -20,8 +20,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="Gaussianキーワード一覧｜Gaussian入門" data-en="Gaussian keyword reference | Gaussian guide">Gaussianキーワード一覧｜Gaussian入門</title>
-<link rel="stylesheet" href="../styles.css?v=20261127-1"/>
-<script defer src="../app.js?v=20261127-1"></script>
+<link rel="stylesheet" href="../styles.css?v=20261127-2"/>
+<script defer src="../app.js?v=20261127-2"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">本文へ移動</a>
@@ -57,7 +57,7 @@
 </tr>
 <tr>
 <td><code translate="no">%oldchk</code><br><span class="kw-ex" translate="no">%oldchk=ts_freq.chk</span></td>
-<td data-en="Reads the checkpoint of a previous job, e.g. to reuse a TS Hessian for an IRC." data-ja="別の計算のチェックポイントを読み込む指定。IRCでTSのヘシアンを再利用するときなどに使います。">別の計算のチェックポイントを読み込む指定。IRCでTSのヘシアンを再利用するときなどに使います。</td>
+<td data-en="Reads the checkpoint of a previous job, e.g. to reuse a TS Hessian (force constants) for an IRC." data-ja="別の計算のチェックポイントを読み込む指定。IRCでTSのヘシアン（力の定数）を再利用するときなどに使います。">別の計算のチェックポイントを読み込む指定。IRCでTSのヘシアン（力の定数）を再利用するときなどに使います。</td>
 </tr>
 <tr>
 <td><code translate="no">%nprocshared</code><br><span class="kw-ex" translate="no">%nprocshared=8</span></td>
@@ -89,7 +89,7 @@
 </tr>
 <tr>
 <td><code translate="no">Freq</code></td>
-<td data-en="Frequency analysis: tells a minimum from a TS by the number of imaginary frequencies at the optimized structure, and provides thermochemistry." data-ja="振動数解析。最適化した構造が極小かTSかを虚振動の数で調べ、熱力学量も得られます。">振動数解析。最適化した構造が極小かTSかを虚振動の数で調べ、熱力学量も得られます。</td>
+<td data-en="Frequency analysis: tells a minimum from a TS by the number of imaginary frequencies at the optimized structure, and provides thermochemistry." data-ja="振動数解析。最適化した構造が極小かTSかを虚振動の数で調べます。熱力学量も計算します。">振動数解析。最適化した構造が極小かTSかを虚振動の数で調べます。熱力学量も計算します。</td>
 </tr>
 <tr>
 <td><code translate="no">Opt Freq</code></td>
@@ -137,7 +137,7 @@
 </tr>
 <tr>
 <td><code translate="no">Opt=CalcFC</code></td>
-<td data-en="Computes exact force constants (the Hessian) at the first cycle; often used for TS searches (ReadFC can read them instead)." data-ja="最初のサイクルで力の定数（ヘシアン）を正確に計算します。TS探索でよく使います（ReadFC で読み込む方法もあります）。">最初のサイクルで力の定数（ヘシアン）を正確に計算します。TS探索でよく使います（ReadFC で読み込む方法もあります）。</td>
+<td data-en="Computes exact force constants (the Hessian) at the first cycle; often used for TS searches (or ReadFC to read them from an earlier job)." data-ja="最初のサイクルで力の定数（ヘシアン）を正確に計算します。TS探索でよく使います（ReadFC で前の計算から読み込む方法もあります）。">最初のサイクルで力の定数（ヘシアン）を正確に計算します。TS探索でよく使います（ReadFC で前の計算から読み込む方法もあります）。</td>
 </tr>
 <tr>
 <td><code translate="no">Opt=CalcAll</code></td>
@@ -169,7 +169,7 @@
 </tr>
 <tr>
 <td><code translate="no">Opt=NoEigenTest</code></td>
-<td><span data-lang="ja">TS探索中の、ヘシアンの負の固有値の数の検査を止めます。余分な負の固有値が出て探索が止まるときに使いますが、検査を止めたまま進めると目的と違う構造に収束することがあるので、収束後の Freq で虚振動が1つかを必ず確認します（<a href="./errors-ts.html">TSエラー</a>）。</span><template data-lang="en"><span data-lang="en" hidden>Suspends the check on the number of negative Hessian eigenvalues during a TS search. Use it when an extra negative eigenvalue stops the search; because the search may then converge to an unintended structure, always confirm with the Freq after convergence that there is exactly one imaginary frequency (<a href="./errors-ts.html">TS errors</a>).</span></template></td>
+<td><span data-lang="ja">TS探索中の、ヘシアンの負の固有値の数の検査を止めます。余分な負の固有値が出て探索が止まるときに使いますが、検査を止めたまま進めると目的と違う構造に収束することがあるので、収束後の Freq で虚振動が1つかを必ず確認します（<a href="./errors-ts.html">TSエラー</a>）。</span><template data-lang="en"><span data-lang="en" hidden>Turns off the check on the number of negative Hessian eigenvalues during a TS search. Use it when an extra negative eigenvalue stops the search; because the search may then converge to an unintended structure, always confirm with the Freq after convergence that there is exactly one imaginary frequency (<a href="./errors-ts.html">TS errors</a>).</span></template></td>
 </tr>
 <tr>
 <td><code translate="no">Opt=Restart</code></td>
@@ -189,7 +189,7 @@
 </tr>
 <tr>
 <td><code translate="no">SCF=Tight</code></td>
-<td data-en="SCF convergence setting; the default in Gaussian 16 (sometimes written explicitly in published inputs)." data-ja="SCFの収束条件の指定。Gaussian 16 では既定です（文献の入力には明示されていることがあります）。">SCFの収束条件の指定。Gaussian 16 では既定です（文献の入力には明示されていることがあります）。</td>
+<td data-en="Uses the standard tight SCF convergence criteria; the default in Gaussian 16 (sometimes written explicitly in published inputs)." data-ja="SCFを標準の厳しい収束条件で計算します。Gaussian 16 では既定です（文献の入力には明示されていることがあります）。">SCFを標準の厳しい収束条件で計算します。Gaussian 16 では既定です（文献の入力には明示されていることがあります）。</td>
 </tr>
 <tr>
 <td><code translate="no">SCF=MaxCycle=N</code></td>
@@ -317,11 +317,11 @@
 </tr></thead><tbody>
 <tr>
 <td><code translate="no">IRC=Forward / Reverse</code></td>
-<td data-en="Direction to follow. Judge from the structures which side is the reactant." data-ja="たどる向き。どちらが反応物側かは構造を見て判断します。">たどる向き。どちらが反応物側かは構造を見て判断します。</td>
+<td data-en="Direction to follow. Which direction leads to the reactant must be judged from the structures." data-ja="たどる向き。どちらが反応物側かは構造を見て判断します。">たどる向き。どちらが反応物側かは構造を見て判断します。</td>
 </tr>
 <tr>
 <td><code translate="no">IRC=CalcFC / RCFC</code></td>
-<td data-en="Compute the initial Hessian (CalcFC) or read it from the Freq %chk (or %oldchk) (RCFC)." data-ja="出発点のヘシアンを計算する（CalcFC）か、Freqの %chk（または %oldchk）から読む（RCFC）かを指定します。">出発点のヘシアンを計算する（CalcFC）か、Freqの %chk（または %oldchk）から読む（RCFC）かを指定します。</td>
+<td data-en="Computes the initial Hessian (CalcFC) or reads it from the Freq %chk or %oldchk (RCFC)." data-ja="出発点のヘシアンを計算する（CalcFC）か、Freqの %chk（または %oldchk）から読む（RCFC）かを指定します。">出発点のヘシアンを計算する（CalcFC）か、Freqの %chk（または %oldchk）から読む（RCFC）かを指定します。</td>
 </tr>
 <tr>
 <td><code translate="no">IRC=MaxPoints=N</code></td>
@@ -333,7 +333,7 @@
 </tr>
 <tr>
 <td><code translate="no">IRC=LQA / HPC</code></td>
-<td data-en="Path-following algorithm. HPC is the default; try LQA when the corrector fails to converge." data-ja="経路をたどるアルゴリズム。HPCが既定で、corrector が収束しないときに LQA を試します。">経路をたどるアルゴリズム。HPCが既定で、corrector が収束しないときに LQA を試します。</td>
+<td data-en="Path-following algorithm. HPC is the default; try LQA when the path-correction iterations (corrector) fail to converge." data-ja="経路をたどるアルゴリズム。HPCが既定で、経路を補正する反復（corrector）が収束しないときに LQA を試します。">経路をたどるアルゴリズム。HPCが既定で、経路を補正する反復（corrector）が収束しないときに LQA を試します。</td>
 </tr>
 <tr>
 <td><code translate="no">IRC=Restart</code></td>
@@ -349,7 +349,7 @@
 </tr></thead><tbody>
 <tr>
 <td><code translate="no">#n / # / #p / #t</code></td>
-<td data-en="Output verbosity: #n (or just #) is normal, #p adds information such as the run time of each link and the progress of SCF convergence, #t is terse." data-ja="出力の詳しさ。#n（または # だけ）が標準、#p はリンクごとの実行時間などと SCF の収束の経過を追加、#t は最小限。">出力の詳しさ。#n（または # だけ）が標準、#p はリンクごとの実行時間などと SCF の収束の経過を追加、#t は最小限。</td>
+<td data-en="Output verbosity: #n (or just #) is normal, #p adds information such as the run time of each link (the individual programs that make up Gaussian, such as l101.exe) and the progress of SCF convergence, #t is terse." data-ja="出力の詳しさ。#n（または # だけ）が標準、#p は、リンク（Gaussian を構成する個々のプログラム、l101.exe など）ごとの実行時間などと、SCF の収束の経過を追加、#t は最小限。">出力の詳しさ。#n（または # だけ）が標準、#p は、リンク（Gaussian を構成する個々のプログラム、l101.exe など）ごとの実行時間などと、SCF の収束の経過を追加、#t は最小限。</td>
 </tr>
 <tr>
 <td><code translate="no">NoSymm</code></td>
@@ -372,7 +372,7 @@
 <aside class="callout callout-caution">
 <strong data-en="Notes" data-ja="注意" class="callout-title">注意</strong>
 <ul class="callout-list">
-<li data-en="This page is written for Gaussian 16. Defaults, available options and output formats may differ in Gaussian 09 and other versions; check the manual for the version you use." data-ja="このページは Gaussian 16 を対象としています。Gaussian 09 やその他の版では、既定値・使えるオプション・出力の書式が異なる場合があります。使用する版のマニュアルで確認してください。">このページは Gaussian 16 を対象としています。Gaussian 09 やその他の版では、既定値・使えるオプション・出力の書式が異なる場合があります。使用する版のマニュアルで確認してください。</li>
+<li data-en="Defaults, options and output formats are those of Gaussian 16. For Gaussian 09 and other versions, check the manual for that version." data-ja="既定値・オプション・出力の書式は Gaussian 16 のものです。Gaussian 09 などほかの版では、その版のマニュアルで確認します。">既定値・オプション・出力の書式は Gaussian 16 のものです。Gaussian 09 などほかの版では、その版のマニュアルで確認します。</li>
 </ul>
 </aside>
 <section class="content-section reading" id="related">

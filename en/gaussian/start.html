@@ -21,8 +21,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="はじめてのGaussian計算｜Gaussian入門" data-en="Your first Gaussian calculation | Gaussian guide">Your first Gaussian calculation | Gaussian guide</title>
-<link rel="stylesheet" href="../../styles.css?v=20261127-1"/>
-<script defer src="../../app.js?v=20261127-1"></script>
+<link rel="stylesheet" href="../../styles.css?v=20261127-2"/>
+<script defer src="../../app.js?v=20261127-2"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">Skip to content</a>
@@ -49,25 +49,25 @@
 <th data-en="Cost" data-ja="費用" scope="col">Cost</th></tr></thead><tbody>
 <tr>
 <td data-en="Your institution&#x27;s license or machines" data-ja="所属機関のライセンス・計算機">Your institution&#x27;s license or machines</td>
-<td data-en="Many universities and institutes hold a site license or run Gaussian on shared machines." data-ja="大学・研究所がサイトライセンスや共用計算機を持っている場合。">Many universities and institutes hold a site license or run Gaussian on shared machines.</td>
+<td data-en="If your university or institute has a site license or shared computers." data-ja="大学・研究所がサイトライセンスや共用計算機を持っている場合。">If your university or institute has a site license or shared computers.</td>
 <td data-en="Check with your institution" data-ja="要確認">Check with your institution</td>
 </tr>
 <tr>
 <td><p><span data-lang="en">Research Center for Computational Science (RCCS), Okazaki, NINS<br><a href="https://ccportal.ims.ac.jp/" target="_blank" rel="noopener noreferrer">ccportal.ims.ac.jp</a></span></p></td>
-<td data-en="The shared supercomputer for molecular science." data-ja="分子科学分野の共用スーパーコンピュータ。">The shared supercomputer for molecular science.</td>
-<td data-en="Free (application and annual report required)" data-ja="無料（申請・年度ごとの報告が必要）">Free (application and annual report required)</td>
+<td data-en="A shared supercomputer for molecular science." data-ja="分子科学分野の共用スーパーコンピューター。">A shared supercomputer for molecular science.</td>
+<td data-en="Free (application required)" data-ja="無料（申請が必要）">Free (application required)</td>
 </tr>
 <tr>
 <td><p><span data-lang="en">University supercomputer centers open to external users<br>e.g. <a href="https://www.cc.kyushu-u.ac.jp/scp/" target="_blank" rel="noopener noreferrer">Kyushu University RIIT (Genkai)</a>, <a href="https://www.hpc.cmc.osaka-u.ac.jp/" target="_blank" rel="noopener noreferrer">The University of Osaka D3 Center</a>, <a href="https://www.ss.cc.tohoku.ac.jp/" target="_blank" rel="noopener noreferrer">Tohoku University Cyberscience Center</a>, <a href="https://www.t4.cii.isct.ac.jp/" target="_blank" rel="noopener noreferrer">Institute of Science Tokyo CII (TSUBAME4.0)</a></span></p></td>
 <td data-en="National joint-use facilities; researchers from other institutions can also use them." data-ja="全国共同利用施設。学外の研究者も利用可。">National joint-use facilities; researchers from other institutions can also use them.</td>
-<td data-en="Paid (usage fees)" data-ja="有償（利用負担金）">Paid (usage fees)</td>
+<td data-en="Paid" data-ja="有償">Paid</td>
 </tr>
 </tbody></table></div>
 <p data-en="The workflow is the same everywhere: write the input file (.gjf/.com) locally, send it to the machine and run it, then bring the output (.log/.out) back to inspect." data-ja="どの環境でも、計算の流れは同じです。手元で入力ファイル（.gjf/.com）を作り、計算機に送って実行し、出力ファイル（.log/.out）を手元に戻して確認します。">The workflow is the same everywhere: write the input file (.gjf/.com) locally, send it to the machine and run it, then bring the output (.log/.out) back to inspect.</p>
 </section>
 <section class="content-section reading" id="input">
 <h2 data-en="1. Anatomy of an input file" data-ja="1. 入力ファイルの中身">1. Anatomy of an input file</h2>
-<p data-en="A Gaussian input is a plain text file (.gjf or .com). It consists of five parts, top to bottom, with one blank line after the route line, after the title and after the coordinates." data-ja="Gaussianの入力は普通のテキストファイルです（拡張子 .gjf または .com）。上から順に5つの部品を書きます。空行は、ルート行の後・タイトルの後・座標の後に1行ずつ入れます。">A Gaussian input is a plain text file (.gjf or .com). It consists of five parts, top to bottom, with one blank line after the route line, after the title and after the coordinates.</p>
+<p data-en="A Gaussian input is a plain text file (.gjf or .com). It consists of five parts, top to bottom, with one blank line after the route line, after the title and after the coordinates." data-ja="Gaussianの入力は普通のテキストファイルです（拡張子 .gjf または .com）。上から順に5つの項目を書きます。空行は、ルート行の後・タイトルの後・座標の後に1行ずつ入れます。">A Gaussian input is a plain text file (.gjf or .com). It consists of five parts, top to bottom, with one blank line after the route line, after the title and after the coordinates.</p>
 <pre class="input-block keep-lines" translate="no" data-lang="en">%nprocshared=8                                    ← (1) Link 0: cores, memory, checkpoint name
 %mem=16GB
 %chk=catechin_opt_freq.chk
@@ -81,7 +81,7 @@ C   -4.360353  -1.556559  -0.095452
  ...
                                                    ← blank line at the end</pre>
 <div class="table-wrap"><table><thead><tr>
-<th data-en="Part" data-ja="部品" scope="col">Part</th>
+<th data-en="Part" data-ja="項目" scope="col">Part</th>
 <th data-en="Contents" data-ja="記載内容" scope="col">Contents</th>
 
 </tr></thead><tbody>
@@ -113,9 +113,9 @@ C   -4.360353  -1.556559  -0.095452
 </tbody></table></div>
 <h3 data-en="Reading the route line" data-ja="ルート行の読み方">Reading the route line</h3>
 <ul class="compact-list">
-<li data-en="#p — output verbosity. #n (or just #) is normal, #p adds information such as the run time of each link and the progress of SCF convergence, #t is terse." data-ja="#p — 出力の詳しさ。#n（または # だけ）が標準、#p はリンクごとの実行時間などと SCF の収束の経過を追加、#t は最小限。">#p — output verbosity. #n (or just #) is normal, #p adds information such as the run time of each link and the progress of SCF convergence, #t is terse.</li>
+<li data-en="#p — output verbosity. #n (or just #) is normal, #p adds information such as the run time of each link (the individual programs that make up Gaussian, such as l101.exe) and the progress of SCF convergence, #t is terse." data-ja="#p — 出力の詳しさ。#n（または # だけ）が標準、#p は、リンク（Gaussian を構成する個々のプログラム、l101.exe など）ごとの実行時間などと、SCF の収束の経過を追加、#t は最小限。">#p — output verbosity. #n (or just #) is normal, #p adds information such as the run time of each link (the individual programs that make up Gaussian, such as l101.exe) and the progress of SCF convergence, #t is terse.</li>
 <li data-en="B3LYP — the functional: how electron exchange and correlation are approximated." data-ja="B3LYP — 汎関数。電子の交換と相関の近似の仕方です。">B3LYP — the functional: how electron exchange and correlation are approximated.</li>
-<li data-en="6-31G(d) — the basis set: the functions used to describe the electron distribution." data-ja="6-31G(d) — 基底関数。電子の分布を表す関数の組です。">6-31G(d) — the basis set: the functions used to describe the electron distribution.</li>
+<li data-en="6-31G(d) — the basis set: the set of functions used to represent the molecular orbitals." data-ja="6-31G(d) — 基底関数。分子軌道を表す関数の組です。">6-31G(d) — the basis set: the set of functions used to represent the molecular orbitals.</li>
 <li data-en="Opt Freq — optimize the geometry, then compute vibrational frequencies at the same geometry." data-ja="Opt Freq — 構造を最適化してから、同じ構造で振動数を計算します。">Opt Freq — optimize the geometry, then compute vibrational frequencies at the same geometry.</li>
 </ul>
 <p><span data-lang="en">See the <a href="./glossary.html">Glossary</a> for terms and the <a href="./workflow.html#methods">Calculation guide</a> for how to choose a method.</span></p>
@@ -169,12 +169,11 @@ H     -4.195289    -3.677126     1.006539
 H     -5.207333     1.107551    -1.576955
 
 </pre>
-<h3 data-en="Making one for your own molecule" data-ja="自分の分子で作るには">Making one for your own molecule</h3>
-<p data-en="One example workflow." data-ja="流れの一例です。">One example workflow.</p>
+<h3 data-en="Building an input for your own molecule" data-ja="自分の分子で作るには">Building an input for your own molecule</h3>
 <ol class="step-list">
 <li><strong data-en="Draw the structure in ChemDraw (or the free ReShiki) and save as .mol" data-ja="ChemDraw（無料ならReShiki）で構造式を描き、.mol で保存する" class="step-title">Draw the structure in ChemDraw (or the free ReShiki) and save as .mol</strong><div class="step-body"><p><span data-lang="en">Specify stereochemistry with wedge/hash bonds. Download links are on the <a href="./software.html#chemdraw">Computational chemistry software</a> page.</span></p></div></li>
-<li><strong data-en="Make it 3D in Avogadro 2, optimize with MMFF94 and check the stereochemistry" data-ja="Avogadro 2 で3D化し、MMFF94 で最適化して立体配置を確認する" class="step-title">Make it 3D in Avogadro 2, optimize with MMFF94 and check the stereochemistry</strong><div class="step-body"><p data-en="Open the .mol in Avogadro 2 and add hydrogens if any are missing. Choose the MMFF94 force field, optimize the structure, check that the stereochemistry is correct, and save as .mol2." data-ja="Avogadro 2 で .mol を開き、水素が足りなければ追加します。力場に MMFF94 を選んで構造を最適化し、立体配置が意図どおりかを確認して、.mol2 で保存します。">Open the .mol in Avogadro 2 and add hydrogens if any are missing. Choose the MMFF94 force field, optimize the structure, check that the stereochemistry is correct, and save as .mol2.</p></div></li>
-<li><strong data-en="Run an MMFF conformer search in Spartan" data-ja="SpartanでMMFF配座探索を行う" class="step-title">Run an MMFF conformer search in Spartan</strong><div class="step-body"><p><span data-lang="en">Load the .mol2 and run Calculations → Conformer Distribution. These conformers are the candidates for the Gaussian calculations in <a href="./conformers.html">Conformers and stable structures</a>. For a first run, use only the lowest-energy one.</span></p></div></li>
+<li><strong data-en="Generate 3D coordinates in Avogadro 2, optimize with MMFF94 and check the stereochemistry" data-ja="Avogadro 2 で3D化し、MMFF94 で最適化して立体配置を確認する" class="step-title">Generate 3D coordinates in Avogadro 2, optimize with MMFF94 and check the stereochemistry</strong><div class="step-body"><p data-en="Open the .mol in Avogadro 2 and add hydrogens if any are missing. Choose the MMFF94 force field, optimize the structure, check that the stereochemistry is correct, and save as .mol2." data-ja="Avogadro 2 で .mol を開き、水素が足りなければ追加します。力場に MMFF94 を選んで構造を最適化し、立体配置が意図どおりかを確認して、.mol2 で保存します。">Open the .mol in Avogadro 2 and add hydrogens if any are missing. Choose the MMFF94 force field, optimize the structure, check that the stereochemistry is correct, and save as .mol2.</p></div></li>
+<li><strong data-en="Run an MMFF94 conformer search in Spartan" data-ja="SpartanでMMFF94配座探索を行う" class="step-title">Run an MMFF94 conformer search in Spartan</strong><div class="step-body"><p><span data-lang="en">Load the .mol2 and run Calculations → Conformer Distribution. These conformers are the candidates for the Gaussian calculations in <a href="./conformers.html">Conformers and stable structures</a>. For a first run, use only the lowest-energy one.</span></p></div></li>
 <li><strong data-en="Turn it into a Gaussian input" data-ja="Gaussian入力にする" class="step-title">Turn it into a Gaussian input</strong><div class="step-body"><p data-en="Export coordinates from Spartan, or create the input with Input → Gaussian in Avogadro 2; write the job type, functional, basis set and solvent on the route line, and save the .gjf." data-ja="Spartan から座標を書き出すか、Avogadro 2 の Input → Gaussian で入力を作り、計算の種類・汎関数・基底関数・溶媒をルート行に書いて .gjf を保存します。">Export coordinates from Spartan, or create the input with Input → Gaussian in Avogadro 2; write the job type, functional, basis set and solvent on the route line, and save the .gjf.</p></div></li>
 </ol>
 </section>
@@ -184,13 +183,13 @@ H     -5.207333     1.107551    -1.576955
 <pre class="input-block keep-lines" translate="no" data-lang="en"># Direct execution on Linux
 g16 catechin_opt_freq.gjf
 
-# With a job scheduler (e.g. Slurm), submit following the procedure of the machine you use
+# With a job scheduler (e.g. Slurm), submit the job as your machine's documentation describes
 # (run_g16.sh is a job script prepared for that machine)
 sbatch run_g16.sh
 
 # On RCCS
 g16sub catechin_opt_freq.gjf</pre>
-<p data-en="The output is written to catechin_opt_freq.log (.out on some systems). On shared machines, set %nprocshared and %mem to that machine&#x27;s rules (on RCCS, g16sub sets them from the resources requested at submission)." data-ja="出力は catechin_opt_freq.log（環境により .out）に書き出されます。共用計算機では %nprocshared と %mem の値をその計算機の規定に合わせます（RCCS の g16sub は、投入時の割り当てに合わせてこれらを設定します）。">The output is written to catechin_opt_freq.log (.out on some systems). On shared machines, set %nprocshared and %mem to that machine&#x27;s rules (on RCCS, g16sub sets them from the resources requested at submission).</p>
+<p data-en="The output is written to catechin_opt_freq.log (.out on some systems). On shared machines, set %nprocshared and %mem to match that machine&#x27;s limits (on RCCS, g16sub sets them from the resources requested at submission)." data-ja="出力は catechin_opt_freq.log（環境により .out）に書き出されます。共用計算機では %nprocshared と %mem の値をその計算機の規定に合わせます（RCCS の g16sub は、投入時の割り当てに合わせてこれらを設定します）。">The output is written to catechin_opt_freq.log (.out on some systems). On shared machines, set %nprocshared and %mem to match that machine&#x27;s limits (on RCCS, g16sub sets them from the resources requested at submission).</p>
 </section>
 <section class="content-section reading" id="output">
 <h2 data-en="4. Reading the output: check three places" data-ja="4. 出力の見方：3か所だけ確認する">4. Reading the output: check three places</h2>
@@ -206,7 +205,7 @@ g16sub catechin_opt_freq.gjf</pre>
  Predicted change in Energy=-9.745202D-09
  Optimization completed.
     -- Stationary point found.</pre>
-<p><span data-lang="en">“Stationary point found” means converged (normally all four items are YES). The table is printed at every optimization cycle. With Opt Freq it is printed once more at the end of the frequency job; check that it is all YES there as well. If that table has NO, the structure is not a stationary point even with 0 imaginary frequencies (see “<a href="./errors-opt-scf.html#freq-check">Not converged in the Freq after Opt</a>” in Troubleshooting).</span></p></div></li>
+<p><span data-lang="en">“Stationary point found” means the optimization has converged (normally all four items are YES). The table is printed at every optimization cycle. With Opt Freq it is printed once more at the end of the frequency job; check that it is all YES there as well. If that table has NO, the structure is not a stationary point even with 0 imaginary frequencies (see “<a href="./errors-opt-scf.html#freq-check">Not converged in the Freq after Opt</a>” in Troubleshooting).</span></p></div></li>
 <li><strong data-en="Are there any imaginary frequencies?" data-ja="虚振動がないか" class="step-title">Are there any imaginary frequencies?</strong><div class="step-body"><pre class="input-block keep-lines" translate="no" lang="en"> Frequencies --     28.7801                36.2275                55.1887
  Red. masses --      6.1207                 6.1679                 6.6287</pre>
 <p><span data-lang="en">Imaginary frequencies are printed as negative values. If all values on the first Frequencies line are positive, the structure is a minimum. Even one negative value (e.g. -45.6) means it is not yet a minimum (see <a href="./conformers.html#opt">Optimization and frequencies in Conformers and stable structures</a>).</span></p>
@@ -228,12 +227,12 @@ g16sub catechin_opt_freq.gjf</pre>
 </tr>
 <tr>
 <td><pre class="input-block" translate="no" lang="en">Convergence failure -- run terminated.</pre></td>
-<td data-en="The SCF (electronic-structure iteration) did not converge." data-ja="SCF（電子状態の反復計算）が収束しません。">The SCF (electronic-structure iteration) did not converge.</td>
+<td data-en="The SCF (the iterative calculation of the electronic structure) did not converge." data-ja="SCF（電子状態の反復計算）が収束しません。">The SCF (the iterative calculation of the electronic structure) did not converge.</td>
 <td><p><span data-lang="en">Check charge/multiplicity and the structure, add SCF=XQC to the route line and rerun. <a href="./errors-opt-scf.html#scf">Details</a></span></p></td>
 </tr>
 <tr>
 <td><pre class="input-block" translate="no" lang="en">Number of steps exceeded,  NStep= ...</pre></td>
-<td data-en="The optimization did not converge within the step limit." data-ja="最適化が回数上限内に収束しませんでした。">The optimization did not converge within the step limit.</td>
+<td data-en="The optimization did not converge within the step limit." data-ja="最適化が上限の回数までに収束しませんでした。">The optimization did not converge within the step limit.</td>
 <td><p><span data-lang="en">Start a new job from the last geometry in the output. <a href="./errors-opt-scf.html#minimum">Details</a></span></p></td>
 </tr>
 </tbody></table></div>
@@ -244,8 +243,8 @@ g16sub catechin_opt_freq.gjf</pre>
 <p data-en="In real work you calculate the several conformers a molecule can adopt. For catechin, combinations of OH orientations and ring shapes give dozens." data-ja="実際の研究では、分子がとりうる複数の配座を計算します。カテキンでは、OHの向きと環の形の組み合わせで数十の配座があります。">In real work you calculate the several conformers a molecule can adopt. For catechin, combinations of OH orientations and ring shapes give dozens.</p>
 <div class="task-grid">
 
-<a class="feature-card" href="./conformers.html"><h3 data-en="Conformer search → Opt Freq → energy comparison" data-ja="配座探索 → Opt Freq → エネルギー比較">Conformer search → Opt Freq → energy comparison</h3><p data-en="Compute several candidates under the same conditions and obtain populations." data-ja="複数候補を同じ条件で計算して存在率を求める流れ。">Compute several candidates under the same conditions and obtain populations.</p></a>
-<a class="feature-card" href="./nmr.html"><h3 data-en="Calculate NMR chemical shifts and compare with experiment" data-ja="NMR化学シフトを計算して実測と比べる">Calculate NMR chemical shifts and compare with experiment</h3><p data-en="The ideas behind property calculations used for structure determination." data-ja="構造決定に使う物性計算の考え方。">The ideas behind property calculations used for structure determination.</p></a>
+<a class="feature-card" href="./conformers.html"><h3 data-en="Conformer search → Opt Freq → energy comparison" data-ja="配座探索 → Opt Freq → エネルギー比較">Conformer search → Opt Freq → energy comparison</h3><p data-en="Compute several candidates under the same conditions and calculate their populations." data-ja="複数候補を同じ条件で計算して存在率を求める流れ。">Compute several candidates under the same conditions and calculate their populations.</p></a>
+<a class="feature-card" href="./nmr.html"><h3 data-en="Calculate NMR chemical shifts and compare them with experimental values" data-ja="NMR化学シフトを計算して実測と比べる">Calculate NMR chemical shifts and compare them with experimental values</h3><p data-en="The ideas behind property calculations used for structure determination." data-ja="構造決定に使う物性計算の考え方。">The ideas behind property calculations used for structure determination.</p></a>
 
 <a class="feature-card" href="./keywords.html"><h3 data-en="Gaussian keyword reference" data-ja="Gaussianキーワード一覧">Gaussian keyword reference</h3><p data-en="What route-line and Link 0 keywords mean and when to use them." data-ja="ルート行・Link 0のキーワードの意味と使いどころ。">What route-line and Link 0 keywords mean and when to use them.</p></a>
 </div>

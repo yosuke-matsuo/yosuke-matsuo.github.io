@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>HRMS Calc (HRMS Exact Mass Calculator)</title>
-<meta name="description" content="A browser tool that calculates exact HRMS masses (m/z), taking the electron mass into account. Candidate formulas, batch calculation, isotope patterns, and writing and checking HRMS statements for papers and SI.">
+<meta name="description" content="A browser tool that calculates exact masses (m/z) for HRMS, taking the electron mass into account. Candidate formulas, batch calculation, isotope patterns, and writing and checking HRMS statements for papers and SI.">
 <link rel="canonical" href="https://yosuke-matsuo.github.io/hrms-calc/en/">
 <link rel="alternate" hreflang="ja" href="https://yosuke-matsuo.github.io/hrms-calc/">
 <link rel="alternate" hreflang="en" href="https://yosuke-matsuo.github.io/hrms-calc/en/">
@@ -13,7 +13,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Yosuke Matsuo（松尾洋介）">
 <meta property="og:title" content="HRMS Calc (HRMS Exact Mass Calculator)">
-<meta property="og:description" content="A browser tool that calculates exact HRMS masses (m/z), taking the electron mass into account. Candidate formulas, batch calculation, isotope patterns, and writing and checking HRMS statements for papers and SI.">
+<meta property="og:description" content="A browser tool that calculates exact masses (m/z) for HRMS, taking the electron mass into account. Candidate formulas, batch calculation, isotope patterns, and writing and checking HRMS statements for papers and SI.">
 <meta property="og:url" content="https://yosuke-matsuo.github.io/hrms-calc/en/">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://yosuke-matsuo.github.io/images/og-image.png">
@@ -27,7 +27,7 @@
  "name": "HRMS Calc",
  "alternateName": "HRMS精密質量計算ツール",
  "url": "https://yosuke-matsuo.github.io/hrms-calc/en/",
- "description": "A browser tool that calculates exact HRMS masses (m/z), taking the electron mass into account. Candidate formulas, batch calculation, isotope patterns, and writing and checking HRMS statements for papers and SI.",
+ "description": "A browser tool that calculates exact masses (m/z) for HRMS, taking the electron mass into account. Candidate formulas, batch calculation, isotope patterns, and writing and checking HRMS statements for papers and SI.",
  "applicationCategory": "Science",
  "operatingSystem": "Any (web browser)",
  "browserRequirements": "Requires JavaScript",
@@ -44,7 +44,7 @@
  }
 }
 </script>
-<link rel="stylesheet" href="../style.css?v=20261127-2">
+<link rel="stylesheet" href="../style.css?v=20261127-3">
 </head>
 <body>
 <a class="skip-link" href="#main" data-t="skip">Skip to content</a>
@@ -141,7 +141,7 @@
 
 <section id="batch" class="panel" role="tabpanel" aria-labelledby="tab-batch" hidden>
 <form id="batchForm" novalidate>
-<p class="hint" data-t="batchHelp">One compound per line: name (optional), formula, ion (optional) and measured <i>m</i>/<i>z</i> (optional), separated by tabs, spaces or commas. Tables from Excel can be pasted.</p>
+<p class="hint" data-t="batchHelp">One compound per line: name (optional), formula, ion (optional) and measured <i>m</i>/<i>z</i> (optional), separated by tabs, spaces or commas. You can also paste a table from Excel.</p>
 <label class="block"><span data-t="batchInput">Compounds</span><textarea id="batchInput" rows="7" spellcheck="false" autocomplete="off"></textarea></label>
 <div class="fields"><div class="field"><span class="field-label" id="batchIon-label" data-t="batchIon">Ion type (for lines without one)</span><select id="batchIon" hidden aria-labelledby="batchIon-label"></select></div><label><span data-t="digits">Decimal places of calculated values</span><select data-digits></select></label></div>
 <div class="actions"><button class="primary" data-t="batchRun">Calculate all</button><button type="button" id="batchExample" data-t="example">Insert example</button></div>
@@ -181,8 +181,8 @@
 <p data-t="molecularWeightMethod" data-tabs="calculator">The molecular weight is calculated from the CIAAW abridged standard atomic weights and shown to two decimal places.</p>
 <p data-t="ppm">Error (ppm) = (measured − calculated) / calculated × 10⁶. Error (mDa) = (measured − calculated) × 1000.</p>
 <p data-t="dbe" data-tabs="calculator finder batch">DBE = 1 + C + N/2 − (H + F + Cl + Br + I)/2 (value for the neutral M; non-integer values are shown as they are). Compositions with elements other than C, H, N, O, S and halogens are shown as —.</p>
-<p data-tabs="finder"><span data-t="filterMethod">Filters in Find formulas: the DBE condition requires the DBE of the neutral M to be an integer and not negative. DBE is calculated for C, H, N, O, S and halogens with the usual valences (C 4, N 3, H and halogens 1, O and S 2); compositions with other elements are not judged and are kept. Being an integer is the same condition as the nitrogen rule (parity of the number of nitrogens and of the nominal mass); being non-negative is not part of the nitrogen rule (CH<sub>6</sub> satisfies the nitrogen rule but has DBE −1). The element-ratio condition uses the ratios of H, N, O, P, S and Si to carbon in the “common range” given by Kind and Fiehn (covering 99.7% of the formulas in their database).</span> <a href="https://doi.org/10.1186/1471-2105-8-105" target="_blank" rel="noopener noreferrer">Kind &amp; Fiehn, <i>BMC Bioinformatics</i> 2007</a></p>
-<p data-t="urlMethod" data-tabs="calculator finder">The inputs of Exact mass and Find formulas are kept in the page address after “#”. That part is not sent to the server, but a bookmarked or shared address carries the inputs. The inputs of Batch and Check SI text are not kept in the address.</p>
+<p data-tabs="finder"><span data-t="filterMethod">Filters in Find formulas: the DBE condition requires the DBE of the neutral M to be an integer and not negative. DBE is calculated for C, H, N, O, S and halogens with the usual valences (C 4, N 3, H and halogens 1, O and S 2); compositions with other elements are not judged and are kept. An integer DBE is equivalent to the nitrogen rule (parity of the number of nitrogens and of the nominal mass); a non-negative DBE is not required by the nitrogen rule (for example, CH<sub>6</sub> satisfies the nitrogen rule but has DBE −1). The element-ratio condition uses the ratios of H, N, O, P, S and Si to carbon in the “common range” given by Kind and Fiehn (covering 99.7% of the formulas in their database).</span> <a href="https://doi.org/10.1186/1471-2105-8-105" target="_blank" rel="noopener noreferrer">Kind &amp; Fiehn, <i>BMC Bioinformatics</i> 2007</a></p>
+<p data-t="urlMethod" data-tabs="calculator finder">The inputs of Exact mass and Find formulas are kept in the page address after “#”. That part is not sent to the server, but if you bookmark or share the address, the inputs go with it. The inputs of Batch and Check SI text are not kept in the address.</p>
 <p data-t="isotopes">84 elements are supported, each with the mass of its most abundant isotope (for example ¹¹B for B and ⁵⁶Fe for Fe). Elements without a natural isotopic composition, such as Tc and Pm, cannot be used.</p>
 <p data-t="isoMethod" data-tabs="calculator">Isotope patterns are calculated from the NIST abundances; isotopologues with the same nominal mass are combined into one peak (<i>m</i>/<i>z</i> is the abundance-weighted mean). At high resolution, these isotopologues may appear as separate peaks.</p>
 <p data-t="checkMethod" data-tabs="checker">Check SI text takes the formula after “calcd for” as the composition of the ion, recalculates its <i>m</i>/<i>z</i> and checks agreement within rounding of the last digit. If they do not agree, it checks whether the electron mass was mishandled or the value was calculated for the neutral formula.</p>
@@ -202,6 +202,6 @@
 
 <footer><p>© 2026 <a href="../../en/index.html" data-home="index">Yosuke Matsuo</a> · <a href="../../en/tools.html" data-home="tools" data-t="toolsPage">Tools</a></p><p><a href="https://github.com/yosuke-matsuo/yosuke-matsuo.github.io/tree/main/hrms-calc" data-t="sourceCode" target="_blank" rel="noopener noreferrer">Source code</a> · <span data-t="codeLicense">HRMS Calc code: </span><a href="../LICENSE.txt">MIT License</a></p></footer>
 </main>
-<script type="module" src="../app.js?v=20261127-2"></script>
+<script type="module" src="../app.js?v=20261127-3"></script>
 </body>
 </html>

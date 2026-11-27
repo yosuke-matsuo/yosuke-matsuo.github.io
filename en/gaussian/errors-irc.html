@@ -21,8 +21,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="IRCエラー｜Gaussian入門" data-en="IRC errors | Gaussian guide">IRC errors | Gaussian guide</title>
-<link rel="stylesheet" href="../../styles.css?v=20261127-1"/>
-<script defer src="../../app.js?v=20261127-1"></script>
+<link rel="stylesheet" href="../../styles.css?v=20261127-2"/>
+<script defer src="../../app.js?v=20261127-2"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">Skip to content</a>
@@ -37,7 +37,7 @@
 <section class="intro"><nav aria-label="Breadcrumb" class="breadcrumb"><a data-ja="Gaussian入門" data-en="Gaussian guide" href="./index.html">Gaussian guide</a> / <a data-ja="Gaussianのエラー対応" data-en="Troubleshooting Gaussian errors" href="./troubleshooting.html">Troubleshooting Gaussian errors</a></nav><h1 data-en="IRC errors" data-ja="IRCエラー">IRC errors</h1></section>
 <section class="content-section reading" id="irc-errors">
 <h2 data-en="IRC errors" data-ja="IRCのエラー">IRC errors</h2>
-<article class="error-entry"><h3 data-en="Corrector does not converge" data-ja="correctorが収束しない" id="corrector">Corrector does not converge</h3><pre class="error-marker" translate="no" lang="en">Maximum number of corrector steps exceded</pre><p><strong data-en="Cause: " data-ja="原因：">Cause: </strong><span data-en="The path-correction iterations (corrector) did not converge." data-ja="経路を補正する反復（corrector）が上限内に収束しません。">The path-correction iterations (corrector) did not converge.</span></p><strong data-en="What to do" data-ja="対処" class="action-label">What to do</strong><ol class="compact-list">
+<article class="error-entry"><h3 data-en="Corrector iterations do not converge" data-ja="補正の反復（corrector）が収束しない" id="corrector">Corrector iterations do not converge</h3><pre class="error-marker" translate="no" lang="en">Maximum number of corrector steps exceded</pre><p><strong data-en="Cause: " data-ja="原因：">Cause: </strong><span data-en="The path-correction iterations (corrector) did not converge within the iteration limit." data-ja="経路を補正する反復（corrector）が上限内に収束しません。">The path-correction iterations (corrector) did not converge within the iteration limit.</span></p><strong data-en="What to do" data-ja="対処" class="action-label">What to do</strong><ol class="compact-list">
 <li data-en="Check whether an SCF failure or a memory/disk shortage happened first." data-ja="SCFの失敗やメモリ・ディスク不足が先に起きていないかを確認します。">Check whether an SCF failure or a memory/disk shortage happened first.</li>
 <li data-en="If this error occurs with the default algorithm (no option, or IRC=HPC), recompute from the same TS with IRC=LQA: read the TS Freq .chk with %oldchk and keep the direction, MaxPoints and StepSize of the original job (input below)." data-ja="既定のアルゴリズム（指定なし、または IRC=HPC）でこのエラーが出た場合は、IRC=LQA に変えて同じTSから計算し直します。TSのFreqの .chk を %oldchk で読み、方向・MaxPoints・StepSize は元の計算と同じにします（下の入力例）。">If this error occurs with the default algorithm (no option, or IRC=HPC), recompute from the same TS with IRC=LQA: read the TS Freq .chk with %oldchk and keep the direction, MaxPoints and StepSize of the original job (input below).</li>
 <li data-en="Reducing StepSize (e.g. 10 → 5) can also help." data-ja="StepSize を小さくする（例：10 → 5）のも有効なことがあります。">Reducing StepSize (e.g. 10 → 5) can also help.</li>
