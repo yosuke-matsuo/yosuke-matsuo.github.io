@@ -140,6 +140,9 @@ HRESIMS m/z 361.1338 [2M + H]+ (calcd for C12H25O12, 361.1341)
   const r = checkText(text);
   assert.deepEqual(r.map(x => x.found), ['313.0679', '313.0690', '291.0860', '291.0871', '361.1338', '225.0614']);
   assert.ok(r.every(x => x.status === 'ok'), r.map(x => x.codes).join('|'));
+  // two found-first records on one line keep their own values
+  const two = checkText('HRMS found 203.0524 [M+Na]+ (calcd for C6H12O6Na 203.0526); HRMS found 181.0709 [M+H]+ (calcd for C6H13O6 181.0707).');
+  assert.deepEqual(two.map(x => [x.found, x.status]), [['203.0524', 'ok'], ['181.0709', 'ok']]);
 });
 
 test('batch input', () => {

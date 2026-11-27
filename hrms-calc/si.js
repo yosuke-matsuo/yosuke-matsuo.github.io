@@ -120,10 +120,10 @@ export function checkText(text,{tolerancePpm=5,tolerance=tolerancePpm,toleranceU
   // (same sentence only, and close to the calculated value, so the next compound's value is not taken)
   let found=null,start=formulaStart??h.index,end=valueEnd;const near=v=>Math.abs(Number(v)-Number(vm[1]))<=0.5;
   let after=s.slice(valueEnd,Math.min(nextKw,valueEnd+250));const stop=/(?<!\b(?:exp|exptl|obs|obsd|calc|calcd|theor))[.。](?=\s|$)(?!\s*(?:found|obs|measured|exp|実測))|\n\s*\n/i.exec(after);if(stop)after=after.slice(0,stop.index);
-  // a value labelled "found" on the same line belongs to this record even when it is far off;
-  // on a later line it must be close to the calculated value (it may be the next compound's)
+  // a value labelled "found" right after the calculated value ("…203.0526; Found 204.0524") belongs to this
+  // record even when it is far off; otherwise it must be close to the calculated value (it may be the next compound's)
   const fa=FOUND_AFTER.exec(after);
-  if(fa&&(near(fa[1])||!after.slice(0,fa.index).includes('\n'))){found=fa[1];end=valueEnd+fa.index+fa[0].length;}
+  if(fa&&(near(fa[1])||/^[ \t,;:)\]]*$/.test(after.slice(0,fa.index)))){found=fa[1];end=valueEnd+fa.index+fa[0].length;}
   const from=Math.max(prevEnd,h.index-250),before=s.slice(from,h.index);
   if(!found){const all=[...before.matchAll(MZ_BEFORE)].filter(b=>near(b[1]));if(all.length){const b=all[all.length-1];found=b[1];start=Math.min(start,from+b.index);}}
   // ion notations of this record: next to the formula, right after the value, otherwise the last one before "calcd"
