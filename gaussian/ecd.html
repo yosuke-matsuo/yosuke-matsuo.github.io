@@ -20,8 +20,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="ECD・UV・旋光度｜Gaussian入門" data-en="ECD, UV and optical rotation | Gaussian guide">ECD・UV・旋光度｜Gaussian入門</title>
-<link rel="stylesheet" href="../styles.css?v=20261127-4"/>
-<script defer src="../app.js?v=20261127-4"></script>
+<link rel="stylesheet" href="../styles.css?v=20261127-5"/>
+<script defer src="../app.js?v=20261127-5"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">本文へ移動</a>
@@ -57,7 +57,7 @@
    SCRF=(PCM,Solvent=Chloroform)</pre><p><strong data-en="Used in: " data-ja="使用例：">使用例：</strong><a href="https://doi.org/10.1021/acs.orglett.1c02537" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Li <i>et al.</i>, <i>Org. Lett.</i> 2021, 23, 7134</a> · <a href="https://doi.org/10.1021/acs.jnatprod.2c00796" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Grauso <i>et al.</i>, <i>J. Nat. Prod.</i> 2022, 85, 2468</a></p><p class="muted"><span data-en="Source: " data-ja="出典：">出典：</span><a href="https://doi.org/10.1039/B810189B" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Chai &amp; Head-Gordon, <i>Phys. Chem. Chem. Phys.</i> 2008, 10, 6615</a> · <a href="https://doi.org/10.1002/chir.22600" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Pescitelli &amp; Bruhn, <i>Chirality</i> 2016, 28, 466</a></p></article>
 <h3 data-en="Building the curves" data-ja="曲線の作り方">曲線の作り方</h3>
 <ul class="compact-list">
-<li data-en="Broaden each transition with a Gaussian function (typically about 0.3 eV FWHM; SpecDis&#x27;s default σ = 0.16 eV is about 0.27 eV FWHM) and average the per-conformer curves by population." data-ja="各遷移をガウス関数で広げ（幅の目安は半値全幅 0.3 eV 前後。SpecDisの既定値 σ = 0.16 eV は半値全幅 約0.27 eV）、配座ごとの曲線を存在率で平均します。">各遷移をガウス関数で広げ（幅の目安は半値全幅 0.3 eV 前後。SpecDisの既定値 σ = 0.16 eV は半値全幅 約0.27 eV）、配座ごとの曲線を存在率で平均します。</li>
+<li data-en="Broaden each transition with a Gaussian function (SpecDis&#x27;s default σ = 0.16 eV is about 0.27 eV FWHM; adjust it to the experimental band width) and average the per-conformer curves by population." data-ja="各遷移をガウス関数で広げ（SpecDisの既定値 σ = 0.16 eV は半値全幅 約0.27 eV。実測のバンドの幅に合わせて調整します）、配座ごとの曲線を存在率で平均します。">各遷移をガウス関数で広げ（SpecDisの既定値 σ = 0.16 eV は半値全幅 約0.27 eV。実測のバンドの幅に合わせて調整します）、配座ごとの曲線を存在率で平均します。</li>
 <li data-en="A wavelength shift is sometimes applied when comparing with experiment (e.g. −7 nm in Xu 2019). Decide it per compound." data-ja="実測と比べるときに波長をシフトすることがあります（例：Xu 2019 では −7 nm）。シフト量は化合物ごとに決めます。">実測と比べるときに波長をシフトすることがあります（例：Xu 2019 では −7 nm）。シフト量は化合物ごとに決めます。</li>
 </ul>
 <p><span data-lang="ja">変換式は下の<a href="#equations">曲線の変換式</a>にあります。この処理は SpecDis などで行えます。</span><template data-lang="en"><span data-lang="en" hidden>The equations are given under <a href="#equations">Curve equations</a> below. SpecDis and similar programs can do this.</span></template></p>
@@ -101,7 +101,7 @@
 HWHH = σ_E √ln2,   FWHM = 2 HWHH,   E(eV) = 1239.84 / λ(nm)</pre>
 <ul class="compact-list">
 <li><span data-lang="ja"><i>E</i>, <i>E</i><sub>ci</sub>, σ<sub><i>E</i></sub> は eV、<i>R</i><sub>ci</sub> はGaussian出力の旋光強度（10⁻⁴⁰ cgs）、<i>f</i><sub>ci</sub> は振動子強度。Δε と ε は L mol⁻¹ cm⁻¹。</span><template data-lang="en"><span data-lang="en" hidden><i>E</i>, <i>E</i><sub>ci</sub> and σ<sub><i>E</i></sub> in eV; <i>R</i><sub>ci</sub> is the rotatory strength from Gaussian output (10⁻⁴⁰ cgs); <i>f</i><sub>ci</sub> is the oscillator strength. Δε and ε in L mol⁻¹ cm⁻¹.</span></template></li>
-<li><span data-lang="ja">σ<sub><i>E</i></sub> は高さが最大値の1/eになる半幅です。例：σ<sub><i>E</i></sub> = 0.4 eV は半値半幅（HWHH）≈ 0.333 eV（半値全幅 ≈ 0.67 eV）。幅は分子に合わせて調整します。</span><template data-lang="en"><span data-lang="en" hidden>σ<sub><i>E</i></sub> is the half-width at 1/e of the maximum; e.g. σ<sub><i>E</i></sub> = 0.4 eV corresponds to a half-width at half-height (HWHH) of ≈ 0.333 eV (FWHM ≈ 0.67 eV). Adjust the width for your molecule.</span></template></li>
+<li><span data-lang="ja">σ<sub><i>E</i></sub> は高さが最大値の1/eになる半幅です。例：σ<sub><i>E</i></sub> = 0.16 eV は半値半幅（HWHH）≈ 0.133 eV（半値全幅 ≈ 0.27 eV）。</span><template data-lang="en"><span data-lang="en" hidden>σ<sub><i>E</i></sub> is the half-width at 1/e of the maximum; e.g. σ<sub><i>E</i></sub> = 0.16 eV corresponds to a half-width at half-height (HWHH) of ≈ 0.133 eV (FWHM ≈ 0.27 eV).</span></template></li>
 <li data-en="Broaden on the energy axis, then convert the curve to a wavelength scale for display." data-ja="広幅化はエネルギー軸で行い、波長表示に変換します。">広幅化はエネルギー軸で行い、波長表示に変換します。</li>
 <li data-en="Building each conformer&#x27;s curve under the same conditions and then averaging by population gives the same result because the operation is linear (so averaging GaussView curves in Excel is equivalent)." data-ja="各配座の曲線を同じ条件で作ってから存在率で平均しても、線形なので結果は同じです（GaussViewの曲線をExcelで平均する方法も同等）。">各配座の曲線を同じ条件で作ってから存在率で平均しても、線形なので結果は同じです（GaussViewの曲線をExcelで平均する方法も同等）。</li>
 </ul>
