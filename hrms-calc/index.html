@@ -43,7 +43,7 @@
  }
 }
 </script>
-<link rel="stylesheet" href="style.css?v=20261127-4">
+<link rel="stylesheet" href="style.css?v=20261127-5">
 </head>
 <body>
 <a class="skip-link" href="#main" data-t="skip">本文へ移動</a>
@@ -81,25 +81,25 @@
 <div id="calcMain" aria-live="polite"></div>
 <div class="actions link-row" id="calcLinkRow" hidden><button type="button" id="calcLink" data-t="linkCopy">この条件のリンクをコピー</button><span id="calcLinkStatus" class="hint" role="status"></span></div>
 <div id="calcSi" class="result-block" hidden>
-<h3 data-t="siTitle">論文・SI用の記載</h3>
+<h2 data-t="siTitle">論文・SI用の記載</h2>
 <div class="si-options">
 <label class="check"><input type="checkbox" data-si="append" checked><span data-t="siAppend">Na・K・Li・Cl を分子式の末尾に書く（例：C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>Na）</span></label>
 </div>
-<p class="hint si-source"><span data-t="siSource"><i>J. Org. Chem.</i>（ACS）の投稿規定の例と同じ書式です（イオン化法は省略）。</span> <a href="https://researcher-resources.acs.org/publish/author_guidelines/pdf?coden=joceah" target="_blank" rel="noopener noreferrer"><i>J. Org. Chem.</i> Author Guidelines</a> · <a href="#journals" data-t="journalsLink">主な雑誌の書き方</a></p>
+<p class="hint si-source"><span data-t="siSource"><i>J. Org. Chem.</i>（ACS）の投稿規定の例の書式です。規定はイオン化法と質量分析計の種類の記載も求めているので、HRMS の後に (ESI/Q-TOF) のように補ってください。</span> <a href="https://researcher-resources.acs.org/publish/author_guidelines/pdf?coden=joceah" target="_blank" rel="noopener noreferrer"><i>J. Org. Chem.</i> Author Guidelines</a> · <a href="#journals" data-t="journalsLink">主な雑誌の書き方</a></p>
 <p id="siText" class="si-text"></p>
 <div class="actions"><button type="button" id="siCopy" data-t="siCopy">記載文をコピー</button><span id="siCopyStatus" class="hint" role="status"></span></div>
 </div>
 <div id="calcIso" class="result-block" hidden>
-<h3 data-t="isoTitle">同位体パターン</h3>
+<h2 data-t="isoTitle">同位体パターン</h2>
 <div id="isoChart" aria-hidden="true"></div>
 <div class="tableWrap"><table id="isoTable" class="compact"><thead></thead><tbody></tbody></table></div>
 <p class="hint" data-t="isoNote">相対強度は最も強いピークを100とします。</p>
 </div>
 </div>
-<div id="journals" class="journals"><h3 data-t="journals">主な雑誌のHRMSの書き方</h3>
+<div id="journals" class="journals"><h2 data-t="journals">主な雑誌のHRMSの書き方</h2>
 <p class="journals-intro" data-t="journalsIntro">投稿規定に載っている記載例です（2026年11月7日に原文を確認）。</p>
 <dl class="journal-list">
-<dt>ACS — <a href="https://researcher-resources.acs.org/publish/author_guidelines?coden=joceah" target="_blank" rel="noopener noreferrer"><i>J. Org. Chem.</i></a>, <a href="https://researcher-resources.acs.org/publish/author_guidelines?coden=jnprdf" target="_blank" rel="noopener noreferrer"><i>J. Nat. Prod.</i></a></dt>
+<dt>ACS — <a href="https://researcher-resources.acs.org/publish/author_guidelines?coden=joceah" target="_blank" rel="noopener noreferrer"><i>J. Org. Chem.</i></a></dt>
 <dd><p class="journal-example">HRMS (ESI/Q-TOF) <i>m</i>/<i>z</i>: [M + Na]<sup>+</sup> Calcd for C<sub>13</sub>H<sub>17</sub>NO<sub>3</sub>Na 258.1101; Found 258.1074.</p></dd>
 <dt>Wiley — <a href="https://onlinelibrary.wiley.com/page/journal/15213773/homepage/notice-to-authors" target="_blank" rel="noopener noreferrer"><i>Angew. Chem. Int. Ed.</i></a>, <a href="https://chemistry-europe.onlinelibrary.wiley.com/hub/journal/10990690/notice-to-authors" target="_blank" rel="noopener noreferrer"><i>Eur. J. Org. Chem.</i></a>, <a href="https://aces.onlinelibrary.wiley.com/hub/journal/1861471x/notice-to-authors" target="_blank" rel="noopener noreferrer"><i>Chem. Asian J.</i></a></dt>
 <dd><p class="journal-example">HRMS (ESI) <i>m</i>/<i>z</i> calcd for C<sub>32</sub>H<sub>47</sub>NO<sub>5</sub>+Na<sup>+</sup>: 548.3352 [M+Na]<sup>+</sup>; found: 548.3331.</p></dd>
@@ -149,11 +149,11 @@
 <div class="tableWrap"><table id="batchResults"><thead></thead><tbody></tbody></table></div>
 <div class="actions" id="batchTableActions" hidden><button type="button" id="batchCopyTsv" data-t="copyTable">表をコピー（Excel用）</button><span id="batchTableStatus" class="hint" role="status"></span></div>
 <div id="batchSi" class="result-block" hidden>
-<h3 data-t="siTitle">論文・SI用の記載</h3>
+<h2 data-t="siTitle">論文・SI用の記載</h2>
 <div class="si-options">
 <label class="check"><input type="checkbox" data-si="append" checked><span data-t="siAppend">Na・K・Li・Cl を分子式の末尾に書く（例：C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>Na）</span></label>
 </div>
-<p class="hint si-source"><span data-t="siSource"><i>J. Org. Chem.</i>（ACS）の投稿規定の例と同じ書式です（イオン化法は省略）。</span> <a href="https://researcher-resources.acs.org/publish/author_guidelines/pdf?coden=joceah" target="_blank" rel="noopener noreferrer"><i>J. Org. Chem.</i> Author Guidelines</a></p>
+<p class="hint si-source"><span data-t="siSource"><i>J. Org. Chem.</i>（ACS）の投稿規定の例の書式です。規定はイオン化法と質量分析計の種類の記載も求めているので、HRMS の後に (ESI/Q-TOF) のように補ってください。</span> <a href="https://researcher-resources.acs.org/publish/author_guidelines/pdf?coden=joceah" target="_blank" rel="noopener noreferrer"><i>J. Org. Chem.</i> Author Guidelines</a></p>
 <div class="actions"><button type="button" id="batchCopySi" data-t="copySiAll">記載文をまとめてコピー</button><span id="batchCopyStatus" class="hint" role="status"></span></div>
 </div>
 </section>
@@ -196,11 +196,11 @@
 <dt data-t="paperIntro">HRMSデータの報告で多い誤り</dt><dd>Christmann, M. <a href="https://doi.org/10.1021/acs.orglett.4c03458" target="_blank" rel="noopener noreferrer">What I Learned from Analyzing Accurate Mass Data of 3000 Supporting Information Files.</a> <i>Org. Lett.</i> <b>2025</b>, <i>27</i>, 4–7.</dd>
 <dt data-t="ratioSource">分子式の元素比の範囲</dt><dd>Kind, T.; Fiehn, O. <a href="https://doi.org/10.1186/1471-2105-8-105" target="_blank" rel="noopener noreferrer">Seven Golden Rules for heuristic filtering of molecular formulas obtained by accurate mass spectrometry.</a> <i>BMC Bioinformatics</i> <b>2007</b>, <i>8</i>, 105.</dd>
 </dl>
-<p class="note" data-t="accessDate">データ参照日：2026年11月7日</p>
+<p class="note" data-t="accessDate">データ参照日：2026年11月7日（標準原子量は2026年11月27日）</p>
 </section>
 
 <footer><p>© 2026 <a href="../index.html" data-home="index">Yosuke Matsuo</a> · <a href="../tools.html" data-home="tools" data-t="toolsPage">ツール</a></p><p><a href="https://github.com/yosuke-matsuo/yosuke-matsuo.github.io/tree/main/hrms-calc" data-t="sourceCode" target="_blank" rel="noopener noreferrer">ソースコード</a> · <span data-t="codeLicense">HRMS Calcのプログラム：</span><a href="LICENSE.txt">MIT License</a></p></footer>
 </main>
-<script type="module" src="app.js?v=20261127-4"></script>
+<script type="module" src="app.js?v=20261127-5"></script>
 </body>
 </html>

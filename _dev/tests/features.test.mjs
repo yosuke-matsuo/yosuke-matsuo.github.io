@@ -286,3 +286,18 @@ test('SI checker: tolerance for the measured value in ppm or mDa', () => {
   const r = checkText(t)[0];
   assert.ok(Math.abs(r.foundMDa - 0.335) < 0.001 && Math.abs(r.ppm - 1.85) < 0.01, `${r.foundMDa} mDa, ${r.ppm} ppm`);
 });
+
+test('SI checker: the quoted record keeps the text as written (review 2026-11, F14)', () => {
+  const q = t => checkText(t).map(r => r.snippet);
+  // closing parenthesis after the calculated value
+  assert.deepEqual(q('HRMS (ESI) m/z 203.0524 [M+Na]+ (calcd for C6H12O6Na, 203.0526).'), ['m/z 203.0524 [M+Na]+ (calcd for C6H12O6Na, 203.0526)']);
+  assert.deepEqual(q('HRMS m/z calcd for C6H12O6Na [M+Na]+ 203.0526 (found 203.0524).'), ['calcd for C6H12O6Na [M+Na]+ 203.0526 (found 203.0524)']);
+  // minus sign, superscript charge and subscript digits stay as typed
+  assert.deepEqual(q('HRESIMS m/z 179.0561 [M − H]− (calcd for C6H11O6, 179.0561)'), ['m/z 179.0561 [M − H]− (calcd for C6H11O6, 179.0561)']);
+  assert.deepEqual(q('HRMS m/z: [M − H]⁻ Calcd for C₆H₁₁O₆⁻ 179.0561; Found 179.0560.'), ['[M − H]⁻ Calcd for C₆H₁₁O₆⁻ 179.0561; Found 179.0560']);
+  // a decimal comma is quoted as written; no bracket is added when none is open
+  assert.deepEqual(q('HRMS m/z: [M + Na]+ Calcd for C6H12O6Na 203,0526; Found 203,0524.'), ['[M + Na]+ Calcd for C6H12O6Na 203,0526; Found 203,0524']);
+  assert.deepEqual(q('HRMS (ESI) m/z: [M + Na]+ Calcd for C6H12O6Na 203.0526; Found 203.0524.)'), ['[M + Na]+ Calcd for C6H12O6Na 203.0526; Found 203.0524']);
+  // the verdicts do not change
+  assert.equal(checkText('HRMS m/z: [M − H]⁻ Calcd for C₆H₁₁O₆⁻ 179.0561; Found 179.0560.')[0].status, 'ok');
+});

@@ -44,7 +44,7 @@
  }
 }
 </script>
-<link rel="stylesheet" href="../style.css?v=20261127-4">
+<link rel="stylesheet" href="../style.css?v=20261127-5">
 </head>
 <body>
 <a class="skip-link" href="#main" data-t="skip">Skip to content</a>
@@ -82,25 +82,25 @@
 <div id="calcMain" aria-live="polite"></div>
 <div class="actions link-row" id="calcLinkRow" hidden><button type="button" id="calcLink" data-t="linkCopy">Copy a link to these inputs</button><span id="calcLinkStatus" class="hint" role="status"></span></div>
 <div id="calcSi" class="result-block" hidden>
-<h3 data-t="siTitle">Statement for papers and SI</h3>
+<h2 data-t="siTitle">Statement for papers and SI</h2>
 <div class="si-options">
 <label class="check"><input type="checkbox" data-si="append" checked><span data-t="siAppend">Write Na, K, Li or Cl at the end of the formula (e.g., C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>Na)</span></label>
 </div>
-<p class="hint si-source"><span data-t="siSource">Same format as the example in the <i>J. Org. Chem.</i> (ACS) author guidelines (without the ionization method).</span> <a href="https://researcher-resources.acs.org/publish/author_guidelines/pdf?coden=joceah" target="_blank" rel="noopener noreferrer"><i>J. Org. Chem.</i> Author Guidelines</a> · <a href="#journals" data-t="journalsLink">Other journals</a></p>
+<p class="hint si-source"><span data-t="siSource">Format of the example in the <i>J. Org. Chem.</i> (ACS) author guidelines. The guidelines also require the ionization method and the mass analyzer type; add them after HRMS, e.g. (ESI/Q-TOF).</span> <a href="https://researcher-resources.acs.org/publish/author_guidelines/pdf?coden=joceah" target="_blank" rel="noopener noreferrer"><i>J. Org. Chem.</i> Author Guidelines</a> · <a href="#journals" data-t="journalsLink">Other journals</a></p>
 <p id="siText" class="si-text"></p>
 <div class="actions"><button type="button" id="siCopy" data-t="siCopy">Copy statement</button><span id="siCopyStatus" class="hint" role="status"></span></div>
 </div>
 <div id="calcIso" class="result-block" hidden>
-<h3 data-t="isoTitle">Isotope pattern</h3>
+<h2 data-t="isoTitle">Isotope pattern</h2>
 <div id="isoChart" aria-hidden="true"></div>
 <div class="tableWrap"><table id="isoTable" class="compact"><thead></thead><tbody></tbody></table></div>
 <p class="hint" data-t="isoNote">Intensities are relative to the strongest peak (100).</p>
 </div>
 </div>
-<div id="journals" class="journals"><h3 data-t="journals">How major journals ask for HRMS data</h3>
+<div id="journals" class="journals"><h2 data-t="journals">How major journals ask for HRMS data</h2>
 <p class="journals-intro" data-t="journalsIntro">Examples as printed in the author guidelines (checked on 7 November 2026).</p>
 <dl class="journal-list">
-<dt>ACS — <a href="https://researcher-resources.acs.org/publish/author_guidelines?coden=joceah" target="_blank" rel="noopener noreferrer"><i>J. Org. Chem.</i></a>, <a href="https://researcher-resources.acs.org/publish/author_guidelines?coden=jnprdf" target="_blank" rel="noopener noreferrer"><i>J. Nat. Prod.</i></a></dt>
+<dt>ACS — <a href="https://researcher-resources.acs.org/publish/author_guidelines?coden=joceah" target="_blank" rel="noopener noreferrer"><i>J. Org. Chem.</i></a></dt>
 <dd><p class="journal-example">HRMS (ESI/Q-TOF) <i>m</i>/<i>z</i>: [M + Na]<sup>+</sup> Calcd for C<sub>13</sub>H<sub>17</sub>NO<sub>3</sub>Na 258.1101; Found 258.1074.</p></dd>
 <dt>Wiley — <a href="https://onlinelibrary.wiley.com/page/journal/15213773/homepage/notice-to-authors" target="_blank" rel="noopener noreferrer"><i>Angew. Chem. Int. Ed.</i></a>, <a href="https://chemistry-europe.onlinelibrary.wiley.com/hub/journal/10990690/notice-to-authors" target="_blank" rel="noopener noreferrer"><i>Eur. J. Org. Chem.</i></a>, <a href="https://aces.onlinelibrary.wiley.com/hub/journal/1861471x/notice-to-authors" target="_blank" rel="noopener noreferrer"><i>Chem. Asian J.</i></a></dt>
 <dd><p class="journal-example">HRMS (ESI) <i>m</i>/<i>z</i> calcd for C<sub>32</sub>H<sub>47</sub>NO<sub>5</sub>+Na<sup>+</sup>: 548.3352 [M+Na]<sup>+</sup>; found: 548.3331.</p></dd>
@@ -150,11 +150,11 @@
 <div class="tableWrap"><table id="batchResults"><thead></thead><tbody></tbody></table></div>
 <div class="actions" id="batchTableActions" hidden><button type="button" id="batchCopyTsv" data-t="copyTable">Copy table (for Excel)</button><span id="batchTableStatus" class="hint" role="status"></span></div>
 <div id="batchSi" class="result-block" hidden>
-<h3 data-t="siTitle">Statement for papers and SI</h3>
+<h2 data-t="siTitle">Statement for papers and SI</h2>
 <div class="si-options">
 <label class="check"><input type="checkbox" data-si="append" checked><span data-t="siAppend">Write Na, K, Li or Cl at the end of the formula (e.g., C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>Na)</span></label>
 </div>
-<p class="hint si-source"><span data-t="siSource">Same format as the example in the <i>J. Org. Chem.</i> (ACS) author guidelines (without the ionization method).</span> <a href="https://researcher-resources.acs.org/publish/author_guidelines/pdf?coden=joceah" target="_blank" rel="noopener noreferrer"><i>J. Org. Chem.</i> Author Guidelines</a></p>
+<p class="hint si-source"><span data-t="siSource">Format of the example in the <i>J. Org. Chem.</i> (ACS) author guidelines. The guidelines also require the ionization method and the mass analyzer type; add them after HRMS, e.g. (ESI/Q-TOF).</span> <a href="https://researcher-resources.acs.org/publish/author_guidelines/pdf?coden=joceah" target="_blank" rel="noopener noreferrer"><i>J. Org. Chem.</i> Author Guidelines</a></p>
 <div class="actions"><button type="button" id="batchCopySi" data-t="copySiAll">Copy all statements</button><span id="batchCopyStatus" class="hint" role="status"></span></div>
 </div>
 </section>
@@ -197,11 +197,11 @@
 <dt data-t="paperIntro">Common errors in reporting HRMS data</dt><dd>Christmann, M. <a href="https://doi.org/10.1021/acs.orglett.4c03458" target="_blank" rel="noopener noreferrer">What I Learned from Analyzing Accurate Mass Data of 3000 Supporting Information Files.</a> <i>Org. Lett.</i> <b>2025</b>, <i>27</i>, 4–7.</dd>
 <dt data-t="ratioSource">Element-ratio ranges of formulas</dt><dd>Kind, T.; Fiehn, O. <a href="https://doi.org/10.1186/1471-2105-8-105" target="_blank" rel="noopener noreferrer">Seven Golden Rules for heuristic filtering of molecular formulas obtained by accurate mass spectrometry.</a> <i>BMC Bioinformatics</i> <b>2007</b>, <i>8</i>, 105.</dd>
 </dl>
-<p class="note" data-t="accessDate">Data accessed: 7 November 2026</p>
+<p class="note" data-t="accessDate">Data accessed: 7 November 2026 (standard atomic weights: 27 November 2026)</p>
 </section>
 
 <footer><p>© 2026 <a href="../../en/index.html" data-home="index">Yosuke Matsuo</a> · <a href="../../en/tools.html" data-home="tools" data-t="toolsPage">Tools</a></p><p><a href="https://github.com/yosuke-matsuo/yosuke-matsuo.github.io/tree/main/hrms-calc" data-t="sourceCode" target="_blank" rel="noopener noreferrer">Source code</a> · <span data-t="codeLicense">HRMS Calc code: </span><a href="../LICENSE.txt">MIT License</a></p></footer>
 </main>
-<script type="module" src="../app.js?v=20261127-4"></script>
+<script type="module" src="../app.js?v=20261127-5"></script>
 </body>
 </html>
