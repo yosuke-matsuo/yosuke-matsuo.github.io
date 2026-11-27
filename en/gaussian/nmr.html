@@ -21,8 +21,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="NMR化学シフト｜Gaussian入門" data-en="NMR chemical shifts | Gaussian guide">NMR chemical shifts | Gaussian guide</title>
-<link rel="stylesheet" href="../../styles.css?v=20261127-5"/>
-<script defer src="../../app.js?v=20261127-5"></script>
+<link rel="stylesheet" href="../../styles.css?v=20261127-6"/>
+<script defer src="../../app.js?v=20261127-6"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">Skip to content</a>
@@ -34,7 +34,7 @@
 <main class="page-shell guide" id="main">
 <div class="page-body">
 <section class="intro"><nav aria-label="Breadcrumb" class="breadcrumb"><a data-ja="Gaussian入門" data-en="Gaussian guide" href="./index.html">Gaussian guide</a> / <a data-ja="計算ガイド" data-en="Calculation guide" href="./workflow.html">Calculation guide</a></nav><h1 data-en="NMR chemical shifts" data-ja="NMR化学シフト">NMR chemical shifts</h1></section>
-<nav aria-label="On this page" class="section-nav"><a href="#theory" data-ja="NMR：遮蔽定数から化学シフトへ" data-en="NMR: from shielding to chemical shift">NMR: from shielding to chemical shift</a><a href="#procedure" data-ja="手順" data-en="Procedure">Procedure</a><a href="#conditions" data-ja="計算条件：GIAO" data-en="Calculation settings: GIAO">Calculation settings: GIAO</a><a href="#calibration" data-ja="実測との比較" data-en="Comparison with experiment">Comparison with experiment</a><a href="#nmr-hashimoto"><span data-lang="en">A protocol with dedicated corrections: Hehre <i>et al.</i> 2019</span></a><a href="#examples" data-ja="文献の条件一覧" data-en="Conditions in the literature">Conditions in the literature</a></nav>
+<nav aria-label="On this page" class="section-nav"><a href="#theory" data-ja="NMR：遮蔽定数から化学シフトへ" data-en="NMR: from shielding to chemical shift">NMR: from shielding to chemical shift</a><a href="#procedure" data-ja="手順" data-en="Procedure">Procedure</a><a href="#conditions" data-ja="計算条件：GIAO" data-en="Calculation settings: GIAO">Calculation settings: GIAO</a><a href="#calibration" data-ja="実測との比較" data-en="Comparison with experiment">Comparison with experiment</a><a href="#nmr-hehre"><span data-lang="en">A protocol with dedicated corrections: Hehre <i>et al.</i> 2019</span></a><a href="#examples" data-ja="文献の条件一覧" data-en="Conditions in the literature">Conditions in the literature</a></nav>
 <section class="content-section reading" id="theory">
 <h2 data-en="NMR: from shielding to chemical shift" data-ja="NMR：遮蔽定数から化学シフトへ">NMR: from shielding to chemical shift</h2>
 <p data-en="Gaussian&#x27;s NMR keyword (GIAO method) gives the shielding constant σ (ppm) of each nucleus. The chemical shift δ is obtained from σ in one of two ways." data-ja="Gaussianの NMR キーワード（GIAO法）が出すのは各核の遮蔽定数σ（ppm）です。化学シフトδは、σから次のどちらかで求めます。">Gaussian&#x27;s NMR keyword (GIAO method) gives the shielding constant σ (ppm) of each nucleus. The chemical shift δ is obtained from σ in one of two ways.</p>
@@ -57,9 +57,9 @@
 <h2 data-en="Procedure" data-ja="手順">Procedure</h2>
 <ol class="step-list">
 <li><strong data-en="Prepare the conformer set" data-ja="配座集合を用意する" class="step-title">Prepare the conformer set</strong><div class="step-body"><p><span data-lang="en">Build a conformer set with populations as described in <a href="./conformers.html">Conformers and stable structures</a>.</span></p></div></li>
-<li><strong data-en="Run an NMR calculation on each conformer" data-ja="各配座でNMR計算を行う" class="step-title">Run an NMR calculation on each conformer</strong><div class="step-body"><p data-en="Pick one of the conditions below and use it for every conformer." data-ja="下の計算条件から1つ選び、全配座に同じ条件を使います。">Pick one of the conditions below and use it for every conformer.</p></div></li>
+<li><strong data-en="Run an NMR calculation on each conformer" data-ja="各配座でNMR計算を行う" class="step-title">Run an NMR calculation on each conformer</strong><div class="step-body"><p data-en="Pick one of the settings below and use it for every conformer." data-ja="下の計算条件から1つ選び、全配座に同じ条件を使います。">Pick one of the settings below and use it for every conformer.</p></div></li>
 <li><strong data-en="Average σ over conformers and convert to δ" data-ja="遮蔽σを配座平均し、δに変換する" class="step-title">Average σ over conformers and convert to δ</strong><div class="step-body"><p data-en="Use a reference difference or a calibration equation." data-ja="参照差または校正式で換算します。">Use a reference difference or a calibration equation.</p></div></li>
-<li><strong data-en="Compare each candidate with experiment" data-ja="候補構造ごとに実測と比べる" class="step-title">Compare each candidate with experiment</strong><div class="step-body"><p><span data-lang="en">Compare MAE/RMSE per nucleus. For DP4+, choose the statistical parameters that match the calculation level.</span></p></div></li>
+<li><strong data-en="Compare each candidate with experiment" data-ja="候補構造ごとに実測と比べる" class="step-title">Compare each candidate with experiment</strong><div class="step-body"><p><span data-lang="en">Compare the mean absolute error (MAE) and root-mean-square error (RMSE), separately for ¹H and ¹³C. For DP4+, choose the statistical parameters that match the calculation level.</span></p></div></li>
 </ol>
 </section>
 <section class="content-section reading" id="conditions">
@@ -90,7 +90,7 @@
 <li><a href="https://doi.org/10.1021/acs.joc.5b02396" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Grimblat <i>et al.</i>, <i>J. Org. Chem.</i> 2015, 80, 12526</a> — DP4+</li>
 </ul>
 </section>
-<section class="content-section reading" id="nmr-hashimoto">
+<section class="content-section reading" id="nmr-hehre">
 <h2><span data-lang="en">A protocol with dedicated corrections: Hehre <i>et al.</i> 2019</span></h2>
 <p data-en="For ¹³C of flexible natural products: conformer screening in Spartan, ωB97X-D/6-31G(d) shieldings and empirical corrections depending on atom environment and bond lengths. Mean RMS error below 4 ppm over about 925 compounds (for the full protocol)." data-ja="柔軟な天然物の¹³Cについて、Spartanでの配座選別と ωB97X-D/6-31G(d) の遮蔽、原子環境・結合長に依存する経験補正を組み合わせた手順です。約925化合物で平均RMS誤差4 ppm未満（全手順の結果）。">For ¹³C of flexible natural products: conformer screening in Spartan, ωB97X-D/6-31G(d) shieldings and empirical corrections depending on atom environment and bond lengths. Mean RMS error below 4 ppm over about 925 compounds (for the full protocol).</p>
 <div class="table-wrap"><table><thead><tr>

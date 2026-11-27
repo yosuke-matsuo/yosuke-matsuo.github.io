@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<meta name="description" content="計算条件から配座の選別、補正式まで、再現に必要な記録の一覧。" data-ja="計算条件から配座の選別、補正式まで、再現に必要な記録の一覧。" data-en="A checklist of everything needed to reproduce the work, from conditions to conformer selection and calibration."/>
+<meta name="description" content="計算条件から配座の選別、補正式まで、再現に必要な記録の一覧。" data-ja="計算条件から配座の選別、補正式まで、再現に必要な記録の一覧。" data-en="A checklist of everything needed to reproduce the work, from calculation settings to conformer selection and calibration."/>
 <link rel="canonical" href="https://yosuke-matsuo.github.io/gaussian/reporting.html"/>
 <link rel="alternate" hreflang="ja" href="https://yosuke-matsuo.github.io/gaussian/reporting.html"/>
 <link rel="alternate" hreflang="en" href="https://yosuke-matsuo.github.io/en/gaussian/reporting.html"/>
@@ -11,7 +11,7 @@
 <meta property="og:type" content="website"/>
 <meta property="og:site_name" content="Yosuke Matsuo（松尾洋介）"/>
 <meta property="og:title" content="論文・SIに書くこと｜Gaussian入門"/>
-<meta property="og:description" content="計算条件から配座の選別、補正式まで、再現に必要な記録の一覧。" data-ja="計算条件から配座の選別、補正式まで、再現に必要な記録の一覧。" data-en="A checklist of everything needed to reproduce the work, from conditions to conformer selection and calibration."/>
+<meta property="og:description" content="計算条件から配座の選別、補正式まで、再現に必要な記録の一覧。" data-ja="計算条件から配座の選別、補正式まで、再現に必要な記録の一覧。" data-en="A checklist of everything needed to reproduce the work, from calculation settings to conformer selection and calibration."/>
 <meta property="og:url" content="https://yosuke-matsuo.github.io/gaussian/reporting.html"/>
 <meta property="og:locale" content="ja_JP"/>
 <meta property="og:image" content="https://yosuke-matsuo.github.io/images/og-image.png"/>
@@ -20,8 +20,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="論文・SIに書くこと｜Gaussian入門" data-en="What to report in papers and SI | Gaussian guide">論文・SIに書くこと｜Gaussian入門</title>
-<link rel="stylesheet" href="../styles.css?v=20261127-5"/>
-<script defer src="../app.js?v=20261127-5"></script>
+<link rel="stylesheet" href="../styles.css?v=20261127-6"/>
+<script defer src="../app.js?v=20261127-6"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">本文へ移動</a>
@@ -43,7 +43,8 @@
 <li data-en="Conformer search method and selection criteria, number of conformers used and their populations." data-ja="配座探索の方法と選択基準、採用した配座の数と存在率。">配座探索の方法と選択基準、採用した配座の数と存在率。</li>
 <li><span data-lang="ja">NMR・<i>J</i>の校正式と係数の出典、原子の帰属。</span><template data-lang="en"><span data-lang="en" hidden>NMR/<i>J</i> calibration equations with the source of the coefficients, and atom assignments.</span></template></li>
 <li data-en="For a TS: the imaginary frequency and the IRC result." data-ja="TSは虚振動の値とIRCの結果。">TSは虚振動の値とIRCの結果。</li>
-<li data-en="Coordinates and energies of all optimized structures, and the number of imaginary frequencies." data-ja="最適化した全構造の座標とエネルギー、虚振動の数。">最適化した全構造の座標とエネルギー、虚振動の数。</li>
+<li data-en="Cartesian (XYZ) coordinates and absolute energies (Hartree) of all optimized structures, and the number of imaginary frequencies." data-ja="最適化した全構造の直交座標（XYZ）と絶対エネルギー（Hartree）、虚振動の数。">最適化した全構造の直交座標（XYZ）と絶対エネルギー（Hartree）、虚振動の数。</li>
+<li><span data-lang="ja"><i>J. Org. Chem.</i> の場合：全構造の座標を1つの .xyz または .mol ファイルにまとめます。収束基準、積分の設定、拘束（数値・対称性）を明記します。ECD では、存在率の大きい配座の遷移エネルギーと旋光強度を表にし、UV と ECD のスペクトルを同じ図に同じ波長範囲で示します（<a href="https://researcher-resources.acs.org/publish/author_guidelines?coden=joceah" target="_blank" rel="noopener noreferrer"><i>J. Org. Chem.</i> 投稿規定</a>）。</span><template data-lang="en"><span data-lang="en" hidden>For <i>J. Org. Chem.</i>: put the coordinates of all structures in a single .xyz or .mol file; state the convergence criteria, integration settings and any numerical or symmetry constraints; for ECD, tabulate the transition energies and rotational strengths of the significantly populated conformers, and show the UV and ECD spectra in the same figure over the same wavelength range (<a href="https://researcher-resources.acs.org/publish/author_guidelines?coden=joceah" target="_blank" rel="noopener noreferrer"><i>J. Org. Chem.</i> author guidelines</a>).</span></template></li>
 </ul>
 </section>
 <section class="content-section reading" id="by-property"><h2 data-en="Records to keep per property" data-ja="物性ごとに残す記録">物性ごとに残す記録</h2>

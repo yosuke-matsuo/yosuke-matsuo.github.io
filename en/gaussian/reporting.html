@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<meta name="description" content="A checklist of everything needed to reproduce the work, from conditions to conformer selection and calibration." data-ja="計算条件から配座の選別、補正式まで、再現に必要な記録の一覧。" data-en="A checklist of everything needed to reproduce the work, from conditions to conformer selection and calibration."/>
+<meta name="description" content="A checklist of everything needed to reproduce the work, from calculation settings to conformer selection and calibration." data-ja="計算条件から配座の選別、補正式まで、再現に必要な記録の一覧。" data-en="A checklist of everything needed to reproduce the work, from calculation settings to conformer selection and calibration."/>
 <link rel="canonical" href="https://yosuke-matsuo.github.io/en/gaussian/reporting.html"/>
 <link rel="alternate" hreflang="ja" href="https://yosuke-matsuo.github.io/gaussian/reporting.html"/>
 <link rel="alternate" hreflang="en" href="https://yosuke-matsuo.github.io/en/gaussian/reporting.html"/>
@@ -12,7 +12,7 @@
 <meta property="og:type" content="website"/>
 <meta property="og:site_name" content="Yosuke Matsuo（松尾洋介）"/>
 <meta property="og:title" content="What to report in papers and SI | Gaussian guide"/>
-<meta property="og:description" content="A checklist of everything needed to reproduce the work, from conditions to conformer selection and calibration." data-ja="計算条件から配座の選別、補正式まで、再現に必要な記録の一覧。" data-en="A checklist of everything needed to reproduce the work, from conditions to conformer selection and calibration."/>
+<meta property="og:description" content="A checklist of everything needed to reproduce the work, from calculation settings to conformer selection and calibration." data-ja="計算条件から配座の選別、補正式まで、再現に必要な記録の一覧。" data-en="A checklist of everything needed to reproduce the work, from calculation settings to conformer selection and calibration."/>
 <meta property="og:url" content="https://yosuke-matsuo.github.io/en/gaussian/reporting.html"/>
 <meta property="og:locale" content="en_US"/>
 <meta property="og:image" content="https://yosuke-matsuo.github.io/images/og-image.png"/>
@@ -21,8 +21,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="論文・SIに書くこと｜Gaussian入門" data-en="What to report in papers and SI | Gaussian guide">What to report in papers and SI | Gaussian guide</title>
-<link rel="stylesheet" href="../../styles.css?v=20261127-5"/>
-<script defer src="../../app.js?v=20261127-5"></script>
+<link rel="stylesheet" href="../../styles.css?v=20261127-6"/>
+<script defer src="../../app.js?v=20261127-6"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">Skip to content</a>
@@ -44,7 +44,8 @@
 <li data-en="Conformer search method and selection criteria, number of conformers used and their populations." data-ja="配座探索の方法と選択基準、採用した配座の数と存在率。">Conformer search method and selection criteria, number of conformers used and their populations.</li>
 <li><span data-lang="en">NMR/<i>J</i> calibration equations with the source of the coefficients, and atom assignments.</span></li>
 <li data-en="For a TS: the imaginary frequency and the IRC result." data-ja="TSは虚振動の値とIRCの結果。">For a TS: the imaginary frequency and the IRC result.</li>
-<li data-en="Coordinates and energies of all optimized structures, and the number of imaginary frequencies." data-ja="最適化した全構造の座標とエネルギー、虚振動の数。">Coordinates and energies of all optimized structures, and the number of imaginary frequencies.</li>
+<li data-en="Cartesian (XYZ) coordinates and absolute energies (Hartree) of all optimized structures, and the number of imaginary frequencies." data-ja="最適化した全構造の直交座標（XYZ）と絶対エネルギー（Hartree）、虚振動の数。">Cartesian (XYZ) coordinates and absolute energies (Hartree) of all optimized structures, and the number of imaginary frequencies.</li>
+<li><span data-lang="en">For <i>J. Org. Chem.</i>: put the coordinates of all structures in a single .xyz or .mol file; state the convergence criteria, integration settings and any numerical or symmetry constraints; for ECD, tabulate the transition energies and rotational strengths of the significantly populated conformers, and show the UV and ECD spectra in the same figure over the same wavelength range (<a href="https://researcher-resources.acs.org/publish/author_guidelines?coden=joceah" target="_blank" rel="noopener noreferrer"><i>J. Org. Chem.</i> author guidelines</a>).</span></li>
 </ul>
 </section>
 <section class="content-section reading" id="by-property"><h2 data-en="Records to keep per property" data-ja="物性ごとに残す記録">Records to keep per property</h2>

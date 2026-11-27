@@ -20,8 +20,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="はじめてのGaussian計算｜Gaussian入門" data-en="Your first Gaussian calculation | Gaussian guide">はじめてのGaussian計算｜Gaussian入門</title>
-<link rel="stylesheet" href="../styles.css?v=20261127-5"/>
-<script defer src="../app.js?v=20261127-5"></script>
+<link rel="stylesheet" href="../styles.css?v=20261127-6"/>
+<script defer src="../app.js?v=20261127-6"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">本文へ移動</a>
@@ -33,7 +33,7 @@
 <main class="page-shell guide" id="main">
 <div class="page-body">
 <section class="intro"><nav aria-label="Breadcrumb" class="breadcrumb"><a data-ja="Gaussian入門" data-en="Gaussian guide" href="./index.html">Gaussian入門</a></nav><h1 data-en="Your first Gaussian calculation" data-ja="はじめてのGaussian計算">はじめてのGaussian計算</h1><p data-en="A first calculation on catechin, from writing the input to checking the output." data-ja="入力の書き方から出力の確認までを、カテキンで一通り体験します。" class="lead">入力の書き方から出力の確認までを、カテキンで一通り体験します。</p></section>
-<nav aria-label="On this page" class="section-nav"><a href="#environment" data-ja="0. 環境を準備する" data-en="0. Set up an environment">0. 環境を準備する</a><a href="#input" data-ja="1. 入力ファイルの中身" data-en="1. Anatomy of an input file">1. 入力ファイルの中身</a><a href="#example" data-ja="2. 完成した入力：(+)-カテキン" data-en="2. Complete input: (+)-catechin">2. 完成した入力：(+)-カテキン</a><a href="#run" data-ja="3. 実行する" data-en="3. Run it">3. 実行する</a><a href="#output" data-ja="4. 出力の見方：3か所だけ確認する" data-en="4. Reading the output: check three places">4. 出力の見方：3か所だけ確認する</a><a href="#errors" data-ja="5. 止まったとき：最初によく出る3つのエラー" data-en="5. When it stops: three common first errors">5. 止まったとき：最初によく出る3つのエラー</a><a href="#next" data-ja="次のステップ" data-en="Next steps">次のステップ</a></nav>
+<nav aria-label="On this page" class="section-nav"><a href="#environment" data-ja="0. 環境を準備する" data-en="0. Set up an environment">0. 環境を準備する</a><a href="#input" data-ja="1. 入力ファイルの中身" data-en="1. Anatomy of an input file">1. 入力ファイルの中身</a><a href="#example" data-ja="2. 完成した入力：(+)-カテキン" data-en="2. Complete input: (+)-catechin">2. 完成した入力：(+)-カテキン</a><a href="#run" data-ja="3. 実行する" data-en="3. Run it">3. 実行する</a><a href="#output" data-ja="4. 出力の見方：確認する3か所" data-en="4. Reading the output: three places to check">4. 出力の見方：確認する3か所</a><a href="#errors" data-ja="5. 止まったとき：最初によく出る3つのエラー" data-en="5. When it stops: three errors you are likely to see first">5. 止まったとき：最初によく出る3つのエラー</a><a href="#next" data-ja="次のステップ" data-en="Next steps">次のステップ</a></nav>
 <section class="content-section reading" id="about">
 
 <p><span data-lang="ja">題材は、茶などに含まれるカテキン類の一つ、(+)-カテキン（C<sub>15</sub>H<sub>14</sub>O<sub>6</sub>）です。</span><template data-lang="en"><span data-lang="en" hidden>The subject is (+)-catechin (C<sub>15</sub>H<sub>14</sub>O<sub>6</sub>), one of the catechins found in tea and other plants.</span></template></p>
@@ -132,7 +132,7 @@ C   -4.360353  -1.556559  -0.095452
 </section>
 <section class="content-section reading" id="example">
 <h2 data-en="2. Complete input: (+)-catechin" data-ja="2. 完成した入力：(+)-カテキン">2. 完成した入力：(+)-カテキン</h2>
-<p><span data-lang="ja">以下はそのまま実行できる入力です。座標は Spartan'24 の MMFF94 配座探索で最も安定だった配座で、立体配置は(2<i>R</i>,3<i>S</i>)の(+)-カテキンです。</span><template data-lang="en"><span data-lang="en" hidden>The input below runs as is. The coordinates are the lowest-energy conformer from a Spartan'24 MMFF94 conformer search of (2<i>R</i>,3<i>S</i>)-(+)-catechin.</span></template></p>
+<p><span data-lang="ja">以下はそのまま実行できる、最初の試し計算の入力です（気相、B3LYP/6-31G(d)）。研究の計算では、必要に応じて溶媒モデルや分散力補正を加えます。座標は Spartan'24 の MMFF94 配座探索で最も安定だった配座で、立体配置は(2<i>R</i>,3<i>S</i>)の(+)-カテキンです。</span><template data-lang="en"><span data-lang="en" hidden>The input below is a minimal first test that runs as is (gas phase, B3LYP/6-31G(d)). For research calculations, add a solvent model and a dispersion correction as needed. The coordinates are the lowest-energy conformer from a Spartan'24 MMFF94 conformer search of (2<i>R</i>,3<i>S</i>)-(+)-catechin.</span></template></p>
 <figure class="structure-figure structure-figure-3d"><img src="./assets/catechin-3d.webp" width="1000" height="462" alt="入力例の座標から描いた (+)-カテキンの立体構造" data-ja="入力例の座標から描いた (+)-カテキンの立体構造" data-en="3D structure of (+)-catechin drawn from the input coordinates" loading="lazy" decoding="async"/><figcaption><span data-lang="ja">入力例の座標を CYLview26 で描いた図</span><template data-lang="en"><span data-lang="en" hidden>The input coordinates drawn with CYLview26</span></template></figcaption></figure>
 <pre class="input-block keep-lines" translate="no" lang="en">%nprocshared=8
 %mem=16GB
@@ -210,7 +210,7 @@ g16sub catechin_opt_freq.gjf</pre></template>
 <p data-en="The output is written to catechin_opt_freq.log (.out on some systems). On shared machines, set %nprocshared and %mem to match that machine&#x27;s limits (on RCCS, g16sub sets them from the resources requested at submission)." data-ja="出力は catechin_opt_freq.log（環境により .out）に書き出されます。共用計算機では %nprocshared と %mem の値をその計算機の規定に合わせます（RCCS の g16sub は、投入時の割り当てに合わせてこれらを設定します）。">出力は catechin_opt_freq.log（環境により .out）に書き出されます。共用計算機では %nprocshared と %mem の値をその計算機の規定に合わせます（RCCS の g16sub は、投入時の割り当てに合わせてこれらを設定します）。</p>
 </section>
 <section class="content-section reading" id="output">
-<h2 data-en="4. Reading the output: check three places" data-ja="4. 出力の見方：3か所だけ確認する">4. 出力の見方：3か所だけ確認する</h2>
+<h2 data-en="4. Reading the output: three places to check" data-ja="4. 出力の見方：確認する3か所">4. 出力の見方：確認する3か所</h2>
 <p data-en="The output is long, but three places tell you whether the job succeeded. Find them with your text editor&#x27;s search." data-ja="出力は長いですが、成功したかどうかは次の3か所で分かります。テキストエディターの検索機能で探します。">出力は長いですが、成功したかどうかは次の3か所で分かります。テキストエディターの検索機能で探します。</p>
 <ol class="step-list">
 <li><strong data-en="Does it end with Normal termination?" data-ja="末尾に Normal termination があるか" class="step-title">末尾に Normal termination があるか</strong><div class="step-body"><pre class="input-block keep-lines" translate="no" lang="en"> Normal termination of Gaussian 16 at ...</pre>
@@ -229,11 +229,11 @@ g16sub catechin_opt_freq.gjf</pre></template>
 <p><span data-lang="ja">虚振動は負の振動数として出力されます。Stationary point found が出ていて、最初の Frequencies 行の値がすべて正なら、安定構造（エネルギー極小）です。負の値（例：-45.6）が1つでもあれば、その構造はまだ極小ではありません（対処は<a href="./conformers.html#opt">配座と安定構造の「構造最適化と振動数解析」</a>にあります）。</span><template data-lang="en"><span data-lang="en" hidden>Imaginary frequencies are printed as negative values. If Stationary point found is printed and all values on the first Frequencies line are positive, the structure is a minimum. Even one negative value (e.g. -45.6) means it is not yet a minimum (see <a href="./conformers.html#opt">Optimization and frequencies in Conformers and stable structures</a>).</span></template></p>
 <p data-en="The Freq output also contains thermochemistry. The free energy used for conformer comparison is this line:" data-ja="Freqの出力には熱力学量も含まれます。配座比較に使う自由エネルギーは次の行です。">Freqの出力には熱力学量も含まれます。配座比較に使う自由エネルギーは次の行です。</p>
 <pre class="input-block keep-lines" translate="no" lang="en"> Sum of electronic and thermal Free Energies=        -1031.108599</pre>
-<p data-en="These outputs are from the catechin calculation on this page. In the first job, Stationary point found was not printed at the end of the frequency step, so the optimization was continued with Opt=CalcFC Freq (CalcFC computes the exact Hessian at the first step); the frequencies and free energy are from that continued job." data-ja="出力例はこのページのカテキンの計算です。最初の計算では振動数解析の最後に Stationary point found が出なかったため、Opt=CalcFC Freq（CalcFC は最初に正確なヘシアンを計算する指定）で計算を続けました。振動数と自由エネルギーは、続けた計算の値です。">出力例はこのページのカテキンの計算です。最初の計算では振動数解析の最後に Stationary point found が出なかったため、Opt=CalcFC Freq（CalcFC は最初に正確なヘシアンを計算する指定）で計算を続けました。振動数と自由エネルギーは、続けた計算の値です。</p></div></li>
+<p><span data-lang="ja">出力例はこのページのカテキンの計算です。最初の計算では振動数解析の最後に Stationary point found が出なかったため、Opt=CalcFC Freq（CalcFC は最初に正確なヘシアンを計算する指定）で計算を続けました。振動数と自由エネルギーは、続けた計算の値です。.chk が残っていれば、FAQ が勧める続け方もあります（<a href="./errors-opt-scf.html#freq-check">Opt後のFreqで収束していない</a>）。</span><template data-lang="en"><span data-lang="en" hidden>These outputs are from the catechin calculation on this page. In the first job, Stationary point found was not printed at the end of the frequency step, so the optimization was continued with Opt=CalcFC Freq (CalcFC computes the exact Hessian at the first step); the frequencies and free energy are from that continued job. If the .chk is still available, you can also continue as recommended in the Gaussian FAQ (<a href="./errors-opt-scf.html#freq-check">Not converged in the Freq after Opt</a>).</span></template></p></div></li>
 </ol>
 </section>
 <section class="content-section reading" id="errors">
-<h2 data-en="5. When it stops: three common first errors" data-ja="5. 止まったとき：最初によく出る3つのエラー">5. 止まったとき：最初によく出る3つのエラー</h2>
+<h2 data-en="5. When it stops: three errors you are likely to see first" data-ja="5. 止まったとき：最初によく出る3つのエラー">5. 止まったとき：最初によく出る3つのエラー</h2>
 <div class="table-wrap"><table><thead><tr>
 <th data-en="Text in the output" data-ja="出力の文字列" scope="col">出力の文字列</th>
 <th data-en="Meaning" data-ja="意味" scope="col">意味</th>

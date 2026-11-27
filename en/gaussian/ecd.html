@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<meta name="description" content="From TD-DFT to conformer-averaged curves: conditions, curve construction and optical rotation." data-ja="TD-DFTから配座平均曲線へ。計算条件、曲線の作り方、旋光度。" data-en="From TD-DFT to conformer-averaged curves: conditions, curve construction and optical rotation."/>
+<meta name="description" content="From TD-DFT to conformer-averaged curves: calculation settings, curve construction and optical rotation." data-ja="TD-DFTから配座平均曲線へ。計算条件、曲線の作り方、旋光度。" data-en="From TD-DFT to conformer-averaged curves: calculation settings, curve construction and optical rotation."/>
 <link rel="canonical" href="https://yosuke-matsuo.github.io/en/gaussian/ecd.html"/>
 <link rel="alternate" hreflang="ja" href="https://yosuke-matsuo.github.io/gaussian/ecd.html"/>
 <link rel="alternate" hreflang="en" href="https://yosuke-matsuo.github.io/en/gaussian/ecd.html"/>
@@ -12,7 +12,7 @@
 <meta property="og:type" content="website"/>
 <meta property="og:site_name" content="Yosuke Matsuo（松尾洋介）"/>
 <meta property="og:title" content="ECD, UV and optical rotation | Gaussian guide"/>
-<meta property="og:description" content="From TD-DFT to conformer-averaged curves: conditions, curve construction and optical rotation." data-ja="TD-DFTから配座平均曲線へ。計算条件、曲線の作り方、旋光度。" data-en="From TD-DFT to conformer-averaged curves: conditions, curve construction and optical rotation."/>
+<meta property="og:description" content="From TD-DFT to conformer-averaged curves: calculation settings, curve construction and optical rotation." data-ja="TD-DFTから配座平均曲線へ。計算条件、曲線の作り方、旋光度。" data-en="From TD-DFT to conformer-averaged curves: calculation settings, curve construction and optical rotation."/>
 <meta property="og:url" content="https://yosuke-matsuo.github.io/en/gaussian/ecd.html"/>
 <meta property="og:locale" content="en_US"/>
 <meta property="og:image" content="https://yosuke-matsuo.github.io/images/og-image.png"/>
@@ -21,8 +21,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="ECD・UV・旋光度｜Gaussian入門" data-en="ECD, UV and optical rotation | Gaussian guide">ECD, UV and optical rotation | Gaussian guide</title>
-<link rel="stylesheet" href="../../styles.css?v=20261127-5"/>
-<script defer src="../../app.js?v=20261127-5"></script>
+<link rel="stylesheet" href="../../styles.css?v=20261127-6"/>
+<script defer src="../../app.js?v=20261127-6"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">Skip to content</a>
@@ -49,7 +49,7 @@
 </section>
 <section class="content-section reading" id="conditions">
 <h2 data-en="Calculation settings: TD-DFT (ECD/UV)" data-ja="計算条件：TD-DFT（ECD・UV）">Calculation settings: TD-DFT (ECD/UV)</h2><p class="note"><span data-lang="en">For the rest of the input, see <a href="./start.html#input">Anatomy of an input file</a>; for what each keyword does, see the <a href="./keywords.html">keyword reference</a>.</span></p>
-<article class="method-entry"><h3 data-en="B3LYP/6-31G(d), IEFPCM(MeOH)" data-ja="B3LYP/6-31G(d)・IEFPCM(MeOH)" id="td-b3">B3LYP/6-31G(d), IEFPCM(MeOH)</h3><p data-en="The basic setting used for absolute-configuration work on natural products. 50 states is an example setting that amply covers the wavelength range being compared." data-ja="天然物の絶対配置検討で使われる基本条件。50状態は、比べる波長域を広めに覆う設定の例です。">The basic setting used for absolute-configuration work on natural products. 50 states is an example setting that amply covers the wavelength range being compared.</p><pre class="input-block keep-lines" translate="no" lang="en">%chk=td-b3.chk
+<article class="method-entry"><h3 data-en="B3LYP/6-31G(d), IEFPCM(MeOH)" data-ja="B3LYP/6-31G(d)・IEFPCM(MeOH)" id="td-b3">B3LYP/6-31G(d), IEFPCM(MeOH)</h3><p data-en="The basic setting used for absolute-configuration work on natural products. 50 states is an example that covers the compared wavelength range with some margin." data-ja="天然物の絶対配置検討で使われる基本条件。50状態は、比べる波長域を広めに覆う設定の例です。">The basic setting used for absolute-configuration work on natural products. 50 states is an example that covers the compared wavelength range with some margin.</p><pre class="input-block keep-lines" translate="no" lang="en">%chk=td-b3.chk
 #p B3LYP/6-31G(d) TD=(Singlets,NStates=50)
    SCRF=(IEFPCM,Solvent=Methanol)</pre><p><strong data-en="Used in: " data-ja="使用例：">Used in: </strong><a href="https://doi.org/10.1021/acs.jnatprod.5c00578" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Zhang <i>et al.</i>, <i>J. Nat. Prod.</i> 2025, 88, 2325</a></p><p class="muted"><span data-en="Source: " data-ja="出典：">Source: </span><a href="https://doi.org/10.1063/1.464913" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Becke, <i>J. Chem. Phys.</i> 1993, 98, 5648</a> · <a href="https://doi.org/10.1002/chir.22600" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Pescitelli &amp; Bruhn, <i>Chirality</i> 2016, 28, 466</a></p></article>
 <article class="method-entry"><h3 data-en="CAM-B3LYP/def2-SVP, SMD or IEFPCM(MeOH)" data-ja="CAM-B3LYP/def2-SVP・SMD または IEFPCM(MeOH)" id="td-cam">CAM-B3LYP/def2-SVP, SMD or IEFPCM(MeOH)</h3><p data-en="A long-range-corrected functional, more reliable than B3LYP when charge-transfer transitions are present. Reported with 30 states." data-ja="長距離補正つき汎関数。電荷移動型の遷移がある場合に B3LYP より信頼できます。30状態で報告されています。">A long-range-corrected functional, more reliable than B3LYP when charge-transfer transitions are present. Reported with 30 states.</p><pre class="input-block keep-lines" translate="no" lang="en">#p CAM-B3LYP/Def2SVP TD=(NStates=30) SCRF=(SMD,Solvent=Methanol)</pre><p><strong data-en="Used in: " data-ja="使用例：">Used in: </strong><a href="https://doi.org/10.1007/s13659-020-00248-y" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Su <i>et al.</i>, <i>Nat. Prod. Bioprospect.</i> 2020</a> · <a href="https://doi.org/10.1007/s13659-019-0203-4" target="_blank" rel="noopener noreferrer" lang="en" translate="no">Xu <i>et al.</i>, <i>Nat. Prod. Bioprospect.</i> 2019</a></p></article>

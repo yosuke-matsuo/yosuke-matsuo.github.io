@@ -21,8 +21,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="計算ガイド｜Gaussian入門" data-en="Calculation guide | Gaussian guide">Calculation guide | Gaussian guide</title>
-<link rel="stylesheet" href="../../styles.css?v=20261127-5"/>
-<script defer src="../../app.js?v=20261127-5"></script>
+<link rel="stylesheet" href="../../styles.css?v=20261127-6"/>
+<script defer src="../../app.js?v=20261127-6"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">Skip to content</a>
@@ -50,7 +50,7 @@
 </section>
 <section class="content-section reading" id="methods">
 <h2 data-en="Choosing a method: MM and DFT" data-ja="計算方法の使い分け：MMとDFT">Choosing a method: MM and DFT</h2>
-<p data-en="Methods differ in speed and accuracy. Use a fast method (MM) to explore many candidates, then an accurate one (DFT) to examine a few." data-ja="計算方法によって、速さと精度が違います。多数の候補を速く探す段階ではMMを、少数の候補を詳しく調べる段階ではDFTを使います。">Methods differ in speed and accuracy. Use a fast method (MM) to explore many candidates, then an accurate one (DFT) to examine a few.</p>
+<p data-en="Methods differ in speed and accuracy. Use MM to search many candidates quickly, and DFT to examine a small number of them in detail." data-ja="計算方法によって、速さと精度が違います。多数の候補を速く探す段階ではMMを、少数の候補を詳しく調べる段階ではDFTを使います。">Methods differ in speed and accuracy. Use MM to search many candidates quickly, and DFT to examine a small number of them in detail.</p>
 <div class="table-wrap"><table><thead><tr>
 <th data-en="Method" data-ja="方法" scope="col">Method</th>
 <th data-en="What it does" data-ja="何をするか" scope="col">What it does</th>
@@ -72,7 +72,7 @@
 <td data-en="Optimization, energies, frequencies, NMR/ECD" data-ja="最適化、エネルギー、振動数、NMR・ECD">Optimization, energies, frequencies, NMR/ECD</td>
 </tr>
 </tbody></table></div>
-<p data-en="In DFT you choose three things: the functional (how electron exchange and correlation are approximated, e.g. B3LYP), the basis set (the set of functions that represent the molecular orbitals, e.g. 6-31G(d)) and the solvent model (e.g. SMD)." data-ja="DFTでは3つの条件を選びます。汎関数（電子の交換と相関の近似の仕方、例：B3LYP）、基底関数（分子軌道を表す関数の組、例：6-31G(d)）、溶媒モデル（例：SMD）。">In DFT you choose three things: the functional (how electron exchange and correlation are approximated, e.g. B3LYP), the basis set (the set of functions that represent the molecular orbitals, e.g. 6-31G(d)) and the solvent model (e.g. SMD).</p>
+<p data-en="In DFT you choose the functional (how electron exchange and correlation are approximated, e.g. B3LYP), the dispersion correction (e.g. GD3BJ), the basis set (the set of functions that represent the molecular orbitals, e.g. 6-31G(d)) and the solvent model (e.g. SMD)." data-ja="DFTでは次の条件を選びます。汎関数（電子の交換と相関の近似の仕方、例：B3LYP）、分散力補正（例：GD3BJ）、基底関数（分子軌道を表す関数の組、例：6-31G(d)）、溶媒モデル（例：SMD）。">In DFT you choose the functional (how electron exchange and correlation are approximated, e.g. B3LYP), the dispersion correction (e.g. GD3BJ), the basis set (the set of functions that represent the molecular orbitals, e.g. 6-31G(d)) and the solvent model (e.g. SMD).</p>
 <p data-en="MM and DFT often rank conformers differently. Keep a generous set of candidates at the MM stage." data-ja="MMとDFTでは配座のエネルギー順位が変わることがよくあります。MMの段階では候補を多めに残します。">MM and DFT often rank conformers differently. Keep a generous set of candidates at the MM stage.</p>
 <h3 data-en="References" data-ja="参考資料">References</h3>
 <ul class="compact-list reference-list">
@@ -85,7 +85,7 @@
 <h2 data-en="Basic workflow" data-ja="基本の流れ">Basic workflow</h2>
 <ol class="step-list">
 <li><strong data-en="Build the molecule" data-ja="分子構造を作る" class="step-title">Build the molecule</strong><div class="step-body"><p data-en="Fix the stereochemistry, charge and protonation state at this step." data-ja="立体配置・電荷・プロトン化状態をここで確定します。">Fix the stereochemistry, charge and protonation state at this step.</p></div></li>
-<li><strong data-en="Search conformers with MM" data-ja="MMで配座を探索する" class="step-title">Search conformers with MM</strong><div class="step-body"><p data-en="Sample all rotatable bonds, ring conformations and OH orientations." data-ja="回転可能な結合、環の形、OHの向きを網羅します。">Sample all rotatable bonds, ring conformations and OH orientations.</p></div></li>
+<li><strong data-en="Search conformers with MM" data-ja="MMで配座を探索する" class="step-title">Search conformers with MM</strong><div class="step-body"><p data-en="Vary rotatable bonds, ring conformations and OH orientations." data-ja="回転可能な結合、環の形、OHの向きを変えて探索します。">Vary rotatable bonds, ring conformations and OH orientations.</p></div></li>
 <li><strong data-en="Remove duplicates and optimize with DFT (Opt Freq)" data-ja="重複を整理し、DFTで最適化する（Opt Freq）" class="step-title">Remove duplicates and optimize with DFT (Opt Freq)</strong><div class="step-body"><p data-en="If the Freq step also prints Stationary point found and there are no imaginary frequencies, the structure is a minimum." data-ja="Freq の部分にも Stationary point found が出ていて、虚振動がゼロなら安定構造です。">If the Freq step also prints Stationary point found and there are no imaginary frequencies, the structure is a minimum.</p></div></li>
 <li><strong data-en="Compare energies and obtain populations" data-ja="エネルギーを比べ、存在率を出す" class="step-title">Compare energies and obtain populations</strong><div class="step-body"><p><span data-lang="en">Usually <i>G</i> is used.</span></p></div></li>
 <li><strong data-en="Compute properties and average by population" data-ja="物性を計算し、存在率で平均する" class="step-title">Compute properties and average by population</strong><div class="step-body"><p data-en="NMR, ECD, optical rotation, ..." data-ja="NMR、ECD、旋光度など。">NMR, ECD, optical rotation, ...</p></div></li>
@@ -94,7 +94,7 @@
 <section class="content-section reading" id="record">
 <h2 data-en="Decide before you start" data-ja="計算前に決めておくこと">Decide before you start</h2>
 <ul class="compact-list">
-<li data-en="The species to study, stereochemistry, charge, multiplicity, solvent, temperature, and the experimental data to compare with." data-ja="調べる分子種、立体配置、電荷、多重度、溶媒、温度、比較したい実験値。">The species to study, stereochemistry, charge, multiplicity, solvent, temperature, and the experimental data to compare with.</li>
+<li data-en="The species to study, stereochemistry, charge, multiplicity, solvent, temperature and the experimental data to compare with." data-ja="調べる分子種、立体配置、電荷、多重度、溶媒、温度、比較したい実験値。">The species to study, stereochemistry, charge, multiplicity, solvent, temperature and the experimental data to compare with.</li>
 <li data-en="A naming rule for structures (e.g. cat_c01_opt). You will end up with dozens of files." data-ja="構造ごとの名前の付け方（例：cat_c01_opt）。あとで数十ファイルになります。">A naming rule for structures (e.g. cat_c01_opt). You will end up with dozens of files.</li>
 <li data-en="The same conditions for every candidate. Values from different conditions cannot be compared." data-ja="すべての候補に使う共通の計算条件。条件が違う値は比べられません。">The same conditions for every candidate. Values from different conditions cannot be compared.</li>
 </ul>
