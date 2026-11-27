@@ -163,3 +163,16 @@ test('candidate filters: integer DBE (nitrogen rule) and element ratios (Kind & 
   assert.equal(search(q).excluded, 0);
   assert.throws(() => search({ ...q, filters: null }), /search/);
 });
+
+test('molecular weight uses the CIAAW abridged standard atomic weights typed here', async () => {
+  // Values typed from CIAAW "Abridged Standard Atomic Weights" (2024), independently of atomic-weights.js.
+  const reference = { H: 1.0080, C: 12.011, N: 14.007, O: 15.999, F: 18.998, Na: 22.990, P: 30.974, S: 32.06, Cl: 35.45, K: 39.098, Br: 79.904, I: 126.90, Gd: 157.25, Lu: 174.97, Zr: 91.222 };
+  const { ATOMIC_WEIGHTS } = await import(pathToFileURL(path.join(SITE, 'hrms-calc', 'atomic-weights.js')).href);
+  for (const [e, v] of Object.entries(reference)) assert.equal(Number(ATOMIC_WEIGHTS[e]), v, e);
+  const { ELEMENTS } = await import(pathToFileURL(path.join(SITE, 'hrms-calc', 'constants.js')).href);
+  assert.deepEqual(Object.keys(ATOMIC_WEIGHTS).sort(), Object.keys(ELEMENTS).sort());
+  const glucose = core.parseFormula('C6H12O6');
+  assert.ok(Math.abs(core.molecularWeight(glucose) - (6 * 12.011 + 12 * 1.0080 + 6 * 15.999)) < 1e-9);
+  assert.equal(core.molecularWeight(glucose).toFixed(2), '180.16');
+  assert.equal(core.ion(glucose, '[M+Na]+').molecularWeight.toFixed(2), '180.16');
+});

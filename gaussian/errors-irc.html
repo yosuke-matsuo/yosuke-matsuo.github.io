@@ -20,8 +20,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="IRCエラー｜Gaussian入門" data-en="IRC errors | Gaussian guide">IRCエラー｜Gaussian入門</title>
-<link rel="stylesheet" href="../styles.css?v=20261126-7"/>
-<script defer src="../app.js?v=20261126-7"></script>
+<link rel="stylesheet" href="../styles.css?v=20261127-2"/>
+<script defer src="../app.js?v=20261127-2"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">本文へ移動</a>
@@ -36,7 +36,7 @@
 <section class="intro"><nav aria-label="Breadcrumb" class="breadcrumb"><a data-ja="Gaussian入門" data-en="Gaussian guide" href="./index.html">Gaussian入門</a> / <a data-ja="Gaussianのエラー対応" data-en="Troubleshooting Gaussian errors" href="./troubleshooting.html">Gaussianのエラー対応</a></nav><h1 data-en="IRC errors" data-ja="IRCエラー">IRCエラー</h1></section>
 <section class="content-section reading" id="irc-errors">
 <h2 data-en="IRC errors" data-ja="IRCのエラー">IRCのエラー</h2>
-<article class="error-entry"><h3 data-en="Corrector does not converge" data-ja="correctorが収束しない" id="corrector">correctorが収束しない</h3><pre class="error-marker" translate="no" lang="en">Maximum number of corrector steps exceded</pre><p><strong data-en="Cause: " data-ja="原因：">原因：</strong><span data-en="The path-correction iterations (corrector) did not converge." data-ja="経路を補正する反復（corrector）が上限内に収束しません。">経路を補正する反復（corrector）が上限内に収束しません。</span></p><strong data-en="What to do" data-ja="対処" class="action-label">対処</strong><ol class="compact-list">
+<article class="error-entry"><h3 data-en="Corrector iterations do not converge" data-ja="補正の反復（corrector）が収束しない" id="corrector">補正の反復（corrector）が収束しない</h3><pre class="error-marker" translate="no" lang="en">Maximum number of corrector steps exceded</pre><p><strong data-en="Cause: " data-ja="原因：">原因：</strong><span data-en="The path-correction iterations (corrector) did not converge within the iteration limit." data-ja="経路を補正する反復（corrector）が上限内に収束しません。">経路を補正する反復（corrector）が上限内に収束しません。</span></p><strong data-en="What to do" data-ja="対処" class="action-label">対処</strong><ol class="compact-list">
 <li data-en="Check whether an SCF failure or a memory/disk shortage happened first." data-ja="SCFの失敗やメモリ・ディスク不足が先に起きていないかを確認します。">SCFの失敗やメモリ・ディスク不足が先に起きていないかを確認します。</li>
 <li data-en="If this error occurs with the default algorithm (no option, or IRC=HPC), recompute from the same TS with IRC=LQA: read the TS Freq .chk with %oldchk and keep the direction, MaxPoints and StepSize of the original job (input below)." data-ja="既定のアルゴリズム（指定なし、または IRC=HPC）でこのエラーが出た場合は、IRC=LQA に変えて同じTSから計算し直します。TSのFreqの .chk を %oldchk で読み、方向・MaxPoints・StepSize は元の計算と同じにします（下の入力例）。">既定のアルゴリズム（指定なし、または IRC=HPC）でこのエラーが出た場合は、IRC=LQA に変えて同じTSから計算し直します。TSのFreqの .chk を %oldchk で読み、方向・MaxPoints・StepSize は元の計算と同じにします（下の入力例）。</li>
 <li data-en="Reducing StepSize (e.g. 10 → 5) can also help." data-ja="StepSize を小さくする（例：10 → 5）のも有効なことがあります。">StepSize を小さくする（例：10 → 5）のも有効なことがあります。</li>
@@ -65,6 +65,6 @@
 </section>
 </div>
 </main>
-<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月26日" data-en="Last updated: 26 November 2026" class="copyright">最終更新：2026年11月26日</p></footer>
+<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月27日" data-en="Last updated: 27 November 2026" class="copyright">最終更新：2026年11月27日</p></footer>
 </body>
 </html>

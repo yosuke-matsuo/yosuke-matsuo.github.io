@@ -43,7 +43,7 @@
  }
 }
 </script>
-<link rel="stylesheet" href="style.css?v=20261126-2">
+<link rel="stylesheet" href="style.css?v=20261127-3">
 </head>
 <body>
 <a class="skip-link" href="#main" data-t="skip">本文へ移動</a>
@@ -175,14 +175,15 @@
 
 <section id="method"><h2 data-t="method">計算方法</h2>
 <div class="equation"><i>m</i>/<i>z</i> = (Σ <i>n</i><sub>i</sub> <i>m</i><sub>i</sub> − <i>z</i> <i>m</i><sub>e</sub>) / |<i>z</i>|</div>
-<p data-t="definition"><i>n</i><sub>i</sub> は付加・脱離後のイオンに含まれる原子数、<i>m</i><sub>i</sub> は各元素の同位体質量、<i>z</i> は符号付きの電荷数です。2価以上のイオンは |<i>z</i>| で割ります。</p>
+<p data-t="definition"><i>n</i><sub>i</sub> は付加・脱離後のイオンに含まれる元素 <i>i</i> の原子数、<i>m</i><sub>i</sub> は元素 <i>i</i> の同位体質量、<i>z</i> は符号付きの電荷数です。2価以上のイオンは |<i>z</i>| で割ります。</p>
 <p data-t="electron">正電荷1つにつき電子1個分の質量を引き、負電荷1つにつき足します（<i>m</i><sub>e</sub> = 0.0005485799090441 Da）。</p>
+<p data-t="molecularWeightMethod" data-tabs="calculator">分子量は、CIAAW の標準原子量（簡略値）から計算し、小数第2位まで表示します。</p>
 <p data-t="ppm">誤差（ppm）=（実測値 − 計算値）/ 計算値 × 10⁶。誤差（mDa）=（実測値 − 計算値）× 1000。</p>
 <p data-t="dbe" data-tabs="calculator finder batch">DBE = 1 + C + N/2 − (H + F + Cl + Br + I)/2（中性分子 M の値。小数もそのまま表示）。C・H・N・O・S・ハロゲン以外を含む組成では「—」とします。</p>
 <p data-tabs="finder"><span data-t="filterMethod">分子式検索の絞り込み：DBE の条件は、中性分子 M の DBE が整数で、かつ0以上であることです。DBE は C・H・N・O・S・ハロゲンを通常の原子価（C 4、N 3、H とハロゲン 1、O・S 2）として計算するので、ほかの元素を含む組成は判定せずに残します。整数であることは窒素ルール（窒素の数と整数質量の偶奇）と同じ条件ですが、0以上であることは窒素ルールには含まれません（例：CH<sub>4</sub> より H の多い CH<sub>6</sub> は窒素ルールを満たしますが、DBE は −1 です）。元素比の条件は、Kind と Fiehn が示した「一般的な範囲」（データベースの分子式の99.7%を含む範囲）のうち、H・N・O・P・S・Si の炭素に対する比を使います。</span> <a href="https://doi.org/10.1186/1471-2105-8-105" target="_blank" rel="noopener noreferrer">Kind &amp; Fiehn, <i>BMC Bioinformatics</i> 2007</a></p>
 <p data-t="urlMethod" data-tabs="calculator finder">精密質量と分子式検索の入力は、ページのアドレスの「#」より後ろに入ります。この部分はサーバーに送られませんが、そのアドレスをブックマーク・共有すると、入力も一緒に伝わります。一括計算と記載チェックの入力はアドレスに入りません。</p>
 <p data-t="isotopes">84元素に対応し、各元素で天然存在比が最も高い同位体の質量を使います（例：B は ¹¹B、Fe は ⁵⁶Fe）。Tc・Pm など天然の同位体組成がない元素は使えません。</p>
-<p data-t="isoMethod" data-tabs="calculator">同位体パターンはNISTの存在比から計算し、同じ整数質量の同位体組成を1本にまとめます（<i>m</i>/<i>z</i> は存在比による加重平均）。高分解能では分かれて観測されることがあります。</p>
+<p data-t="isoMethod" data-tabs="calculator">同位体パターンはNISTの存在比から計算し、同じ整数質量の同位体組成を1本のピークにまとめます（<i>m</i>/<i>z</i> は存在比による加重平均）。これらは高分解能では別々のピークとして観測されることがあります。</p>
 <p data-t="checkMethod" data-tabs="checker">記載チェックでは、「calcd for」の後の分子式をイオンの組成として <i>m</i>/<i>z</i> を計算し直し、最終桁の丸めの範囲で一致するかを見ます。一致しない場合は、電子の質量の扱いの誤りや、中性分子の分子式のまま計算した可能性を調べます。</p>
 <details><summary data-t="constants">使用する同位体と質量を表示</summary><table id="constants"><thead></thead><tbody></tbody></table></details>
 </section>
@@ -191,6 +192,7 @@
 <dl class="sources">
 <dt data-t="isotopeSource">同位体質量・存在比</dt><dd><a href="https://physics.nist.gov/cgi-bin/Compositions/stand_alone.pl?all=all&amp;ascii=ascii2" target="_blank" rel="noopener noreferrer">NIST — Atomic Weights and Isotopic Compositions</a></dd>
 <dt data-t="electronSource">電子質量</dt><dd><a href="https://physics.nist.gov/cuu/Constants/Table/allascii.txt" target="_blank" rel="noopener noreferrer">NIST — 2022 CODATA Recommended Values</a></dd>
+<dt data-t="atomicWeightSource">標準原子量（分子量）</dt><dd><a href="https://www.ciaaw.org/abridged-atomic-weights.htm" target="_blank" rel="noopener noreferrer">CIAAW — Abridged Standard Atomic Weights (2024)</a></dd>
 <dt data-t="paperIntro">HRMSデータの報告で多い誤り</dt><dd>Christmann, M. <a href="https://doi.org/10.1021/acs.orglett.4c03458" target="_blank" rel="noopener noreferrer">What I Learned from Analyzing Accurate Mass Data of 3000 Supporting Information Files.</a> <i>Org. Lett.</i> <b>2025</b>, <i>27</i>, 4–7.</dd>
 <dt data-t="ratioSource">分子式の元素比の範囲</dt><dd>Kind, T.; Fiehn, O. <a href="https://doi.org/10.1186/1471-2105-8-105" target="_blank" rel="noopener noreferrer">Seven Golden Rules for heuristic filtering of molecular formulas obtained by accurate mass spectrometry.</a> <i>BMC Bioinformatics</i> <b>2007</b>, <i>8</i>, 105.</dd>
 </dl>
@@ -199,6 +201,6 @@
 
 <footer><p>© 2026 <a href="../index.html" data-home="index">Yosuke Matsuo</a> · <a href="../tools.html" data-home="tools" data-t="toolsPage">ツール</a></p><p><a href="https://github.com/yosuke-matsuo/yosuke-matsuo.github.io/tree/main/hrms-calc" data-t="sourceCode" target="_blank" rel="noopener noreferrer">ソースコード</a> · <span data-t="codeLicense">HRMS Calcのプログラム：</span><a href="LICENSE.txt">MIT License</a></p></footer>
 </main>
-<script type="module" src="app.js?v=20261126-2"></script>
+<script type="module" src="app.js?v=20261127-3"></script>
 </body>
 </html>

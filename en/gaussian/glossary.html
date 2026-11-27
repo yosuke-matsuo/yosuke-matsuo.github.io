@@ -21,8 +21,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="用語集｜Gaussian入門" data-en="Glossary | Gaussian guide">Glossary | Gaussian guide</title>
-<link rel="stylesheet" href="../../styles.css?v=20261126-7"/>
-<script defer src="../../app.js?v=20261126-7"></script>
+<link rel="stylesheet" href="../../styles.css?v=20261127-2"/>
+<script defer src="../../app.js?v=20261127-2"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">Skip to content</a>
@@ -51,7 +51,7 @@
 </tr>
 <tr>
 <td data-en=".chk (checkpoint)" data-ja=".chk（チェックポイント）">.chk (checkpoint)</td>
-<td data-en="A binary file holding intermediate results. Set with %chk=name; read from another job with %oldchk." data-ja="計算の途中結果を保存するバイナリファイル。%chk=名前 で指定し、%oldchk で別の計算から読み込めます。">A binary file holding intermediate results. Set with %chk=name; read from another job with %oldchk.</td>
+<td data-en="A binary file that stores the results of a job (geometry, wavefunction and so on). Set with %chk=name; read from another job with %oldchk." data-ja="計算の結果（構造・波動関数など）を保存するバイナリファイル。%chk=名前 で指定し、%oldchk で別の計算から読み込めます。">A binary file that stores the results of a job (geometry, wavefunction and so on). Set with %chk=name; read from another job with %oldchk.</td>
 </tr>
 </tbody></table></div>
 </section>
@@ -63,19 +63,19 @@
 </tr></thead><tbody>
 <tr>
 <td data-en="Opt (geometry optimization)" data-ja="Opt（構造最適化）">Opt (geometry optimization)</td>
-<td data-en="Moves atoms step by step to find a structure where the forces are nearly zero (a minimum or a TS)." data-ja="原子の位置を少しずつ動かし、力がほぼゼロになる構造（極小またはTS）を探します。">Moves atoms step by step to find a structure where the forces are nearly zero (a minimum or a TS).</td>
+<td data-en="Moves atoms step by step to find a structure where the forces are nearly zero (a minimum or a transition state, TS)." data-ja="原子の位置を少しずつ動かし、力がほぼゼロになる構造（極小または遷移状態（TS））を探します。">Moves atoms step by step to find a structure where the forces are nearly zero (a minimum or a transition state, TS).</td>
 </tr>
 <tr>
 <td data-en="Freq (frequency analysis)" data-ja="Freq（振動数解析）">Freq (frequency analysis)</td>
-<td><span data-lang="en">Computes vibrational frequencies at the optimized structure. Thermodynamic quantities (<i>G</i>, <i>H</i>) come from here too.</span></td>
+<td><span data-lang="en">Computes vibrational frequencies at the optimized structure. The Freq job also gives thermochemical quantities (<i>G</i>, <i>H</i>).</span></td>
 </tr>
 <tr>
-<td data-en="SP (single point)" data-ja="SP（シングルポイント計算）">SP (single point)</td>
+<td data-en="SP (single-point calculation)" data-ja="SP（シングルポイント計算）">SP (single-point calculation)</td>
 <td data-en="Computes the energy without moving the geometry. Used to refine energies with a larger basis set." data-ja="構造を動かさずにエネルギーだけを計算します。大きな基底関数でエネルギーを精密化するときに使います。">Computes the energy without moving the geometry. Used to refine energies with a larger basis set.</td>
 </tr>
 <tr>
 <td data-en="TS (transition-state search)" data-ja="TS（遷移状態探索）">TS (transition-state search)</td>
-<td data-en="Opt=TS. Searches for the top of a reaction barrier (first-order saddle point). CalcFC is often used (ReadFC can read the force constants instead)." data-ja="Opt=TS。反応の障壁の頂点（一次の鞍点）を探します。CalcFC をよく使います（ReadFC で読み込む方法もあります）。">Opt=TS. Searches for the top of a reaction barrier (first-order saddle point). CalcFC is often used (ReadFC can read the force constants instead).</td>
+<td data-en="Opt=TS. Searches for the top of a reaction barrier (first-order saddle point). CalcFC is often used (or ReadFC to read the force constants from an earlier job)." data-ja="Opt=TS。反応の障壁の頂点（一次の鞍点）を探します。CalcFC をよく使います（ReadFC で前の計算から読み込む方法もあります）。">Opt=TS. Searches for the top of a reaction barrier (first-order saddle point). CalcFC is often used (or ReadFC to read the force constants from an earlier job).</td>
 </tr>
 <tr>
 <td data-en="IRC (intrinsic reaction coordinate)" data-ja="IRC（固有反応座標）">IRC (intrinsic reaction coordinate)</td>
@@ -83,7 +83,7 @@
 </tr>
 <tr>
 <td data-en="NMR (GIAO)" data-ja="NMR（GIAO）">NMR (GIAO)</td>
-<td><span data-lang="en">Computes nuclear shielding constants <i>σ</i>. Chemical shifts <i>δ</i> come from the difference with a reference or from a calibration equation.</span></td>
+<td><span data-lang="en">Computes nuclear shielding constants <i>σ</i>. Chemical shifts <i>δ</i> are obtained from the difference from a reference compound or from a calibration equation.</span></td>
 </tr>
 <tr>
 <td data-en="TD (time-dependent DFT)" data-ja="TD（時間依存DFT）">TD (time-dependent DFT)</td>
@@ -99,7 +99,7 @@
 </tr></thead><tbody>
 <tr>
 <td data-en="Route line" data-ja="ルート行">Route line</td>
-<td data-en="The line in the input starting with #. Specifies the method (functional/basis set) and job type (Opt, Freq, NMR, ...)." data-ja="入力の # で始まる行。計算方法（汎関数/基底関数）と計算の種類（Opt, Freq, NMR など）を指定します。">The line in the input starting with #. Specifies the method (functional/basis set) and job type (Opt, Freq, NMR, ...).</td>
+<td data-en="The line of the input that starts with #. Specifies the method (functional/basis set) and job type (Opt, Freq, NMR, ...)." data-ja="入力の # で始まる行。計算方法（汎関数/基底関数）と計算の種類（Opt, Freq, NMR など）を指定します。">The line of the input that starts with #. Specifies the method (functional/basis set) and job type (Opt, Freq, NMR, ...).</td>
 </tr>
 <tr>
 <td data-en="Functional" data-ja="汎関数">Functional</td>
@@ -107,11 +107,11 @@
 </tr>
 <tr>
 <td data-en="Basis set" data-ja="基底関数">Basis set</td>
-<td data-en="The set of functions describing the electron distribution: 6-31G(d), 6-311+G(d,p), def2-TZVP, ... Larger sets generally give higher accuracy and take longer to compute." data-ja="電子の広がりを表す関数の組。6-31G(d), 6-311+G(d,p), def2-TZVP など。大きいほど一般に精度が上がり、計算は重くなります。">The set of functions describing the electron distribution: 6-31G(d), 6-311+G(d,p), def2-TZVP, ... Larger sets generally give higher accuracy and take longer to compute.</td>
+<td data-en="The set of functions that represent the molecular orbitals: 6-31G(d), 6-311+G(d,p), def2-TZVP, ... Larger sets generally give higher accuracy and take longer to compute." data-ja="分子軌道を表す関数の組。6-31G(d), 6-311+G(d,p), def2-TZVP など。大きいほど一般に精度が上がり、計算は重くなります。">The set of functions that represent the molecular orbitals: 6-31G(d), 6-311+G(d,p), def2-TZVP, ... Larger sets generally give higher accuracy and take longer to compute.</td>
 </tr>
 <tr>
 <td data-en="Dispersion correction (D3)" data-ja="分散力補正（D3）">Dispersion correction (D3)</td>
-<td data-en="Adds weak attractive (dispersion) interactions to DFT. EmpiricalDispersion=GD3BJ. Important for conformations and intermolecular interactions." data-ja="弱い引力（分散力）をDFTに足す補正。EmpiricalDispersion=GD3BJ。配座や分子間相互作用で重要です。">Adds weak attractive (dispersion) interactions to DFT. EmpiricalDispersion=GD3BJ. Important for conformations and intermolecular interactions.</td>
+<td data-en="Adds weak attractive (dispersion) interactions to DFT. EmpiricalDispersion=GD3BJ. Matters for conformer energy differences and intermolecular interactions." data-ja="弱い引力（分散力）をDFTに足す補正。EmpiricalDispersion=GD3BJ。配座のエネルギー差や分子間相互作用の計算に効きます。">Adds weak attractive (dispersion) interactions to DFT. EmpiricalDispersion=GD3BJ. Matters for conformer energy differences and intermolecular interactions.</td>
 </tr>
 <tr>
 <td data-en="Solvent model (PCM, SMD)" data-ja="溶媒モデル（PCM, SMD）">Solvent model (PCM, SMD)</td>
@@ -123,7 +123,7 @@
 </tr>
 <tr>
 <td data-en="SCF" data-ja="SCF">SCF</td>
-<td data-en="The iterative solution of the electronic structure at one geometry. Failure to converge gives Convergence failure." data-ja="1つの構造で電子状態を求める反復計算。収束しないと Convergence failure になります。">The iterative solution of the electronic structure at one geometry. Failure to converge gives Convergence failure.</td>
+<td data-en="The iterative calculation of the electronic structure at one geometry. If it does not converge, the output shows Convergence failure." data-ja="1つの構造で電子状態を求める反復計算。収束しないと Convergence failure になります。">The iterative calculation of the electronic structure at one geometry. If it does not converge, the output shows Convergence failure.</td>
 </tr>
 <tr>
 <td data-en="Hessian / CalcFC" data-ja="ヘシアン / CalcFC">Hessian / CalcFC</td>
@@ -147,15 +147,15 @@
 </tr>
 <tr>
 <td data-en="Error termination" data-ja="Error termination">Error termination</td>
-<td data-en="Abnormal end. The cause is printed a few lines above." data-ja="異常終了。原因はこの行の数行上に書かれています。">Abnormal end. The cause is printed a few lines above.</td>
+<td data-en="The job ended with an error. The cause is printed a few lines above." data-ja="異常終了。原因はこの行の数行上に書かれています。">The job ended with an error. The cause is printed a few lines above.</td>
 </tr>
 <tr>
 <td data-en="Stationary point found" data-ja="Stationary point found">Stationary point found</td>
-<td data-en="Shows that the optimization converged; normally printed when all four Converged? items are YES (it can also appear with displacements NO when the forces are very small)." data-ja="最適化が収束したことを示す出力。通常は Converged? の4項目がすべて YES のときに出ます（力が十分小さければ、変位が NO でも出ることがあります）。">Shows that the optimization converged; normally printed when all four Converged? items are YES (it can also appear with displacements NO when the forces are very small).</td>
+<td data-en="Shows that the optimization converged to a stationary point (a structure where the forces are nearly zero: a minimum or a TS); normally printed when all four Converged? items are YES (it can also appear with displacements NO when the forces are very small)." data-ja="最適化が収束し、停留点（力がほぼゼロの構造。極小またはTS）に着いたことを示す出力。通常は Converged? の4項目がすべて YES のときに出ます（力が十分小さければ、変位が NO でも出ることがあります）。">Shows that the optimization converged to a stationary point (a structure where the forces are nearly zero: a minimum or a TS); normally printed when all four Converged? items are YES (it can also appear with displacements NO when the forces are very small).</td>
 </tr>
 <tr>
 <td data-en="Imaginary frequency" data-ja="虚振動">Imaginary frequency</td>
-<td data-en="A frequency reported as negative; moving along it lowers the energy. A minimum has none; a TS has exactly one." data-ja="負の値で出力される振動数。その方向に構造を動かすとエネルギーが下がることを意味します。安定構造ではゼロ個、TSでは1個。">A frequency reported as negative; moving along it lowers the energy. A minimum has none; a TS has exactly one.</td>
+<td data-en="A frequency reported as a negative number; moving the structure along this mode lowers the energy. A minimum has none; a TS has exactly one." data-ja="負の値で出力される振動数。その方向に構造を動かすとエネルギーが下がることを意味します。安定構造ではゼロ個、TSでは1個。">A frequency reported as a negative number; moving the structure along this mode lowers the energy. A minimum has none; a TS has exactly one.</td>
 </tr>
 <tr>
 <td><span data-lang="en"><i>E</i> and <i>G</i></span></td>
@@ -180,6 +180,6 @@
 </section>
 </div>
 </main>
-<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月26日" data-en="Last updated: 26 November 2026" class="copyright">Last updated: 26 November 2026</p></footer>
+<footer><p class="copyright">© 2026 Yosuke Matsuo</p><p data-ja="最終更新：2026年11月27日" data-en="Last updated: 27 November 2026" class="copyright">Last updated: 27 November 2026</p></footer>
 </body>
 </html>
