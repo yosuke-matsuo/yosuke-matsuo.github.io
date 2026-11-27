@@ -125,7 +125,8 @@ export function checkText(text,{tolerancePpm=5,tolerance=tolerancePpm,toleranceU
   // close to the calculated value (it may be the next compound's)
   const fa=FOUND_AFTER.exec(after);let foundSkipped=false;
   if(fa&&(near(fa[1])||/^[ \t,;:.、(\])]*$/.test(after.slice(0,fa.index)))){found=fa[1];end=valueEnd+fa.index+fa[0].length;}
-  else if(fa)foundSkipped=true;
+  // "found" after another HRMS record's start (m/z, HRMS, an ion notation) is that record's value, not an unread one
+  else if(fa&&!new RegExp('m\\/z|HR|\\bMS\\b|質量|'+ION).test(after.slice(0,fa.index)))foundSkipped=true;
   const from=Math.max(prevEnd,h.index-250),before=s.slice(from,h.index);
   // a value just before "(calcd" ("m/z 204.0524 [M+Na]+ (calcd for …") is this record's, even when it is far off
   if(!found){const all=[...before.matchAll(MZ_BEFORE)],last=all[all.length-1];

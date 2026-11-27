@@ -149,6 +149,9 @@ HRESIMS m/z 361.1338 [2M + H]+ (calcd for C12H25O12, 361.1341)
   // two found-first records on one line keep their own values
   const two = checkText('HRMS found 203.0524 [M+Na]+ (calcd for C6H12O6Na 203.0526); HRMS found 181.0709 [M+H]+ (calcd for C6H13O6 181.0707).');
   assert.deepEqual(two.map(x => [x.found, x.status]), [['203.0524', 'ok'], ['181.0709', 'ok']]);
+  // the next record's measured value does not mark a calculated-only record as unread
+  const next = checkText('HRMS [M+Na]+ calcd for C6H12O6Na 203.0526; HRMS found 181.0709 [M+H]+ (calcd for C6H13O6 181.0707).');
+  assert.deepEqual(next.map(x => [x.found, x.status]), [[null, 'ok'], ['181.0709', 'ok']]);
 });
 
 test('batch input', () => {
