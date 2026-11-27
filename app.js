@@ -1,6 +1,18 @@
 'use strict';
 // English text that contains markup is kept in <template data-lang="en"> so the initial HTML (what search engines read) is Japanese only; put it in place first
 document.querySelectorAll('template[data-lang]').forEach(t => t.replaceWith(t.content));
+// input examples and tables that scroll sideways: reachable with the keyboard (Safari does not focus a scroll area by itself)
+const scrollText = { ja: { pre: '入力例（横にスクロール）', table: '表（横にスクロール）' }, en: { pre: 'Input example (scrolls sideways)', table: 'Table (scrolls sideways)' } };
+function markScrollable() {
+  const t = scrollText[document.documentElement.lang === 'en' ? 'en' : 'ja'];
+  document.querySelectorAll('pre.input-block.keep-lines, .table-wrap').forEach(el => {
+    if (el.scrollWidth > el.clientWidth + 1) {
+      el.tabIndex = 0; el.setAttribute('role', 'region'); el.setAttribute('aria-label', el.matches('pre') ? t.pre : t.table); el.dataset.scroll = '';
+    } else if ('scroll' in el.dataset) {
+      ['tabindex', 'role', 'aria-label', 'data-scroll'].forEach(a => el.removeAttribute(a));
+    }
+  });
+}
 const buttons = [...document.querySelectorAll('[data-language]')];
 function setLanguage(lang) {
   const sel = lang === 'en' ? 'en' : 'ja';
@@ -15,13 +27,17 @@ function setLanguage(lang) {
   buttons.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.language === sel)));
   try { localStorage.setItem('ym-language', sel); } catch (e) {}
   document.querySelectorAll('a[href]').forEach(a => {
-    const h = a.getAttribute('href');
+    if (!('href0' in a.dataset)) a.dataset.href0 = a.getAttribute('href');
+    const h = a.dataset.href0;
     if (!h || /^[a-z][a-z0-9+.-]*:/i.test(h) || h.startsWith('#')) return;
     const [pathq, frag] = h.split('#'); const [path, q] = pathq.split('?');
     if (!/\.html$/.test(path)) return;
+    // pages with an English version (/en/...) are linked directly; others get ?lang=
+    if (/^\/(?:(?:index|research|publications|tools)\.html|gaussian\/[\w-]+\.html)$/.test(path)) { a.setAttribute('href', (sel === 'en' ? '/en' : '') + h); return; }
     const ps = new URLSearchParams(q || ''); ps.set('lang', sel);
     a.setAttribute('href', `${path}?${ps}${frag ? '#' + frag : ''}`);
   });
+  markScrollable();
 }
 const req = new URLSearchParams(location.search).get('lang');
 const pageLang = document.documentElement.lang === 'en' ? 'en' : 'ja';
@@ -56,8 +72,12 @@ if (document.querySelector('link[rel="alternate"][hreflang="en"]')) {
     try { const u = new URL(location.href); u.searchParams.set('lang', b.dataset.language === 'en' ? 'en' : 'ja'); history.replaceState(null, '', u); } catch (e) {}
   }));
   let stored; try { stored = localStorage.getItem('ym-language'); } catch (e) {}
-  setLanguage(['ja', 'en'].includes(req) ? req : stored || (navigator.language.toLowerCase().startsWith('ja') ? 'ja' : 'en'));
+  // a missing page under /en/ starts in English
+  setLanguage(['ja', 'en'].includes(req) ? req : location.pathname.startsWith('/en/') ? 'en' : stored || (navigator.language.toLowerCase().startsWith('ja') ? 'ja' : 'en'));
 }
+markScrollable();
+addEventListener('load', markScrollable);
+let scrollTimer; addEventListener('resize', () => { clearTimeout(scrollTimer); scrollTimer = setTimeout(markScrollable, 150); });
 
 // lightbox: enlarge TOC / cover images in a modal dialog; close with ×, Esc or a click outside the image
 const lbText = { ja: { name: '画像の拡大表示', close: '閉じる' }, en: { name: 'Enlarged image', close: 'Close' } };
