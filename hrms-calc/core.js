@@ -1,6 +1,6 @@
-import {ELEMENTS,ELECTRON_MASS} from './constants.js?v=20261127-5';
-import {ISOTOPES} from './isotopes.js?v=20261127-5';
-import {ATOMIC_WEIGHTS} from './atomic-weights.js?v=20261127-5';
+import {ELEMENTS,ELECTRON_MASS} from './constants.js?v=20261127-6';
+import {ISOTOPES} from './isotopes.js?v=20261127-6';
+import {ATOMIC_WEIGHTS} from './atomic-weights.js?v=20261127-6';
 export {ELEMENTS,ELECTRON_MASS};
 // [number of M, signed charge, atoms added (+) or removed (−)]
 export const IONS = {
@@ -49,14 +49,18 @@ export function ion(c,key){
  const neutral=mass(c); if(!(neutral>0))throw Error('formula');
  const mz=(mass(counts)-z*ELECTRON_MASS)/Math.abs(z);
  if(!(mz>0))throw Error('composition');
- return {formula:formula(c),ionFormula:formula(counts),z,neutral,mz,molecularWeight:molecularWeight(c)};
+ return {formula:formula(c),ionFormula:formula(counts),z,neutral,mz,molecularWeight:molecularWeight(c),molecularWeightText:formatMolecularWeight(c)};
 }
 /* Molecular weight of the neutral formula from the CIAAW abridged standard atomic weights. */
-export function molecularWeight(c){
- let w=0;
- for(const [e,n] of Object.entries(c)){const a=ATOMIC_WEIGHTS[e];if(a===undefined)throw Error('formula');w+=n*Number(a);}
- return w;
+// summed in exact units of 0.0001 (the finest digit of the abridged values), so ties such as 186.035 round correctly
+function molecularWeightUnits(c){
+ let u=0;
+ for(const [e,n] of Object.entries(c)){const a=ATOMIC_WEIGHTS[e];if(a===undefined)throw Error('formula');u+=n*Math.round(Number(a)*1e4);}
+ return u;
 }
+export const molecularWeight=c=>molecularWeightUnits(c)/1e4;
+// shown to two decimal places, rounding half up
+export function formatMolecularWeight(c){return (Math.floor(molecularWeightUnits(c)/100+0.5)/100).toFixed(2);}
 export const ppm=(found,calculated)=>(found-calculated)/calculated*1e6;
 export function dbe(c){
  if(Object.keys(c).some(k=>c[k]&&!['C','H','N','O','S','F','Cl','Br','I'].includes(k)))return null;
