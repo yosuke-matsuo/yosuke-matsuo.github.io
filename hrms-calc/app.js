@@ -252,7 +252,7 @@ $('batchCopySi').onclick=()=>{
 };
 
 // ---------- checker ----------
-const CODE_TEXT={ok:'cOk',rounding:'cRounding',electron:'cElectron',electronSign:'cElectronSign',neutralFormula:'cNeutralFormula',neutralFormulaElectron:'cNeutralFormulaElectron',mismatch:'cMismatch',adductMissing:'cAdductMissing',chargeAssumed:'cChargeAssumed',chargeConflict:'cChargeConflict',noFormula:'cNoFormula',noValue:'cNoValue',fewDigits:'cFewDigits',formula:'cFormula'};
+const CODE_TEXT={ok:'cOk',rounding:'cRounding',electron:'cElectron',electronSign:'cElectronSign',neutralFormula:'cNeutralFormula',neutralFormulaElectron:'cNeutralFormulaElectron',mismatch:'cMismatch',adductMissing:'cAdductMissing',foundUnread:'cFoundUnread',chargeAssumed:'cChargeAssumed',chargeConflict:'cChargeConflict',noFormula:'cNoFormula',noValue:'cNoValue',fewDigits:'cFewDigits',formula:'cFormula'};
 const STATUS_TEXT={ok:'stOk',warn:'stWarn',error:'stError',unparsed:'stUnparsed'};
 function tolValue(){const v=Number($('checkTol').value);return Number.isFinite(v)&&v>=0?v:5;}
 const unitValue=()=>$('checkUnit').value==='mDa'?'mDa':'ppm';

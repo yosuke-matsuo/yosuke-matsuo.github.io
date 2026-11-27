@@ -114,6 +114,12 @@ test('SI checker: verdicts', () => {
     ['HRMS m/z: [M + NH4]+ Calcd for C6H16NO6 198.0972; Found 198.0970.', 'ok', ['ok'], '198.0970', 1],
     // a found value far from the calculated one on the same line is kept and judged by the tolerance
     ['HRMS m/z: [M + Na]+ Calcd for C6H12O6Na 203.0526; Found 204.0524.', 'warn', ['ok', 'foundOff'], '204.0524', 1],
+    ['HRMS m/z: [M + Na]+ Calcd for C6H12O6Na 203.0526 (found 204.0524).', 'warn', ['ok', 'foundOff'], '204.0524', 1],
+    ['HRMS m/z: [M + Na]+ Calcd for C6H12O6Na 203.0526. Found 204.0524.', 'warn', ['ok', 'foundOff'], '204.0524', 1],
+    ['HRMS m/z [M+Na]+ 計算値 C6H12O6Na 203.0526、実測値 204.0524', 'warn', ['ok', 'foundOff'], '204.0524', 1],
+    ['HRESIMS m/z 204.0524 [M+Na]+ (calcd for C6H12O6Na, 203.0526).', 'warn', ['ok', 'foundOff'], '204.0524', 1],
+    // a measured value that cannot be tied to the record is reported, not dropped silently
+    ['HRMS m/z: [M + Na]+ Calcd for C6H12O6Na 203.0526 (compound 3 found 181.0709).', 'warn', ['ok', 'foundUnread'], null, 1],
     // a superscript charge on the formula is not read as an atom count
     ['HRMS m/z: [M + 2H]²⁺ Calcd for C₆H₁₄O₆²⁺ 91.0390; Found 91.0391.', 'ok', ['ok'], '91.0391', 2],
     ['HRMS m/z: [M + H]⁺ Calcd for C₆H₁₃O₆⁺ 181.0707; Found 181.0709.', 'ok', ['ok'], '181.0709', 1],
