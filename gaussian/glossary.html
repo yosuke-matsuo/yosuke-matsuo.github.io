@@ -20,8 +20,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="用語集｜Gaussian入門" data-en="Glossary | Gaussian guide">用語集｜Gaussian入門</title>
-<link rel="stylesheet" href="../styles.css?v=20261127-2"/>
-<script defer src="../app.js?v=20261127-2"></script>
+<link rel="stylesheet" href="../styles.css?v=20261127-3"/>
+<script defer src="../app.js?v=20261127-3"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">本文へ移動</a>
@@ -62,7 +62,7 @@
 </tr></thead><tbody>
 <tr>
 <td data-en="Opt (geometry optimization)" data-ja="Opt（構造最適化）">Opt（構造最適化）</td>
-<td data-en="Moves atoms step by step to find a structure where the forces are nearly zero (a minimum or a transition state, TS)." data-ja="原子の位置を少しずつ動かし、力がほぼゼロになる構造（極小または遷移状態（TS））を探します。">原子の位置を少しずつ動かし、力がほぼゼロになる構造（極小または遷移状態（TS））を探します。</td>
+<td data-en="Moves atoms step by step to find a structure where the forces are nearly zero: a minimum by default, or a transition state (TS) with Opt=TS." data-ja="原子の位置を少しずつ動かし、力がほぼゼロになる構造を探します。既定では極小を、Opt=TS では遷移状態（TS）を探します。">原子の位置を少しずつ動かし、力がほぼゼロになる構造を探します。既定では極小を、Opt=TS では遷移状態（TS）を探します。</td>
 </tr>
 <tr>
 <td data-en="Freq (frequency analysis)" data-ja="Freq（振動数解析）">Freq（振動数解析）</td>
@@ -85,8 +85,8 @@
 <td><span data-lang="ja">核の遮蔽定数<i>σ</i>を計算します。化学シフト<i>δ</i>は参照物質との差や校正式で求めます。</span><template data-lang="en"><span data-lang="en" hidden>Computes nuclear shielding constants <i>σ</i>. Chemical shifts <i>δ</i> are obtained from the difference from a reference compound or from a calibration equation.</span></template></td>
 </tr>
 <tr>
-<td data-en="TD (time-dependent DFT)" data-ja="TD（時間依存DFT）">TD（時間依存DFT）</td>
-<td data-en="Computes excited states; used for UV and ECD spectra." data-ja="励起状態を計算します。UVスペクトルとECDスペクトルの計算に使います。">励起状態を計算します。UVスペクトルとECDスペクトルの計算に使います。</td>
+<td data-en="TD (excited-state calculation)" data-ja="TD（励起状態の計算）">TD（励起状態の計算）</td>
+<td data-en="Computes excited states by time-dependent HF or DFT (the examples in this guide are TD-DFT); used for UV and ECD spectra." data-ja="時間依存HFまたは時間依存DFTで励起状態を計算します（この入門の例は TD-DFT）。UVスペクトルとECDスペクトルの計算に使います。">時間依存HFまたは時間依存DFTで励起状態を計算します（この入門の例は TD-DFT）。UVスペクトルとECDスペクトルの計算に使います。</td>
 </tr>
 </tbody></table></div>
 </section>
@@ -150,7 +150,7 @@
 </tr>
 <tr>
 <td data-en="Stationary point found" data-ja="Stationary point found">Stationary point found</td>
-<td data-en="Shows that the optimization converged to a stationary point (a structure where the forces are nearly zero: a minimum or a TS); normally printed when all four Converged? items are YES (it can also appear with displacements NO when the forces are very small)." data-ja="最適化が収束し、停留点（力がほぼゼロの構造。極小またはTS）に着いたことを示す出力。通常は Converged? の4項目がすべて YES のときに出ます（力が十分小さければ、変位が NO でも出ることがあります）。">最適化が収束し、停留点（力がほぼゼロの構造。極小またはTS）に着いたことを示す出力。通常は Converged? の4項目がすべて YES のときに出ます（力が十分小さければ、変位が NO でも出ることがあります）。</td>
+<td data-en="Shows that the optimization converged to a stationary point (a structure where the forces are nearly zero: a minimum or a TS); normally printed when all four Converged? items are YES (also when Maximum Force and RMS Force are below 1/100 of their thresholds, whatever the displacements). With Opt Freq the test is repeated in the Freq step; if it is not printed there, the structure is not a stationary point." data-ja="最適化が収束し、停留点（力がほぼゼロの構造。極小またはTS）に着いたことを示す出力。通常は Converged? の4項目がすべて YES のときに出ます（Maximum Force と RMS Force が閾値の1/100未満なら、変位が NO でも出ます）。Opt Freq では Freq の部分でも判定し直し、そこで出なければ停留点ではありません。">最適化が収束し、停留点（力がほぼゼロの構造。極小またはTS）に着いたことを示す出力。通常は Converged? の4項目がすべて YES のときに出ます（Maximum Force と RMS Force が閾値の1/100未満なら、変位が NO でも出ます）。Opt Freq では Freq の部分でも判定し直し、そこで出なければ停留点ではありません。</td>
 </tr>
 <tr>
 <td data-en="Imaginary frequency" data-ja="虚振動">虚振動</td>

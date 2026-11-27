@@ -20,8 +20,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="はじめてのGaussian計算｜Gaussian入門" data-en="Your first Gaussian calculation | Gaussian guide">はじめてのGaussian計算｜Gaussian入門</title>
-<link rel="stylesheet" href="../styles.css?v=20261127-2"/>
-<script defer src="../app.js?v=20261127-2"></script>
+<link rel="stylesheet" href="../styles.css?v=20261127-3"/>
+<script defer src="../app.js?v=20261127-3"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">本文へ移動</a>
@@ -85,7 +85,7 @@ C   -4.360353  -1.556559  -0.095452
                                                    ← blank line
 (+)-catechin  Opt+Freq                             ← (3) title: free text
                                                    ← blank line
-0 1                                                ← (4) charge multiplicity
+0 1                                                ← (4) charge and multiplicity
 C   -4.273953  -0.303693  -0.688531                ← (5) coordinates: symbol x y z (Å)
 C   -4.360353  -1.556559  -0.095452
  ...
@@ -223,13 +223,13 @@ g16sub catechin_opt_freq.gjf</pre></template>
  Predicted change in Energy=-9.745202D-09
  Optimization completed.
     -- Stationary point found.</pre>
-<p><span data-lang="ja">「Stationary point found」と出ていれば収束です（通常は4項目すべてが YES）。この表は最適化のサイクルごとに出ます。Opt Freq では振動数解析の最後にも同じ表が出るので、そこでも YES がそろっていることを確認します。振動数解析の最後の表に NO があれば、虚振動が0でも停留点ではありません（エラー対応の「<a href="./errors-opt-scf.html#freq-check">Opt後のFreqで収束していない</a>」）。</span><template data-lang="en"><span data-lang="en" hidden>“Stationary point found” means the optimization has converged (normally all four items are YES). The table is printed at every optimization cycle. With Opt Freq it is printed once more at the end of the frequency job; check that it is all YES there as well. If that table has NO, the structure is not a stationary point even with 0 imaginary frequencies (see “<a href="./errors-opt-scf.html#freq-check">Not converged in the Freq after Opt</a>” in Troubleshooting).</span></template></p></div></li>
+<p><span data-lang="ja">「Stationary point found」と出ていれば収束です（通常は4項目すべてが YES。Maximum Force と RMS Force が閾値の1/100未満なら、変位が NO でも収束と判定されます）。この表は最適化のサイクルごとに出ます。Opt Freq では振動数解析の最後にも同じ判定が出るので、そこにも Stationary point found があることを確認します。なければ、虚振動が0でも停留点ではありません（エラー対応の「<a href="./errors-opt-scf.html#freq-check">Opt後のFreqで収束していない</a>」）。</span><template data-lang="en"><span data-lang="en" hidden>“Stationary point found” means the optimization has converged (normally all four items are YES; it is also printed when Maximum Force and RMS Force are below 1/100 of their thresholds, whatever the displacements). The table is printed at every optimization cycle. With Opt Freq the test is repeated at the end of the frequency job; check that Stationary point found appears there as well. If it does not, the structure is not a stationary point even with 0 imaginary frequencies (see “<a href="./errors-opt-scf.html#freq-check">Not converged in the Freq after Opt</a>” in Troubleshooting).</span></template></p></div></li>
 <li><strong data-en="Are there any imaginary frequencies?" data-ja="虚振動がないか" class="step-title">虚振動がないか</strong><div class="step-body"><pre class="input-block keep-lines" translate="no" lang="en"> Frequencies --     28.7801                36.2275                55.1887
  Red. masses --      6.1207                 6.1679                 6.6287</pre>
-<p><span data-lang="ja">虚振動は負の振動数として出力されます。最初の Frequencies 行の値がすべて正なら、安定構造（エネルギー極小）です。負の値（例：-45.6）が1つでもあれば、その構造はまだ極小ではありません（対処は<a href="./conformers.html#opt">配座と安定構造の「構造最適化と振動数解析」</a>にあります）。</span><template data-lang="en"><span data-lang="en" hidden>Imaginary frequencies are printed as negative values. If all values on the first Frequencies line are positive, the structure is a minimum. Even one negative value (e.g. -45.6) means it is not yet a minimum (see <a href="./conformers.html#opt">Optimization and frequencies in Conformers and stable structures</a>).</span></template></p>
+<p><span data-lang="ja">虚振動は負の振動数として出力されます。Stationary point found が出ていて、最初の Frequencies 行の値がすべて正なら、安定構造（エネルギー極小）です。負の値（例：-45.6）が1つでもあれば、その構造はまだ極小ではありません（対処は<a href="./conformers.html#opt">配座と安定構造の「構造最適化と振動数解析」</a>にあります）。</span><template data-lang="en"><span data-lang="en" hidden>Imaginary frequencies are printed as negative values. If Stationary point found is printed and all values on the first Frequencies line are positive, the structure is a minimum. Even one negative value (e.g. -45.6) means it is not yet a minimum (see <a href="./conformers.html#opt">Optimization and frequencies in Conformers and stable structures</a>).</span></template></p>
 <p data-en="The Freq output also contains thermochemistry. The free energy used for conformer comparison is this line:" data-ja="Freqの出力には熱力学量も含まれます。配座比較に使う自由エネルギーは次の行です。">Freqの出力には熱力学量も含まれます。配座比較に使う自由エネルギーは次の行です。</p>
 <pre class="input-block keep-lines" translate="no" lang="en"> Sum of electronic and thermal Free Energies=        -1031.108599</pre>
-<p data-en="These outputs are from the catechin calculation on this page. In the first job, the table at the end of the frequency step had NO, so the optimization was continued with Opt=CalcFC Freq; the frequencies and free energy are from that continued job." data-ja="出力例はこのページのカテキンの計算です。最初の計算では振動数解析の最後の表に NO が出たため、Opt=CalcFC Freq で計算を続けました。振動数と自由エネルギーは、続けた計算の値です。">出力例はこのページのカテキンの計算です。最初の計算では振動数解析の最後の表に NO が出たため、Opt=CalcFC Freq で計算を続けました。振動数と自由エネルギーは、続けた計算の値です。</p></div></li>
+<p data-en="These outputs are from the catechin calculation on this page. In the first job, the table at the end of the frequency step had NO, so the optimization was continued with Opt=CalcFC Freq (CalcFC computes the exact Hessian at the first step); the frequencies and free energy are from that continued job." data-ja="出力例はこのページのカテキンの計算です。最初の計算では振動数解析の最後の表に NO が出たため、Opt=CalcFC Freq（CalcFC は最初に正確なヘシアンを計算する指定）で計算を続けました。振動数と自由エネルギーは、続けた計算の値です。">出力例はこのページのカテキンの計算です。最初の計算では振動数解析の最後の表に NO が出たため、Opt=CalcFC Freq（CalcFC は最初に正確なヘシアンを計算する指定）で計算を続けました。振動数と自由エネルギーは、続けた計算の値です。</p></div></li>
 </ol>
 </section>
 <section class="content-section reading" id="errors">

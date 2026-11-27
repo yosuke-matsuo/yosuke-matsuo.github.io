@@ -20,8 +20,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="color-scheme" content="light"/>
 <title data-ja="配座と安定構造｜Gaussian入門" data-en="Conformers and stable structures | Gaussian guide">配座と安定構造｜Gaussian入門</title>
-<link rel="stylesheet" href="../styles.css?v=20261127-2"/>
-<script defer src="../app.js?v=20261127-2"></script>
+<link rel="stylesheet" href="../styles.css?v=20261127-3"/>
+<script defer src="../app.js?v=20261127-3"></script>
 </head>
 <body>
 <a class="skip-link" href="#main" data-ja="本文へ移動" data-en="Skip to content">本文へ移動</a>
@@ -80,7 +80,7 @@
 </section>
 <section class="content-section reading" id="opt">
 <h2 data-en="Optimization and frequencies (Opt Freq)" data-ja="構造最適化と振動数解析（Opt Freq）">構造最適化と振動数解析（Opt Freq）</h2>
-<p data-en="Run Opt Freq on every candidate under the same conditions (functional, basis set, solvent). For each output, confirm convergence (Stationary point found) and zero imaginary frequencies." data-ja="すべての候補を同じ条件（汎関数・基底関数・溶媒）で Opt Freq します。各出力について、収束（Stationary point found）と虚振動ゼロを確認します。">すべての候補を同じ条件（汎関数・基底関数・溶媒）で Opt Freq します。各出力について、収束（Stationary point found）と虚振動ゼロを確認します。</p>
+<p data-en="Run Opt Freq on every candidate under the same conditions (functional, basis set, solvent). For each output, confirm that Stationary point found is printed in both the optimization and the frequency job, and that there are no imaginary frequencies." data-ja="すべての候補を同じ条件（汎関数・基底関数・溶媒）で Opt Freq します。各出力について、最適化と振動数解析の両方に Stationary point found が出ていることと、虚振動ゼロを確認します。">すべての候補を同じ条件（汎関数・基底関数・溶媒）で Opt Freq します。各出力について、最適化と振動数解析の両方に Stationary point found が出ていることと、虚振動ゼロを確認します。</p>
 <ul class="compact-list">
 <li data-en="If an imaginary frequency remains, look at its motion in a viewer such as GaussView, displace the structure slightly along that mode and reoptimize." data-ja="虚振動があれば、そのモードの動きをGaussViewなどのビューアーで見て、その方向に構造を少し動かして再最適化します。">虚振動があれば、そのモードの動きをGaussViewなどのビューアーで見て、その方向に構造を少し動かして再最適化します。</li>
 <li data-en="An optimization may slide into a different conformer. Check that the final structure is still the intended conformer." data-ja="最適化中に別の配座へ落ちることがあります。最終構造が出発配座と同じかを確認します。">最適化中に別の配座へ落ちることがあります。最終構造が出発配座と同じかを確認します。</li>
