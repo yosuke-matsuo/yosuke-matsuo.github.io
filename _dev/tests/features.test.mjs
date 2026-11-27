@@ -108,6 +108,21 @@ test('SI checker: verdicts', () => {
     ['実測値 m/z 225.0614 [M+HCOO]- 計算値 C7H13O8 225.0616', 'ok', ['ok'], '225.0614', -1],
     ['HRMS m/z [M−H]⁻ calcd for C₆H₁₁O₆ 179.0561', 'ok', ['ok'], null, -1],
     ['HRMS m/z [M+H]+ calcd for C6D12O6 193.1', 'unparsed', ['formula'], null, null],
+    // the ion formula must contain the atoms added by the notation (180.0628 is the value of C6H12O6+, not [M+Na]+)
+    ['HRMS m/z: [M + Na]+ Calcd for C6H12O6 180.0628; Found 180.0627.', 'error', ['ok', 'adductMissing'], '180.0627', 1],
+    ['HRMS m/z: [M + NH4]+ Calcd for C6H16O6 184.0941; Found 184.0940.', 'error', ['ok', 'adductMissing'], '184.0940', 1],
+    ['HRMS m/z: [M + NH4]+ Calcd for C6H16NO6 198.0972; Found 198.0970.', 'ok', ['ok'], '198.0970', 1],
+    // a found value far from the calculated one on the same line is kept and judged by the tolerance
+    ['HRMS m/z: [M + Na]+ Calcd for C6H12O6Na 203.0526; Found 204.0524.', 'warn', ['ok', 'foundOff'], '204.0524', 1],
+    ['HRMS m/z: [M + Na]+ Calcd for C6H12O6Na 203.0526 (found 204.0524).', 'warn', ['ok', 'foundOff'], '204.0524', 1],
+    ['HRMS m/z: [M + Na]+ Calcd for C6H12O6Na 203.0526. Found 204.0524.', 'warn', ['ok', 'foundOff'], '204.0524', 1],
+    ['HRMS m/z [M+Na]+ 計算値 C6H12O6Na 203.0526、実測値 204.0524', 'warn', ['ok', 'foundOff'], '204.0524', 1],
+    ['HRESIMS m/z 204.0524 [M+Na]+ (calcd for C6H12O6Na, 203.0526).', 'warn', ['ok', 'foundOff'], '204.0524', 1],
+    // a measured value that cannot be tied to the record is reported, not dropped silently
+    ['HRMS m/z: [M + Na]+ Calcd for C6H12O6Na 203.0526 (compound 3 found 181.0709).', 'warn', ['ok', 'foundUnread'], null, 1],
+    // a superscript charge on the formula is not read as an atom count
+    ['HRMS m/z: [M + 2H]²⁺ Calcd for C₆H₁₄O₆²⁺ 91.0390; Found 91.0391.', 'ok', ['ok'], '91.0391', 2],
+    ['HRMS m/z: [M + H]⁺ Calcd for C₆H₁₃O₆⁺ 181.0707; Found 181.0709.', 'ok', ['ok'], '181.0709', 1],
   ];
   for (const [text, status, codes, found, z] of cases) {
     const r = checkText(text);
@@ -131,6 +146,12 @@ HRESIMS m/z 361.1338 [2M + H]+ (calcd for C12H25O12, 361.1341)
   const r = checkText(text);
   assert.deepEqual(r.map(x => x.found), ['313.0679', '313.0690', '291.0860', '291.0871', '361.1338', '225.0614']);
   assert.ok(r.every(x => x.status === 'ok'), r.map(x => x.codes).join('|'));
+  // two found-first records on one line keep their own values
+  const two = checkText('HRMS found 203.0524 [M+Na]+ (calcd for C6H12O6Na 203.0526); HRMS found 181.0709 [M+H]+ (calcd for C6H13O6 181.0707).');
+  assert.deepEqual(two.map(x => [x.found, x.status]), [['203.0524', 'ok'], ['181.0709', 'ok']]);
+  // the next record's measured value does not mark a calculated-only record as unread
+  const next = checkText('HRMS [M+Na]+ calcd for C6H12O6Na 203.0526; HRMS found 181.0709 [M+H]+ (calcd for C6H13O6 181.0707).');
+  assert.deepEqual(next.map(x => [x.found, x.status]), [[null, 'ok'], ['181.0709', 'ok']]);
 });
 
 test('batch input', () => {

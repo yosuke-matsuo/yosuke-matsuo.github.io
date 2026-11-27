@@ -1,5 +1,5 @@
 // Sentences for papers / Supporting Information, a checker for reported HRMS values, and batch input.
-import {IONS,ELECTRON_MASS,parseFormula,formula,mass,ionCounts} from './core.js?v=20261127-3';
+import {IONS,ELECTRON_MASS,parseFormula,formula,mass,ionCounts} from './core.js?v=20261127-4';
 const MINUS='−';
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
@@ -35,7 +35,8 @@ export function siSentence({key,ionFormula,calcd,found=''}){
 // ---------- reading pasted text ----------
 const SUP='⁰¹²³⁴⁵⁶⁷⁸⁹',SUB='₀₁₂₃₄₅₆₇₈₉',FULL='０１２３４５６７８９';
 export function normalize(s){
- return String(s).replace(/[−‐‑‒–—﹣－⁻₋]/g,'-').replace(/[＋⁺₊]/g,'+')
+ // a superscript charge (O₆²⁺, [M+H]⁺) is kept apart from the atom count before the digits are mapped
+ return String(s).replace(/[⁰¹²³⁴-⁹]*[⁺⁻]/g,' $&').replace(/[−‐‑‒–—﹣－⁻₋]/g,'-').replace(/[＋⁺₊]/g,'+')
   .replace(/[·•∙⋅]/g,'').replace(/[   　]/g,' ').replace(/／/g,'/')
   .replace(/：/g,':').replace(/，/g,',').replace(/．/g,'.').replace(/；/g,';').replace(/[（]/g,'(').replace(/[）]/g,')')
   .replace(/[⁰-⁹₀-₉０-９¹²³]/g,c=>{for(const t of [SUP,SUB,FULL]){const i=t.indexOf(c);if(i>=0)return String(i);}return c;});
@@ -119,10 +120,19 @@ export function checkText(text,{tolerancePpm=5,tolerance=tolerancePpm,toleranceU
   // (same sentence only, and close to the calculated value, so the next compound's value is not taken)
   let found=null,start=formulaStart??h.index,end=valueEnd;const near=v=>Math.abs(Number(v)-Number(vm[1]))<=0.5;
   let after=s.slice(valueEnd,Math.min(nextKw,valueEnd+250));const stop=/(?<!\b(?:exp|exptl|obs|obsd|calc|calcd|theor))[.。](?=\s|$)(?!\s*(?:found|obs|measured|exp|実測))|\n\s*\n/i.exec(after);if(stop)after=after.slice(0,stop.index);
-  const fa=FOUND_AFTER.exec(after);
-  if(fa&&near(fa[1])){found=fa[1];end=valueEnd+fa.index+fa[0].length;}
+  // a value labelled "found" right after the calculated value ("…203.0526; Found 204.0524", "… 203.0526 (found
+  // 204.0524)", "…203.0526、実測値 204.0524") belongs to this record even when it is far off; otherwise it must be
+  // close to the calculated value (it may be the next compound's)
+  const fa=FOUND_AFTER.exec(after);let foundSkipped=false;
+  if(fa&&(near(fa[1])||/^[ \t,;:.、(\])]*$/.test(after.slice(0,fa.index)))){found=fa[1];end=valueEnd+fa.index+fa[0].length;}
+  // "found" after another HRMS record's start (m/z, HRMS, an ion notation) is that record's value, not an unread one
+  else if(fa&&!new RegExp('m\\/z|HR|\\bMS\\b|質量|'+ION).test(after.slice(0,fa.index)))foundSkipped=true;
   const from=Math.max(prevEnd,h.index-250),before=s.slice(from,h.index);
-  if(!found){const all=[...before.matchAll(MZ_BEFORE)].filter(b=>near(b[1]));if(all.length){const b=all[all.length-1];found=b[1];start=Math.min(start,from+b.index);}}
+  // a value just before "(calcd" ("m/z 204.0524 [M+Na]+ (calcd for …") is this record's, even when it is far off
+  if(!found){const all=[...before.matchAll(MZ_BEFORE)],last=all[all.length-1];
+   const adjacent=last&&new RegExp('^[ \\t]*(?:'+ION+')?[ \\t]*[(\\[]?[ \\t]*$').test(before.slice(last.index+last[0].length));
+   const b=adjacent?last:all.filter(x=>near(x[1])).pop();
+   if(b){found=b[1];start=Math.min(start,from+b.index);foundSkipped=false;}}
   // ion notations of this record: next to the formula, right after the value, otherwise the last one before "calcd"
   const notes=[];
   for(const cand of [ionAfter&&ionAfter[1],ionBefore&&ionBefore[1],ionAfterValue&&ionAfterValue[1]]){if(cand){const info=parseIonNotation(cand);if(info)notes.push(info);}}
@@ -165,10 +175,15 @@ export function checkText(text,{tolerancePpm=5,tolerance=tolerancePpm,toleranceU
   if(conflict)rec.codes.push('chargeConflict');
   rec.z=r.z;rec.recalculated=r.shown;rec.diffMDa=(S-r.shown)*1000;rec.codes.unshift(r.code);
   if(d<4&&['ok','rounding'].includes(r.code))rec.codes.push('fewDigits');
+  // the written ion formula must contain the atoms added by the ion notation ([M+Na]+ needs Na; H is not checked)
+  if(br&&!conflict&&!['neutralFormula','neutralFormulaElectron'].includes(r.code)&&
+   Object.entries(br.delta).some(([e,n])=>e!=='H'&&n>0&&!((F[e]||0)>=n)))rec.codes.push('adductMissing');
   // the tolerance for the measured value is in ppm or mDa
+  // a measured value was written but could not be tied to this record
+  if(found===null&&foundSkipped)rec.codes.push('foundUnread');
   if(found!==null){rec.ppm=(Number(found)-r.ref)/r.ref*1e6;rec.foundMDa=(Number(found)-r.ref)*1000;if(Math.abs(toleranceUnit==='mDa'?rec.foundMDa:rec.ppm)>tolerance+1e-9)rec.codes.push('foundOff');}
-  const errors=['electron','electronSign','neutralFormulaElectron','mismatch'];
-  rec.status=rec.codes.some(c=>errors.includes(c))?'error':rec.codes.some(c=>['neutralFormula','foundOff','chargeAssumed','chargeConflict'].includes(c))?'warn':'ok';
+  const errors=['electron','electronSign','neutralFormulaElectron','mismatch','adductMissing'];
+  rec.status=rec.codes.some(c=>errors.includes(c))?'error':rec.codes.some(c=>['neutralFormula','foundOff','foundUnread','chargeAssumed','chargeConflict'].includes(c))?'warn':'ok';
  });
  return records;
 }
